@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunknotes_de_cours_4_n_1_2024=self.webpackChunknotes_de_cours_4_n_1_2024||[]).push([[7140],{9401:s=>{s.exports=JSON.parse('{"label":"hola","permalink":"/4N1_2024/blog/tags/hola","allTagsPath":"/4N1_2024/blog/tags","count":1,"unlisted":false}')}}]);

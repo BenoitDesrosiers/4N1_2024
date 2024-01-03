@@ -3,7 +3,7 @@ sidebar_position: 4
 ---
 # SuperCarte.Core
 
-## Création du projet
+## Création du projet dans une solution existante
 
 Il faut ajouter le projet **Core** dans la solution.
 
@@ -532,6 +532,10 @@ Le nom du champ de la clé primaire change pour chacune des tables. Généraleme
 
 Il y a aussi le cas d'une clé primaire composée.
 
+:::note
+Ne copiez pas les prochains exemples de code
+:::
+
 ```csharp
 //Clé avec nom différent
 Carte carte = _bd.CarteTb.Where(c => c.CarteId == carteId).FirstOrDefault();
@@ -553,7 +557,7 @@ Est-ce possible de généraliser ceci ? Oui et non.
 
 Le **contexte** possède une méthode **Find()** ou **FindAsync()**. Cette méthode permet de recevoir un enregistrement en fonction de sa clé primaire.
 
-Cette méthode peut recevoir un **params object?[]? keyValues **. Le type est **object**, donc il peut recevoir une clé en **int**, en **string**, etc. selon le cas.
+Cette méthode peut recevoir un **params object?[]? keyValues**. Le type est **object**, donc il peut recevoir une clé en **int**, en **string**, etc. selon le cas.
 
 ```csharp
 //Clé avec nom différent
@@ -623,17 +627,21 @@ utilisateurCarteRepo.ObtenirParCleAsync(1); //Il y aura une exception "System.Ar
 "
 ```
 
-Cette approche va contre les principes **SOLID**. Il s'agit du **L (Liskov substitution)**. Ça ne s'applique pas nécessairement au type générique dans sa définition pure, mais l'idée est tout de même respectée. Ce principe consiste qu'une classe de **Base** doit fonctionner pour tous les types de données. Il ne doit pas avoir de méthode disponible dans une classe dont le programmeur sait qu'un cas particulier va générer une exception si elle est utilisée. Donc par conception, le programmeur concepteur sait que la méthode **ObtenirParCleAsync()** va générer une exception pour le modèle de données **UtilisateurCarte**. Le programmeur qui n'est pas concepteur et qui voit cette méthode disponible, ne saura pas nécessairement qu'il ne peut pas l'utiliser, d'où l'importance de respecter le **L** de **SOLID**.
+Cette approche va contre les principes **SOLID**. Il s'agit du **L ([Liskov substitution](https://fr.wikipedia.org/wiki/Principe_de_substitution_de_Liskov))**. Ça ne s'applique pas nécessairement au type générique dans sa définition pure, mais l'idée est tout de même respectée. Ce principe consiste au fait qu'une classe de **Base** doit fonctionner pour tous les types de données. Il ne doit pas avoir de méthode disponible dans une classe pour laquelle le programmeur sait qu'un cas particulier va générer une exception si elle est utilisée. Donc par conception, le programmeur concepteur sait que la méthode **ObtenirParCleAsync()** va générer une exception pour le modèle de données **UtilisateurCarte**. Le programmeur qui n'est pas concepteur et qui voit cette méthode disponible, ne saura pas nécessairement qu'il ne peut pas l'utiliser, d'où l'importance de respecter le **L** de **SOLID**.
 
 La solution a ce problème est de créer une classe de base intermédiaire.
 
+:::note
+la recopie du code recommence ici
+:::
 Créez l'interface **IBasePKUniqueRepo** dans le dossier **Repositories\Bases**.
 
 ```csharp
 namespace SuperCarte.Core.Repositories.Bases;
 
 /// <summary>
-/// Interface générique qui contient les opérations de base des tables de la base de données pour une table à clé primaire unique
+/// Interface générique qui contient les opérations de base des tables de la base
+/// de données pour une table à clé primaire unique
 /// </summary>
 /// <typeparam name="TData">Type du modèle de données / table</typeparam>
 /// <typeparam name="TClePrimaire">Type de la clé primaire</typeparam>
@@ -677,7 +685,8 @@ using SuperCarte.EF.Data.Context;
 namespace SuperCarte.Core.Repositories.Bases;
 
 // <summary>
-/// Classe abstraite générique qui contient les opérations de base des tables de la base de données pour une table à clé primaire unique
+/// Classe abstraite générique qui contient les opérations de base des tables 
+/// de la base de données pour une table à clé primaire unique
 /// </summary>
 /// <typeparam name="TData">Type du modèle de données / table</typeparam>
 /// <typeparam name="TClePrimaire">Type de la clé primaire</typeparam>
@@ -738,7 +747,7 @@ public abstract class BasePKUniqueRepo<TData, TClePrimaire> : BaseRepo<TData>, I
 }
 ```
 
-La classe a 2 méthodes spécifiques aux tables avec une clé primaire unique. Il est possible d'obtenir un item à partir de sa clé primaire et de le supprimer. Il y la version **synchrone** et **asynchrone**.
+La classe a 2 méthodes spécifiques aux tables avec une clé primaire unique. Il est possible d'obtenir un item à partir de sa clé primaire et de le supprimer. Il y a la version **synchrone** et **asynchrone**.
 
 ### Utilisation du Repository - Théorie
 
@@ -783,7 +792,7 @@ Il y a 2 options.
           _bd = bd;
       }
       
-  	public List<Carte> ObtenirListeParPointVieMin(int vie)
+      public List<Carte> ObtenirListeParPointVieMin(int vie)
       {
           return _bd.CarteTb.Where(c => c.vie >= vie).ToList();
       }
@@ -855,7 +864,7 @@ Les 2 approches ont leurs avantages et leurs inconvénients.
 
 L'approche par héritage permet d'avoir un seul **Repository** qui contient toutes les méthodes nécessaires à l'entité. Par contre, ce n'est pas tous les **Repository** qui nécessitent des requêtes spécifiques. Dans une approche standardisée, il pourrait être exigé au programmeur de créer des classes spécifiques, même s'il n'y a pas de requête spécifique. 
 
-Dans une approche non standardisée, il faudrait injecter le **BaseRepo\<TData\>** dans le service lorsqu'il n'y a pas de requêtes spécifiques. Si un jour, il faut ajouter une requête spécifique, il faut créer le **Repository** spécifique et modifier tous les services qui utilisaient le **Repository** de base. Ceci peut demander beaucoup de refactorisation. Donc, si l'approche par 
+Dans une approche non standardisée, il faudrait injecter le **BaseRepo\<TData\>** dans le service lorsqu'il n'y a pas de requêtes spécifiques. Si un jour, il faut ajouter une requête spécifique, il faut créer le **Repository** spécifique et modifier tous les services qui utilisaient le **Repository** de base. Ceci peut demander beaucoup de refactorisation. 
 
 L'approche avec 2 **Repositories** a l'avantage de créer uniquement un **Repo** spécialisé lorsque nécessaire. Par contre, le programmeur doit basculer d'un **Repository** à l'autre selon le contexte. Aussi, à chaque fois qu'il faut injecter le **Repository** de base, il faut s'assurer de spécifier le type de la bonne clé primaire. Rien n'empêche également d'injecter la mauvaise classe de base, par exemple **BaseRepo\<Carte\>**.
 
@@ -1102,7 +1111,7 @@ La classe hérite de **BasePKUniqueRepo\<Carte,int\>**, car il y a seulement une
 
 ### UtilisateurCarteRepo
 
-Créez l'interface **IUtilisateurCarteRepoRepo**.
+Créez l'interface **IUtilisateurCarteRepo**.
 
 ```csharp
 using SuperCarte.Core.Repositories.Bases;
@@ -1119,7 +1128,7 @@ public interface IUtilisateurCarteRepo : IBaseRepo<UtilisateurCarte>
 }
 ```
 
-Créez la classe **UtilisateurCarteRepoRepo**.
+Créez la classe **UtilisateurCarteRepo**.
 
 ```csharp
 using SuperCarte.Core.Repositories.Bases;
@@ -1146,454 +1155,3 @@ public class UtilisateurCarteRepo : BaseRepo<UtilisateurCarte>, IUtilisateurCart
 
 La classe hérite de **BaseRepo\<UtilisateurCarte\>**, car elle n'a pas de clé primaire unique.
 
-# Préparation du projet WPF
-
-## Création du projet dans une solution existante
-
-Il faut ajouter le projet **WPF** dans la solution.
-
-Pour ce faire, sélectionnez la solution **SuperCarteApp** en haut de l'**Explorateur de solution** et choisissez **Ajouter -> Nouveau projet...** dans le menu contextuel.
-
-Créez un projet de type **Application WPF**. Il est important **de ne pas choisir** la version **.NET Framework**.
-
-- **Nom du projet** : SuperCarte.WPF
-- **Infrastructure** : .NET 7
-
-Ensuite, sélectionnez le projet **SuperCarte.WPF** en haut de l'**Explorateur de solution** et choisissez **Définir en tant que projet de démarrage** dans le menu contextuel.
-
-## Ajout des dépendances de projet
-
-Le projet **SuperCarte.WPF** aura besoin du projet **SuperCarte.EF** pour initialiser le contexte et **SuperCarte.Core**, car il utilisera des **services**.
-
-Il faut l'ajouter dans les dépendances du projet.
-
-Sélectionnez le dossier **Dépendances** du projet **SuperCarte.WPF** et choisissez **Ajouter une référence de projet** dans le menu contextuel.
-
-Dans la fenêtre, il faut cocher **SuperCarte.EF** et **SuperCarte.Core**. Vous venez d'intégrer 2 librairies internes au projet.
-
-## Fichier Usings.cs
-
-Afin de réduire la taille des classes, les **using** qui seront beaucoup utilisés dans ce projet seront déclaré globalement.
-
-Créez le fichier **Usings.cs** à la racine du projet **SuperCarte.WPF**.
-
-```csharp
-global using SuperCarte.WPF; //Les classes à la racine de l'application WPF
-global using SuperCarte.EF.Data; //Les classes du modèle du contexte
-global using SuperCarte.EF.Data.Context; // La classe du contexte
-global using System;
-global using System.Collections.Generic;
-global using System.Threading.Tasks;
-```
-
-Au fur et à mesure que des classes s'ajouteront dans le projet, le fichier **Usings.cs** sera mis à jour.
-
-Également, le fichier **Usings.cs** appartient uniquement au projet dans lequel il est créé.
-
-## Fichier de configuration - appsettings.json
-
-La librairie **Microsoft.Extensions.Configuration.Json** permet de lire un fichier de configuration en **json**.
-
-Dans la **Console du Gestionnaire de package**, inscrivez cette ligne. Il est important que le **Projet par défaut** soit **SuperCarte.WPF** dans la console. La librairie s'installera dans le projet indiqué dans le champ **Projet par défaut**.
-
-<img src="/4N1_2024/img/13_package_console_1.png"  />
-
-
-```powershell
-Install-Package Microsoft.Extensions.Configuration.Json
-```
-
-Créez le fichier **appsettings.json** à la racine du projet **SuperCarte.WPF**. Prenez le modèle **Fichier Texte**.
-
-**IMPORTANT** : Pour que le fichier soit pris en compte par le compilateur, il faut indiquer dans ces propriétés qu'il doit être copié dans le dossier de compilation. Effectuez un **clic droit** sur le fichier **appsettings.json** et sélectionnez **Propriétés**. Pour le champ **Copier dans le répertoire de sortie**, il faut mettre la valeur **Copier si plus récent**.
-
-<img src="/4N1_2024/img/12_appsettings_01.png"  />
-
-
-Copiez ce code **json** dans le fichier.
-
-Utilisez cette version si vous n'avez pas le message d'erreur du certificat **SSL**. Il faut également modifier le nom de la base de données pour celui que vous avez utilisé.
-
-```powershell
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;"
-  }
-}
-```
-
-Utilisez cette version avec le paramètre **Trust Server Certificate=true;** si vous avez le message d'erreur du certificat **SSL**. Il faut également modifier le nom de la base de données pour celui que vous avez utilisé.
-
-```csharp
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;Trust Server Certificate=true;"
-  }
-}
-```
-
-## Ajout de la structure pour injection des dépendances
-
-Le projet **WPF** n'a pas de fichier **program.cs**. Ce type de projet n'est pas conçu à la base pour être dans la structure du **hosting** de **.Net Core**. Il faut donc l'adapter.
-
-Le fichier de démarrage de l'application est **App.xaml.cs**. Il est inclus dans le fichier **App.xaml**.
-
-Remarquez que la classe est **partial**. 
-
-```csharp
-public partial class App : Application
-{
-}
-```
-
-Une classe partielle en **.NET** consiste à créer une classe dans plusieurs fichiers. Le fichier **App.xaml** est aussi une classe, sauf que le langage est **XAML**.
-
-```xaml
-<Application x:Class="SuperCarte.WPF.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SuperCarte.WPF"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
-</Application>
-```
-
- À la ligne 1, le nom de la classe est indiqué.
-
-C'est pour cette raison que le fichier **App.xaml.cs** est un sous-fichier de **App.xaml** dans l'**Explorateur de solutions**. Si la classe n'était pas partielle, il ne serait pas possible d'avoir 2 langages pour une même classe. La notion de classe partielle sert également à ajouter des fonctionnalités dans une classe générée automatiquement. Dans le **TP 2**, les classes du modèle sont **partial**. Il aurait été possible d'ajouter un 2e fichier interne pour ajouter des éléments à la classe de base.
-
-À la ligne 5, c'est la fenêtre de démarrage. Pour une application **WPF**, la classe **App** est le conteneur des fenêtres. Une fenêtre est l'équivalent d'une page.
-
-L'application **WPF** de ce projet sera comme un **SPA** ou une **Application à page unique**. Dans le cas d'une application native, il serait possible de dire un **SWA** pour une **Application à fenêtre unique**.
-
-Les applications **à fenêtres multiples** sont de plus en plus rares, car de nombreux appareils ne sont pas en mesure de les gérer correctement. C'est une approche pour les systèmes d'exploitation ordinateur, comme **Windows** ou **macOS**, car ils sont en mesure de gérer le **multifenêtre**.
-
-L'application aura seulement une seule fenêtre, le classe **MainWindow.xaml**. À l'intérieur de cette classe, il y aura un **conteneur** qui aura un **contrôle utilisateur (user contrôle)** qui s'occupera d'une vue spécifique. Ce conteneur changera de **contrôle utilisateur** lorsqu'une nouvelle vue devra être affichée. Il s'agit de la même méganique que Blazor ou Angular, mais pour une application native.
-
-### Classes d'extension de méthodes
-
-Comme pour le projet de **GestionPersonnage**, des extensions seront utilisées pour gérer l'enregistrement des dépendances.
-
-Créez les dossiers **Extensions\ServiceCollections** à la racine du projet **SuperCarte.WPF**.
-
-Créez la classe **SCRepositories.cs** dans le dossier.
-
-Les **Repositories** sont déjà créés, alors il faut les ajouter dans l'enregistrement. Remarquez que la création est maintenant en **Scoped**. L'instance du **Repo** sera partagée entre les différents services qui l'utilisent.
-
-```csharp
-using Microsoft.Extensions.DependencyInjection;
-
-namespace SuperCarte.WPF.Extensions.ServiceCollections;
-
-/// <summary>
-/// Classe d'extension qui permet d'enregistrer les classes de la catégorie Repository
-/// </summary>
-public static class SCRepositoryExtensions
-{
-    /// <summary>
-    /// Méthode qui permet d'enregistrer les repositories de l'application
-    /// </summary>
-    /// <param name="services">La collection de services</param>
-    public static void EnregistrerRepositories(this IServiceCollection services)
-    {
-        services.AddScoped<IRoleRepo, RoleRepo>();
-        services.AddScoped<IEnsembleRepo, EnsembleRepo>();
-        services.AddScoped<ICategorieRepo, CategorieRepo>();
-        services.AddScoped<IUtilisateurRepo, UtilisateurRepo>();
-        services.AddScoped<ICarteRepo, CarteRepo>();
-        services.AddScoped<IUtilisateurCarteRepo, UtilisateurCarteRepo>();
-    }
-}
-```
-
-Créez la classe **SCServiceExtensions.cs** dans le dossier .
-
-```csharp
-using Microsoft.Extensions.DependencyInjection;
-
-namespace SuperCarte.WPF.Extensions.ServiceCollections;
-
-/// <summary>
-/// Classe d'extension qui permet d'enregistrer les classes de la catégorie Service
-/// </summary>
-public static class SCServiceExtensions
-{
-    /// <summary>
-    /// Méthode qui permet d'enregistrer les services de l'application
-    /// </summary>
-    /// <param name="services">La collection de services</param>
-    public static void EnregistrerServices(this IServiceCollection services)
-    {
-                
-    }
-}
-```
-
-Créez la classe **SCValidateurExtensions.cs** dans le dossier . Cette classe s'occupera de l'enregistrement des **Validateurs**. Ce concept sera présenté dansun autre document.
-
-```csharp
-using Microsoft.Extensions.DependencyInjection;
-
-namespace SuperCarte.WPF.Extensions.ServiceCollections;
-
-/// <summary>
-/// Classe d'extension qui permet d'enregistrer les classes de la catégorie Validateur
-/// </summary>
-public static class SCValidateurExtensions
-{
-    /// <summary>
-    /// Méthode qui permet d'enregistrer les validateurs de l'application
-    /// </summary>
-    /// <param name="services">La collection de services</param>
-    public static void EnregistrerValidateurs(this IServiceCollection services)
-    {
-
-    }
-}
-```
-
-Créez la classe **SCViewModelExtensions.cs** dans le dossier . Cette classe s'occupera de l'enregistrement des **ViewModel**. Ce concept sera présenté dans le prochain document.
-
-```csharp
-using Microsoft.Extensions.DependencyInjection;
-
-namespace SuperCarte.WPF.Extensions.ServiceCollections;
-
-/// <summary>
-/// Classe d'extension qui permet d'enregistrer les classes de la catégorie Service
-/// </summary>
-public static class SCViewModelExtensions
-{
-    /// <summary>
-    /// Méthode qui permet d'enregistrer les ViewModels de l'application
-    /// </summary>
-    /// <param name="services">La collection de services</param>
-    public static void EnregistrerViewModels(this IServiceCollection services)
-    {
-
-    }
-}
-
-```
-
-### Création du Host - App.xaml.cs
-
-Dans la **Console du Gestionnaire de package**, inscrivez cette ligne. Il est important que le **Projet par défaut** soit **SuperCarte.WPF** dans la console. La librairie s'installera dans le projet indiqué dans le champ **Projet par défaut**.
-
-```
-Install-Package Microsoft.Extensions.Hosting
-```
-
-Avec cette librairie, il sera possible de configurer l'application **WPF** avec le **hosting** d'application de **.NET Core**.
-
-Copiez ce code dans le fichier **App.xaml.cs**.
-
-```csharp
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using SuperCarte.WPF.Extensions.ServiceCollections;
-using System.Windows;
-
-namespace SuperCarte.WPF;
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
-public partial class App : Application
-{
-    private IHost? _host;
-
-	public App()
-	{
-        var builder = Host.CreateDefaultBuilder();
-
-        //Enregistrement des services
-        builder.ConfigureServices((context, services) =>
-        {            
-            services.AddSingleton<MainWindow>(); //Fenêtre principale
-
-            //Enregistrement du contexte    
-            services.AddDbContext<SuperCarteContext>(options => options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
-
-            //Appel des méthodes d'extension                        
-            services.EnregistrerRepositories();
-            services.EnregistrerServices();            
-            services.EnregistrerValidateurs();
-            services.EnregistrerViewModels();
-        });
-
-        _host = builder.Build();
-    }
-
-    /// <summary>
-    /// Démarrage de l'application
-    /// </summary>
-    /// <param name="e"></param>
-    protected override async void OnStartup(StartupEventArgs e)
-    {
-        await _host!.StartAsync();
-
-        var fenetreInitiale = _host.Services.GetRequiredService<MainWindow>();
-        fenetreInitiale.Show(); //Affiche la fenêtre initiale
-        base.OnStartup(e);
-    }
-
-    /// <summary>
-    /// Fermeture de l'application
-    /// </summary>
-    /// <param name="e"></param>
-    protected override async void OnExit(ExitEventArgs e)
-    {
-        await _host!.StopAsync();
-        base.OnExit(e);
-    }
-}
-```
-
-Voici le détail de la classe.
-
-À la ligne 1 du bloc de code ci-dessous, il y a un attribut pour le **host** de l'application. Le **host**  doit être en attribut, car il sera utilisé dans plusieurs méthodes de la classe. 
-
-Ensuite, le constructeur de la classe s'occupe de configurer le **host** comme il a été fait dans le fichier **Program.cs** de l'application console.
-
-À la ligne 5, le constructeur par défaut du **host** est créé.
-
-À la ligne 10, il faut enregistrer la fenêtre principale dans les dépendances de l'application.
-
-À la ligne 13, le contexte est enregistré avec le fichier de configuration. 
-
-Aux lignes 16 à 18, le service utilise les méthodes d'extension pour enregistrer les différents concepts.
-
-À la ligne 21, le **host** est construit en fonction de la configuration initiale.
-
-```csharp
-private IHost? _host;
-
-public App()
-{
-    var builder = Host.CreateDefaultBuilder();
-
-    //Enregistrement des services
-    builder.ConfigureServices((context, services) =>
-    {            
-        services.AddSingleton<MainWindow>(); //Fenêtre principale
-
-        //Enregistrement du contexte    
-        services.AddDbContext<SuperCarteContext>(options => options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
-
-        //Appel des méthodes d'extension                        
-        services.EnregistrerRepositories();
-        services.EnregistrerServices();            
-        services.EnregistrerValidateurs();
-        services.EnregistrerViewModels();
-    });
-
-    _host = builder.Build();
-}
-```
-
-La méthode **OnStartup()** est appelé au démarrage de l'application, après le constructeur. Elle démarre le **host** et ensuite indique au programme d'afficher la fenêtre principale de l'application.
-
-```csharp
-protected override async void OnStartup(StartupEventArgs e)
-{
-    await _host!.StartAsync();
-
-    var fenetreInitiale = _host.Services.GetRequiredService<MainWindow>();
-    fenetreInitiale.Show(); //Affiche la fenêtre initiale
-    base.OnStartup(e);
-}
-```
-
-Démarrez l'application. Il y a 2 fenêtres.
-
-Ouvrez le fichier **App.xaml**.
-
-```xaml
-<Application x:Class="SuperCarte.WPF.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SuperCarte.WPF"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
-</Application>
-```
-
-À la ligne 5, il y a la propriété **StartupUri**. Cette propriété indique également la fenêtre de démarrage. Il faut retirer cette propriété pour ne pas interférer avec l'injection de dépendances.
-
-```xaml
-<Application x:Class="SuperCarte.WPF.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SuperCarte.WPF">
-    <Application.Resources>
-         
-    </Application.Resources>
-</Application>
-```
-
-Démarrez de nouveau l'application et il aura seulement une fenêtre.
-
-## Hello World
-
-Pour avoir un premier contenu visuel, il faut modifier le fichier **MainWindows.xaml**.
-
-```xaml
-<Window x:Class="SuperCarte.WPF.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SuperCarte.WPF"
-        mc:Ignorable="d"
-        Title="Super Carte App" Height="450" Width="800">
-    <Grid>
-        <Label Content="Hello World!!!"></Label>
-    </Grid>
-</Window>
-```
-
-À la ligne 8, la propriété **Title** de la balise **\<Window\>** permet de mettre le titre de la fenêtre. 
-
-À la ligne 10, il y a un **Label** pour afficher du texte statique.  L'intérieur de la balise **\<Grid\>**, c'est le contenu de la fenêtre.
-
-# Annexe - Remove-Migration
-
-Pour être en mesure de supprimer des migrations, il faut remettre la base de données à l'état correct.
-
-Par exemple, voici 4 migrations.
-
-```
-CreationBD
-AjoutTableUtilisateur
-AjoutTableEnsemble -- Problématique
-AjoutTableCategorie -- Correct
-
-```
-
-Il faut remettre la base de données à un état valide. Le dernier état valide est **AjoutTableUtilisateur**.
-
-```powershell
-Update-Database -StartupProject SuperCarte.EF -Migration AjoutTableUtilisateur
-```
-
-Ensuite, il faut utiliser la commande **Remove-Migration**. Cette commande enlève seulement la dernière migration. Il faudra l'exécuter 2 fois pour retirer la migration problématique.
-
-Pour effacer **AjoutTableCategorie**
-
-```
-Remove-Migration -StartupProject SuperCarte.EF 
-```
-
-Pour effacer **AjoutTableEnsemble**
-
-```
-Remove-Migration -StartupProject SuperCarte.EF 
-```
-
-Malheureusement, la partie de **AjoutTableCategorie** doit être effacée, même si elle est valide.

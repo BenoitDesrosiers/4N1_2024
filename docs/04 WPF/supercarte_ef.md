@@ -532,7 +532,7 @@ Il est possible d'ajouter des configurations et des spécifications à la base d
 
 Il est possible de spécifier le nom de la table pour chacune des classes, les clés primaires composées, des types de données spécifiques, des contraintes sur une colonne...
 
-Il faut les ajouter dans la méthode **`OnModelCreating`** du contexte. Il s'agit du **FluentAPI**. Il est possible de faire plusieurs configurations avec **DataAnnotation** directement avec les classes du modèle, mais certaines configurations doivent être faites obligatoirement avec **FluentAPI**. Également, il y a certaines limitations selon la version de **Entity Framework Core** utilisée. Le **FluentAPI** permet de tout faire. Il est préférable de le faire dans un endroit centralisé.
+Il faut les ajouter dans la méthode **`OnModelCreating`** du contexte. Il s'agit du [**FluentAPI**](https://www.entityframeworktutorial.net/efcore/fluent-api-in-entity-framework-core.aspx) . Il est possible de faire plusieurs configurations avec [**DataAnnotation**](https://www.entityframeworktutorial.net/code-first/dataannotation-in-code-first.aspx) directement avec les classes du modèle, mais certaines configurations doivent être faites obligatoirement avec **FluentAPI**. Également, il y a certaines limitations selon la version de **Entity Framework Core** utilisée. Le **FluentAPI** permet de tout faire. Il est préférable de le faire dans un endroit centralisé.
 
 ### Nom des tables
 
@@ -557,28 +557,24 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
     //Table Utilisateur
     modelBuilder.Entity<Utilisateur>(entity =>
     {
-        //Spécifie le nom de la table dans la BD
         entity.ToTable("Utilisateur");
     });
 
     //Table Categorie
     modelBuilder.Entity<Categorie>(entity =>
     {
-        //Spécifie le nom de la table dans la BD
         entity.ToTable("Categorie");
     });
 
     //Table Ensemble
     modelBuilder.Entity<Ensemble>(entity =>
     {
-        //Spécifie le nom de la table dans la BD
         entity.ToTable("Ensemble");
     });
 
     //Table Carte
     modelBuilder.Entity<Carte>(entity =>
     {
-        //Spécifie le nom de la table dans la BD
         entity.ToTable("Carte");
     });
 }
@@ -586,7 +582,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 Pour chacune des **entités (modèles/tables)**, il faut utiliser le **`modelBuilder`** pour faire la configuration. Dans une modélisation de données, le terme **Entité** est utilisé pour représenter un concept. **DEA** est pour **Diagramme Entité Association**. Donc une **entité** dans une base de données est une table et pour un modèle objet une classe de modèle de données.
 
-La méthode **`ToTable()`** permet d'indiquer le nom de la table dans la base de données. Il serait possible de s'adapter aux standards propres de l'organisation/technologie en utilisant que des minuscules, **PascalCase**, **camelCase**, la pluralisation, le **underscore** pour une table pivot...
+La méthode **`ToTable()`** permet d'indiquer le nom de la table dans la base de données. Il serait possible de s'adapter aux standards propres de l'organisation/technologie en utilisant que des minuscules, PascalCase, camelCase, la pluralisation, le underscore pour une table pivot...
 
 Dans la **Console du gestionnaire de Package**, créez la migration **RenommerTables**.
 
@@ -656,13 +652,9 @@ namespace SuperCarte.EF.Data;
 public class UtilisateurCarte
 {
     public int UtilisateurId { get; set; }
-
     public int CarteId { get; set; }
-
     public short Quantite { get; set; }
-
     public Utilisateur Utilisateur { get; set; } = null!;
-
     public Carte Carte { get; set; } = null!;
 }
 ```
@@ -675,29 +667,18 @@ namespace SuperCarte.EF.Data;
 public class Carte
 {
     public int CarteId { get; set; }
-
     public string Nom { get; set; } = null!;
-
     public byte[]? Image { get; set; }
-
     public short Vie { get; set; }
-
     public short Armure { get; set; }
-
     public short Attaque { get; set; }
-
     public bool EstRare { get; set; }
-    
     public decimal PrixRevente { get; set; }
-
     public int CategorieId { get; set; }
-
     public int EnsembleId { get; set; }
-
     public Categorie Categorie { get; set; } = null!;
-
     public Ensemble Ensemble { get; set; } = null!;
-
+//highlight-next-line
     public ICollection<UtilisateurCarte> UtilisateurCarteListe { get; set; } = new List<UtilisateurCarte>();
 }
 ```
@@ -710,19 +691,13 @@ namespace SuperCarte.EF.Data;
 public class Utilisateur
 {
     public int UtilisateurId {  get; set; }
-
     public string Prenom { get; set; } = null!;
-
     public string Nom { get; set; } = null!;
-
     public string NomUtilisateur { get; set; } = null!;
-    
     public string MotPasseHash { get; set; } = null!;
-
     public int RoleId { get; set; }
-
     public Role Role { get; set; } = null!;
-
+    //highlight-next-line
     public ICollection<UtilisateurCarte> UtilisateurCarteListe { get; set; } = new List<UtilisateurCarte>();
 }
 ```
@@ -911,7 +886,7 @@ MigrationId														ProductVersion
 
 ### Type des champs - string, decimal et date
 
-Actuellement, toutes les chaines de caractères sont des **NVARCHAR(MAX)**. Il est de plus en plus fréquent de ne plus spécifier la longueur des chaines de caractères qui ne sont pas fixes, car il est difficile de déterminer la bonne longueur pour plusieurs champs. La longueur est souvent spécifiée par l'expérience, mais sans considération valable. Le **NVARCHAR(MAX)** va seulement utiliser l'espace nécessaire. La gestion des contraintes se fait plus au niveau du logiciel maintenant. Si la longueur maximale doit être modifiée, il n'est pas nécessaire de modifier la base de données, seulement la partie **validation** dans le logiciel.
+Actuellement, toutes les chaines de caractères sont des **NVARCHAR(MAX)**. Il est de plus en plus fréquent de ne plus spécifier la longueur des chaines de caractères qui ne sont pas fixes, car il est difficile de déterminer la bonne longueur pour plusieurs champs. La longueur est souvent spécifiée par l'expérience, mais sans considération valable. Le **NVARCHAR(MAX)** va seulement utiliser l'espace nécessaire. La gestion des contraintes se fait normalement au niveau du logiciel maintenant. Si la longueur maximale doit être modifiée, il n'est pas nécessaire de modifier la base de données, seulement la partie **validation** dans le logiciel.
 
 Mais en tant que programmeur, il faut réaliser le **DEA** tel que produit par le concepteur. Si vous êtes le concepteur, posez-vous la question s'il est nécessaire de limiter la longueur d'un champ ou de ne pas permettre le **unicode**.
 
@@ -921,7 +896,7 @@ Pour spécifier la longueur maximale, c'est la méthode **`HasMaxLength()`** qui
 
 Dans le **DEA**, ce sont des **`VARCHAR`** et non des **`NVARCHAR`**. La méthode **`IsUnicode(false)`** permet d'indiquer que ce n'est pas un **`NVARCHAR`**.
 
-Voici les exemples pour la configuration des différents cas. La classe complète sera fournise à la fin de la section.
+Voici les exemples pour la configuration des différents cas. La classe complète sera fourni à la fin de la section.
 
 Pour la table **Role**
 
@@ -1168,9 +1143,12 @@ Pour la table **Utilisateur**, le champ **NomUtilisateur** doit être unique.
 
 Cette contrainte est assez importante dans la base de données, car s'il y a un problème dans l'application pour faire la validation d'un doublon, l'application aurait une faille de sécurité.
 
-Une contrainte d'unicité permet de créer un **index** de recherche sur le champ et d'indiquer la contrainte **UNIQUE**. Il faut donc créer un **index** dans le contexte et de le spécifier comme unique. La spécification est à la ligne 24. Par contre, dans la base de données, il n'y aura pas de contrainte explicite **UNIQUE** sur le champ. Ce sera uniquement l'index qui s'occupera de valider l'unicité. L'ajout de l'index unique est à la ligne 24 du code ci-dessous.
+Une contrainte d'unicité permet de créer un **index** de recherche sur le champ et d'indiquer la contrainte **UNIQUE**. Il faut donc créer un **index** dans le contexte et de le spécifier comme unique. La spécification est à la ligne 24. Par contre, dans la base de données, il n'y aura pas de contrainte explicite **UNIQUE** sur le champ. Ce sera uniquement l'index qui s'occupera de valider l'unicité. L'ajout de l'index unique est à la ligne 25 du code ci-dessous.
 
-```csharp
+Remplacez la section pour Table Utilisateur dans SuperCarteContext.cs
+
+```csharp showLineNumbers
+
 //Table Utilisateur
 modelBuilder.Entity<Utilisateur>(entity =>
 {
@@ -1194,6 +1172,7 @@ modelBuilder.Entity<Utilisateur>(entity =>
         .IsFixedLength(true) //CHAR
         .HasMaxLength(60);
 
+//highlight-next-line
     entity.HasIndex(t => t.NomUtilisateur).IsUnique(true);
 });
 ```
@@ -1220,7 +1199,7 @@ Pour la table **UtilisateurCarte**, il pourrait être intéressant de conserver 
 
 Par contre, pour la clé étrangère carte, il n'est pas intéressant de le faire, car si une carte est supprimée, elle disparaitrait de tous les utilisateurs. L'administrateur avant de supprimer une carte qui est utilisée par des utilisateurs devra prendre une action spéciale s'il désire réellement supprimer la carte, soit en offrant une nouvelle carte en compensation. Il serait possible de gérer ce comportement dans le code uniquement, mais en cas de **bug**, les conséquences peuvent être importantes. Il peut être préférable de limiter ce comportement dans la base de données également.
 
-Pour le **`ON UPDATE`**, il est toujours à **`NO ACTION`**avec **Entity Framework**, même si la table est configurée de cette façon dans la base de données.
+Pour le **`ON UPDATE`**, il est toujours à **`NO ACTION`** avec **Entity Framework**, même si la table est configurée de cette façon dans la base de données.
 
 Pour l'instant, toutes les clés étrangères auront **`ON DELETE NO ACTION`**. Pour **Entity Framework**, il faut mettre **`DeleteBehavior.ClientSetNull`**.
 
@@ -1387,9 +1366,12 @@ public class SuperCarteContext : DbContext
 
             entity.HasIndex(t => t.NomUtilisateur).IsUnique(true);
 
+//highlight-start
             entity.HasOne(t => t.Role).WithMany(p => p.UtilisateurListe)
                 .HasForeignKey(t => t.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+                //highlight-end
+
         });
 
         //Table Categorie
@@ -1434,6 +1416,7 @@ public class SuperCarteContext : DbContext
             entity.Property(t => t.PrixRevente)
                 .HasPrecision(8,2);
 
+//highlight-start
             entity.HasOne(t => t.Ensemble).WithMany(p => p.CarteListe)
                     .HasForeignKey(t => t.EnsembleId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
@@ -1441,6 +1424,7 @@ public class SuperCarteContext : DbContext
             entity.HasOne(t => t.Categorie).WithMany(p => p.CarteListe)
                     .HasForeignKey(t => t.CategorieId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+//highlight-end
         });
 
         //Table UtilisateurCarte
@@ -1511,7 +1495,7 @@ DELETE FROM [Role];
 
 Pour éviter que le **Seed** soit toujours exécuté en mémoire, il est préférable de modifier le contexte. Ce sera l'attribut **`_executerSeed`** qui s'occupera de ceci.
 
-```csharp
+```csharp showLineNumbers
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 
@@ -1689,7 +1673,7 @@ public class SuperCarteContext : DbContext
         {
             Seed(modelBuilder);
         }
-//highlight-end
+
     }
 
     /// <summary>
@@ -1699,7 +1683,7 @@ public class SuperCarteContext : DbContext
     {
         //Les données à ajouter
     }
-
+//highlight-end
     public DbSet<Role> RoleTb { get; set; }
 
     public DbSet<Utilisateur> UtilisateurTb { get; set; }
@@ -1714,17 +1698,19 @@ public class SuperCarteContext : DbContext
 }
 ```
 
-À la ligne 46, l'activation du **Seed** se fait uniquement si le contexte est initialisé en mode **Migration** dans la méthode **`OnConfiguring()`**.
+À la ligne 45, l'activation du **Seed** se fait uniquement si le contexte est initialisé en mode **Migration** dans la méthode **`OnConfiguring()`**.
 
-À la ligne 160, il y a une vérification avant d'exécuter le **Seed **dans la méthode **`OnModelCreating()`**.
+À la ligne 171, il y a une vérification avant d'exécuter le **Seed **dans la méthode **`OnModelCreating()`**.
 
-À la ligne 169, les données seront créées dans cette méthode.
+À la ligne 181, les données seront créées dans cette méthode.
 
 ### Création des données
 
 Pour ajouter des données, il faut envoyer un tableau des données dans la méthode **`HasData()`** de l'entité en question.
 
 Il est obligatoire de spécifier les clés primaires et étrangères lors d'un **Seed** à partir de la migration avec **Entity Framework**.
+
+Remplaces la méthode Seed() avec ce code:
 
 ```csharp
 /// <summary>

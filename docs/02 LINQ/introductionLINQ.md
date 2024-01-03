@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Introduction à LINQ
+# Requêtes en LINQ
 
 **LINQ** ou Language Integrated Query dans sa forme longue est un langage de requêtes créé par Microsoft.
 

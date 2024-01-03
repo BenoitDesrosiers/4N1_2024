@@ -14,6 +14,9 @@ Créez un projet de type **Bibliothèque de classe**. Il est important **de ne p
 - **Nom du projet** : SuperCarte.Core
 - **Infrastructure** : .NET 7
 
+Pour le champ **Solution**, indiquez d'**Ajouter à la solution** et gardez SuperCarteApp. 
+
+
 Supprimez le fichier **Class1.cs**.
 
 Créez un dossier **Models** à la racine du projet. Ce dossier contient les classes du modèle du domaine. 
@@ -66,9 +69,9 @@ Pour plus d'information : https://learn.microsoft.com/fr-fr/dotnet/csharp/fundam
 
 L'utilisation de classe générique permet de généraliser les classes afin d'éviter de créer plusieurs classes spécifiques et de méthodes spécifiques.
 
-Les classes et les méthodes génériques ont à la fin de leur nom le **`<>`**. Le **`<>`** permet d'indiquer le type réel qui doit être utilisé pour l'instance de la classe ou pour l'utilisation de la méthode.
+Les classes et les méthodes génériques ont à la fin de leur nom le **\<\>**. Le **\<\>** permet d'indiquer le type réel qui doit être utilisé pour l'instance de la classe ou pour l'utilisation de la méthode.
 
-La classe générique la plus populaire en **C#** est **`List<T>`**. La lettre **`T`** est la norme pour indiquer que le type est générique.
+La classe générique la plus populaire en **C#** est **List\<T\>**. La lettre **T** est la norme pour indiquer que le type est générique.
 
 Prenez par exemple qu'il faut avoir une collection de la classe **Personne**.
 
@@ -81,11 +84,11 @@ public class Personne
 }
 ```
 
-Avant d'avoir une collection de type **`List<T>`**, il avait 2 options.
+Avant d'avoir une collection de type **List\<T\>**, il avait 2 options.
 
 - **Créer une collection d'objets**
 
-  Par exemple, en **C#**, il y a la collection **ArrayList**. Voici la signature de la méthode **`Add(objet? value)`**. Cette collection permet d'ajouter des classes du type **objet**, donc tous les types de classes.
+  Par exemple, en **C#**, il y a la collection **ArrayList**. Voici la signature de la méthode **Add(objet? value)**. Cette collection permet d'ajouter des classes du type **objet**, donc tous les types de classes.
 
   Il est possible d'ajouter plusieurs types de données dans la même collection. C'est rarement un comportement désiré dans une liste.
 
@@ -142,11 +145,9 @@ Avant d'avoir une collection de type **`List<T>`**, il avait 2 options.
   liste.Ajouter(4); //Erreur du compilateur. Seulement le type **Personne** qui est accepté.
   ```
 
-- **Classe générique**
+Maintenant, avec les classes génériques, il est possible de généraliser un comportement et de spécifier un type à une instance précise.
 
-  Les classes génériques permettent de généraliser un comportement et de spécifier un type à une instance précise.
-
-  Voici une simplification de la classe **`List<T>`**. 
+  Voici une simplification de la classe **List\<T\>**. 
 	
 	```csharp
 	public class ListeGenerique<T>
@@ -172,13 +173,13 @@ Avant d'avoir une collection de type **`List<T>`**, il avait 2 options.
 	}
 	```
 	
-	Dans la déclaration de la classe, il y a le **`<T>`** qui indique qu'il faut obligatoirement spécifier un type lors de la création d'un objet.
+	Dans la déclaration de la classe, il y a le **\<T\>** qui indique qu'il faut obligatoirement spécifier un type lors de la création d'un objet.
 	
-	Le type générique **`T`** est utilisé comme type pour le paramètre de la méthode **`void Ajouter(T valeur)`**.
+	Le type générique **T** est utilisé comme type pour le paramètre de la méthode **void Ajouter(T valeur)**.
 	
-	Le type générique **`T`** est utilisé comme type de retour de la méthode **`T Obtenir(int index)`**.
+	Le type générique **T** est utilisé comme type de retour de la méthode **T Obtenir(int index)**.
 	
-	Donc, si un objet est créé avec le type **Personne** **`new ListeGenerique<Personne>()`** , le compilateur va voir **`void Ajouter(Personne valeur)`** et  **`Personne Obtenir(int index)`**.
+	Donc, si une liste est créé avec le type **Personne** **new ListeGenerique\<Personne\>()** , le compilateur va générer **void Ajouter(Personne valeur)** et  **Personne Obtenir(int index)**.
 	
 	Voici comment l'utiliser.
 	
@@ -225,11 +226,11 @@ Voici une liste de requêtes **classiques** qui sont généralement identiques.
 
 Créez le dossier **Bases** dans le dossier **Repositories**. Ce dossier contiendra les classes génériques de base.
 
-L'injection de dépendances du **Repository** se fait par les interfaces. Il faut donc que les classes de base possèdent une interface.
+L'injection de dépendances du **Repository** se fera par les interfaces. Il faut donc que les classes de base possèdent une interface.
 
 Créez l'interface **IBaseRepo** dans le dossier **Repositories\Bases**.
 
-```csharp
+```csharp showLineNumbers
 namespace SuperCarte.Core.Repositories.Bases;
 
 /// <summary>
@@ -318,19 +319,19 @@ public interface IBaseRepo<TData> where TData : class
 }
 ```
 
-À la ligne 7, il y a la déclaration de l'interface avec un type générique.  Il est possible de renommer le **`T`** pour un nom plus spécifique **`TData`**. Par convention, le type générique débute toujours avec le préfixe **`T`**.
+À la ligne 7, il y a la déclaration de l'interface avec un type générique.  Il est possible de renommer le **T** pour un nom plus spécifique **TData**. Par convention, le type générique débute toujours avec le préfixe **T**.
 
-Il est possible de mettre des contraintes au type générique. Le mot-clé **`where`** permet de spécifier les contraintes. Dans ce cas-ci, il est seulement possible de spécifier un type qui est une classe. Donc, il n'est pas possible de spécifier **`IBaseRepo<int>`**, car le type **`int`** n'est pas une classe, mais un type primitif. 
+Il est possible de mettre des contraintes au type générique. Le mot-clé **where** permet de spécifier les contraintes. Dans ce cas-ci, il est seulement possible de spécifier un type qui est une classe. Donc, il n'est pas possible de spécifier **IBaseRepo\<int\>**, car le type **int** n'est pas une classe, mais un type primitif. 
 
-Pour plus d'information pour le **`where`** https://learn.microsoft.com/fr-ca/dotnet/csharp/language-reference/keywords/where-generic-type-constraint
+Pour plus d'information pour le **where** https://learn.microsoft.com/fr-ca/dotnet/csharp/language-reference/keywords/where-generic-type-constraint
 
 ```csharp
 public interface IBaseRepo<TData> where TData : class
 ```
 
-Pour chacune des méthodes, il y a le **`TData`** pour le type d'un paramètre ou pour le retour.
+Pour chacune des méthodes, il y a le **TData** pour le type d'un paramètre ou pour le retour.
 
-Également, l'application doit pouvoir fonctionner en **asynchrone**. Par convention en **C#**, une méthode **asynchrone** doit avoir le suffixe **Async**, mais ce n'est pas obligatoire. De plus, les méthodes doivent retourner un type **`Task`** ou **`Task<T>`**. L'explication du fonctionnement de l'asynchrone sera expliquée dans la partie 2. Il faut également le méthode **synchrone**, car selon le cas d'utilisation, l'appel peut être obligatoirement synchrone.
+Également, l'application doit pouvoir fonctionner en **asynchrone**. Par convention en **C#**, une méthode **asynchrone** doit avoir le suffixe **Async**, mais ce n'est pas obligatoire. De plus, les méthodes doivent retourner un type **Task** ou **Task\<T\>**. L'explication du fonctionnement de l'asynchrone sera expliquée plus tard. Il faut également le méthode **synchrone**, car selon le cas d'utilisation, l'appel peut être obligatoirement synchrone.
 
 Créez la classe **BaseRepo** dans le dossier **Repositories\Bases**.
 
@@ -516,64 +517,69 @@ public class BaseRepo<TData> : IBaseRepo<TData> where TData : class
 
 Les méthodes ressemblent à ce que vous avez déjà fait, mais elles sont génériques. 
 
-Également, le contexte utilise des méthodes **asynchrones**. Pour y avoir accès, il faut inclure **`using Microsoft.EntityFrameworkCore;`**.
+Également, le contexte utilise des méthodes **asynchrones**. Pour y avoir accès, il faut inclure **using Microsoft.EntityFrameworkCore;**.
 
-- **`ToListAsync()`**
-- **`SaveChangesAsync()`**
+- **ToListAsync()**
+- **SaveChangesAsync()**
 
-La déclaration de la classe **`public class BaseRepo<TData> : IBaseRepo<TData> where TData : class`** doit également inclure le **`<TData>`**. Elle doit la répliquer dans l'implémentation de l'interface avec la même contrainte **`where`**. Retirez le **`where`** et le compilateur indiquera que la classe est en erreur.
+La déclaration de la classe **public class BaseRepo\<TData\> : IBaseRepo\<TData\> where TData : class** doit également inclure le **\<TData\>**. Elle doit la répliquer dans l'implémentation de l'interface avec la même contrainte **where**. Retirez le **where** et le compilateur indiquera que la classe est en erreur.
 
 ### Obtenir un enregistrement spécifique par sa clé
 
 Une opération de base dans les opérations de la base de données est d'obtenir un enregistrement spécifique en fonction de sa clé primaire.
 
-Le nom du champ de la clé primaire change pour chacune des tables. Généralement, le type de la clé primaire un entier, mais ce n'est pas une garantie.
+Le nom du champ de la clé primaire change pour chacune des tables. Généralement, le type de la clé primaire est un entier, mais ce n'est pas une garantie.
 
 Il y a aussi le cas d'une clé primaire composée.
 
 ```csharp
 //Clé avec nom différent
-Carte carte = _bd.CarteTb.Where(c => c.CarteId == carteId).FirtOrDefault();
-Utilisateur utilisateur = _bd.UtilisateurTb.Where(c => c.UtilisateurId == utilisateurId).FirtOrDefault();
+Carte carte = _bd.CarteTb.Where(c => c.CarteId == carteId).FirstOrDefault();
+Utilisateur utilisateur = _bd.UtilisateurTb.Where(c => c.UtilisateurId == utilisateurId).FirstOrDefault();
 
 //Clé pas un entier. DA est une string, car les DA peuvent débuter par 0, pour ceux qui ont été inscrits entre 2000 et 2009
 Etudiant etudiant = _bd.EtudiantTb.Where(e => e.DA == da).FirstOrDefault();
 
 //Clé composée
-UtilisateurCarte utilisateurCarte = _bd.UtilisateurCarteTb.Where(uc => uc.CarteId == carteId && uc.utilisateurId == UtilisateurId).FirtOrDefault();
+UtilisateurCarte utilisateurCarte = _bd.UtilisateurCarteTb.Where(uc => uc.CarteId == carteId && uc.utilisateurId == UtilisateurId).FirstOrDefault();
 ```
+
+:::note
+Remarquez ici que le nom des tables se termine par **Tb**. C'est donc le nom du **DbSet** dans **SuperCarteContext.cs**
+:::
+
 
 Est-ce possible de généraliser ceci ? Oui et non.
 
-Le **contexte** possède une méthode **`Find()`** ou **`FindAsync()`**. Cette méthode permet de recevoir un enregistrement en fonction de sa clé primaire.
+Le **contexte** possède une méthode **Find()** ou **FindAsync()**. Cette méthode permet de recevoir un enregistrement en fonction de sa clé primaire.
 
-Cette méthode peut recevoir un **`params object?[]? keyValues `**. Le type est **`object`**, donc il peut recevoir une clé en **`int`**, en **`string`**, etc. selon le cas.
+Cette méthode peut recevoir un **params object?[]? keyValues **. Le type est **object**, donc il peut recevoir une clé en **int**, en **string**, etc. selon le cas.
 
 ```csharp
 //Clé avec nom différent
-Carte carte = _bd.CarteTb.Find(carteId).FirtOrDefault();
-Utilisateur utilisateur = _bd.UtilisateurTb.Find(utilisateurId).FirtOrDefault();
+Carte carte = _bd.CarteTb.Find(carteId).FirstOrDefault();
+Utilisateur utilisateur = _bd.UtilisateurTb.Find(utilisateurId).FirstOrDefault();
 
 //Clé pas un entier. DA est une string, car les DA peuvent débuter par 0, pour ceux qui ont été inscrits entre 2000 et 2009
 Etudiant etudiant = _bd.EtudiantTb.Find(da).FirstOrDefault();
 ```
 
-Le mot-clé **`params`** d'ajouter des paramètres illimités (max réel de 65 535) à la méthode. Donc il est possible de faire **`Find(1, "2", new DateTime(2022, 1, 3), 10.3m, true)`** ou **`Find(1, 2, 3)`**.  En réalité, il faudrait envoyer un tableau **object[]** en paramètre, mais le mot-clé **`params`** permet de le créer lors de l'appel de la méthode en fusionnant les paramètres. Donc **`Find(1, 2, 3)` ** est en réalité **`Find(new object{1, 2, 3})`**. Pour plus d'information pour le **`params`** https://learn.microsoft.com/fr-ca/dotnet/csharp/language-reference/keywords/params
+Le mot-clé **params** permet d'ajouter des paramètres illimités (max réel de 65 535) à la méthode. Donc il est possible de faire **Find(1, "2", new DateTime(2022, 1, 3), 10.3m, true)** ou **Find(1, 2, 3)**.  En réalité, il faudrait envoyer un tableau **object[]** en paramètre, mais le mot-clé **params** permet de le créer lors de l'appel de la méthode en fusionnant les paramètres. Donc **Find(1, 2, 3)** est en réalité **Find(new object{1, 2, 3})**. Pour plus d'information pour le **params** https://learn.microsoft.com/fr-ca/dotnet/csharp/language-reference/keywords/params
 
 Il est donc possible de récupérer un enregistrement qui a une clé primaire composée.
 
 ```csharp
-UtilisateurCarte utilisateurCarte1 = _bd.UtilisateurCarteTb.Find(carteId, utilisateurId).FirtOrDefault();
-UtilisateurCarte utilisateurCarte2 = _bd.UtilisateurCarteTb.Find(utilisateurId, carte).FirtOrDefault();
+UtilisateurCarte utilisateurCarte1 = _bd.UtilisateurCarteTb.Find(carteId, utilisateurId).FirstOrDefault();
+UtilisateurCarte utilisateurCarte2 = _bd.UtilisateurCarteTb.Find(utilisateurId, carte).FirstOrDefault();
 ```
 
-L'ordre des clés a-t-il son importance ? La réponse est **oui**. Lequel des 2 appels est la bonne ? Il faut retourner dans la méthode **`OnModelCreating`** du **contexte** pour voir dans quel ordre les clés ont été spécifiées.
+L'ordre des clés a-t-il son importance ? La réponse est **oui**. Lequel des 2 appels est la bonne ? Il faut retourner dans la méthode **OnModelCreating** du **contexte** pour voir dans quel ordre les clés ont été spécifiées.
 
 ```csharp
 entity.HasKey(t => new { t.UtilisateurId, t.CarteId });
 ```
 
-C'est donc **`UtilisateurCarte utilisateurCarte2 = _bd.UtilisateurCarteTb.Find(utilisateurId, carte).FirtOrDefault();`** qui serait la bonne. Il est possible de généraliser la méthode **Find** dans le **Repo**, mais il faut l'encadrer.
+C'est donc **UtilisateurCarte utilisateurCarte2 = _bd.UtilisateurCarteTb.Find(utilisateurId, carte).FirstOrDefault();** qui serait la bonne. Il est possible de généraliser la méthode **Find** dans le **Repo**, mais il faut l'encadrer.
 
 Le **Repo** générique ne permettra pas la gestion des clés multiples, car il y a trop de risque d'erreur que le programmeur doive toujours valider l'ordre des clés primaires. Ce sera une méthode spécifique pour les tables qui ont une clé primaire composée.
 
@@ -603,11 +609,11 @@ public class BaseRepo<TData, TClePrimaire> : IBaseRepo<TData, TClePrimaire> wher
 }
 ```
 
-Le nombre de types génériques d'une classe n'est pas limité à 1 uniquement. Il suffit de mettre une virgule dans le **`<>` ** pour ajouter des types génériques, par exemple  **`<T1, T2, T3, T4>`** . Lorsqu'il y a plusieurs types génériques, il est important de les nommer avec un nom significatif. 
+Le nombre de types génériques d'une classe n'est pas limité à 1 uniquement. Il suffit de mettre une virgule dans le **`<>`** pour ajouter des types génériques, par exemple  **`<T1, T2, T3, T4>`** . Lorsqu'il y a plusieurs types génériques, il est important de les nommer avec un nom significatif. 
 
-**`TClePrimaire`** sert uniquement pour le paramètre de la méthode **`ObtenirParCleAsync()`**.
+**TClePrimaire** sert uniquement pour le paramètre de la méthode **ObtenirParCleAsync()**.
 
-Mais est-ce le bon endroit pour mettre cette méthode ? Que devra-t-il être spécifié pour la table **UtilisateurCarte** ? Dans le cas ci-dessous, ce sera **`int`**, mais si le programmeur utilise quand même la méthode **`ObtenirParCleAsync()`**, il y aura une exception.
+Mais est-ce le bon endroit pour mettre cette méthode ? Que devra-t-il être spécifié pour la table **UtilisateurCarte** ? Dans le cas ci-dessous, ce sera **int**, mais si le programmeur utilise quand même la méthode **ObtenirParCleAsync()**, il y aura une exception.
 
 ```csharp
 var utilisateurCarteRepo BaseRepo<UtilisateurCarte, int>();
@@ -617,7 +623,7 @@ utilisateurCarteRepo.ObtenirParCleAsync(1); //Il y aura une exception "System.Ar
 "
 ```
 
-Cette approche va contre les principes **SOLID**. Il s'agit du **L (Liskov substitution)**. Ça ne s'applique pas nécessairement au type générique dans sa définition pure, mais l'idée est tout de même respectée. Ce principe consiste qu'une classe de **Base ** doit fonctionner pour tous les types de données. Il ne doit pas avoir de méthode disponible dans une classe dont le programmeur sait qu'un cas particulier va générer une exception si elle est utilisée. Donc par conception, le programmeur concepteur sait que la méthode **`ObtenirParCleAsync()`** va générer une exception pour le modèle de données **UtilisateurCarte**. Le programmeur qui n'est pas concepteur et qui voit cette méthode disponible, ne saura pas nécessairement qu'il ne peut pas l'utiliser, d'où l'importance de respecter le **L** de **SOLID**.
+Cette approche va contre les principes **SOLID**. Il s'agit du **L (Liskov substitution)**. Ça ne s'applique pas nécessairement au type générique dans sa définition pure, mais l'idée est tout de même respectée. Ce principe consiste qu'une classe de **Base** doit fonctionner pour tous les types de données. Il ne doit pas avoir de méthode disponible dans une classe dont le programmeur sait qu'un cas particulier va générer une exception si elle est utilisée. Donc par conception, le programmeur concepteur sait que la méthode **ObtenirParCleAsync()** va générer une exception pour le modèle de données **UtilisateurCarte**. Le programmeur qui n'est pas concepteur et qui voit cette méthode disponible, ne saura pas nécessairement qu'il ne peut pas l'utiliser, d'où l'importance de respecter le **L** de **SOLID**.
 
 La solution a ce problème est de créer une classe de base intermédiaire.
 
@@ -849,15 +855,15 @@ Les 2 approches ont leurs avantages et leurs inconvénients.
 
 L'approche par héritage permet d'avoir un seul **Repository** qui contient toutes les méthodes nécessaires à l'entité. Par contre, ce n'est pas tous les **Repository** qui nécessitent des requêtes spécifiques. Dans une approche standardisée, il pourrait être exigé au programmeur de créer des classes spécifiques, même s'il n'y a pas de requête spécifique. 
 
-Dans une approche non standardisée, il faudrait injecter le **`BaseRepo<TData>`** dans le service lorsqu'il n'y a pas de requêtes spécifiques. Si un jour, il faut ajouter une requête spécifique, il faut créer le **Repository** spécifique et modifier tous les services qui utilisaient le **Repository** de base. Ceci peut demander beaucoup de refactorisation. Donc, si l'approche par 
+Dans une approche non standardisée, il faudrait injecter le **BaseRepo\<TData\>** dans le service lorsqu'il n'y a pas de requêtes spécifiques. Si un jour, il faut ajouter une requête spécifique, il faut créer le **Repository** spécifique et modifier tous les services qui utilisaient le **Repository** de base. Ceci peut demander beaucoup de refactorisation. Donc, si l'approche par 
 
-L'approche avec 2 **Repositories** a l'avantage de créer uniquement un **Repo** spécialisé lorsque nécessaire. Par contre, le programmeur doit basculer d'un **Repository** à l'autre selon le contexte. Aussi, à chaque fois qu'il faut injecter le **Repository** de base, il faut s'assurer de spécifier le type de la bonne clé primaire. Rien n'empêche également d'injecter la mauvaise classe de base, par exemple **`BaseRepo<Carte>`**.
+L'approche avec 2 **Repositories** a l'avantage de créer uniquement un **Repo** spécialisé lorsque nécessaire. Par contre, le programmeur doit basculer d'un **Repository** à l'autre selon le contexte. Aussi, à chaque fois qu'il faut injecter le **Repository** de base, il faut s'assurer de spécifier le type de la bonne clé primaire. Rien n'empêche également d'injecter la mauvaise classe de base, par exemple **BaseRepo\<Carte\>**.
 
 Si l'enregistrement des services est bien fait dans l'injection des dépendances, le programme génèrera une exception lorsque la mauvaise classe de base sera utilisée. Par contre, si le programmeur l'ajoute dans l'enregistrement sans valider l'existence des autres, le programme va devenir non uniforme et moins maintenable dans le temps.
 
 Principalement pour la dernière raison, l'approche par héritage sera utilisée et il faudra créer la classe et l'interface spécifique en tout temps, même si elle est vide. Le programme sera plus uniforme et plus facilement maintenable à long terme.  De plus, dans les applications d'envergure, les **entités** sans aucune requête spécifique sont assez rares.
 
-Remarquez que les classes **BaseRepo** et **BasePKUniqueRepo** ont été déclarées dès le départ **`abstract`** pour éviter l'utilisation directe sans héritage.
+Remarquez que les classes **BaseRepo** et **BasePKUniqueRepo** ont été déclarées dès le départ **abstract** pour éviter l'utilisation directe sans héritage.
 
 ## Création des Repositories spécifiques
 
@@ -955,7 +961,7 @@ public class UtilisateurRepo : BasePKUniqueRepo<Utilisateur, int>, IUtilisateurR
 }
 ```
 
-La classe hérite de **`BasePKUniqueRepo<Utilisateur,int>`**, car il y a seulement une clé primaire et c'est un entier.
+La classe hérite de **BasePKUniqueRepo\<Utilisateur,int\>**, car il y a seulement une clé primaire et c'est un entier.
 
 ### EnsembleRepo
 
@@ -1001,7 +1007,7 @@ public class EnsembleRepo : BasePKUniqueRepo<Ensemble, int>, IEnsembleRepo
 }
 ```
 
-La classe hérite de **`BasePKUniqueRepo<Ensemble,int>`**, car il y a seulement une clé primaire et c'est un entier.
+La classe hérite de **BasePKUniqueRepo\<Ensemble,int\>**, car il y a seulement une clé primaire et c'est un entier.
 
 ### CategorieRepo
 
@@ -1047,7 +1053,7 @@ public class CategorieRepo : BasePKUniqueRepo<Categorie, int>, ICategorieRepo
 
 ```
 
-La classe hérite de **`BasePKUniqueRepo<Categorie,int>`**, car il y a seulement une clé primaire et c'est un entier.
+La classe hérite de **BasePKUniqueRepo\<Categorie,int\>**, car il y a seulement une clé primaire et c'est un entier.
 
 ### CarteRepo
 
@@ -1092,7 +1098,7 @@ public class CarteRepo : BasePKUniqueRepo<Carte, int>, ICarteRepo
 }
 ```
 
-La classe hérite de **`BasePKUniqueRepo<Carte,int>`**, car il y a seulement une clé primaire et c'est un entier.
+La classe hérite de **BasePKUniqueRepo\<Carte,int\>**, car il y a seulement une clé primaire et c'est un entier.
 
 ### UtilisateurCarteRepo
 
@@ -1138,7 +1144,7 @@ public class UtilisateurCarteRepo : BaseRepo<UtilisateurCarte>, IUtilisateurCart
 }
 ```
 
-La classe hérite de **`BaseRepo<UtilisateurCarte>`**, car elle n'a pas de clé primaire unique.
+La classe hérite de **BaseRepo\<UtilisateurCarte\>**, car elle n'a pas de clé primaire unique.
 
 # Préparation du projet WPF
 
@@ -1167,7 +1173,7 @@ Dans la fenêtre, il faut cocher **SuperCarte.EF** et **SuperCarte.Core**. Vous 
 
 ## Fichier Usings.cs
 
-Afin de réduire la taille des classes, les **`using`** qui seront beaucoup utilisés dans ce projet seront déclaré globalement.
+Afin de réduire la taille des classes, les **using** qui seront beaucoup utilisés dans ce projet seront déclaré globalement.
 
 Créez le fichier **Usings.cs** à la racine du projet **SuperCarte.WPF**.
 
@@ -1216,7 +1222,7 @@ Utilisez cette version si vous n'avez pas le message d'erreur du certificat **SS
 }
 ```
 
-Utilisez cette version avec le paramètre **`Trust Server Certificate=true;`** si vous avez le message d'erreur du certificat **SSL**. Il faut également modifier le nom de la base de données pour celui que vous avez utilisé.
+Utilisez cette version avec le paramètre **Trust Server Certificate=true;** si vous avez le message d'erreur du certificat **SSL**. Il faut également modifier le nom de la base de données pour celui que vous avez utilisé.
 
 ```csharp
 {
@@ -1489,7 +1495,7 @@ public App()
 }
 ```
 
-La méthode **`OnStartup()`** est appelé au démarrage de l'application, après le constructeur. Elle démarre le **host** et ensuite indique au programme d'afficher la fenêtre principale de l'application.
+La méthode **OnStartup()** est appelé au démarrage de l'application, après le constructeur. Elle démarre le **host** et ensuite indique au programme d'afficher la fenêtre principale de l'application.
 
 ```csharp
 protected override async void OnStartup(StartupEventArgs e)
@@ -1552,9 +1558,9 @@ Pour avoir un premier contenu visuel, il faut modifier le fichier **MainWindows.
 </Window>
 ```
 
-À la ligne 8, la propriété **Title** de la balise **`<Window>`** permet de mettre le titre de la fenêtre. 
+À la ligne 8, la propriété **Title** de la balise **\<Window\>** permet de mettre le titre de la fenêtre. 
 
-À la ligne 10, il y a un **Label** pour afficher du texte statique.  L'intérieur de la balise **`<Grid>`**, c'est le contenu de la fenêtre.
+À la ligne 10, il y a un **Label** pour afficher du texte statique.  L'intérieur de la balise **\<Grid\>**, c'est le contenu de la fenêtre.
 
 # Annexe - Remove-Migration
 
@@ -1576,7 +1582,7 @@ Il faut remettre la base de données à un état valide. Le dernier état valide
 Update-Database -StartupProject SuperCarte.EF -Migration AjoutTableUtilisateur
 ```
 
-Ensuite, il faut utiliser la commande **`Remove-Migration`**. Cette commande enlève seulement la dernière migration. Il faudra l'exécuter 2 fois pour retirer la migration problématique.
+Ensuite, il faut utiliser la commande **Remove-Migration**. Cette commande enlève seulement la dernière migration. Il faudra l'exécuter 2 fois pour retirer la migration problématique.
 
 Pour effacer **AjoutTableCategorie**
 

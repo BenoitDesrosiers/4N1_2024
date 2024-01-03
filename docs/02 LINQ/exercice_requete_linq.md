@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# Exercices LINQ
+# Exercices requêtes en LINQ
 
 ## Création du projet
 

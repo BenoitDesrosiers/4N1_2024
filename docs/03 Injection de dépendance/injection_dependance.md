@@ -597,7 +597,7 @@ Démarrez le programme. Il sera fonctionnel et il utilisera la classe **UniversV
 
 Un autre avantage d'utiliser les interfaces est lors des tests. Il est possible de remplacer les dépendances par des **simulacres**. Les tests seront présentés plus tard dans la session.
 
-# Type d'enregistrement des dépendances
+## Type d'enregistrement des dépendances
 
 Il existe 3 types d'enregistrement pour les dépendances. Ces types d'enregistrement consistent à la durée de vie de l'instance de la classe qui sera créée lors de l'injection.
 

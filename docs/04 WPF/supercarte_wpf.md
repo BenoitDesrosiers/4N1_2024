@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# Supercarte WPF
+# SuperCarte.WPF
 
 ## Préparation du projet WPF
 
@@ -139,11 +139,11 @@ L'application aura seulement une seule fenêtre, le classe **MainWindow.xaml**. 
 
 Comme pour le projet de **GestionPersonnage**, des extensions seront utilisées pour gérer l'enregistrement des dépendances.
 
-Créez les dossiers **Extensions\ServiceCollections** à la racine du projet **SuperCarte.WPF**.
+Créez le dossier **Extensions\ServiceCollections** à la racine du projet **SuperCarte.WPF**.
 
 Créez la classe **SCRepositories.cs** dans le dossier.
 
-Les **Repositories** sont déjà créés, alors il faut les ajouter dans l'enregistrement. Remarquez que la création est maintenant en **Scoped**. L'instance du **Repo** sera partagée entre les différents services qui l'utilisent.
+Les **Repositories** sont déjà créés, alors il faut les ajouter dans l'enregistrement. Remarquez que la création est maintenant en **Scoped** (voir la section [Injection de dépendance/Type d'enregistrement des dépendances](../03%20Injection%20de%20d%C3%A9pendance/injection_dependance#type-denregistrement-des-d%C3%A9pendances)). L'instance du **Repo** sera partagée entre les différents services qui l'utilisent.
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
@@ -253,7 +253,7 @@ Avec cette librairie, il sera possible de configurer l'application **WPF** avec 
 
 Copiez ce code dans le fichier **App.xaml.cs**.
 
-```csharp
+```csharp showLineNumbers
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -318,58 +318,25 @@ public partial class App : Application
 
 Voici le détail de la classe.
 
-À la ligne 1 du bloc de code ci-dessous, il y a un attribut pour le **host** de l'application. Le **host**  doit être en attribut, car il sera utilisé dans plusieurs méthodes de la classe. 
+À la ligne 14 du bloc de code ci-dessous, il y a un attribut pour le **host** de l'application. Le **host**  doit être en attribut, car il sera utilisé dans plusieurs méthodes de la classe. 
 
 Ensuite, le constructeur de la classe s'occupe de configurer le **host** comme il a été fait dans le fichier **Program.cs** de l'application console.
 
-À la ligne 5, le constructeur par défaut du **host** est créé.
+À la ligne 18, le constructeur par défaut du **host** est créé.
 
-À la ligne 10, il faut enregistrer la fenêtre principale dans les dépendances de l'application.
+À la ligne 23, il faut enregistrer la fenêtre principale dans les dépendances de l'application.
 
-À la ligne 13, le contexte est enregistré avec le fichier de configuration. 
+À la ligne 23, le contexte est enregistré avec le fichier de configuration. 
 
-Aux lignes 16 à 18, le service utilise les méthodes d'extension pour enregistrer les différents concepts.
+Aux lignes 29 à 32, le service utilise les méthodes d'extension pour enregistrer les différents concepts.
 
-À la ligne 21, le **host** est construit en fonction de la configuration initiale.
+À la ligne 35, le **host** est construit en fonction de la configuration initiale.
 
-```csharp
-private IHost? _host;
 
-public App()
-{
-    var builder = Host.CreateDefaultBuilder();
-
-    //Enregistrement des services
-    builder.ConfigureServices((context, services) =>
-    {            
-        services.AddSingleton<MainWindow>(); //Fenêtre principale
-
-        //Enregistrement du contexte    
-        services.AddDbContext<SuperCarteContext>(options => options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
-
-        //Appel des méthodes d'extension                        
-        services.EnregistrerRepositories();
-        services.EnregistrerServices();            
-        services.EnregistrerValidateurs();
-        services.EnregistrerViewModels();
-    });
-
-    _host = builder.Build();
-}
-```
 
 La méthode **OnStartup()** est appelé au démarrage de l'application, après le constructeur. Elle démarre le **host** et ensuite indique au programme d'afficher la fenêtre principale de l'application.
 
-```csharp
-protected override async void OnStartup(StartupEventArgs e)
-{
-    await _host!.StartAsync();
 
-    var fenetreInitiale = _host.Services.GetRequiredService<MainWindow>();
-    fenetreInitiale.Show(); //Affiche la fenêtre initiale
-    base.OnStartup(e);
-}
-```
 
 Démarrez l'application. Il y a 2 fenêtres.
 
@@ -425,38 +392,4 @@ Pour avoir un premier contenu visuel, il faut modifier le fichier **MainWindows.
 
 À la ligne 10, il y a un **Label** pour afficher du texte statique.  L'intérieur de la balise **\<Grid\>**, c'est le contenu de la fenêtre.
 
-# Annexe - Remove-Migration
 
-Pour être en mesure de supprimer des migrations, il faut remettre la base de données à l'état correct.
-
-Par exemple, voici 4 migrations.
-
-```
-CreationBD
-AjoutTableUtilisateur
-AjoutTableEnsemble -- Problématique
-AjoutTableCategorie -- Correct
-
-```
-
-Il faut remettre la base de données à un état valide. Le dernier état valide est **AjoutTableUtilisateur**.
-
-```powershell
-Update-Database -StartupProject SuperCarte.EF -Migration AjoutTableUtilisateur
-```
-
-Ensuite, il faut utiliser la commande **Remove-Migration**. Cette commande enlève seulement la dernière migration. Il faudra l'exécuter 2 fois pour retirer la migration problématique.
-
-Pour effacer **AjoutTableCategorie**
-
-```
-Remove-Migration -StartupProject SuperCarte.EF 
-```
-
-Pour effacer **AjoutTableEnsemble**
-
-```
-Remove-Migration -StartupProject SuperCarte.EF 
-```
-
-Malheureusement, la partie de **AjoutTableCategorie** doit être effacée, même si elle est valide.

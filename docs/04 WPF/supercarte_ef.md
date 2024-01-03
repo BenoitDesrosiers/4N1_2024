@@ -176,7 +176,7 @@ Chacune des classes qui sont inscrites dans un **DbSet** doit avoir une clé pri
 
 Par exemple, pour la classe **Carte.cs**, il y a la clé étrangère vers la table parent **Categorie**. Mais il serait possible de modifier la convention en effectuant le 2e exemple. Il faut par contre que le couple de propriétés **Navigation et clé étrangère** respecte la convention.
 
-```csharp
+```csharp title="NE PAS COPIER"
 //Convention
 public int CategorieId { get; set; }
 public Categorie Categorie { get; set; } = null!;

@@ -29,7 +29,7 @@ La première librairie est pour le serveur utilisé avec le contexte. Dans notre
 Install-Package Microsoft.EntityFrameworkCore.SqlServer
 ```
 
-La 2e librairie est pour les outils de migration. C'est la même librairie que pour l'outil **`Scaffold-DbContext`** de l'approche **Database First**.
+La 2e librairie est pour les outils de migration. C'est la même librairie que pour l'outil **Scaffold-DbContext** de l'approche **Database First**.
 
 ```
 Install-Package Microsoft.EntityFrameworkCore.Tools
@@ -172,7 +172,7 @@ Pour que la migration fonctionne, il faut avoir un **contexte**, une configurati
 
 Chacune des classes qui sont inscrites dans un **DbSet** doit avoir une clé primaire. Par convention, la propriété qui se nomme **Id** ou **[Nom de la Classe]Id**  dans la classe du modèle est automatiquement considérée comme la clé primaire.
 
-Également, pour les clés étrangères, il faut la propriété de navigation **Plusieurs à 1** et une propriété du même nom avec **Id** comme suffixe. Par convention, une clé étrangère a le même nom que la clé primaire de la table parent. Donc pour une clé étrangère qui utilise la table **Maison**, la propriété de navigation serait **Maison** et la propriété de la clé serait **MaisonId**. Par défaut, la clé étrangère est **`ON DELETE CASCADE`** et **`ON UPDATE NO ACTION`**. Si la classe parent possède une collection de la classe enfant, le lien sera fait automatiquement. Si la table avait 2 clés étrangères sur la même table, il faudrait configurer la relation dans le contexte.
+Également, pour les clés étrangères, il faut la propriété de navigation **Plusieurs à 1** et une propriété du même nom avec **Id** comme suffixe. Par convention, une clé étrangère a le même nom que la clé primaire de la table parent. Donc pour une clé étrangère qui utilise la table **Maison**, la propriété de navigation serait **Maison** et la propriété de la clé serait **MaisonId**. Par défaut, la clé étrangère est **ON DELETE CASCADE** et **ON UPDATE NO ACTION**. Si la classe parent possède une collection de la classe enfant, le lien sera fait automatiquement. Si la table avait 2 clés étrangères sur la même table, il faudrait configurer la relation dans le contexte.
 
 Par exemple, pour la classe **Carte.cs**, il y a la clé étrangère vers la table parent **Categorie**. Mais il serait possible de modifier la convention en effectuant le 2e exemple. Il faut par contre que le couple de propriétés **Navigation et clé étrangère** respecte la convention.
 
@@ -263,13 +263,13 @@ Il est possible de choisir le nom des **DbSet**. Pour ce projet, le suffixe **Tb
 
 La table **UtilisateurCarte** est volontairement **exclue** des **DbSet** pour l'instant, car elle n'a pas de clé primaire unique, mais une clé primaire composée. Ce concept sera présenté plus tard.
 
-La méthode **`OnConfiguring`** contient la logique pour la configuration du serveur par un fichier externe ou par une variable d'environnement. 
+La méthode **OnConfiguring** contient la logique pour la configuration du serveur par un fichier externe ou par une variable d'environnement. 
 
-La clause **`#if DEBUG`** indique au compilateur de tenir compte du code seulement si l'application est en mode **Debug**. Il ne faut pas que cette configuration soit accessible en production.
+La clause **#if DEBUG** indique au compilateur de tenir compte du code seulement si l'application est en mode **Debug**. Il ne faut pas que cette configuration soit accessible en production.
 
-### Variable d'environnement `MIGRATION_CONNECTION_STRING`
+### MIGRATION_CONNECTION_STRING
 
-Il faut assigner la chaine de connexion dans la variable d'environnement **`MIGRATION_CONNECTION_STRING`**.
+Il faut assigner la chaine de connexion dans la variable d'environnement **MIGRATION_CONNECTION_STRING**.
 
 Il faut faire cette étape à chaque démarrage de **Visual Studio** s'il est nécessaire d'effectuer des migrations.
 
@@ -287,7 +287,7 @@ Pour ce projet, utilisez cette chaine de connexion. Le nom de la base de donnée
 $env:MIGRATION_CONNECTION_STRING = "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;"
 ```
 
-Voici la commande avec le **`Trusted_Connection=True;`** , si vous avez l'erreur **SSL**.
+Voici la commande avec le **Trusted_Connection=True;** , si vous avez l'erreur **SSL**.
 
 ```powershell
 $env:MIGRATION_CONNECTION_STRING = "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;Trust Server Certificate=True;"
@@ -321,7 +321,7 @@ Add-Migration CreationBD -StartupProject SuperCarte.EF
 
 Il y a maintenant un dossier **Migration**. À l'intérieur, il y a un fichier avec un **timestamp** avec le nom de la migration. L'outil **Add-Migration** s'occupe d'analyser le contexte et de créer le fichier de migration correspondant. Il serait possible de faire ce fichier manuellement ou à partir d'une autre librairie.
 
-Voici le fichier. La méthode **`Up`** permet d'appliquer la migration à la base de données et la méthode **`Down`** est de la retirer. Il n'est pas recommandé de modifier ce fichier s'il a été généré par un outil., car il ne sera plus en **synchronisation** avec le **contexte**.
+Voici le fichier. La méthode **Up** permet d'appliquer la migration à la base de données et la méthode **Down** est de la retirer. Il n'est pas recommandé de modifier ce fichier s'il a été généré par un outil., car il ne sera plus en **synchronisation** avec le **contexte**.
 
 ```csharp
 using System;
@@ -473,7 +473,7 @@ namespace SuperCarte.EF.Migrations
 
 Les fichiers de migration sont incrémentaux. La génération d'une migration se base sur le fichier **snapshot** du dossier de migration. 
 :::danger Attention
-Il est important d'utiliser la commande **`Remove-Migration`** pour retirer une migration de la liste et non supprimer le fichier manuellement. L'annexe à la fin du document explique le fonctionnement du **`Remove-Migration`**.
+Il est important d'utiliser la commande **Remove-Migration** pour retirer une migration de la liste et non supprimer le fichier manuellement. L'annexe à la fin du document explique le fonctionnement du **Remove-Migration**.
 :::
 
 ### Synchronisation de la base de données
@@ -486,9 +486,9 @@ Voici la syntaxe.
 Update-Database -StartupProject [Nom Projet Entity Framework] -Migration [Nom migration]
 ```
 
-Si l'argument **`-Migration`** n'est pas spécifié, ce sera toutes les migrations qui seront appliquées. 
+Si l'argument **-Migration** n'est pas spécifié, ce sera toutes les migrations qui seront appliquées. 
 
-Également, dans la chaine de connexion de la variable **`MIGRATION_CONNECTION_STRING`**, il faut s'assurer que l'utilisateur spécifié soit en mesure de créer des bases de données. Le premier fichier de migration aura le code de création de la base de données.
+Également, dans la chaine de connexion de la variable **MIGRATION_CONNECTION_STRING**, il faut s'assurer que l'utilisateur spécifié soit en mesure de créer des bases de données. Le premier fichier de migration aura le code de création de la base de données.
 
 Pour ce projet, utilisez cette commande. 
 
@@ -500,9 +500,9 @@ Ouvrez **SSMS** et la base de données sera présente.
 
 Il y a par contre quelques erreurs. 
 * Les tables se terminent par **Tb**.
-* Toutes les propriétés **`string`** sont des **`NVARCHAR(max)`**. 
-* Le champ **CarteTb.PrixRevente** est un **`DECIMAL(18,2)`**. 
-* Le champ **EnsembleTb.Disponible** est un **`datetime2`**. 
+* Toutes les propriétés **string** sont des **NVARCHAR(max)**. 
+* Le champ **CarteTb.PrixRevente** est un **DECIMAL(18,2)**. 
+* Le champ **EnsembleTb.Disponible** est un **datetime2**. 
 * Le champ **UtilisateurTb.NomUtilisateur** n'est pas unique.
   
 Ceci ne respecte pas le **DEA**. Il faut configurer le contexte pour respecter le **DEA**.
@@ -522,7 +522,7 @@ INSERT INTO RoleTb(Nom)
 VALUES ('Administrateur');
 ```
 
-La clé primaire n'est pas spécifiée dans le **`INSERT`**. La migration considère que la clé primaire d'une table est **auto incrémentée** par défaut. 
+La clé primaire n'est pas spécifiée dans le **INSERT**. La migration considère que la clé primaire d'une table est **auto incrémentée** par défaut. 
 
 ## Configuration du contexte
 
@@ -532,11 +532,11 @@ Il est possible d'ajouter des configurations et des spécifications à la base d
 
 Il est possible de spécifier le nom de la table pour chacune des classes, les clés primaires composées, des types de données spécifiques, des contraintes sur une colonne...
 
-Il faut les ajouter dans la méthode **`OnModelCreating`** du contexte. Il s'agit du [**FluentAPI**](https://www.entityframeworktutorial.net/efcore/fluent-api-in-entity-framework-core.aspx) . Il est possible de faire plusieurs configurations avec [**DataAnnotation**](https://www.entityframeworktutorial.net/code-first/dataannotation-in-code-first.aspx) directement avec les classes du modèle, mais certaines configurations doivent être faites obligatoirement avec **FluentAPI**. Également, il y a certaines limitations selon la version de **Entity Framework Core** utilisée. Le **FluentAPI** permet de tout faire. Il est préférable de le faire dans un endroit centralisé.
+Il faut les ajouter dans la méthode **OnModelCreating** du contexte. Il s'agit du [**FluentAPI**](https://www.entityframeworktutorial.net/efcore/fluent-api-in-entity-framework-core.aspx) . Il est possible de faire plusieurs configurations avec [**DataAnnotation**](https://www.entityframeworktutorial.net/code-first/dataannotation-in-code-first.aspx) directement avec les classes du modèle, mais certaines configurations doivent être faites obligatoirement avec **FluentAPI**. Également, il y a certaines limitations selon la version de **Entity Framework Core** utilisée. Le **FluentAPI** permet de tout faire. Il est préférable de le faire dans un endroit centralisé.
 
 ### Nom des tables
 
-Pour débuter, il faut modifier le nom des tables pour retirer le suffixe **Tb** dans la base de données, mais il faut le conserver dans les **`DBSet`**.
+Pour débuter, il faut modifier le nom des tables pour retirer le suffixe **Tb** dans la base de données, mais il faut le conserver dans les **DBSet**.
 
 Ajoutez la méthode ci-dessous dans la classe **SuperCarteContext.cs**.
 
@@ -580,9 +580,9 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 }
 ```
 
-Pour chacune des **entités (modèles/tables)**, il faut utiliser le **`modelBuilder`** pour faire la configuration. Dans une modélisation de données, le terme **Entité** est utilisé pour représenter un concept. **DEA** est pour **Diagramme Entité Association**. Donc une **entité** dans une base de données est une table et pour un modèle objet une classe de modèle de données.
+Pour chacune des **entités (modèles/tables)**, il faut utiliser le **modelBuilder** pour faire la configuration. Dans une modélisation de données, le terme **Entité** est utilisé pour représenter un concept. **DEA** est pour **Diagramme Entité Association**. Donc une **entité** dans une base de données est une table et pour un modèle objet une classe de modèle de données.
 
-La méthode **`ToTable()`** permet d'indiquer le nom de la table dans la base de données. Il serait possible de s'adapter aux standards propres de l'organisation/technologie en utilisant que des minuscules, PascalCase, camelCase, la pluralisation, le underscore pour une table pivot...
+La méthode **ToTable()** permet d'indiquer le nom de la table dans la base de données. Il serait possible de s'adapter aux standards propres de l'organisation/technologie en utilisant que des minuscules, PascalCase, camelCase, la pluralisation, le underscore pour une table pivot...
 
 Dans la **Console du gestionnaire de Package**, créez la migration **RenommerTables**.
 
@@ -592,7 +592,7 @@ Add-Migration RenommerTables -StartupProject SuperCarte.EF
 
 Si vous ouvrez le fichier **xxx_RenommerTables.cs** dans le dossier de migration, il y aura seulement la logique pour renommer les tables. En **SQL**, cette tâche demanderait beaucoup de code.
 
-Appliquez la migration avec la commande **`Update-Database`**. Il faut spécifier la migration **`RenommerTables`**.
+Appliquez la migration avec la commande **Update-Database**. Il faut spécifier la migration **RenommerTables**.
 
 Pour ce projet, utilisez cette commande. Le nom de la base de données est **eDA_4N1_SuperCarte**. Modifiez le **DA** par votre numéro d'admission.
 
@@ -623,7 +623,7 @@ MigrationId														ProductVersion
 20230315131307_RenommerTables									7.0.4
 ```
 
-Pour revenir à l'état initial, il faut appliquer de nouveau la migration **`CreationBD`**.
+Pour revenir à l'état initial, il faut appliquer de nouveau la migration **CreationBD**.
 
 Pour ce projet, utilisez cette commande. 
 
@@ -825,7 +825,7 @@ public class SuperCarteContext : DbContext
 }
 ```
 
-Effectuez une nouvelle migration nommée **`AjouterTableUtilisateurCarte`**.
+Effectuez une nouvelle migration nommée **AjouterTableUtilisateurCarte**.
 
 ```powershell
 Add-Migration AjouterTableUtilisateurCarte -StartupProject SuperCarte.EF
@@ -839,7 +839,7 @@ The entity type 'UtilisateurCarte' requires a primary key to be defined. If you 
 
 Ceci indique que la classe **UtilisateurCarte** n'a pas de clé primaire, car il n'y a pas de propriété **UtilisateurCarteId**. Le générateur de migration n'est pas en mesure de déterminer que les propriétés **UtilisateurId** et **CarteId** sont les clés primaires. Il faut donc le spécifier dans le contexte.
 
-Modifiez la partie **UtilisateurCarte** dans la méthode **`OnModelCreating()`** du contexte.
+Modifiez la partie **UtilisateurCarte** dans la méthode **OnModelCreating()** du contexte.
 
 ```csharp
 //Table UtilisateurCarte
@@ -853,19 +853,19 @@ modelBuilder.Entity<UtilisateurCarte>(entity =>
 });
 ```
 
-La méthode **`HasKey()`** permet de spécifier la clé primaire. Si la clé est représentée par plusieurs champs, il faut créer un objet dynamique **`new {}`** et insérer toutes les propriétés qui représentent la clé primaire.
+La méthode **HasKey()** permet de spécifier la clé primaire. Si la clé est représentée par plusieurs champs, il faut créer un objet dynamique **new {}** et insérer toutes les propriétés qui représentent la clé primaire.
 
-Il peut arriver qu'une table n'utilise pas une clé artificielle pour la clé primaire. Par exemple, la table **Etudiant** peut avoir comme clé primaire le champ **DA** et non **EtudiantId**. Il faudrait spécifier **`entity.HasKey(t => t.DA)`**.
+Il peut arriver qu'une table n'utilise pas une clé artificielle pour la clé primaire. Par exemple, la table **Etudiant** peut avoir comme clé primaire le champ **DA** et non **EtudiantId**. Il faudrait spécifier **entity.HasKey(t => t.DA)**.
 
-Effectuez une nouvelle migration nommée **`AjouterTableUtilisateurCarte`**. Elle devrait fonctionner.
+Effectuez une nouvelle migration nommée **AjouterTableUtilisateurCarte**. Elle devrait fonctionner.
 
 ```powershell
 Add-Migration AjouterTableUtilisateurCarte
 ```
 
-Dans le fichier de migration **xxx_AjouterTableUtilisateurCarte.cs** du dossier **Migrations**, il y a seulement la logique de la création de la table **UtilisateurCarte**. Il prend en considération les anciennes migrations, dont **`RemommerTables`** même si elle n'est pas actuellement appliquée.
+Dans le fichier de migration **xxx_AjouterTableUtilisateurCarte.cs** du dossier **Migrations**, il y a seulement la logique de la création de la table **UtilisateurCarte**. Il prend en considération les anciennes migrations, dont **RemommerTables** même si elle n'est pas actuellement appliquée.
 
-Appliquez les modifications à la base de données. Spécifiez la migration **`AjouterTableUtilisateurCarte`**.
+Appliquez les modifications à la base de données. Spécifiez la migration **AjouterTableUtilisateurCarte**.
 
 ```csharp
 Update-Database -StartupProject SuperCarte.EF -Migration AjouterTableUtilisateurCarte
@@ -890,11 +890,11 @@ Actuellement, toutes les chaines de caractères sont des **NVARCHAR(MAX)**. Il e
 
 Mais en tant que programmeur, il faut réaliser le **DEA** tel que produit par le concepteur. Si vous êtes le concepteur, posez-vous la question s'il est nécessaire de limiter la longueur d'un champ ou de ne pas permettre le **unicode**.
 
-Le **`modelBuilder`** a la méthode **`Property()`** qui permet de spécifier les éléments spécifiques à un champ. La méthode **`Property()`** est chainable, donc il est possible d'ajouter toutes les spécifications d'un coup pour une propriété. Elle reçoit en paramètre une fonction **Lambda** pour spécifier la propriété. La variable **`t`** est utilisée pour **Table**. Ensuite, les autres méthodes chainables permettent de configurer la propriété/champ.
+Le **modelBuilder** a la méthode **Property()** qui permet de spécifier les éléments spécifiques à un champ. La méthode **Property()** est chainable, donc il est possible d'ajouter toutes les spécifications d'un coup pour une propriété. Elle reçoit en paramètre une fonction **Lambda** pour spécifier la propriété. La variable **t** est utilisée pour **Table**. Ensuite, les autres méthodes chainables permettent de configurer la propriété/champ.
 
-Pour spécifier la longueur maximale, c'est la méthode **`HasMaxLength()`** qui permet de la spécifier.
+Pour spécifier la longueur maximale, c'est la méthode **HasMaxLength()** qui permet de la spécifier.
 
-Dans le **DEA**, ce sont des **`VARCHAR`** et non des **`NVARCHAR`**. La méthode **`IsUnicode(false)`** permet d'indiquer que ce n'est pas un **`NVARCHAR`**.
+Dans le **DEA**, ce sont des **VARCHAR** et non des **NVARCHAR**. La méthode **IsUnicode(false)** permet d'indiquer que ce n'est pas un **NVARCHAR**.
 
 Voici les exemples pour la configuration des différents cas. La classe complète sera fourni à la fin de la section.
 
@@ -913,7 +913,7 @@ modelBuilder.Entity<Role>(entity =>
 });
 ```
 
-Pour la table **Utilisateur**, le champ **MotPasseHash** est un **`CHAR(60)`**. La longueur d'un **Hash** est fixe à 60 caractères pour l'algorithme **Bcrypt**. Ce sera l'algorithme utilisé pour ce projet. Pour ce cas, il est pertinent pour le concepteur de fixer la longueur. La méthode **`IsFixedLength()`** permet d'indiquer que c'est un **`NCHAR`** ou un **`CHAR`**. 
+Pour la table **Utilisateur**, le champ **MotPasseHash** est un **CHAR(60)**. La longueur d'un **Hash** est fixe à 60 caractères pour l'algorithme **Bcrypt**. Ce sera l'algorithme utilisé pour ce projet. Pour ce cas, il est pertinent pour le concepteur de fixer la longueur. La méthode **IsFixedLength()** permet d'indiquer que c'est un **NCHAR** ou un **CHAR**. 
 
 ```csharp
 //Table Utilisateur
@@ -931,7 +931,7 @@ modelBuilder.Entity<Utilisateur>(entity =>
 });
 ```
 
-Pour la table **Carte**, le champ **PrixRevente** doit être un **`DECIMAL(8,2)`**. La méthode **`HasPrecision()`** permet de préciser la précision d'un **`DECIMAL`**.
+Pour la table **Carte**, le champ **PrixRevente** doit être un **DECIMAL(8,2)**. La méthode **HasPrecision()** permet de préciser la précision d'un **DECIMAL**.
 
 ```csharp
 //Table Carte
@@ -945,7 +945,7 @@ modelBuilder.Entity<Carte>(entity =>
 });
 ```
 
-Pour la table **Ensemble**, le champ **Disponibilite** doit être de type **DATE**. Actuellement c'est un **DATETIME2**. La méthode **`HasColumnType()`** permet de spécifier directement un type. Il faut s'assurer que le type est compatible avec celui de la classe.
+Pour la table **Ensemble**, le champ **Disponibilite** doit être de type **DATE**. Actuellement c'est un **DATETIME2**. La méthode **HasColumnType()** permet de spécifier directement un type. Il faut s'assurer que le type est compatible avec celui de la classe.
 
 ```csharp
 //Table Ensemble
@@ -1129,7 +1129,7 @@ Créez la migration **CorrectionType**.
 Add-Migration CorrectionType -StartupProject SuperCarte.EF
 ```
 
-Appliquez les modifications à la base de données. Spécifiez la migration **`CorrectionType`**.
+Appliquez les modifications à la base de données. Spécifiez la migration **CorrectionType**.
 
 ```csharp
 Update-Database -StartupProject SuperCarte.EF -Migration CorrectionType
@@ -1183,7 +1183,7 @@ Créez la migration **UtilisateurNomUtilisateurUnique**.
 Add-Migration UtilisateurNomUtilisateurUnique -StartupProject SuperCarte.EF
 ```
 
-Appliquez les modifications à la base de données. Spécifiez la migration **`UtilisateurNomUtilisateurUnique`**.
+Appliquez les modifications à la base de données. Spécifiez la migration **UtilisateurNomUtilisateurUnique**.
 
 ```powershell
 Update-Database -StartupProject SuperCarte.EF -Migration UtilisateurNomUtilisateurUnique
@@ -1193,17 +1193,17 @@ Ouvrez **SSMS** et la base de données aura l'index avec la mention **Unique** s
 
 ### ON DELETE NO ACTION
 
-Par défaut, les clés étrangères ont la règle **`ON DELETE CASCADE`**. Dans certains cas, ce comportement peut être intéressant, car ceci permet de supprimer plusieurs enregistrements à partie de l'enregistrement parent.
+Par défaut, les clés étrangères ont la règle **ON DELETE CASCADE**. Dans certains cas, ce comportement peut être intéressant, car ceci permet de supprimer plusieurs enregistrements à partie de l'enregistrement parent.
 
-Pour la table **UtilisateurCarte**, il pourrait être intéressant de conserver le **`ON DELETE CASCADE`** sur la clé étrangère **UtilisateurId**. Si l'utilisateur est supprimé, les cartes qu'ils possèdent le seront également.
+Pour la table **UtilisateurCarte**, il pourrait être intéressant de conserver le **ON DELETE CASCADE** sur la clé étrangère **UtilisateurId**. Si l'utilisateur est supprimé, les cartes qu'ils possèdent le seront également.
 
 Par contre, pour la clé étrangère carte, il n'est pas intéressant de le faire, car si une carte est supprimée, elle disparaitrait de tous les utilisateurs. L'administrateur avant de supprimer une carte qui est utilisée par des utilisateurs devra prendre une action spéciale s'il désire réellement supprimer la carte, soit en offrant une nouvelle carte en compensation. Il serait possible de gérer ce comportement dans le code uniquement, mais en cas de **bug**, les conséquences peuvent être importantes. Il peut être préférable de limiter ce comportement dans la base de données également.
 
-Pour le **`ON UPDATE`**, il est toujours à **`NO ACTION`** avec **Entity Framework**, même si la table est configurée de cette façon dans la base de données.
+Pour le **ON UPDATE**, il est toujours à **NO ACTION** avec **Entity Framework**, même si la table est configurée de cette façon dans la base de données.
 
-Pour l'instant, toutes les clés étrangères auront **`ON DELETE NO ACTION`**. Pour **Entity Framework**, il faut mettre **`DeleteBehavior.ClientSetNull`**.
+Pour l'instant, toutes les clés étrangères auront **ON DELETE NO ACTION**. Pour **Entity Framework**, il faut mettre **DeleteBehavior.ClientSetNull**.
 
-Il faut donc configurer manuellement dans le **contexte** la relation **Plusieurs à 1** avec la méthode **`HasOne()`**.
+Il faut donc configurer manuellement dans le **contexte** la relation **Plusieurs à 1** avec la méthode **HasOne()**.
 
 Pour la table **Utilisateur**, la relation est avec la table **Role**.
 
@@ -1219,13 +1219,13 @@ modelBuilder.Entity<Utilisateur>(entity =>
 });
 ```
 
-La méthode **`HasOne(t => t.Role)`** indique qu'il y a une relation **Plusieurs à 1** avec la table/modèle **Role**.
+La méthode **HasOne(t => t.Role)** indique qu'il y a une relation **Plusieurs à 1** avec la table/modèle **Role**.
 
-La méthode **`WithMany(p => p.UtilisateurListe)`** indique la relation **1 à plusieurs** de la table/modèle **Role** avec la table/modèle **Utilisateur**. La variable **`p`** est pour **Table Parent**.
+La méthode **WithMany(p => p.UtilisateurListe)** indique la relation **1 à plusieurs** de la table/modèle **Role** avec la table/modèle **Utilisateur**. La variable **p** est pour **Table Parent**.
 
-La méthode **`HasForeignKey(t => t.RoleId)`** indique que la clé étrangère de la table/modèle **Role** est la propriété **RoleId**.
+La méthode **HasForeignKey(t => t.RoleId)** indique que la clé étrangère de la table/modèle **Role** est la propriété **RoleId**.
 
-La méthode **`OnDelete(DeleteBehavior.ClientSetNull)`** permet d'indiquer que la règle est **`No Action`**. Malgré que l'option **`DeleteBehavior.NoAction`** existe, il est recommandé de prendre **`DeleteBehavior.ClientSetNull`**.
+La méthode **OnDelete(DeleteBehavior.ClientSetNull)** permet d'indiquer que la règle est **No Action**. Malgré que l'option **DeleteBehavior.NoAction** existe, il est recommandé de prendre **DeleteBehavior.ClientSetNull**.
 
 Pour la classe **Carte** et **UtilisateurCarte**, il y a 2 clés étrangères. Il faut le faire pour les 2 clés.
 
@@ -1466,7 +1466,7 @@ Créez la migration **FKOnDeleteNoAction**.
 Add-Migration FKOnDeleteNoAction -StartupProject SuperCarte.EF
 ```
 
-Appliquez les modifications à la base de données. Spécifiez la migration **`UtilisateurNomUtilisateurUnique`**.
+Appliquez les modifications à la base de données. Spécifiez la migration **UtilisateurNomUtilisateurUnique**.
 
 ```powershell
 Update-Database -StartupProject SuperCarte.EF -Migration FKOnDeleteNoAction
@@ -1474,7 +1474,7 @@ Update-Database -StartupProject SuperCarte.EF -Migration FKOnDeleteNoAction
 
 Ouvrez **SSMS** et les clés étrangères auront **No Action**.
 
-Voici le résultat de la 7e section de **`sp_help Utilisateur `**.
+Voici le résultat de la 7e section de **sp_help Utilisateur **.
 
 ```
 constraint_type			constraint_name				delete_action	update_action	
@@ -1483,7 +1483,7 @@ FOREIGN KEY				FK_Utilisateur_Role_RoleId	No Action		No Action
 
 ## Seed - Ajout des données
 
-Pour ajouter des données, il faut le faire dans la méthode **`OnModelCreating()`**. Cette action s'appelle **Seed** pour semer des données.
+Pour ajouter des données, il faut le faire dans la méthode **OnModelCreating()**. Cette action s'appelle **Seed** pour semer des données.
 
 Avant de poursuivre, il faut retirer l'enregistrement de la table **Role** qui a été fait manuellement.
 
@@ -1493,7 +1493,7 @@ DELETE FROM [Role];
 
 ### Préparation du contexte
 
-Pour éviter que le **Seed** soit toujours exécuté en mémoire, il est préférable de modifier le contexte. Ce sera l'attribut **`_executerSeed`** qui s'occupera de ceci.
+Pour éviter que le **Seed** soit toujours exécuté en mémoire, il est préférable de modifier le contexte. Ce sera l'attribut **_executerSeed** qui s'occupera de ceci.
 
 ```csharp showLineNumbers
 using Microsoft.EntityFrameworkCore;
@@ -1698,15 +1698,15 @@ public class SuperCarteContext : DbContext
 }
 ```
 
-À la ligne 45, l'activation du **Seed** se fait uniquement si le contexte est initialisé en mode **Migration** dans la méthode **`OnConfiguring()`**.
+À la ligne 45, l'activation du **Seed** se fait uniquement si le contexte est initialisé en mode **Migration** dans la méthode **OnConfiguring()**.
 
-À la ligne 171, il y a une vérification avant d'exécuter le **Seed **dans la méthode **`OnModelCreating()`**.
+À la ligne 171, il y a une vérification avant d'exécuter le **Seed **dans la méthode **OnModelCreating()**.
 
 À la ligne 181, les données seront créées dans cette méthode.
 
 ### Création des données
 
-Pour ajouter des données, il faut envoyer un tableau des données dans la méthode **`HasData()`** de l'entité en question.
+Pour ajouter des données, il faut envoyer un tableau des données dans la méthode **HasData()** de l'entité en question.
 
 Il est obligatoire de spécifier les clés primaires et étrangères lors d'un **Seed** à partir de la migration avec **Entity Framework**.
 
@@ -1778,7 +1778,7 @@ Créez la migration **Seed_RoleEtUtilisateur**.
 Add-Migration Seed_RoleEtUtilisateur -StartupProject SuperCarte.EF
 ```
 
-Appliquez les modifications à la base de données. Spécifiez la migration **`Seed_RoleEtUtilisateur`**.
+Appliquez les modifications à la base de données. Spécifiez la migration **Seed_RoleEtUtilisateur**.
 
 ```powershell
 Update-Database -StartupProject SuperCarte.EF -Migration Seed_RoleEtUtilisateur

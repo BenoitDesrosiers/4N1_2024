@@ -72,7 +72,7 @@ Lorsqu'aucun **schéma** n'est spécifié lors de la création d'une table, le *
 
 Pour en savoir plus : https://www.youtube.com/watch?v=bbpxxnEMda4
 
-## Exercices sur `SELECT`
+## Exercices sur **SELECT**
 
 Utilisez la base de données **AdventureWorks** pour tous les exercices de **`SELECT`**. 
 
@@ -137,7 +137,7 @@ ORDER BY
 
 Modifiez la requête 2 et utilisez l'alias **p** pour la table **Person**.
 
-Les colonnes du **`SELECT`** doivent utiliser cet alias.
+Les colonnes du **SELECT** doivent utiliser cet alias.
 
 Sélectionnez ceux qui ont le type de personne est **SP** ou **EM** et que leur prénom commence par la lettre **A** ou **C**.
 
@@ -174,7 +174,7 @@ Affichez le prénom, nom et l'adresse courriel d'une personne.
 
 Vous devez faire une jointure entre 2 tables: Person et EmailAddress.
 
-Utilisez **`sp_help`** pour connaitre les clés pour la jointure entre EmailAddress et Person.
+Utilisez **sp_help** pour connaitre les clés pour la jointure entre EmailAddress et Person.
 
 <details>
   <summary>Solution pour sp_help</summary>
@@ -350,7 +350,7 @@ Refaites la requête 9, mais au lieu d'afficher uniquement le chiffre du choix, 
 
 :::tip
 
-Il faudra utiliser un **`CASE`** dans le **`SELECT`**. 
+Il faudra utiliser un **CASE** dans le **SELECT**. 
 
 Voir le site : https://sql.sh/cours/case
 

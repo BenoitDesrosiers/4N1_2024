@@ -125,7 +125,6 @@ Pour chacun des exercices, nommez votre objet de retour comme indiqué ci-dessou
 Pour chacun des exercices, effectuez la requête en syntaxe **Lamba** et **Query**.
 
 ```csharp
-//Pour l'exercice 1.
 //Si un seul objet
 Animal ex1Lambda = ...
 Animal ex1Query = ...
@@ -237,7 +236,7 @@ int ex5Query = (from lqAnimal in listeAnimal
 
 Retournez tous les animaux qui sont des  **mâles** et qui sont des **mammifères**.
 
-Utilisez l'**`enum`** pour faire la sélection du type d'animal.
+Utilisez l'**enum** pour faire la sélection du type d'animal.
 
 <details>
   <summary>Solution</summary>
@@ -344,7 +343,7 @@ var ex10Query = (from lqAnimal in listeAnimal
 
 Retournez l'animal qui a le grand nom (plus de lettres).
 
-Utilisez un **`LastOrDefault()`**.
+Utilisez un **LastOrDefault()**.
 
 <details>
   <summary>Solution</summary>
@@ -453,7 +452,7 @@ Retournez la liste des noms des animaux. Il faut éliminer les doublons.
 
 Triez la liste en ordre alphabétique.
 
-Utilisez la méthode **`Distinct()`** avant de faire le **`.ToList()`**.
+Utilisez la méthode **Distinct()** avant de faire le **.ToList()**.
 
 Retournez une liste de **string**.
 
@@ -537,11 +536,11 @@ Retournez la liste des **propriétaires** qui ont des **chiens**. La liste doit 
 
 Retournez la liste des **propriétaires** qui ont des **chats**. La liste doit avoir seulement des éléments **distincts**. Utilisez la syntaxe **Query**.
 
-Utilisez 2 listes différentes. Exemple : **`List<string> ex18ChienLambda`** et **`List<string> ex18ChatQuery`** . 
+Utilisez 2 listes différentes. Exemple : **List\<string\> ex18ChienLambda** et **List\<string\> ex18ChatQuery`** . 
 
-Retournez la liste des propriétaires qui ont des chats et des chiens. Utilisez la méthode **`Intersect`** (intersection).
+Retournez la liste des propriétaires qui ont des chats et des chiens. Utilisez la méthode **Intersect** (intersection).
 
-Retournez la liste des propriétaires qui ont soit un chat ou un chien, mais pas les 2. Utilisez la méthode **`Union`** et **`Except`** (différence) et le résultat de l'intersection. 
+Retournez la liste des propriétaires qui ont soit un chat ou un chien, mais pas les 2. Utilisez la méthode **Union** et **Except** (différence) et le résultat de l'intersection. 
 
 <details>
   <summary>Solution</summary>
@@ -567,9 +566,9 @@ List<string> ex18ChatOuChien = ex18ChatQuery.Union(ex18ChienLambda).Except(ex18C
 
 ### Exercice 19
 
-Créez un dictionnaire de type **`Dictionary<int, Animal> ex20dicAnimal`**, où la clé est le **AnimalId**.
+Créez un dictionnaire de type **Dictionary\<int, Animal\> ex20dicAnimal**, où la clé est le **AnimalId**.
 
-Effectuez une boucle **foreach **et non par **LINQ**, car ce n'est pas possible directement.
+Effectuez une boucle **foreach** et non par **LINQ**, car ce n'est pas possible directement.
 
 Au prochain cours, nous utiliserons l'extension de classe pour être en mesure de le faire avec **LINQ**.
 

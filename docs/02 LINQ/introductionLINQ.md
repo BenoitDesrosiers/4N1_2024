@@ -22,7 +22,7 @@ using System.Data.Linq;
 
 **LINQ** utilise l'extension de méthodes pour ajouter des méthodes additionnelles à certaines collections. Ce concept sera étudié plus tard dans la session. 
 
-La collection la plus utilisée sous **LINQ** est la **`List<T>`**.
+La collection la plus utilisée sous **LINQ** est la **List\<T\>**.
 
 Il existe 2 types de syntaxes pour effectuer des requêtes LINQ.
 
@@ -44,15 +44,15 @@ Il existe 2 types de syntaxes pour effectuer des requêtes LINQ.
 
   Il faut lire la **syntaxe Query** comme ceci.
 
-  **`from lqPersonne in list`** => Pour chacun des éléments de **`list`**, met l'item dans la variable **`lqPersonne`**.
+  **from lqPersonne in list** => Pour chacun des éléments de **list**, met l'item dans la variable **lqPersonne**.
 
-  **`where lqPersonne.Id == 2`** => Qui ont le **Id** égale à **2**.
+  **where lqPersonne.Id == 2** => Qui ont le **Id** égale à **2**.
 
-  **`select lqPersonne` ** => Ajoute l'objet **lqPersonne** dans les items à retourner.
+  **select lqPersonne** => Ajoute l'objet **lqPersonne** dans les items à retourner.
 
-  Il ne faut pas confondre le **`from`** de **LINQ** du **`from`** de **SQL**.
+  Il ne faut pas confondre le **from** de **LINQ** du **from** de **SQL**.
 
-  Dans la documentation, la variable du **`from`** est souvent une seule lettre.
+  Dans la documentation, la variable du **from** est souvent une seule lettre.
 
   Il est préférable d'avoir un nom significatif, car pour les requêtes complexes, le mélange des variables deviendra incompréhensible.
 
@@ -70,11 +70,11 @@ La **syntaxe Query** ressemble plus à **SQL** et elle est un peu plus intuitive
 
 La **Syntaxe Lambda** est plus compacte et elle est parfois plus simple pour les requêtes simples.
 
-## Sélection unique `FirstOrDefault()` et `LastOrDefault()`
+## FirstOrDefault() et LastOrDefault()
 
-La méthode **`FirstOrDefault`** permet de retourner le premier élément en fonction de la recherche demandée. 
+La méthode **FirstOrDefault** permet de retourner le premier élément en fonction de la recherche demandée. 
 
-La méthode **`LastOrDefault`** permet de retourner le premier élément en fonction de la recherche demandée. 
+La méthode **LastOrDefault** permet de retourner le premier élément en fonction de la recherche demandée. 
 
 Si aucun élément n’est trouvé, ce sera la valeur par défaut qui sera retournée. 
 
@@ -103,7 +103,7 @@ int default = listInt.FirstOrDefault(); //0
 int defaultSpecifique = listInt.FirstOrDefault(9); //9
 ```
 
-La clause **`where`** permet de spécifier les conditions de sélection.
+La clause **where** permet de spécifier les conditions de sélection.
 
 ```csharp
 Personne personne1 = new Personne();
@@ -137,7 +137,7 @@ Personne premierQuery = (from lqPersonne in list
 Personne premierLambda = list.where(lqPersonne.Prenom == "François").FirstOrDefault();
 ```
 
-Dans le cas qu'il y a plusieurs conditions, il faut utiliser le **`&&`** et le **`||`** comme pour un **`if`**
+Dans le cas qu'il y a plusieurs conditions, il faut utiliser le **&&** et le **||** comme pour un **if**
 
 ```csharp
 //Query
@@ -151,9 +151,9 @@ Personne premierQuery = (from lqPersonne in list
 Personne premierLambda = list.where(lqPersonne.Prenom == "François" && lqPersonne.Id > 1).FirstOrDefault();
 ```
 
-## Sélection multiple **`ToList()`**
+## ToList()
 
-La méthode **`ToList()`** permet de détourner tous les items qui correspondent aux critères de la requête dans une **`List<T>`**.
+La méthode **ToList()** permet de détourner tous les items qui correspondent aux critères de la requête dans une **List\<T\>**.
 
 ```csharp
 //Query
@@ -183,7 +183,7 @@ List<Personne> lstLambda = list.where(lqPersonne.Prenom == "Stéphane").ToList()
 Console.WriteLine(lstQuery.Count); //Retoune 1
 ```
 
-Dans le cas que la requête ne retourne aucun item, la liste sera vide. **LINQ** ne retourne pas de liste **`null`**.
+Dans le cas que la requête ne retourne aucun item, la liste sera vide. **LINQ** ne retourne pas de liste **null**.
 
 ```csharp
 //Query
@@ -201,7 +201,7 @@ List<Personne> lstLambda = list.where(lqPersonne.Prenom == "Benoit" || lqPersonn
 Console.WriteLine(lstQuery.Count); //Retoune 0
 ```
 
-## Tri `OrderBy`
+## OrderBy
 
 Pour effectuer un tri sur une requête, il est plus facile d'utiliser la **syntaxe Query** que la **syntaxe Lambda**.
 
@@ -248,7 +248,7 @@ List<Personne> lstTriQuery = (from lqPersonne in list
 List<Personne> lstTriLambda = list.OrderBy(lqPersonne => lqPersonne.Prenom).ThenBy(lqPersonne => lqPersonne.Nom).ToList();
 ```
 
-Il n'est pas possible de les regrouper tous les champs dans la méthode **`OrderBy`** ou **`OrderByDescending`**. Il faut ajouter la méthode **`ThenBy`** ou **`ThenByDescending`** pour chacun des champs additionnels.
+Il n'est pas possible de les regrouper tous les champs dans la méthode **OrderBy** ou **OrderByDescending**. Il faut ajouter la méthode **ThenBy** ou **ThenByDescending** pour chacun des champs additionnels.
 
 ```csharp
 List<Personne> lstTriQuery = (from lqPersonne in list
@@ -263,7 +263,7 @@ List<Personne> lstTriLambda = list.OrderBy(lqPersonne => lqPersonne.Prenom).Then
 
 La liste peut devenir longue si le nombre de champs pour le tri est énorme.
 
-## CountIf **`Count()`**
+## Count()
 
 Il est possible de faire un **CountIf** avec **LINQ**. Il faut utiliser la méthode **Count()**.
 
@@ -283,7 +283,7 @@ int nbFrancoisQuery = (from lqPersonne in list
 int nbFrancoisLambda = lstTriLambda.Count(lqPersonne => lqPersonne.Prenom == "François"); //Retourne 2
 ```
 
-Avec la syntaxe **Lambda**, il est possible de mettre la condition directement dans la méthode **`Count()`**.
+Avec la syntaxe **Lambda**, il est possible de mettre la condition directement dans la méthode **Count()**.
 
 ## Objet dynamique
 
@@ -291,7 +291,7 @@ Il est possible de créer des objets **dynamiquement** avec C#. Pour **LINQ**, c
 
 Par contre, l'utilisation d'objets dynamiques fonctionne uniquement si celui-ci est utilisé uniquement dans le bloc de code. S'il doit être retourné dans une méthode ou utilisé comme paramètre, son utilisation ne fonctionne plus.
 
-Pour créer un objet dynamique, il faut utiliser le type **`var`**.
+Pour créer un objet dynamique, il faut utiliser le type **var**.
 
 ```csharp
 var personne = new
@@ -317,7 +317,7 @@ var lstDynQuery = (from lqPersonne in list
 var lstDynLambda = list.Select(lqPersonne => new { Id = lqPersonne.Id, Nom = $"{lqPersonne.Prenom} {lqPersonne.Nom}" }).ToList();
 ```
 
-Le type **`var`** dans ce contexte est une **`List<>`** d'un objet dynamique **`int`**, **`string`**.
+Le type **var** dans ce contexte est une **List\<\>** d'un objet dynamique **int**, **string**.
 
 ## Éléments distincts
 
@@ -328,13 +328,15 @@ List<int> liste = new List<int> { 1, 1, 3, 4, 6, 7, 3, 6 };
 List<int> listeDistinct = liste.Distinct().ToList(); // 1, 3, 4, 6, 7
 ```
 
-Pour les classes, il faut ajouter implémenter les méthodes **`Equals`** et **`GetHashCode`** pour être en mesure d'utiliser le **`Distinct`**.
+Pour les classes, il faut ajouter implémenter les méthodes **Equals** et **GetHashCode** pour être en mesure d'utiliser le **Distinct**.
 
-## Théorie des ensembles - Intersection
+## Théorie des ensembles 
+
+### Intersection
 
 Il est possible de trouver les éléments communs dans les 2 listes grâce à la théorique des ensembles.
 
-La méthode **`Intersect`** permet de voir l'intersection des 2 listes.
+La méthode **Intersect** permet de voir l'intersection des 2 listes.
 
 ```csharp
 List<int> liste1 = new List<int> { 1, 3, 4, 6, 7 };
@@ -347,7 +349,7 @@ List<int> listeIntersect = liste1.Intersect(liste2).ToList(); //1, 4 => liste1 �
 
 Il est possible de regrouper tous les éléments des 2 listes grâce à la théorique des ensembles.
 
-La méthode **`Union`** permet de voir l'intersection des 2 listes.
+La méthode **Union** permet de voir l'intersection des 2 listes.
 
 ```csharp
 List<int> liste1 = new List<int> { 1, 3, 4, 6, 7 };
@@ -360,7 +362,7 @@ List<int> listeUnion = liste1.Union(liste2).ToList(); //1, 2, 3, 4, 5, 6, 7, 8, 
 
 Il est possible de trouver les éléments différents dans les 2 listes grâce à la théorique des ensembles.
 
-La méthode **`Except`** permet de voir la différence entre les 2 listes.
+La méthode **Except** permet de voir la différence entre les 2 listes.
 
 ```csharp
 List<int> liste1 = new List<int> { 1, 3, 4, 6, 7 };

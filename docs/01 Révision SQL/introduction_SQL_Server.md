@@ -52,7 +52,7 @@ CREATE TABLE Client
 );
 ```
 
-# Type de données
+## Type de données
 
 Les types de données utilisés par SQL Server sont similaires à MariaDB ou PostGres. Par contre. il existe quelques différences.
 
@@ -60,7 +60,7 @@ Pour accéder au document de références sur le site **Learn** de Microsoft :
 
 https://learn.microsoft.com/fr-ca/sql/t-sql/data-types/data-types-transact-sql?view=sql-server-ver15
 
-## Entier
+### Entier
 
 **SQL Server** utilise 4 types de données pour les nombres entiers. Le plus utilisé pour les clés primaires est le type **INT**.
 
@@ -73,7 +73,7 @@ https://learn.microsoft.com/fr-ca/sql/t-sql/data-types/data-types-transact-sql?v
 
 Pour plus d'information : https://learn.microsoft.com/fr-ca/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver15
 
-## Chaine de caractères
+### Chaine de caractères
 
 Il existe plusieurs types de chaine de caractères.
 
@@ -89,7 +89,7 @@ Il existe plusieurs types de chaine de caractères.
 
 Pour plus d'information : https://learn.microsoft.com/fr-ca/sql/t-sql/data-types/char-and-varchar-transact-sql?view=sql-server-ver15
 
-## Date et temps
+### Date et temps
 
 Le format **DATETIME** est le plus populaire, car il était le type de base avant 2008 avec le **SMALLDATETIME**. Par la suite, il y a eu d'autres types pour gérer les dates et le temps.
 
@@ -113,7 +113,7 @@ Pour plus d'information : https://docs.microsoft.com/fr-ca/sql/t-sql/functions/d
 
 **SQL Server** n'offre pas directement des champs de type **TIMESTAMP** pour enregistrer des moments sur des actions de la table. Il est possible de simuler le comportement similaire à MariaDB pour la modification avec des **triggers**. L'approche **MariaDB** est plus conviviale. Dans ce cours, ce comportement sera géré avec **Entity Framework** et non en pur **SQL**.
 
-## Nombre numérique avec précision
+### Nombre numérique avec précision
 
 Le type **DECIMAL** permet d'enregistrer avec précision un chiffre avec une virgule.
 
@@ -136,9 +136,9 @@ INSERT INTO TestDecimal(Valeur) VALUES (99.986); -- Valeur enregistrée : 99.99
 INSERT INTO TestDecimal(Valeur) VALUES (99.996) -- Erreur, car SQL essaie d'enregistrer 100.00
 ```
 
-# Commandes de base
+## Commandes de base
 
-## Création d'une base de données - `CREATE DATABASE`
+### CREATE DATABASE
 
 Voici la syntaxe de création d'une base de données.
 
@@ -146,7 +146,7 @@ Voici la syntaxe de création d'une base de données.
 CREATE DATABASE Demo4N1;
 ```
 
-## Destruction d'une base de données - `DROP DATABASE`
+### DROP DATABASE
 
 Voici la syntaxe de destruction d'une base de données.
 
@@ -154,18 +154,18 @@ Voici la syntaxe de destruction d'une base de données.
 DROP DATABASE Demo4N1;
 ```
 
-## Utilisations de la base de données - `USE`
+### USE
 
-La commande **`USE`** permet de sélectionner une base de données par programmation. Donc, si vous êtes dans une autre base de données dans la barre d'outils, il est possible de changer la base de données au préalable dans votre script. 
+La commande **USE** permet de sélectionner une base de données par programmation. Donc, si vous êtes dans une autre base de données dans la barre d'outils, il est possible de changer la base de données au préalable dans votre script. 
 
-La majorité des scripts débute par le **`USE`** pour s'assurer que l'exécution se fait au bon endroit.
+La majorité des scripts débute par le **USE** pour s'assurer que l'exécution se fait au bon endroit.
 
 ```sql
 USE Demo4N1;
 GO
 ```
 
-## Création d'une table - `CREATE TABLE`
+### CREATE TABLE
 
 Voici la syntaxe pour la création d'une table.
 
@@ -178,7 +178,7 @@ CREATE TABLE MaTable
 );
 ```
 
-## Destruction d'un table - `DROP TABLE`
+### DROP TABLE
 
 Voici la syntaxe pour la destruction d'une table.
 
@@ -186,9 +186,9 @@ Voici la syntaxe pour la destruction d'une table.
 DROP TABLE MaTable;
 ```
 
-## Champ obligatoire ou optionnel - `NOT NULL` et `NULL`
+### NOT NULL et NULL
 
-Par défaut, si aucune spécification n'est indiquée, le champ sera considéré comme optionnel ou pouvant contenir la valeur **`NULL`**.
+Par défaut, si aucune spécification n'est indiquée, le champ sera considéré comme optionnel ou pouvant contenir la valeur **NULL**.
 
 Pour s'assurer qu'une valeur soit entrer dans une colonne, il faut indiquer `NOT NULL`
 ```sql
@@ -202,7 +202,9 @@ CREATE TABLE MaTable
 
 Par convention, il est préférable d'être constant pour la déclaration des champs optionnels. 
 
-## Auto-incrémentation - `IDENTITY`
+### IDENTITY
+
+Pour avoir un identifiant qui s'autoincrémente, il faut lui donner l'attribut **IDENTITY**
 
 Voici un script de création d'une table.
 
@@ -214,7 +216,7 @@ CREATE TABLE Client
 );
 ```
 
-La clé primaire a le mot clé **`IDENTITY`** qui indique que la clé de la table sera auto incrémentée. Il s'agit donc d'une clé artificielle.
+La clé primaire a le mot clé **IDENTITY** qui indique que la clé de la table sera auto incrémentée. Il s'agit donc d'une clé artificielle.
 
 Par défaut, l'incrémentation débute à 1 et augmente de 1.
 
@@ -234,11 +236,11 @@ CREATE TABLE Client
 );
 ```
 
-La propriété **`IDENTITY`** est généralement utilisée avec une clé primaire, mais elle peut être utilisée pour un champ qui n'est pas une clé. Il est important de ne pas oublier la contrainte de clé primaire. Par contre, il peut avoir uniquement un champ **`IDENTITY`**.
+La propriété **IDENTITY** est généralement utilisée avec une clé primaire, mais elle peut être utilisée pour un champ qui n'est pas une clé. Il est important de ne pas oublier la contrainte de clé primaire. Par contre, il peut avoir uniquement un champ **IDENTITY**.
 
-## Concaténation de string - `+`
+### Concaténation de string  +
 
-**SQL Server** utilise le symbole **`+`** pour faire la concaténation de chaine de caractères.
+**SQL Server** utilise le symbole **+** pour faire la concaténation de chaine de caractères.
 
 ```sql
 SELECT 
@@ -246,11 +248,11 @@ SELECT
 FROM MaTable;
 ```
 
-## Commentaires
+### Commentaires
 
-Le **`--`** est pour une seule ligne.
+Le **--** est pour une seule ligne.
 
-Le **`/**/`** est pour un bloc de commentaires.
+Le **/**/** est pour un bloc de commentaires.
 
 ```sql
 --Mon commentaire sur une seule ligne
@@ -261,13 +263,13 @@ Un bloc de commentaire
 */
 ```
 
-# Contraintes
+## Contraintes
 
 Pour faciliter la gestion, il est fortement recommandé de nommer les contraintes en **SQL Server**. Il est possible de modifier le comportement d'une contrainte sans recréer une table en utilisant son nom.
 
 Si aucun nom n'est spécifié, **SQL Server** génère automatiquement un nom, mais il n'aura aucune signification.
 
-## Clé primaire
+### Clé primaire
 
 Le nom de la contrainte doit utiliser le préfixe **PK_** et le nom de la table.
 
@@ -282,7 +284,7 @@ CREATE TABLE Client
 );
 ```
 
-## Clé étrangère
+### Clé étrangère
 
 Le champ de la clé étrangère doit avoir le même nom que celle utilisée dans la table parent.
 
@@ -320,9 +322,13 @@ CREATE TABLE Client
 );
 ```
 
-Le comportement des actions par défaut est **`NO ACTION `** s'il n'est pas spécifié.
+Le comportement des actions par défaut est **NO ACTION ** s'il n'est pas spécifié.
 
-## Table pivot - Clé primaire composée avec clé étrangère
+### Table pivot - Clé primaire composée avec clé étrangère
+
+Lorsqu'on a une relation n-m il faut utiliser une table pivot qui entreposera la clé des 2 tables. 
+
+Par exemple, si nous avons un table contenant les produits, et une contenant les commandes, il est possible d'avoir plusieurs produits sur une commande et qu'un produit se retrouve sur plusieurs commandes. 
 
 L'approche recommandée pour la table pivot est celle-ci :
 
@@ -339,9 +345,9 @@ CREATE TABLE CommandeProduit
 );
 ```
 
-## Contrainte de vérification 
+### Contrainte de vérification 
 
-La contrainte de vérification est d'accepter uniquement des valeurs précises pour une colonne. Il s'agit d'un **`CHECK`**.
+La contrainte de vérification est d'accepter uniquement des valeurs précises pour une colonne. Il s'agit d'un **CHECK**.
 
 Le nom de la contrainte doit utiliser le préfixe **CK_** , le nom de la table, une barre et le nom du champ.
 
@@ -356,11 +362,12 @@ CREATE TABLE Client
 	CompagnieId INT NOT NULL CONSTRAINT FK_Client_CompagnieId FOREIGN KEY REFERENCES Compagnie(CompagnieId)
     	ON DELETE NO ACTION	
     	ON UPDATE CASCADE,
+			--highlight-next-line
 	Type CHAR(1) NOT NULL CONSTRAINT CK_Client_Type CHECK(Type IN ('A', 'D', 'X'))
 );
 ```
 
-## Valeur par défaut
+### Valeur par défaut
 
 Le nom de la contrainte doit utiliser le préfixe **DF_**,  le nom de la table, une barre et le nom du champ.
 
@@ -375,12 +382,14 @@ CREATE TABLE Client
 	CompagnieId INT NOT NULL CONSTRAINT FK_Client_CompagnieId FOREIGN KEY REFERENCES Compagnie(CompagnieId)
     	ON DELETE NO ACTION	
     	ON UPDATE CASCADE,
-    DateCreation DATETIME NOT NULL CONSTRAINT DF_DateCreation DEFAULT GetDate(),
+			--highlight-next-line
+	DateCreation DATETIME NOT NULL CONSTRAINT DF_DateCreation DEFAULT GetDate(),
+		--highlight-next-line
 	EstActif BIT NOT NULL CONSTRAINT DF_Client_EstActif DEFAULT 1
 );
 ```
 
-## Contrainte d'unicité
+### Contrainte d'unicité
 
 Le nom de la contrainte doit utiliser le préfixe **UQ_**,  le nom de la table, une barre et le nom du champ.
 
@@ -395,11 +404,12 @@ CREATE TABLE Client
     	ON UPDATE CASCADE,
 	Type VARCHAR(1) CONSTRAINT CK_Client_Type CHECK(Type IN ('A', 'D', 'X')),
 	Actif BIT NOT NULL CONSTRAINT DF_Client_Actif DEFAULT 1,
+		--highlight-next-line
 	Code VARCHAR(10) NOT NULL CONSTRAINT UQ_Client_Code UNIQUE
 );
 ```
 
-## Exemple de modification
+## ALTER TABLE
 
 Il est possible de modifier une table une fois qu'elle a été créée. Pour ce faire, on utilise la commande **ALTER TABLE**. 
 
@@ -428,8 +438,9 @@ CREATE TABLE Client
 
 ### Clé étrangère
 
-Il faut modifier les actions d'une clé étrangère pour avoir **`ON DELETE CASCASDE`** et **`ON UPDATE CASCADE`**
+Pour modifier les actions d'une clé étrangère il faut commencer par l'enlever et ensuite en créer une nouvelle selon nos besoin
 
+Ici on change **ON DELETE NO ACTION ON UPDATE CASCADE** par  **ON DELETE CASCADE ON UPDATE CASCADE**
 ```sql
 ALTER TABLE Client
 DROP CONSTRAINT FK_Client_CompagnieId;
@@ -441,7 +452,9 @@ ADD CONSTRAINT FK_Client_CompagnieId FOREIGN KEY(CompagnieId) REFERENCES Compagn
 
 ### Contrainte de vérification
 
-Il faut ajouter le type **`Z`**.
+Pour ajouter une contrainte, il faut commencer par l'enlever et ensuite en créer une nouvelle selon nos besoins. 
+
+Ici on ajoute **Z**
 
 ```sql
 ALTER TABLE Client
@@ -451,7 +464,7 @@ ALTER TABLE Client
 ADD CONSTRAINT CK_Client_Type CHECK(Type IN ('A', 'D', 'X', 'Z'));
 ```
 
-# T-SQL
+## T-SQL
 
 Le langage de requêtes pour accéder à **SQL Server** s’appelle **T-SQL**, ou encore **Transact-SQL**. **T-SQL** est une extension du langage SQL.
 
@@ -461,11 +474,13 @@ Comme pour le SQL, le **T-SQL** n'est pas sensible à la casse.
 
 Pour plus d'information : https://en.wikipedia.org/wiki/Transact-SQL
 
-## Vérification de l'existence ou non d'une base de données - `DB_ID()`
+### DB_ID()
 
+:::note
 **SQL Server** n'utilise pas le **IF EXISTS** et le **IF NOT EXISTS** comme avec **SQLite** et **MariaDB**.
+:::
 
-Pour vérifier l'existence d'une base de données, il faut utiliser la fonction **`DB_ID(nombd)`**.
+Pour vérifier l'existence d'une base de données, il faut utiliser la fonction **DB_ID(nombd)**.
 
 ```sql
 --Vérifie si la base de données est inexistante dans le SGBD
@@ -477,11 +492,13 @@ IF DB_ID('Demo4N1') IS NOT NULL
 	DROP DATABASE Demo4N1;
 ```
 
-## Vérification de l'existence ou non d'un élément dans une base de données - `OBJECT_ID()`
+### OBJECT_ID()
 
+:::note
 **SQL Server** n'utilise pas le **IF EXISTS** et le **IF NOT EXISTS** comme avec **SQLite** et **MariaDB**.
+:::
 
-Il faut utiliser la fonction **`OBJECT_ID(nom, type)`** pour déterminer l'existence ou non d'un élément dans une base de données. Il faut spécifier le nom de l'élément et ensuite son type.
+Il faut utiliser la fonction **OBJECT_ID(nom, type)** pour déterminer l'existence ou non d'un élément dans une base de données. Il faut spécifier le nom de l'élément et ensuite son type.
 
 Voici la liste des types.
 
@@ -506,7 +523,7 @@ Voici la liste des types.
 - **U** = Table (définie par l'utilisateur)
 - **V** = Vue
 
-Pour les tables, il faut utiliser le type **`U`**.
+Pour les tables, il faut utiliser le type **U**.
 
 ```sql
 --Vérifie si la table est inexistante dans la base de données 
@@ -524,13 +541,13 @@ IF OBJECT_ID('Matable', 'U') IS NOT NULL
 	DROP TABLE MaTable;
 ```
 
-## Exécution d'un lot - `GO`
+## GO
 
-La commande **`GO`** permet d'exécuter tout le code au-dessus en lot.
+La commande **GO** permet d'exécuter tout le code au-dessus en lot.
 
-Lorsqu'on veut séparer un script en plusieurs lots d'exécution, on met un **`GO`** après chacune des sections.
+Lorsqu'on veut séparer un script en plusieurs lots d'exécution, on met un **GO** après chacune des sections.
 
-Certaines commandes, comme un **`CREATE VIEW`** doit être obligatoirement en début de lot.
+Certaines commandes, comme un **CREATE VIEW** doit être obligatoirement en début de lot.
 
 ```sql
 CREATE TABLE Produit
@@ -550,7 +567,7 @@ SELECT * FROM Produit;
 
 Malgré l'erreur, la table **Produit** a été créée. L'erreur s'applique uniquement à la vue.
 
-Il n'est pas possible d'inverser les commandes, car il faut que la table existe pour créer la vue. L'utilisation du **`GO`** permet de corriger le problème.
+Il n'est pas possible d'inverser les commandes, car il faut que la table existe pour créer la vue. L'utilisation du **GO** permet de corriger le problème.
 
 ```sql
 CREATE TABLE Produit
@@ -565,11 +582,11 @@ SELECT * FROM Produit;
 GO
 ```
 
-## `sp_help`
+## sp_help
 
-La commande **`sp_help`** permet de générer un rapport détaillé sur un objet de la base de données. C'est très pratique pour avoir le détail d'une table par exemple. Il est possible d'avoir cette information en utilisant l'explorateur d'objets. 
+La commande **sp_help** permet de générer un rapport détaillé sur un objet de la base de données. C'est très pratique pour avoir le détail d'une table par exemple. Il est possible d'avoir cette information en utilisant l'explorateur d'objets. 
 
-La syntaxe est **`sp_help 'nom de l'objet'`**
+La syntaxe est **sp_help 'nom de l'objet'**
 
 Pour avoir accès à l'information de la table **Person.Person** dans la base de données **AdventureWorks**
 
@@ -583,28 +600,28 @@ Voici le résultat.
 
     
 
-En sélectionnant du texte et en effectuant le raccourci **ALT+F1**, la commande **`sp_help`** s'effectuera sur le texte sélectionné.
+En sélectionnant du texte et en effectuant le raccourci **ALT+F1**, la commande **sp_help** s'effectuera sur le texte sélectionné.
 
 ## Variable
 
 Il est possible d'utiliser des variables pour faire des scripts plus complexes.
 
-Le nom de la variable débute toujours par un **`@`**. Par convention, le nom de la variable est en **camelCase**.
+Le nom de la variable débute toujours par un **@**. Par convention, le nom de la variable est en **camelCase**.
 
-Il faut utiliser la clause **`DECLARE @nomVar TYPE`** pour la créer.
+Il faut utiliser la clause **DECLARE @nomVar TYPE** pour la créer.
 
 ```sql
 DECLARE @nom VARCHAR(10); --Déclaration sans assignation de valeur
 DECLARE @prenom NVARCHAR(10) = 'François'; --Déclaration avec assignation de valeur
 ```
 
-La clause **`SET`** permet d'assigner une valeur à la variable après sa déclaration
+La clause **SET** permet d'assigner une valeur à la variable après sa déclaration
 
 ```sql
 SET @nom = 'St-Hilaire';
 ```
 
-Pour afficher une variable, il faut utiliser un **`SELECT`**.
+Pour afficher une variable, il faut utiliser un **SELECT**.
 
 ```sql
 SELECT @da;

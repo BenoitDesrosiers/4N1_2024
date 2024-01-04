@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# Exercices de création BD et données
+# Exercices de création BD - Univers
 
 Pour ces exercices, vous pouvez utiliser SSMS
 
@@ -18,7 +18,7 @@ Créez les 4 tables ci-dessous. Veuillez mettre la vérification si la table n'e
 
 
 
-Pour la table `Film`, le champ `Etoile` a une contrainte. Le champ accepte uniquement les valeurs de 1 à 5.
+Pour la table **Film**, le champ **Etoile** a une contrainte. Le champ accepte uniquement les valeurs de 1 à 5.
 
 <details>
   <summary>Solution</summary>
@@ -257,7 +257,7 @@ ADD CONSTRAINT CK_Film_Etoile CHECK(Etoile >= 1 AND Etoile <= 10)
 
 ## Exercice 5
 
-Effectuez une sauvegarde de votre base de données. Assurez-vous d'avoir le dossier **`C:\Backup`** dans votre ordinateur.
+Effectuez une sauvegarde de votre base de données. Assurez-vous d'avoir le dossier **C:\Backup** dans votre ordinateur.
 
 
 <details>

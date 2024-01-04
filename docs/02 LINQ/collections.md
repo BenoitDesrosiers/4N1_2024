@@ -28,15 +28,15 @@ Sélectionnez l'infrastructure **.NET 7.0** et décochez **N'utilisez pas d'inst
 <img src="/4N1_2024/img/04_projet_4.png" />
 
 
-# Collection en C#
+## Collection en C#
 
 Il existe plusieurs collections en C#. Nous allons en prendre quelques-unes pour les expliquer.
 
 Pour plus d'information : https://docs.microsoft.com/fr-ca/dotnet/csharp/programming-guide/concepts/collections
 
-## `ArrayList`
+### ArrayList
 
-Un **`ArrayList`** est un tableau de **taille dynamique**. 
+Un **ArrayList** est un tableau de **taille dynamique**. 
 
 Elle peut contenir tous les types d'objets.
 
@@ -47,7 +47,7 @@ al.Add(200);
 al.Add(300);
 ```
 
-La signature de la méthode **Add** est **`int Add(object? value)`**. Cette collection est en mesure de contenir n'importe quoi.
+La signature de la méthode **Add** est **int Add(object? value)**. Cette collection est en mesure de contenir n'importe quoi.
 
 ```csharp
 ArrayList al = new ArrayList();
@@ -58,7 +58,7 @@ al.Add(true);
 
 Au niveau cohérence des données, ceci peut être un problème. 
 
-Par exemple, il faut un tableau dynamique qui contient des entiers. Il y a un problème dans la méthode d'insertion et la donnée entrée en **`string`** par l'utilisateur n'a pas été transformée en **`int`**. La donnée sera tout de même dans la liste.
+Par exemple, il faut un tableau dynamique qui contient des entiers. Il y a un problème dans la méthode d'insertion et la donnée entrée en **string** par l'utilisateur n'a pas été transformée en **int**. La donnée sera tout de même dans la liste.
 
 Il est possible d'accéder à un item de la collection en utilisant son index comme un tableau.
 
@@ -71,7 +71,7 @@ al.Add(300);
 Console.WriteLine(al[1]); //200 est affiché dans la console
 ```
 
-Il est possible de faire des recherches avec la méthode **`IndexOf`**.
+Il est possible de faire des recherches avec la méthode **IndexOf**.
 
 ```csharp
 ArrayList al = new ArrayList();
@@ -129,25 +129,25 @@ al.Add(personne3);
 
 
 
-Un **`ArrayList`** fonctionne comme un tableau, il est possible de récupérer un élément par un **index**. Étant donné que l'ArrayList peut contenir n'importe quel type d'objet, un cast doit être fait afin de resortir une Personne. 
+Un **ArrayList** fonctionne comme un tableau, il est possible de récupérer un élément par un **index**. Étant donné que l'ArrayList peut contenir n'importe quel type d'objet, un **cast** doit être fait afin de ressortir une **Personne**. 
 
 ```csharp
 Personne p = (Personne)al[0];
 ```
 
-Pour obtenir le nombre d'éléments dans la collection , la propriété **`Count`** permet d'obtenir la quantité.
+Pour obtenir le nombre d'éléments dans la collection , la propriété **Count** permet d'obtenir la quantité.
 
 ```csharp
 int nb = al.Count;
 ```
 
-Pour retrouver les personnes **François**, il n'y a pas de moyen efficace, à part de parcourir le **`ArrayList`** et de faire une vérification sur chacun des éléments.
+Pour retrouver les personnes **François**, il n'y a pas de moyen efficace, à part de parcourir le **ArrayList** et de faire une vérification sur chacun des éléments.
 
 Mais il existe d'autres types de listes que nous allons voir ci-bas.
 
-## `List<T>`
+## List\<T\>
 
-La plus populaire est la **`List<T>`**. 
+La plus populaire est la **List\<T\>**. 
 
 C# est en mesure d'utiliser des types génériques pour avoir un meilleur contrôle dans la cohérence des données internes.
 
@@ -173,7 +173,7 @@ personne3.Nom = "Morin";
 
 // Notez ici que la liste porte le nom du type au pluriel car elle contient DES personneS.
 // D'autres noms qui seraient intéressants: groupe, classe, employes ... 
-List<Personne> personnes = new List<Personne>(); 
+List<Personne> personnes = new List<Personne\>(); 
 personnes.Add(personne1);
 personnes.Add(personne2);
 personnes.Add(personne3);
@@ -181,7 +181,7 @@ personnes.Add(personne3);
 
 La liste ci-dessus peut accepter uniquement des objets de type **Personne**, car **T** = **Personne**.
 
-**`List<T>`** permet de faire des recherches avec des critères grace aux fonctions **`Find`**, **FindAll** etc.
+**List\<T\>** permet de faire des recherches avec des critères grace aux fonctions **Find**, **FindAll** etc.
 
 ```csharp
 List<Personne> lesFrancois = personnes.FindAll(p => p.Prenom == "François");
@@ -196,7 +196,7 @@ Pour en savoir plus: https://learn.microsoft.com/en-us/dotnet/api/system.predica
 :::
 
 
-Un **`List<T>`** fonctionne comme un tableau, il est possible de récupérer un élément par un **index**.
+Un **List\<T\>** fonctionne comme un tableau, il est possible de récupérer un élément par un **index**.
 
 ```csharp
 Personne p = personnes[0];
@@ -205,13 +205,13 @@ Personne p = personnes[0];
 Notez ici que le cast n'est pas nécessaire comme avec ArrayList car personnes ne contient que des Personne. 
 
 
-Pour obtenir le nombre d'éléments dans la collection , la propriété **`Count`** permet d'obtenir la quantité.
+Pour obtenir le nombre d'éléments dans la collection , la propriété **Count** permet d'obtenir la quantité.
 
 ```csharp
 int nb = personnes.Count;
 ```
 
-## `Dictionary<TKey,TValue>`
+## Dictionary\<TKey,TValue\>
 
 Le dictionnaire permet d'enregistrer une valeur en fonction d'une clé.
 
@@ -255,12 +255,12 @@ Le dictionnaire peut utiliser la clé pour accéder directement à un élément.
 Personne p = dic[2];
 ```
 
-L'accès par les **`[]`** indique la valeur de la clé et non une position.
+L'accès par les **[]** indique la valeur de la clé et non une position.
 
 La valeur peut également être une collection. 
 
 ```csharp
-Dictionary<string, List<Personne>> dicNom = new Dictionary<string, List<Personne>>();
+Dictionary<string, List<Personne> dicNom = new Dictionary<string, List<Personne>();
 
 dicNom.Add("François", new List<Personne>());
 //le .Add est le .Add de List et non le .Add du Dictionary, car dicNom[""] retourne la valeur.
@@ -272,15 +272,15 @@ dicNom.Add("Stéphane", new List<Personne>());
 dicNom["Stéphane"].Add(personne2);
 ```
 
-Dans le cas-ci dessus, l'accès se fait par **`[]`** et à l'intérieur c'est une **string**. 
+Dans le cas-ci dessus, l'accès se fait par **[]** et à l'intérieur c'est une **string**. 
 
-Également **`dicNom["François"]`** retourne une **`List<Personne>`**.
+Également **dicNom["François"]** retourne une **List\<Personne\>**.
 
 ```csharp
 List<Personne> lesFrancois = dicNom["François"];
 ```
 
-Les propriétés **`Keys`** et **`Values`** retournent une collection spécifique contenant toutes les clés.
+Les propriétés **Keys** et **Values** retournent une collection spécifique contenant toutes les clés.
 
 ```csharp
 foreach(int key in dic.Keys)
@@ -294,21 +294,21 @@ foreach (Personne personne in dic.Values)
 }
 ```
 
-Pour obtenir le nombre d'éléments dans la collection , la propriété **`Count`** permet d'obtenir la quantité.
+Pour obtenir le nombre d'éléments dans la collection , la propriété **Count** permet d'obtenir la quantité.
 
 ```csharp
 int nb = dic.Count;
 ```
 
-## `Queue` et `Queue<T>`
+## Queue et Queue\<T\>
 
-Le type **`Queue`** et **`Queue<T>`** sont des collections de type file (FIFO), c'est-à-dire le premier élément entré est le premier retiré.
+Le type **Queue** et **Queue\<T\>** sont des collections de type file (FIFO), c'est-à-dire le premier élément entré est le premier retiré.
 
-**`Queue`** reçoit des objets de type **`objet`**. Il est comme le **`ArrayList`**.
+**Queue** reçoit des objets de type **objet**. Il est comme le **ArrayList**.
 
-**`Queue<T>`** est générique. La file reçoit uniquement des objets du type spécifié.
+**Queue\<T\>** est générique. La file reçoit uniquement des objets du type spécifié.
 
-La méthode **`Enqueue`** permet d'ajouter un élément et la méthode **Dequeue** permet de le retirer de la file.
+La méthode **Enqueue** permet d'ajouter un élément et la méthode **Dequeue** permet de le retirer de la file.
 
 ```csharp
 Personne personne1 = new Personne();
@@ -337,7 +337,7 @@ Personne p3 = queue.Dequeue(); //François Morin
 Personne p4 = queue.Dequeue(); //Retoure un null exception
 ```
 
-La méthode **`Peek`** permet d'obtenir le prochain item sans le retirer de la liste.
+La méthode **Peek** permet d'obtenir le prochain item sans le retirer de la liste.
 
 ```csharp
 Personne personne1 = new Personne();
@@ -366,21 +366,21 @@ Personne p3 = queue.Peek(); //François St-Hilaire
 Personne p4 = queue.Peek(); //François St-Hilaire
 ```
 
-Pour obtenir le nombre d'éléments dans la collection , la propriété **`Count`** permet d'obtenir la quantité.
+Pour obtenir le nombre d'éléments dans la collection , la propriété **Count** permet d'obtenir la quantité.
 
 ```csharp
 int nb = queue.Count;
 ```
 
-## `Stack` et `Stack<T>`
+## Stack et Stack\<T\>
 
-Le type **`Stack`** et **`Stack<T>`** sont des collections de type pile (LIFO), c'est-à-dire que le dernier élément entré est le premier retiré.
+Le type **Stack** et **Stack\<T\>** sont des collections de type pile (LIFO), c'est-à-dire que le dernier élément entré est le premier retiré.
 
-**`Stack`** reçoit des objets de type **`objet`**. Il est comme le **`ArrayList`**.
+**Stack** reçoit des objets de type **objet**. Il est comme le **ArrayList**.
 
-**`Stack<T>`** est générique. La file reçoit uniquement des objets du type spécifié.
+**Stack\<T\>** est générique. La file reçoit uniquement des objets du type spécifié.
 
-La méthode **`Push`** permet d'ajouter un élément et la méthode **Pop** permet de le retirer de la pile.
+La méthode **Push** permet d'ajouter un élément et la méthode **Pop** permet de le retirer de la pile.
 
 ```csharp
 Personne personne1 = new Personne();
@@ -409,7 +409,7 @@ Personne p3 = stack.Pop(); //François St-Hilaire
 Personne p4 = stack.Pop(); //Retoure un null exception
 ```
 
-La méthode **`Peek`** permet d'obtenir le prochain item sans le retirer de la liste.
+La méthode **Peek** permet d'obtenir le prochain item sans le retirer de la liste.
 
 ```csharp
 Personne personne1 = new Personne();
@@ -438,7 +438,7 @@ Personne p3 = stack.Peek(); //François Morin
 Personne p4 = stack.Peek(); //François Morin
 ```
 
-Pour obtenir le nombre d'éléments dans la collection , la propriété **`Count`** permet d'obtenir la quantité.
+Pour obtenir le nombre d'éléments dans la collection , la propriété **Count** permet d'obtenir la quantité.
 
 ```csharp
 int nb = stack.Count;

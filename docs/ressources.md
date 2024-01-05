@@ -5,6 +5,8 @@ sidebar_position: 0
 
 Voici tous les liens vers des ressoures utilisées dans le cours
 
+[Bogus](https://stenbrinke.nl/blog/taking-ef-core-data-seeding-to-the-next-level-with-bogus/)
+
 [Classe et méthode générique]( https://learn.microsoft.com/fr-fr/dotnet/csharp/fundamentals/types/generics)
 
 [Contrainte where pour les types génériques](https://learn.microsoft.com/fr-ca/dotnet/csharp/language-reference/keywords/where-generic-type-constraint)

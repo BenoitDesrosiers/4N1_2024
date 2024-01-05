@@ -4,7 +4,7 @@ sidebar_position: 17
 
 # Insertion de données
 
-Pour ajouter des données, il faut le faire dans la méthode **OnModelCreating()**. Cette action s'appelle **Seed** pour semer des données.
+Pour ajouter des données, il faut le faire dans la méthode **OnModelCreating()**. Cette action s'appelle **Seed** pour semer des données. Nous verrons plus tard des outils plus performants afin de générer des données de tests. 
 
 Avant de poursuivre, il faut retirer l'enregistrement de la table **Univers** qui a été fait manuellement.
 
@@ -184,72 +184,135 @@ Remplaces la méthode Seed() avec ce code:
 private void Seed(ModelBuilder modelBuilder)
 {
     //Les données à ajouter
-    Role[] roles = 
+    Univers[] univers =
     {
-        new Role() 
-        { 
-            RoleId = 1,
-            Nom = "Administrateur"                
-        },
-        new Role()
-        {
-            RoleId = 2,
-            Nom = "Utilisateur"
-        },
-    };
+    new Univers()
+    {
+        UniversId = 1,
+        Nom = "Marvel",
+        AnneeCreation = 1939,
+        SiteWeb = "https://www.marvel.com",
+        Proprietaire = "Disney"
+    },
+    new Univers()
+    {
+        UniversId = 2,
+        Nom = "DC Comics",
+        AnneeCreation = 1934,
+        SiteWeb = "https://www.dc.com",
+        Proprietaire = "Warner Bros"
+    },
+};
 
-    Utilisateur[] utilisateurs =
+    Personnage[] personnages =
     {
-        new Utilisateur()
-        {
-            UtilisateurId = 1,
-            Prenom = "François",
-            Nom = "St-Hilaire",
-            NomUtilisateur = "fsthilaire",
-            MotPasseHash = "$2y$11$IY6NG9FkTSI1dnjLfSbuOuNkuyI7IZHxHSOD5Td6AlwvroUz/vzLK", //Native3! avec Bcrypt
-            RoleId = 1 //Admin
-        },
-        new Utilisateur()
-        {
-            UtilisateurId = 2,
-            Prenom = "Benoit",
-            Nom = "Tremblay",
-            NomUtilisateur = "btremblay",
-            MotPasseHash = "$2y$11$ewK3YsMGQ1IMKEzJUAjyVe0P19I0gEbTO998mwfVbSSA8nZ6MG/ha", //Web4MVC! avec Bcrypt
-            RoleId = 2 //Utilisateur
-        },
-        new Utilisateur() 
-        {
-            UtilisateurId = 3,
-            Prenom = "Tony",
-            Nom = "Stark",
-            NomUtilisateur = "tstark",
-            MotPasseHash = "$2y$11$VfcNowkWResPQKl0AA3MJ.w1LXBqmMM77YKlyf32Glr9TWG4xxyD2", //#NotAdmin! avec Bcrypt
-            RoleId = 2 //Utilisateur
-        }
-    };
+    new Personnage()
+    {
+        PersonnageId = 1,
+        Nom = "Spiderman",
+        IdentiteReelle = "Peter Parker",
+        DateNaissance = new DateOnly(1980, 12,01),
+        EstVilain = false,
+        UniversId = 1
+    },
+    new Personnage()
+    {
+        PersonnageId = 2,
+        Nom = "Iron Man",
+        IdentiteReelle = "Tony Stark",
+        DateNaissance = new DateOnly(1970,11,12),
+        EstVilain = false,
+        UniversId = 1
+    },
+    new Personnage()
+    {
+        PersonnageId = 3,
+        Nom = "Batman",
+        IdentiteReelle = "Bruce Wayne",
+        DateNaissance = new DateOnly(1966,03,04),
+        EstVilain = false,
+        UniversId = 2
+    },
+};
 
     //Ajout dans les tables
-    modelBuilder.Entity<Role>().HasData(roles);
-    modelBuilder.Entity<Utilisateur>().HasData(utilisateurs);
+    modelBuilder.Entity<Univers>().HasData(univers);
+    modelBuilder.Entity<Personnage>().HasData(personnages);
 }
 ```
 
-Créez la migration **Seed_RoleEtUtilisateur**.
+Créez la migration **Seed_UniversEtPersonnage**.
 
 ```powershell
-Add-Migration Seed_RoleEtUtilisateur -StartupProject SuperCarte.EF
+Add-Migration Seed_UniversEtPersonnage -StartupProject Univers.EF
 ```
 
-Appliquez les modifications à la base de données. Spécifiez la migration **Seed_RoleEtUtilisateur**.
+Appliquez les modifications à la base de données. Spécifiez la migration **Seed_UniversEtPersonnage**.
 
 ```powershell
-Update-Database -StartupProject SuperCarte.EF -Migration Seed_RoleEtUtilisateur
+Update-Database -StartupProject Univers.EF -Migration Seed_UniversEtPersonnage
 ```
 
 :::note
 Pour votre **TP 3**, vous devez créer un jeu de données initial pour chacune des tables. Il devra être créé par un **Seed**.
 :::
 
-Ouvrez **SSMS** et la base de données aura des données dans les tables **Utilisateur** et **Role**.
+Ouvrez **SSMS** et la base de données aura des données dans les tables **Personnage** et **Univers**.
+
+## Exercice
+
+Ajoutez la migration pour les films. 
+
+Vous pouvez vous baser sur les données de 
+[l'exercices de création de la BD univers du début de la session](/01%20Révision%20SQL/exercice_revision_sql.md)
+
+Ajoutez seulement les 3 premiers.
+
+
+<details>
+  <summary>Solution</summary>
+```csharp
+Film[] films =
+{
+    new Film()
+    {
+        FilmId = 1,
+        Titre = "Black Widow",
+        DateSortie = new DateOnly(2021, 07, 09),
+        Etoile = 3,
+        Duree = 121
+    },
+    new Film()
+    {
+        FilmId = 2,
+        Titre = "The Avengers",
+        DateSortie = new DateOnly(2012, 05, 04),
+        Etoile = 5,
+        Duree = 98
+    },
+    new Film()
+    {
+        FilmId = 3,
+        Titre = "Spiderman",
+        DateSortie = new DateOnly(2003, 05, 03),
+        Etoile = 5,
+        Duree = 110
+    }
+};
+
+
+modelBuilder.Entity<Film>().HasData(films);
+```
+
+Suivit de l'ajout de la migration et son exécution 
+
+```powershell
+Add-Migration Seed_Film -StartupProject Univers.EF
+
+Update-Database -StartupProject Univers.EF -Migration Seed_Film
+```
+</details>
+
+
+Nous sommes maintenat prêt pour faire des requêtes. 
 

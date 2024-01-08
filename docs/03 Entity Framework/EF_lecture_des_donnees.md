@@ -2,87 +2,204 @@
 sidebar_position: 20
 ---
 
+
+## Préparation du projet de CRUD
+
+### Création du projet dans une solution existante
+
+Il faut ajouter le projet **LinqCRUD** dans la solution.
+
+Pour ce faire, sélectionnez la solution **Univers** en haut de l'**Explorateur de solution** et choisissez **Ajouter -> Nouveau projet...** dans le menu contextuel.
+
+Créez un projet de type **Application Console**. Il est important **de ne pas choisir** la version **.NET Framework**.
+
+- **Nom du projet** : LinqCRUD
+- **Infrastructure** : .NET la dernière
+
+Ensuite, sélectionnez le projet **LinqCRUD** dans l'**Explorateur de solution** et choisissez **Définir en tant que projet de démarrage** dans le menu contextuel.
+
+### Ajout des dépendances de projet
+
+Le projet **LinqCRUD** aura besoin du projet **Univers.EF** pour initialiser le contexte.
+
+Il faut l'ajouter dans les dépendances du projet.
+
+Sélectionnez le dossier **Dépendances** du projet **LinqCRUD** et choisissez **Ajouter une référence de projet** dans le menu contextuel.
+
+Dans la fenêtre, il faut cocher **Univers.EF**. Vous venez d'intégrer cette librairie interne au projet.
+
+### Fichier Usings.cs
+
+Afin de réduire la taille des classes, les **using** qui seront beaucoup utilisés dans ce projet seront déclaré globalement.
+
+Créez le fichier **Usings.cs** à la racine du projet **LinqCRUD**.
+
+```csharp
+
+global using Univers.EF.Data; //Les classes du modèle du contexte
+global using Univers.EF.Data.Context; // La classe du contexte
+global using System;
+global using System.Collections.Generic;
+global using System.Threading.Tasks;
+```
+
+Au fur et à mesure que des classes s'ajouteront dans le projet, le fichier **Usings.cs** sera mis à jour.
+
+Également, le fichier **Usings.cs** appartient uniquement au projet dans lequel il est créé.
+
 # CRUD EF en LINQ 
 
 ## Lecture des données
 
 Inscrivez directement les blocs de code dans le fichier **Program.cs** pour tester.
 
-Vous devez avoir les 2 **`using`** au début du fichier.
-
-```c#
-using IntroEF.Data.Context;
-using IntroEF.Data;
-```
-
 Pour avoir une connexion à la base de données, il faut créer une instance du **contexte**.
 
-```c#
-GestionPersonnageContext db = new GestionPersonnageContext();
+```csharp
+UniversContext db = new UniversContext();
 Univers univers = db.Univers.FirstOrDefault(); //Retourne le premier univers de la base de données
 Console.WriteLine($"Id : {univers.UniversId}");
 Console.WriteLine($"Nom : {univers.Nom}");
 db.Dispose();
 ```
 
+Oups ... petit problème!!! Univers est le nom du Namespace ET le nom d'une classe. Le compilateur ne sais pas de quoi on parle. 
+
+Il y a 2 solutions: 
+
+1) toujours indiquer que la classe Univers est dans le contexte Univers avec la syntaxe **Univers.EF.Data.Univers**. Ca vient un peu long.
+2) renommer la classe Univers en Franchise. 
+
+Nous allons utiliser la solution 2 avec ce qu'elle a comme complications. Mais ca sera fait une fois pour toute. 
+
+### Refactor de Univers
+
+Ouvrez **Univers.cs** et renommez la classe **Univers** en **Franchise**. 
+
+:::warning Attention
+c'est la classe qu'il faut renommer. 
+:::
+:::warning Attention #2
+Utilisez l'option **rename** de visual studio. Ne changez pas directement le nom de la classe. Visual Studio va s'occuper de changer toutes les références à cette classe dans le reste du code. 
+:::
+
+Renommez aussi **UniversId** pour **FranchiseId**
+
+Quiz: qu'est-ce qui doit suivre le changement d'un nom de classe utilisé dans un contexte ?
+
+<details>
+<summary>Réponse</summary>
+1) le DBset: le type utilisé et le nom par défaut de la table (se terminant par Tb)
+2) la classe Personnage contient une référence vers UniversId
+3) le nom de la table dans le OnModelCreating (entity.ToTable())
+4) le seeder
+</details>
+
+Commencons par le DbSet. 
+
+Le type Univers a été changé pour Franchise, mais UniversTb ne l'a pas été. Changez le pour FranchiseTb
+
+Changeons la référence dans Personnage. 
+
+Continuons vers les changement dans le OnModelCreating. Changez le commentaire, et le nom de la table. 
+
+Et terminons par le seeder. 
+
+Remplacé tous les univers et UniversId par franchises et FranchiseId
+
+Il faut maintenant faire la migration.
+```powershell
+Add-Migration RenommerClasseUnivers -StartupProject Univers.EF
+```
+
+et l'appliquer à la BD
+
+```powershell
+Update-Database -StartupProject "Univers.EF" -Migration RenommerClasseUnivers
+```
+
+Vérifiez que la migration c'est bien faite. 
+
+Comme vous pouvez le voir, il arrive qu'on ait des erreurs de design qui n'apparaissent que beaucoup plus tard. Les migrations peuvent nous sortir de ce genre de problème dans certains cas, mais il est toujours mieux de bien réfléchir au système avant de trop coder. 
+
+
+Revenons à notre premier test de requête sur la bd utilisant Linq. Notre code devrait fonctionner maintenant en changeant la classe Univers par Franchise:
+
+```csharp
+UniversContext db = new UniversContext();
+Franchise franchise = db.FranchiseTb.FirstOrDefault(); //Retourne la premiere franchise de la base de données
+Console.WriteLine($"Id : {franchise.FranchiseId}");
+Console.WriteLine($"Nom : {franchise.Nom}");
+db.Dispose();
+```
+
+Essayez ce code. 
+
+
 La méthode **Dispose** ferme la connexion.
 
-Il est préférable d'utiliser un bloc de code **`using`**. La méthode **Dispose** est appelée automatiquement lorsque le bloc de code est terminé.
+### using
 
-```c#
-using (GestionPersonnageContext db = new GestionPersonnageContext())
+Il est préférable d'utiliser un bloc de code **using**. La méthode **Dispose** est appelée automatiquement lorsque le bloc de code est terminé.
+
+```csharp
+using (UniversContext db = new UniversContext())
 {
-	Univers univers = db.Univers.FirstOrDefault();
-    Console.WriteLine($"Id : {univers.UniversId}");
-	Console.WriteLine($"Nom : {univers.Nom}");
+	Franchise franchise = db.FranchiseTb.FirstOrDefault();
+    Console.WriteLine($"Id : {franchise.FranchiseId}");
+	Console.WriteLine($"Nom : {franchise.Nom}");
 }
 ```
 
- Pour faire une requête à la base de données, il faut utiliser **LINQ** en syntaxe **Query** ou **Lambda**.
+ Pour faire une requête à la base de données, on peut utiliser **LINQ** en syntaxe **Query** ou **Lambda**.
 
-```c#
-using (GestionPersonnageContext db = new GestionPersonnageContext())
+```csharp
+using (UniversContext db = new UniversContext())
 {
-    List<Univers> lstUniversQuery = (from lqUnivers in db.Univers
+    //Syntaxe Query
+    List<Franchise> lstFranchiseQuery = (from lqFranchise in db.FranchiseTb
                                      orderby
-                                         lqUnivers.AnneeCreation descending
+                                         lqFranchise.AnneeCreation descending
                                      select
-                                         lqUnivers).ToList();
+                                         lqFranchise).ToList();
 
-    foreach (Univers univers in lstUniversQuery)
+    foreach (Franchise franchise in lstFranchiseQuery)
     {
-        Console.WriteLine($"Id : {univers.UniversId}");
-        Console.WriteLine($"Nom : {univers.Nom}");
+        Console.WriteLine($"Id : {franchise.FranchiseId}");
+        Console.WriteLine($"Nom : {franchise.Nom}");
     }
 
-    List<Univers> lstUniversLambda = db.Univers.OrderByDescending(u => u.AnneeCreation).ToList();
+    //Syntaxe Lambda
+    List<Franchise> lstFranchiseLambda = db.FranchiseTb.OrderByDescending(u => u.AnneeCreation).ToList();
 
-    foreach (Univers univers in lstUniversLambda)
+    foreach (Franchise franchise in lstFranchiseLambda)
     {
-        Console.WriteLine($"Id : {univers.UniversId}");
-        Console.WriteLine($"Nom : {univers.Nom}");
+        Console.WriteLine($"Id : {franchise.FranchiseId}");
+        Console.WriteLine($"Nom : {franchise.Nom}");
     }
 }
 ```
 
 Il est possible d'utiliser le **`using`** sans créer un sous bloc de code. Si le **contexte** doit exister tout le long de la durée de vie de la méthode, il est possible de déclarer comme ci-dessous.
 
-```c#
-private void MaMethode()
+```csharp
+MaMethode();
+
+void MaMethode()
 {
     //Déclaration du contexte par un using
-    using GestionPersonnageContext db = new GestionPersonnageContext();
+    using UniversContext db = new UniversContext();
 
-    List<Univers> lstUniversQuery = (from lqUnivers in db.Univers
+    List<Franchise> lstFranchiseQuery = (from lqFranchise in db.FranchiseTb
                                      orderby
-                                         lqUnivers.AnneeCreation descending
+                                         lqFranchise.AnneeCreation descending
                                      select
-                                         lqUnivers).ToList();
+                                         lqFranchise).ToList();
 
-    foreach (Univers univers in lstUniversQuery)
+    foreach (Franchise franchise in lstFranchiseQuery)
     {
-        Console.WriteLine($"Id : {univers.UniversId}");
-        Console.WriteLine($"Nom : {univers.Nom}");
+        Console.WriteLine($"Id : {franchise.FranchiseId}");
+        Console.WriteLine($"Nom : {franchise.Nom}");
     }
 } //Fin du contexte
 ```
@@ -91,21 +208,23 @@ private void MaMethode()
 
 Il peut être intéressant de voir le SQL généré.
 
-Le contexte devra être créé avec des options. Le SQL sera généré dans le fichier **`C:\eflog\{tick}.txt`**. Il faut que le dossier **c:\eflog** existe.
+Le contexte doit être créé avec ces options. Le SQL sera généré dans le fichier **`C:\eflog\{tick}.txt`**. Il faut que le dossier **c:\eflog** existe.
 
-Il y aura un fichier de créer par requête effectuée à la base de données.
 
-```c#
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
+```csharp
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
 optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
     Microsoft.Extensions.Logging.LogLevel.Information);
 optBuilder.EnableSensitiveDataLogging(); //Permet de voir les valeurs
 
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
+using (UniversContext db = new UniversContext(optBuilder.Options))
 {
 	//Les requêtes
 }
 ```
+
+Il y aura un fichier de créer par requête effectuée à la base de données.
+
 
 ### Exemple 1
 
@@ -114,26 +233,26 @@ Code **SQL**
 ```sql
 SELECT * 
 FROM Film
-WHERE Etoile >= 8;
+WHERE Etoile >= 2;
 ```
 
 Code **LINQ**
 
-```c#
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
+```csharp
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
 optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
     Microsoft.Extensions.Logging.LogLevel.Information);
 optBuilder.EnableSensitiveDataLogging();
 
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
+using (UniversContext db = new UniversContext(optBuilder.Options))
 {
-    List<Film> lstFilmQuery = (from lqFilm in db.Film
+    List<Film> lstFilmQuery = (from lqFilm in db.FilmTb
                                where
                                     lqFilm.Etoile >= 8
                                select
                                     lqFilm).ToList();
 
-    List<Film> lstFilmLambda = db.Film.Where(f => f.Etoile >= 8).ToList();
+    List<Film> lstFilmLambda = db.FilmTb.Where(f => f.Etoile >= 8).ToList();
     
     foreach(Film film in lstFilmLambda)
     {
@@ -148,36 +267,39 @@ Code **SQL généré**
 ```sql
 SELECT [f].[FilmId], [f].[Budget], [f].[DateSortie], [f].[Duree], [f].[Etoile], [f].[Titre]
 FROM [Film] AS [f]
-WHERE [f].[Etoile] >= CAST(8 AS tinyint)
+WHERE [f].[Etoile] >= CAST(2 AS tinyint)
 ```
+:::note
+Il y a 2 logs de générées car il y a 2 requêtes identiques de faites: une en query, l'autre en lambda
+:::
 
-## Exemple 2
+### Exemple 2
 
 Code **SQL**
 
 ```sql
 SELECT * 
 FROM Film
-WHERE Year(DateSortie) = 2019;
+WHERE Year(DateSortie) = 2021;
 ```
 
 Code **LINQ**
 
-```c#
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
+```csharp
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
 optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
     Microsoft.Extensions.Logging.LogLevel.Information);
 optBuilder.EnableSensitiveDataLogging();
 
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
+using (UniversContext db = new UniversContext(optBuilder.Options))
 {
-    List<Film> lstFilmQuery = (from lqFilm in db.Film
+    List<Film> lstFilmQuery = (from lqFilm in db.FilmTb
                                where
-                                    lqFilm.DateSortie.Year == 2019
+                                    lqFilm.DateSortie.Year == 2021
                                select
                                     lqFilm).ToList();
 
-    List<Film> lstFilmLambda = db.Film.Where(f => f.DateSortie.Year == 2019).ToList();
+    List<Film> lstFilmLambda = db.FilmTb.Where(f => f.DateSortie.Year == 2021).ToList();
 
     foreach(Film film in lstFilmLambda)
     {
@@ -192,10 +314,10 @@ Code **SQL généré**
 ```sql
 SELECT [f].[FilmId], [f].[Budget], [f].[DateSortie], [f].[Duree], [f].[Etoile], [f].[Titre]
 FROM [Film] AS [f]
-WHERE DATEPART(year, [f].[DateSortie]) = 2019
+WHERE DATEPART(year, [f].[DateSortie]) = 2021
 ```
 
-## Exemple 3
+### Exemple 3
 
 Code **SQL**
 
@@ -207,22 +329,22 @@ ORDER BY Year(DateSortie) ASC, Titre DESC;
 
 Code **LINQ**
 
-```c#
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
+```csharp
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
 optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
     Microsoft.Extensions.Logging.LogLevel.Information);
 optBuilder.EnableSensitiveDataLogging();
 
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
+using (UniversContext db = new UniversContext(optBuilder.Options))
 {
-    List<Film> lstFilmQuery = (from lqFilm in db.Film
+    List<Film> lstFilmQuery = (from lqFilm in db.FilmTb
                                orderby 
                                 lqFilm.DateSortie.Year descending, 
                                 lqFilm.Titre
                                select
                                     lqFilm).ToList();
 
-    List<Film> lstFilmLambda = db.Film
+    List<Film> lstFilmLambda = db.FilmTb
         .OrderByDescending(f => f.DateSortie.Year)
         .ThenBy(f => f.Titre).ToList();
 
@@ -242,44 +364,303 @@ FROM [Film] AS [f]
 ORDER BY DATEPART(year, [f].[DateSortie]) DESC, [f].[Titre]
 ```
 
-# Modifier
+## Ajouter des données
+
+Pour ajouter un nouvel enregistrement dans la base de données, il faut créer un nouvel objet.
+
+```csharp showLineNumbers
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
+optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
+    Microsoft.Extensions.Logging.LogLevel.Information);
+optBuilder.EnableSensitiveDataLogging();
+
+using (UniversContext db = new UniversContext(optBuilder.Options))
+{
+    //Obtenir la franchise à modifier
+    Franchise franchise = new Franchise()
+    {
+        Nom = "Teenage mutant ninja turtles",
+        AnneeCreation = 1984,
+        Proprietaire = "Paramount",
+        SiteWeb = "https://www.teenagemutantninjaturtles.com/"
+    };
+
+    //L'ajouter dans la base de données
+    //Le contexte est en mesure de déterminer la table par le type de l'objet
+    db.Add(franchise);
+
+    //Affiche la clé, elle sera à 0
+    //highlight-next-line
+    Console.WriteLine($"Id : {franchise.FranchiseId}");
+
+    db.SaveChanges();
+
+    //Affiche la clé, elle aura une valeur
+    //highlight-next-line
+    Console.WriteLine($"Id : {franchise.FranchiseId}");
+}
+```
+
+Remarquez que la clé n'est pas spécifiée lors de la création de l'objet. À la ligne 22, la valeur de la clé est 0, car le contexte ne s'est pas mis à jour avec la base de données.
+
+Une fois que la méthode **`SaveChanges()`** a été appelée, la valeur de la propriété **FranchiseId** a été mise à jour avec celle qui a été autogénérée par la base de données.
+
+
+### Exercice
+
+Vous devez compléter la BD Univers afin de correspondre à ces données. 
+
+Il y a déjà de l'information dans la bd. Comment allez-vous faire pour connaitre les ids des films, personnages et franchises déjà présente dans la bd ?
+
+<details>
+  <summary>Solution</summary>
+
+Vous savez comment aller lire de l'information. Créez des variables pour contenir l'info qui est déjà dans la bd. 
+
+</details>
+
+
+Et tant qu'à se pratiquer, utilisez une **List\<Distribution\>** afin de créer les distributions. 
+
+**Table Franchise**
+
+| FranchiseId | Nom       | AnneCreation | SiteWeb                | Proprietaire |
+|-----------|-----------|--------------|------------------------|--------------|
+| 1         | Marvel    | 1939         | https://www.marvel.com | Disney       |
+| 2         | DC Comics | 1934         | https://www.dc.com     | Warner Bros  |
+|           |           |              |                        |              |
+
+
+**Table Personnage**
+| PersonnageId 	| Nom         	| IdentiteReelle    	| DateNaissance 	| EstVilain 	| Franchise |
+|--------------	|-------------	|-------------------	|---------------	|-----------	|---------	|
+| 1            	| Spiderman   	| Peter Parker      	| null          	| 0         	| Marvel  	|
+| 2            	| Iron Man    	| Tony Stark        	| 1970-11-12    	| 0         	| Marvel  	|
+| 3            	| Batman      	| Bruce Wayne       	| 1966-03-04    	| 0         	| DC      	|
+| 4            	| Joker       	| null              	| 1966-01-01      	| 1         	| DC      	|
+| 5            	| Thor        	| Thor              	| 0001-01-01       	| 0         	| Marvel  	|
+| 6            	| Black Widow 	| Nathasha Romanoff 	| 1985-08-31    	| 0         	| Marvel  	|
+
+**Table Film**
+| FilmId 	| Titre              	| DateSortie 	| Etoile 	| Duree 	|
+|--------	|--------------------	|------------	|--------	|-------	|
+| 1      	| Black Widow        	| 2021-07-09 	| 3      	| 121   	|
+| 2      	| The Avengers       	| 2012-05-04 	| 5      	| 98    	|
+| 3      	| Spiderman          	| 2003-05-03 	| 5      	| 110   	|
+| 4      	| The Dark Knight    	| 2008-07-18 	| 5      	| 142   	|
+| 5      	| Avengers : Endgame 	| 2019-04-26 	| 4      	| 132   	|
+| 6      	| Iron Man           	| 2008-05-02 	| 4      	| 96    	|
+| 7      	| Joker              	| 2019-10-04 	| 4      	| 99    	|
+
+
+**Table Distribution**
+| Personnage  	| Film               	| Acteur             	|
+|-------------	|--------------------	|--------------------	|
+| Spiderman   	| Spiderman          	| Tobey Maguire      	|
+| Spiderman   	| Avengers : Endgame 	| Tom Holland        	|
+| Iron Man    	| Iron Man           	| Robert Downey Jr   	|
+| Iron Man    	| The Avengers       	| Robert Downey Jr   	|
+| Iron Man    	| Avengers : Endgame 	| Robert Downey Jr   	|
+| Batman      	| The Dark Knight    	| Christian Bale     	|
+| Joker       	| The Dark Knight    	| Heath Ledger       	|
+| Joker       	| Joker              	| Joaquin Phoenix    	|
+| Thor        	| The Avengers       	| Chris Hemsworth    	|
+| Thor        	| Avengers : Endgame 	| Chris Hemsworth    	|
+| Black Widow 	| The Avengers       	| Scarlett Johansson 	|
+| Black Widow 	| Avengers : Endgame 	| Scarlett Johansson 	|
+| Black Widow 	| Black Widow        	| Scarlett Johansson 	|
+
+<details>
+  <summary>Solution</summary>
+```csharp
+global using Univers.EF.Data; //Les classes du modèle du contexte
+global using Univers.EF.Data.Context; // La classe du contexte
+global using System;
+global using System.Collections.Generic;
+global using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+using (UniversContext db = new UniversContext())
+{
+    Franchise marvel = db.FranchiseTb.Where(f => f.Nom == "Marvel").First();
+    Franchise dc = db.FranchiseTb.Where(f => f.Nom == "DC Comics").First();
+
+    Personnage joker = new Personnage()
+    {
+        Nom = "Joker",
+        IdentiteReelle = null,
+        DateNaissance = new DateOnly(1966, 01, 01),
+        EstVilain = true,
+        FranchiseId = dc.FranchiseId,
+
+    };
+
+    Personnage thor = new Personnage()
+    {
+        Nom = "Thor",
+        IdentiteReelle = "Thor",
+        DateNaissance = new DateOnly(01, 01, 01),
+        EstVilain = false,
+        FranchiseId = marvel.FranchiseId,
+
+    };
+    Personnage blackwidow = new Personnage()
+    {
+        Nom = "Black Widow",
+        IdentiteReelle = "Nathasha Romanoff",
+        DateNaissance = new DateOnly(1985, 08, 31),
+        EstVilain = false,
+        FranchiseId = marvel.FranchiseId,
+
+    };
+
+    db.Add(joker);
+    db.Add(thor);
+    db.Add(blackwidow);
+
+    //il est important de faire la sauvegarde afin d'avoir des id pour les 3
+    // personnages ajoutés. 
+    db.SaveChanges();
+
+    Film darkknight = new Film()
+    {
+        Titre = "The Dark Knight",
+        DateSortie = new DateOnly(2008, 07, 18),
+        Etoile = 5, 
+        Duree = 142,
+    };
+    Film endgame = new Film()
+    {
+        Titre = "Avengers : Endgame",
+        DateSortie = new DateOnly(2019, 04, 26),
+        Etoile = 4,
+        Duree = 132,
+    };
+    Film ironman = new Film()
+    {
+        Titre = "Iron Man",
+        DateSortie = new DateOnly(2008, 05, 02),
+        Etoile = 4,
+        Duree = 96,
+    };
+
+    Film jokerf = new Film()
+    {
+        Titre = "Joker",
+        DateSortie = new DateOnly(2019, 10, 04),
+        Etoile = 4,
+        Duree = 99,
+    };
+
+    db.Add(darkknight);
+    db.Add(endgame);
+    db.Add(ironman); 
+    db.Add(jokerf);
+
+    db.SaveChanges();
+    
+    //Pour compléter l'inventaire des personnages et films qui sont déjà dans la bd
+    Personnage spidey = db.PersonnageTb.Where(p => p.Nom == "Spiderman").First();
+    Personnage ironmanP = db.PersonnageTb.Where(p => p.Nom == "Iron Man").First();
+    Personnage batman = db.PersonnageTb.Where(p => p.Nom == "Batman").First();
+
+    Film spidermanF = db.FilmTb.Where(f => f.Titre == "Spiderman").First();
+    Film ironmanF  = db.FilmTb.Where(f => f.Titre == "Iron Man").First();
+    Film batmanF = db.FilmTb.Where(f => f.Titre == "The Dark Knight").First();
+    Film avenger = db.FilmTb.Where(f => f.Titre == "The Avengers").First();
+    Film blackwidowF = db.FilmTb.Where(f => f.Titre == "Black Widow").First();
+
+    List<Distribution> distributions = new List<Distribution>()
+    {
+        new Distribution(){PersonnageId=spidey.PersonnageId,
+                            FilmId = spidermanF.FilmId, 
+                            Acteur = "Tobey Maguire"},
+        new Distribution(){PersonnageId=spidey.PersonnageId,
+                            FilmId = endgame.FilmId,
+                            Acteur = "Tom Holland"},
+        new Distribution(){PersonnageId=ironmanP.PersonnageId,
+                            FilmId = ironmanF.FilmId,
+                            Acteur = "Robert Downey Jr"},
+        new Distribution(){PersonnageId=ironmanP.PersonnageId,
+                            FilmId = endgame.FilmId,
+                            Acteur = "Robert Downey Jr"},
+        new Distribution(){PersonnageId=batman.PersonnageId,
+                            FilmId = darkknight.FilmId,
+                            Acteur = "Christian Bale"},
+        new Distribution(){PersonnageId=joker.PersonnageId,
+                            FilmId = darkknight.FilmId,
+                            Acteur = "Heath Ledger"},
+        new Distribution(){PersonnageId=joker.PersonnageId,
+                            FilmId = jokerf.FilmId,
+                            Acteur = "Joaquin Phoenix"},
+        new Distribution(){PersonnageId=thor.PersonnageId,
+                            FilmId = endgame.FilmId,
+                            Acteur = "Chris Hemsworth"},
+        new Distribution(){PersonnageId=thor.PersonnageId,
+                            FilmId = avenger.FilmId,
+                            Acteur = "Chris Hemsworth"},
+        new Distribution(){PersonnageId=blackwidow.PersonnageId,
+                            FilmId = endgame.FilmId,
+                            Acteur = "Scarlett Johansson"},
+        new Distribution(){PersonnageId=blackwidow.PersonnageId,
+                            FilmId = avenger.FilmId,
+                            Acteur = "Scarlett Johansson"},
+        new Distribution(){PersonnageId=blackwidow.PersonnageId,
+                            FilmId = blackwidowF.FilmId,
+                            Acteur = "Scarlett Johansson"},
+    };
+
+    foreach (Distribution d  in distributions)
+    {
+        db.Add(d);
+    }
+    db.SaveChanges();
+}
+```
+</details>
+
+
+
+
+
+## Modifier des données
 
 Pour être en mesure de modifier un enregistrement, il faut avoir une instance d'un objet de l'enregistrement.
 
 Il n'y a pas d'action directe comme **SQL** pour le faire en une seule commande.
 
-```sql
-UPDATE Univers SET Nom = 'DC Comics' WHERE UniversId = 2; --En supposant que DC = 2
+```sql title="NE PAS EXÉCUTER"
+UPDATE Franchise SET Nom = 'DC Comics modifié' WHERE FranchiseId = 2; --En supposant que DC = 2
 ```
 
 Pour faire la même chose avec **Entity Framework**, il faut faire un **SELECT** pour obtenir l'enregistrement et ensuite modifier les valeurs.
 
-```c#
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
+```csharp
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
 optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
     Microsoft.Extensions.Logging.LogLevel.Information);
 optBuilder.EnableSensitiveDataLogging();
 
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
+using (UniversContext db = new UniversContext(optBuilder.Options))
 {
-    //Obetnir l'univers à modifier
-    Univers univers = (from lqUnivers in db.Univers
+    //Obetnir la franchise à modifier
+    Franchise franchise = (from lqFranchise in db.FranchiseTb
                         where
-                             lqUnivers.UniversId == 2
+                             lqFranchise.FranchiseId == 2
                         select
-                             lqUnivers).First();
+                             lqFranchise).First();
 
     //Appliquer la modification
-    univers.Nom = "DC Comics";    
+    franchise.Nom = "DC Comics modifié";    
 
-    //Obtenir la liste de tous les univers
-    List<Univers> lstUnivers = db.Univers.ToList();
+    //Obtenir la liste de tous les franchises
+    List<Franchise> lstFranchise = db.FranchiseTb.ToList();
 
-    //Afficher tous les univers
-    foreach(Univers u in lstUnivers)
+    //Afficher toutes les franchises
+    foreach(Franchise f in lstFranchise)
     {
-        Console.WriteLine($"Id : {u.UniversId}");
-        Console.WriteLine($"Nom : {u.Nom}");
+        Console.WriteLine($"Id : {f.FranchiseId}");
+        Console.WriteLine($"Nom : {f.Nom}");
     }
 }
 ```
@@ -296,23 +677,23 @@ Il est important d'appeler la méthode **`SaveChanges()`** pour indiquer au cont
 
 Exécutez ce code. La modification sera appliquée.
 
-```c#
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
+```csharp
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
 optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
     Microsoft.Extensions.Logging.LogLevel.Information);
 optBuilder.EnableSensitiveDataLogging();
 
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
+using (UniversContext db = new UniversContext(optBuilder.Options))
 {
-    //Obtenir l'univers à modifier
-    Univers univers = (from lqUnivers in db.Univers
+    //Obtenir la franchise à modifier
+    Franchise franchise = (from lqFranchise in db.FranchiseTb
                         where
-                             lqUnivers.UniversId == 2
+                             lqFranchise.FranchiseId == 2
                         select
-                             lqUnivers).First();
+                             lqFranchise).First();
 
     //Appliquer la modification
-    univers.Nom = "DC Comics";
+    franchise.Nom = "DC Comics modifié";
 
     db.SaveChanges();    
 }
@@ -320,24 +701,24 @@ using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Opt
 
 Dans le code généré, il y aura un **UPDATE**.
 
-```sql
+```sql title="NE PAS EXÉCUTER"
 info: 2023-02-22 13:57:52.904 RelationalEventId.CommandExecuted[20101] (Microsoft.EntityFrameworkCore.Database.Command) 
       Executed DbCommand (86ms) [Parameters=[@p1='2', @p0='DC Comics' (Nullable = false) (Size = 100) (DbType = AnsiString)], CommandType='Text', CommandTimeout='30']
       SET IMPLICIT_TRANSACTIONS OFF;
       SET NOCOUNT ON;
-      UPDATE [Univers] SET [Nom] = @p0
+      UPDATE [Franchise] SET [Nom] = @p0
       OUTPUT 1
-      WHERE [UniversId] = @p1;
+      WHERE [FranchiseId] = @p1;
 ```
 
 ## Mise à jour massive
 
 Contrairement au langage **SQL**, il n'est pas possible de faire une mise à jour sur plusieurs enregistrements en fonction de sa condition.
 
-Voici par exemple, il faut masquer l'identité réelle de tous les personnages de l'univers Marvel. 
+Voici par exemple, il faut masquer l'identité réelle de tous les personnages de la franchise Marvel. 
 
-```sql
-UPDATE Personnage SET IdentiteReelle = 'Confidentielle' WHERE UniversId = 1; --En supposant que Marvel = 1;
+```sql title="NE PAS EXÉCUTER"
+UPDATE Personnage SET IdentiteReelle = 'Confidentielle' WHERE FranchiseId = 1; --En supposant que Marvel = 1;
 ```
 
 Si la table a 1 million de personnages de Marvel, cette simple requête est en mesure de mettre à jour tous les enregistrements.
@@ -346,21 +727,21 @@ Avec **Entity Framework**, il faut faire en plusieurs étapes.
 
 - Récupérer tous les enregistrements
 - Parcourir les enregistrements
-- Assigné la nouvelle valeur à chaque enregistrement
+- Assigner la nouvelle valeur à chaque enregistrement
 
-```c#
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
+```csharp
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
 optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
     Microsoft.Extensions.Logging.LogLevel.Information);
 optBuilder.EnableSensitiveDataLogging();
 
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
+using (UniversContext db = new UniversContext(optBuilder.Options))
 {
     //Obtenir les personnages à mettre à jour
     List<Personnage> lstPersonnage =
-        (from lqPersonnage in db.Personnage
+        (from lqPersonnage in db.PersonnageTb
          where
-            lqPersonnage.UniversId == 1
+            lqPersonnage.FranchiseId == 1
          select lqPersonnage).ToList();
 
     
@@ -397,57 +778,16 @@ info: 2023-02-22 13:59:54.801 RelationalEventId.CommandExecuted[20101] (Microsof
 
 Il y en a plusieurs. Pour des mises à jour massives, **SQL** a toujours son utilité.
 
-# Ajouter
 
-Pour ajouter un nouvel enregistrement dans la base de données, il faut créer un nouvel objet.
 
-```c#
-using IntroEF.Data.Context;
-using IntroEF.Data;
-using Microsoft.EntityFrameworkCore;
-
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
-optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
-    Microsoft.Extensions.Logging.LogLevel.Information);
-optBuilder.EnableSensitiveDataLogging();
-
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
-{
-    //Obetnir l'univers à modifier
-    Univers univers = new Univers()
-    {
-        Nom = "Teenage mutant ninja turtles",
-        AnneeCreation = 1984,
-        Proprietaire = "Paramount",
-        SiteWeb = "https://www.teenagemutantninjaturtles.com/"
-    };
-
-    //L'ajouter dans la base de données
-    //Le contexte est en mesure de déterminer la table par le type de l'objet
-    db.Add(univers);
-
-    //Affiche la clé, elle sera à 0
-    Console.WriteLine($"Id : {univers.UniversId}");
-
-    db.SaveChanges();
-
-    //Affiche la clé, elle aura une valeur
-    Console.WriteLine($"Id : {univers.UniversId}");
-}
-```
-
-Remarquez que la clé n'est pas spécifiée lors de la création de l'objet. À la ligne 26, la valeur de la clé est 0, car le contexte ne s'est pas mis à jour avec la base de données.
-
-Une fois que la méthode **`SaveChanges()`** a été appelée, la valeur de la propriété **UniversId** a été mise à jour avec celle qui a été autogénérée par la base de données.
-
-# Supprimer
+## Supprimer des données
 
 Pour supprimer un enregistrement, il faut faire une technique similaire à la mise à jour.
 
-Pour supprimer l'univers **Teenage mutant ninja turtles**, il faut faire cette requête.
+Pour supprimer la franchise **Teenage mutant ninja turtles**, il faut faire cette requête.
 
-```sql
-DELETE FROM Univers WHERE Nom = 'Teenage mutant ninja turtles';
+```sql title="NE PAS EXÉCUTER"
+DELETE FROM Franchise WHERE Nom = 'Teenage mutant ninja turtles';
 ```
 
 Avec **Entity Framework**, il faut faire en plusieurs étapes.
@@ -455,18 +795,18 @@ Avec **Entity Framework**, il faut faire en plusieurs étapes.
 - Récupérer l'enregistrement
 - Le retirer du **DBSet**.
 
-```c#
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
+```csharp
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
 optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
     Microsoft.Extensions.Logging.LogLevel.Information);
 optBuilder.EnableSensitiveDataLogging();
 
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
+using (UniversContext db = new UniversContext(optBuilder.Options))
 {
-    Univers univers = db.Univers.Where(u => u.Nom == "Teenage mutant ninja turtles").First();
+    Franchise franchise = db.FranchiseTb.Where(u => u.Nom == "Teenage mutant ninja turtles").First();
 
     //Le contexte est en mesure de déterminer la table par le type de l'objet
-    db.Remove(univers);
+    db.Remove(franchise);
 
     db.SaveChanges();
 }
@@ -478,7 +818,7 @@ Contrairement au langage **SQL**, il n'est pas possible de supprimer plusieurs e
 
 Pour supprimer toutes les références de **Spideman** dans les films, il faudrait faire ceci en **SQL**.
 
-```sql
+```sql title="NE PAS EXÉCUTER"
 DELETE FROM [Distribution] WHERE PersonnageId = 1; --En supposant que Spiderman = 1
 ```
 
@@ -488,12 +828,12 @@ Avec **Entity Framework**, il faut faire en plusieurs étapes.
 - Les retirer du **DBSet**.
 
 ```sql
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
 optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
     Microsoft.Extensions.Logging.LogLevel.Information);
 optBuilder.EnableSensitiveDataLogging();
 
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
+using (UniversContext db = new UniversContext(optBuilder.Options))
 {
 	//Obtenir les distributions à supprimer
     List<Distribution> lstDistribution =
@@ -523,7 +863,7 @@ info: 2023-02-22 14:07:33.395 RelationalEventId.CommandExecuted[20101] (Microsof
       WHERE [FilmId] = @p2 AND [PersonnageId] = @p3;
 ```
 
-# Transaction
+## Transaction
 
 **Entity Framework** effectue toutes les modifications(ajout, suppression, mise à jour) de la base de données dans la mémoire de son contexte.
 
@@ -531,13 +871,13 @@ Toutes les actions sont effectuées lors de l'exécution de la méthode **`SaveC
 
 Est-ce que le comportement de **`SaveChanges()`** est comme celui d'une transaction ?
 
-```c#
-var optBuilder = new DbContextOptionsBuilder<GestionPersonnageContext>();
+```csharp
+var optBuilder = new DbContextOptionsBuilder<UniversContext>();
 optBuilder.LogTo(message => File.WriteAllText(@"C:\eflog\" + DateTime.Now.Ticks + ".txt", message),
     Microsoft.Extensions.Logging.LogLevel.Information);
 optBuilder.EnableSensitiveDataLogging();
 
-using (GestionPersonnageContext db = new GestionPersonnageContext(optBuilder.Options))
+using (UniversContext db = new UniversContext(optBuilder.Options))
 {
     Film film1 = new Film()
     {
@@ -581,228 +921,4 @@ SqlException : The MERGE statement conflicted with the CHECK constraint "CK_Fil
 Est-ce qu'une partie des données seront dans la base de données ? Il n'y aura aucun des 3 films, car la méthode **`SaveChanges()`** effectue une transaction.
 
 La gestion de transaction se fait automatiquement, il faut seulement bien gérer quand est-ce que la méthode **`SaveChanges()`** doit être appelée.
-
-# Méthode d'extension
-
-Dans une conception objet, il serait intéressant d'ajouter une méthode dans la classe **Univers** qui permettrait d'afficher son information dans la console. Cette approche permet de favoriser la réutilisation du code, donc d'être plus **DRY**.
-
-Ajoutez cette méthode dans la classe **Univers**.
-
-```
-public void AfficherConsole()
-{
-    Console.WriteLine($"Id : {UniversId}");
-    Console.WriteLine($"Nom : {Nom}");
-    Console.WriteLine($"Année de création : {AnneeCreation}");
-    Console.WriteLine($"Site Web : {SiteWeb}");
-    Console.WriteLine($"Propriétaire : {Proprietaire}");
-}
-```
-
-Maintenant, il est possible de faire ceci dans le fichier **Program.cs**.
-
-```
-using (GestionPersonnageContext db = new GestionPersonnageContext())
-{
-    List<Univers> lstUniversQuery = (from lqUnivers in db.Univers
-                                     orderby
-                                         lqUnivers.AnneeCreation descending
-                                     select
-                                         lqUnivers).ToList();
-
-    foreach (Univers univers in lstUniversQuery)
-    {
-        univers.AfficherConsole();
-    }
-}
-```
-
-Il faut maintenant ajouter dans la table le champ **TelephoneProprietaire**.
-
-```sql
-ALTER TABLE Univers
-ADD TelephoneProprietaire VARCHAR(15);
-```
-
-Il faut mettre à jour le contexte avec **Scaffold-DbContext**.
-
-```powershell
-Scaffold-DbContext "Server=localhost\SQLExpress;Database=eDA_4N1_GestionPersonnage;Trusted_Connection=True;Trust Server Certificate=true;" Microsoft.EntityFrameworkCore.SqlServer -Context GestionPersonnageContext -OutputDir Data -ContextDir Data\Context
-```
-
-Compilez de nouveau le code. Il y a une erreur pour la méthode **`AfficherConsole()`**.  
-
-Elle n'existe plus dans la classe **Univers**. Pourtant, la nouvelle propriété **TelephoneProprietaire** est présente.
-
-Lorsqu'une classe est générée et mise à jour par un outil d'autogénération de code, dans la majorité des cas, tous les changements manuels ne seront pas conservés.
-
-De plus, selon les principes **SOLID**, le **S** est pour une responsabilité simple. Pour **Entity Framework**, une classe du modèle doit contenir seulement les données d'un enregistrement et les propriétés de navigations. Elle ne peut pas avoir d'autres responsabilités. De plus, il faut éviter de mettre des fonctionnalités liées directement à l'interface utilisateur dans des classes de modèles, car il serait possible d'utiliser ces modèles pour une application web, ensuite une console et WPF.
-
-Donc, pour être en mesure d'ajouter des fonctionnalités, il faut utiliser des méthodes d'extension. Le **O** de **SOLID** est **(open/close)**, c'est-à-dire une classe doit être fermée à la modification directe, mais ouverte à l'extension. C'est avec ce principe qu'il sera possible d'ajouter la méthode **`AfficherConsole()`** dans la classe **Univers**.
-
-Créez un nouveau dossier **Extensions** dans le projet et créez la classe **UniversConsoleExtensions**. Cette classe contiendra les méthodes pour la console.
-
-```c#
-/// <summary>
-/// Classe statique qui regroupe les méthodes d'extension pour la console du modèle Univers
-/// </summary>
-public static class UniversConsoleExtensions
-{
-    /// <summary>
-    /// Méthode qui affiche l'information d'un univers à la console
-    /// </summary>
-    /// <param name="univers">Univers</param>
-    public static void AfficherConsole(this Univers univers)
-    {
-        Console.WriteLine($"Id : {univers.UniversId}");
-        Console.WriteLine($"Nom : {univers.Nom}");
-        Console.WriteLine($"Année de création : {univers.AnneeCreation}");
-        Console.WriteLine($"Site Web : {univers.SiteWeb}");
-        Console.WriteLine($"Propriétaire : {univers.Proprietaire}");
-    }
-}
-```
-
-Pour ajouter des méthodes d'extension, il faut obligatoirement les créer dans une classe **static**.
-
-La méthode doit également être **static**. Remarquez le paramètre, il débute par **`this`**. Ceci indique que le premier paramètre consiste à l'objet qui utilisera la méthode d'extension.
-
-Voici un exemple.
-
-```c#
-Univers u1 = new Univers();
-
-//Par extension
-u1.AfficherConsole();
-
-//Directement
-UniversConsoleExtensions.AfficherConsole(u1);
-```
-
-La méthode **`u1.AfficherConsole()`**  est en réalité **`UniversConsoleExtensions.AfficherConsole(u1);`** pour le compilateur.
-
-Dans le fichier **Program.cs**, est-ce que la méthode disponible ? Pour quelle soit disponible, il faut ajouter le **`using`** qui contient la classe d'extension.
-
-```c#
-using IntroEF.Data.Context;
-using IntroEF.Data;
-using IntroEF.Extensions; //Donne accès à AfficherConsole()
-
-using (GestionPersonnageContext db = new GestionPersonnageContext())
-{
-    List<Univers> lstUniversQuery = (from lqUnivers in db.Univers
-                                     orderby
-                                         lqUnivers.AnneeCreation descending
-                                     select
-                                         lqUnivers).ToList();
-
-    foreach (Univers univers in lstUniversQuery)
-    {
-        univers.AfficherConsole();        
-    }
-}
-```
-
-Il est possible d'ajouter des paramètres dans la méthode.
-
-Remplacez le code de la classe **UniversConsoleExtensions** par celui-ci.
-
-```c#
-/// <summary>
-/// Classe statique qui regroupe les méthodes d'extension pour la console du modèle Univers
-/// </summary>
-public static class UniversConsoleExtensions
-{
-    /// <summary>
-    /// Méthode qui affiche l'information d'un univers à la console
-    /// </summary>
-    /// <param name="univers">Univers</param>
-    /// <param name="majuscule">Affiche le texte en majuscule. Faux par défaut.</param>
-    public static void AfficherConsole(this Univers univers, bool majuscule = false)
-    {
-        if (majuscule == true)
-        {
-            //En majuscule
-            Console.WriteLine($"Id : {univers.UniversId}");
-            Console.WriteLine($"Nom : {univers.Nom.ToUpper()}");
-            Console.WriteLine($"Id : {univers.UniversId}");
-            Console.WriteLine($"Année de création : {univers.AnneeCreation}");
-            Console.WriteLine($"Site Web : {univers.SiteWeb.ToUpper()}");
-            Console.WriteLine($"Propriétaire : {univers.Proprietaire.ToUpper()}");
-        }
-        else
-        {
-            //Aucun changement
-            Console.WriteLine($"Id : {univers.UniversId}");
-            Console.WriteLine($"Nom : {univers.Nom}");
-            Console.WriteLine($"Année de création : {univers.AnneeCreation}");
-            Console.WriteLine($"Site Web : {univers.SiteWeb}");
-            Console.WriteLine($"Propriétaire : {univers.Proprietaire}");
-        }
-    }
-}
-```
-
-Il est donc possible de faire ceci.
-
-```c#
-using IntroEF.Data.Context;
-using IntroEF.Data;
-using IntroEF.Extensions; //Donne accès à AfficherConsole()
-
-using (GestionPersonnageContext db = new GestionPersonnageContext())
-{
-    List<Univers> lstUniversQuery = (from lqUnivers in db.Univers
-                                     orderby
-                                         lqUnivers.AnneeCreation descending
-                                     select
-                                         lqUnivers).ToList();
-
-    foreach (Univers univers in lstUniversQuery)
-    {
-        univers.AfficherConsole(); //false par défaut => UniversConsoleExtensions.AfficherConsole(univers);       
-        univers.AfficherConsole(false); //false spécifié => UniversConsoleExtensions.AfficherConsole(univers, false);
-        univers.AfficherConsole(true); //true spécifié ==> UniversConsoleExtensions.AfficherConsole(univers, true);
-    }
-}
-```
-
-Il est possible de le faire sur une collection également.
-
-Dans la classe **UniversConsoleExtensions**, ajoutez la méthode ci-dessous.
-
-```c#
-/// <summary>
-/// Méthode qui affiche l'information d'une liste d'univers à la console
-/// </summary>
-/// <param name="lstUnivers"></param>
-public static void AfficherConsole(this List<Univers> lstUnivers)
-{
-    if(lstUnivers?.Count > 0)
-    {
-        foreach (Univers univers in lstUnivers)
-        {
-            univers.AfficherConsole();
-        }
-    }
-}
-```
-
-Il est possible de simplifier le code dans le fichier **Program.cs** par celui-ci.
-
-```c#
-using (GestionPersonnageContext db = new GestionPersonnageContext())
-{
-    List<Univers> lstUniversQuery = (from lqUnivers in db.Univers
-                                     orderby
-                                         lqUnivers.AnneeCreation descending
-                                     select
-                                         lqUnivers).ToList();
-
-    lstUniversQuery.AfficherConsole();
-
-    //Ou directement en lambda
-    db.Univers.OrderByDescending(u => u.AnneeCreation).ToList().AfficherConsole();
-}
-```
 

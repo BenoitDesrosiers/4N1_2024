@@ -143,7 +143,7 @@ Créez le dossier **Extensions\ServiceCollections** à la racine du projet **Sup
 
 Créez la classe **SCRepositories.cs** dans le dossier.
 
-Les **Repositories** sont déjà créés, alors il faut les ajouter dans l'enregistrement. Remarquez que la création est maintenant en **Scoped** (voir la section [Injection de dépendance/Type d'enregistrement des dépendances](../03%20Injection%20de%20d%C3%A9pendance/injection_dependance#type-denregistrement-des-d%C3%A9pendances)). L'instance du **Repo** sera partagée entre les différents services qui l'utilisent.
+Les **Repositories** sont déjà créés, alors il faut les ajouter dans l'enregistrement. Remarquez que la création est maintenant en **Scoped**. L'instance du **Repo** sera partagée entre les différents services qui l'utilisent.
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;

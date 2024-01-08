@@ -314,5 +314,5 @@ Update-Database -StartupProject Univers.EF -Migration Seed_Film
 </details>
 
 
-Nous sommes maintenat prêt pour faire des requêtes. 
+Nous sommes maintenant prêt pour faire des requêtes. 
 

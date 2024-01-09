@@ -440,7 +440,7 @@ Pour ce projet, utilisez cette commande.
 Update-Database -StartupProject "Univers.EF" -Migration CreationBD
 ```
 
-### Anulation d'une migration
+### Annulation d'une migration
 
 Si vous vous apercevez qu'il y a une erreur dans une migration, vous devez *reculer* la base de données à l'état précédent cette migration. Pour ce faire, vous n'avez qu'à exécuter la migration précédent celle que vous désirez enlever. Le **down** de toutes les migrations suivantes sera exécuté. 
 

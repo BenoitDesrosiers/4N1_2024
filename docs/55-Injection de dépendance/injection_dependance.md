@@ -9,6 +9,10 @@ https://learn.microsoft.com/fr-fr/dotnet/architecture/modern-web-apps-azure/arch
 
 https://learn.microsoft.com/fr-fr/dotnet/core/extensions/dependency-injection
 
+https://youtu.be/Hhpq7oYcpGE?si=uyluJ3V_JQtpRzX8
+
+
+
 ## Définition
 
 L’injection de dépendances consiste, pour une classe, à déléguer la création de ses dépendances au code appelant qui va ensuite les injecter dans la classe correspondante. De ce fait, la création d’une instance de la dépendance est effectuée à l’extérieur de la classe dépendante et injectée dans la classe (le plus souvent dans le constructeur mais il existe d’autres possibilités). [source](https://www.softfluent.fr/blog/injection-de-dependances-a-quoi-ca-sert/#:~:text=L'injection%20de%20d%C3%A9pendances%20consiste,injecter%20dans%20la%20classe%20correspondante.)
@@ -134,12 +138,14 @@ builder.ConfigureServices((context, services) =>
 {
     services.AddTransient<App>(); //Application principale
 
-//highlight-start
     //Manager
+    //highlight-next-line
     services.AddTransient<IUniversManager, UniversManager>();
-//highlight-end
 });
 ```
+
+Cette ligne indique que si le code demande qqchose qui implémente IUniversManager, l'injection de dépendances va fournir une instance de UniversManager. 
+
 
 ## IServiceProvider
 
@@ -357,7 +363,7 @@ Il faut modifier le **Manager** Univers pour utiliser le **Repository**.
 
 Il ne faut pas faire la création comme aux lignes 13 et 29.
 
-```csharp showLineNumbers
+```csharp showLineNumbers title="NE PAS UTILISER"
 using GestionPersonnageApp.Data;
 using GestionPersonnageApp.Repositories;
 
@@ -413,7 +419,7 @@ La 2e technique serait de l'injecter par le constructeur, en utilisant la classe
 
 Premièrement, il faut enregistrer le service **UniversV1Repo**. Remplacez la section de la configuration des services du fichier **Program.cs** par le code ci-dessous.
 
-```csharp
+```csharp showLineNumbers title="NE PAS UTILISER"
 //Configuration des services
 builder.ConfigureServices((context, services) =>
 {
@@ -510,7 +516,7 @@ Pour simuler cette erreur, dans la classe **UniversManager**, conserver le const
 
 
 
-## Injection par l'interface (approche recommandée)
+## Injection par interface (approche recommandée)
 
 La meilleure approche est d'injecter l'**interface** par le constructeur. Le **Manager** n'est plus dépendant d'une classe, mais d'une interface. Il sera maintenant plus efficace d'utiliser une 2e version du **repo**.
 

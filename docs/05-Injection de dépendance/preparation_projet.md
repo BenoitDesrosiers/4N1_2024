@@ -1,38 +1,20 @@
 ---
-sidebar_position: 3
+sidebar_position: 30
 ---
 
-# Structure de base de l'application
+# Préparation du projet
 
-## Projet vs solution
-
-Quelle est la différence entre un projet et une solution en **.Net** ?
-
-Il est fréquent en **.Net** de séparer une application en plusieurs projets. Généralement, le projet consiste en une couche logicielle. Cette couche contient le code correspondant au rôle du projet dans l'application. Un projet peut être utilisé dans plusieurs applications.
-
-La solution permet de regrouper plusieurs projets ensemble. La solution n'a pas de logique en soi. Elle permet d'avoir accès à plusieurs projets rapidement. Généralement, la solution contient tous les projets nécessaires à l'application.
-
-
-Il est possible d'utiliser cette approche avec une application console avec **.NET 7**.
-
-Les prochaines étapes préparent la structure de base du projet **Console** pour être en mesure d'utiliser l'injection de dépendances.
-
-## Préparation du projet
-
-L'application que nous allons construire consiste à la gestion d'une "bd" contenant des univers de personnages (Marvel, DC, TMNT, Power Rangers). 
+Nous allons reprendre la bd Univers afin d'introduire le concept d'injection de dépendance. 
 
 Afin de structurer notre application console convenablement, il faut mettre en place certains éléments.
 
-Créez un nouveau projet **Application Console**.
-<img src="/4N1_2024/img/05_projet_1.png"  />
-
+Dans la solution **Univers** utilisée précédemment, créez un nouveau projet **Application Console**.
 
 Nommez le projet **GestionPersonnageApp**.
-<img src="/4N1_2024/img/05_projet_2.png"  />
 
+Sélectionnez la dernière infrastructure **.NET** et décochez **N'utilisez pas d'instructions de niveau supérieur.**
 
-Sélectionnez l'infrastructure **.NET 7.0** et décochez **N'utilisez pas d'instructions de niveau supérieur.**
-<img src="/4N1_2024/img/05_projet_3.png"  />
+Une fois le projet créé, définisez le en tant que **projet de démarrage.** 
 
 
 ## Installation des librairies
@@ -43,7 +25,11 @@ L'ajout des librairies se fait par **Nuget**. Il est plus convivial d'utiliser l
 <img src="/4N1_2024/img/05_package_console_1.png"  />
 
 
-Dans la **Console du Gestionnaire de package**, incrivez cette ligne. 
+:::danger Attention
+Assurez-vous que le projet **GestionPersonnageApp** est le projet par défaut dans la console du gestionnaire de package
+:::
+
+Dans la **Console du Gestionnaire de package**,  incrivez cette ligne. 
 
 ```
 Install-Package Microsoft.Extensions.Hosting
@@ -115,7 +101,7 @@ Remarquez que les variables private sont préfixées par **_**. Cette nomenclatu
 :::
 
 
-Pour le test initial, insérez le code ci-dessous dans la méthode **`DemarrerApplicationAsync`**.
+Pour le test initial, insérez le code ci-dessous dans la méthode **DemarrerApplicationAsync**.
 
 ```csharp
 Console.WriteLine("Appuyez sur ENTER pour quitter.");
@@ -183,7 +169,7 @@ Pourquoi ne pas avoir fait ceci à la ligne 21 .
 App application = new App(host.Services);
 ```
 
-En utilisant **`host.Services.GetRequiredService<App>();`**, ceci permet de d'injecter automatiquement toutes les dépendances dans le constructeur.
+En utilisant **host.Services.GetRequiredService\<App\>();**, ceci permet de d'injecter automatiquement toutes les dépendances dans le constructeur.
 
 ## Arguments du programme
 
@@ -195,7 +181,7 @@ Voici comment les arguments sont envoyés par l'invite de commandes.
 c:\projet> monprog.exe -univers -afficher
 ```
 
-Les arguments proviennent de la variable **args** du fichier **Program.cs**. Cette variable est un tableau. L'index 0 correspond à **`-univers`**, l'index 1 correspond  à **`-afficher`**.
+Les arguments proviennent de la variable **args** du fichier **Program.cs**. Cette variable est un tableau. L'index 0 correspond à **-univers**, l'index 1 correspond  à **-afficher**.
 
 La classe **App** dans son constructeur récupère les arguments du programme à la ligne 24. 
 
@@ -205,7 +191,7 @@ La classe **App** dans son constructeur récupère les arguments du programme à
 
 À cette étape, l'index 0 correspond au fichier compilé du programme. Il faut donc l'exclure.
 
-Selon l'option choisie par l'utilisateur, la classe **App** choisira l’action à utiliser. Ce choix se fera dans la méthode **`DemarrerApplicationAsync`**.  Remplacez la méthode avec le code ci-dessous.
+Selon l'option choisie par l'utilisateur, la classe **App** choisira l’action à utiliser. Ce choix se fera dans la méthode **DemarrerApplicationAsync**.  Remplacez la méthode avec le code ci-dessous.
 
 ```csharp showLineNumbers
 public async Task DemarrerApplicationAsync()
@@ -232,7 +218,7 @@ public async Task DemarrerApplicationAsync()
 
 Exécutez l'application. Elle devrait générer une exception à la ligne 5 ci-dessus. La raison est que le programme n' a reçu aucun argument et que le code de sélection en attend. Il faut donc ajouter une vérification si la longueur des arguments n'est pas valide, et avoir une option par défaut si aucun argument n'est spécifié.
 
-Dans notre cas, l'argument par défaut sera **`-aide`**.
+Dans notre cas, l'argument par défaut sera **-aide**.
 
 Modifiez le constructeur par celui-ci. La ligne 16 sera modifiée pour appliquer le paramètre par défaut.
 
@@ -259,7 +245,7 @@ public App(IServiceProvider serviceProvider)
 }
 ```
 
-Ajoutez la méthode **`AfficherAide()`** dans la classe App.
+Ajoutez la méthode **AfficherAide()** dans la classe App.
 
 ```csharp
 /// <summary>
@@ -275,7 +261,7 @@ private void AfficherAide()
 }
 ```
 
-Modifiez la méthode **`DemarrerApplicationAsync`** pour ajouter l'option **`-aide`**.
+Modifiez la méthode **DemarrerApplicationAsync** pour ajouter l'option **-aide**.
 
 ```csharp
 public async Task DemarrerApplicationAsync()

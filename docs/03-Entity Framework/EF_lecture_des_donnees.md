@@ -2,6 +2,9 @@
 sidebar_position: 20
 ---
 
+# CRUD
+
+Dans cette leçon nous verrons comment utiliser LINQ afin de réaliser des opérations de CRUD. 
 
 ## Préparation du projet de CRUD
 

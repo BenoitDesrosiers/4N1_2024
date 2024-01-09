@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 40
 ---
 
 # Injection de dépendances
@@ -45,9 +45,11 @@ En l’absence d’un mécanisme d’injection de dépendances, une des principa
 
 L'application consiste à faire la gestion d'une base de données contenant des univers de personnages. 
 
-Nous ne savons pas encore comment sera entreposée cette bd. Sera-t-elle en mémoire, dans un fichier texte, dans un SGBD... 
+Présentement, nos données sur l'Univers de superhéros sont entreposées dans une bd relationnel SQLServer. Mais rien n'empêche de mettre ces données dans une structure de liste, dans une bd sqlite, un API, ou encore une bd NoSQL. Il est courant dans un projet de ne pas connaitre la technologie exacte d'entreposage des données. Afin de s'isoler de celle-ci, il est courant d'utiliser une classe qui fera le lien entre l'entrepot de données et le reste du programme: un **Repository**. Il suffira alors de simplement changer cette classe afin de changer l'entrepot de donnés. 
 
-Nous pouvons quand même décider de quelques fonctionnalités que nous désirons avoir. La connexion entre notre programme et la "bd" se fera selon la solution utilisée. L'injection de dépendances nous permettra de choisir le mode de connexion au moment de l'exécution. 
+Mais comment "isoler" le reste du code afin de rendre cette classe intermédiaire échangeable? C'est ici que l'injection de dépendance entre en jeu.
+
+Cette classe intermédiaire nous fournira quelques fonctionnalités que nous désirons avoir. La connexion entre notre programme et la "bd" se fera selon la solution utilisée. L'injection de dépendances nous permettra de choisir le mode de connexion au moment de l'exécution. 
 
 ## Classe de coordination - Manager
 

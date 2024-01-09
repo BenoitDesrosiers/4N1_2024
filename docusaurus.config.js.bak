@@ -79,7 +79,11 @@ const config = {
           src: 'img/logo420.svg',
         },
         items: [
-		
+		{type: 'doc',
+          position: 'left',
+          docId: 'introduction',
+          label: 'Docs'
+		},
           {
             type: 'docSidebar',
             sidebarId: 'NotesSidebar',

@@ -263,8 +263,7 @@ Ouvrez **SSMS** et la base de données aura des données dans les tables **Perso
 
 Ajoutez la migration pour les films. 
 
-Vous pouvez vous baser sur les données de 
-[l'exercices de création de la BD univers du début de la session](/01%20Révision%20SQL/exercice_revision_sql.md)
+Vous pouvez vous baser sur les données de l'exercices de création de la BD univers du début de la session
 
 Ajoutez seulement les 3 premiers.
 

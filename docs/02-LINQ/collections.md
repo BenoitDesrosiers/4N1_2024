@@ -1,10 +1,10 @@
 ---
-sidebar_position: 1
+sidebar_position: 10
 ---
 
 # Les Collections
 
-Avant d'aborder LINQ, nous allons introduire un type de données qui est fréquemment utilisée avec LINQ: Les collections. 
+Avant d'aborder LINQ, nous allons introduire un type de données qui est fréquemment utilisée avec LINQ: **Les collections**. 
 
 ## Création du projet
 

@@ -42,7 +42,6 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-		  
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           //editUrl:
@@ -65,11 +64,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-		docs: {
-      sidebar: {
-        hideable: true,
-      },
-    },
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
@@ -79,13 +73,12 @@ const config = {
           src: 'img/logo420.svg',
         },
         items: [
-		
           {
             type: 'docSidebar',
             sidebarId: 'NotesSidebar',
             position: 'left',
             label: 'Notes de cours',
-         },
+          },
           /*{to: '/blog', label: 'Blog', position: 'left'},*/
           /*{
             href: 'https://github.com/facebook/docusaurus',

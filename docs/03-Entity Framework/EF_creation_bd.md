@@ -40,7 +40,15 @@ Par la suite, il faut utiliser un outil de génération de code pour générer *
 
 Cette approche ne sera pas utilisée pour ce cours étant donné qu'elle est moins utilisée.
 
+## Projet vs solution
 
+Quelle est la différence entre un projet et une solution en **.Net** ?
+
+Il est fréquent en **.Net** de séparer une application en plusieurs projets. Généralement, le projet consiste en une couche logicielle. Cette couche contient le code correspondant au rôle du projet dans l'application. Un projet peut être utilisé dans plusieurs applications.
+
+La solution permet de regrouper plusieurs projets ensemble. La solution n'a pas de logique en soi. Elle permet d'avoir accès à plusieurs projets rapidement. Généralement, la solution contient tous les projets nécessaires à l'application.
+
+Il est possible d'utiliser cette approche avec une application console avec **.NET 7**.
 
 ## Création du projet 
 

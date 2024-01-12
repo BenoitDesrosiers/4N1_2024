@@ -149,29 +149,29 @@ Maintenant, avec les classes génériques, il est possible de généraliser un c
 
   Voici une simplification de la classe **List\<T\>**. 
 	
-	```csharp
-	public class ListeGenerique<T>
-	{
-	    private ArrayList _arr = new ArrayList();
-	
-	    public void Ajouter(T valeur)
-	    {
-	        _arr.Add(valeur);
-	    }
-	
-	    public T Obtenir(int index)
-	    {
-	        if (index < _arr.Count)
-	        {
-	            return (T)_arr[index];
-	        }
-	        else
-	        {
-	            throw new Exception($"La liste a {_arr.Count} élément(s)");
-	        }
-	    }
-	}
-	```
+```csharp
+public class ListeGenerique<T>
+{
+    private ArrayList _arr = new ArrayList();
+
+    public void Ajouter(T valeur)
+    {
+        _arr.Add(valeur);
+    }
+
+    public T Obtenir(int index)
+    {
+        if (index < _arr.Count)
+        {
+            return (T)_arr[index];
+        }
+        else
+        {
+            throw new Exception($"La liste a {_arr.Count} élément(s)");
+        }
+    }
+}
+```
 	
 	Dans la déclaration de la classe, il y a le **\<T\>** qui indique qu'il faut obligatoirement spécifier un type lors de la création d'un objet.
 	

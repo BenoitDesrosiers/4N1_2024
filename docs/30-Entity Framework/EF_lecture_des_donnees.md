@@ -98,17 +98,13 @@ Quiz: qu'est-ce qui doit suivre le changement d'un nom de classe utilisé dans u
 4) le seeder
 </details>
 
-Commencons par le DbSet. 
+Commencez par le DbSet dans UniversContext : le type **Univers** a été changé pour **Franchise**, mais **UniversTb** ne l'a pas été. Changez le pour **FranchiseTb**
 
-Le type Univers a été changé pour Franchise, mais UniversTb ne l'a pas été. Changez le pour FranchiseTb
+Changez la référence dans Personnage: **UniversId** pour **FranchiseID**, **Univers** pour **Franchise** (le type et la variable) . 
 
-Changeons la référence dans Personnage. 
+Continuez dans le OnModelCreating: changez le commentaire, et le nom de la table. 
 
-Continuons vers les changement dans le OnModelCreating. Changez le commentaire, et le nom de la table. 
-
-Et terminons par le seeder. 
-
-Remplacé tous les univers et UniversId par franchises et FranchiseId
+Et terminez par le seeder: remplacez tous les **UniversId** par **FranchiseId**
 
 Il faut maintenant faire la migration.
 ```powershell

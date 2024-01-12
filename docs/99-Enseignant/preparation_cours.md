@@ -1,5 +1,10 @@
 # Preparation 
 
+Voir les instructions dans les commentaires de la page source 
+
+<!---
+
+
 ## Installation du serveur SQL-Serveur du département
 
 Les scripts se trouvent dans le répertoire *Script Gestion SQL* des notes de cours. 
@@ -28,3 +33,6 @@ Il y a aussi le script 1-CreationBDEtudiantBDS.sql qui peut être utilisé si la
 Exécuter le script 3-CreationComptesEtudiantsEtBDs.sql. 
 
 Ce script crée un compte pour chaque étudiant se trouvant dans la table Etudiant, ainsi qu'une copie de AdventureWorks2019. 
+
+
+-->

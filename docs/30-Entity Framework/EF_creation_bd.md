@@ -38,7 +38,7 @@ L'approche **Database First** consiste à créer la base de données en pur **SQ
 
 Par la suite, il faut utiliser un outil de génération de code pour générer **automatiquement** le modèle objet et le contexte de communication avec la base de données.
 
-Cette approche ne sera pas utilisée pour ce cours étant donné qu'elle est moins utilisée.
+Pour ce cours, nous allons favoriser l'approche **Code First** car elle est plus souvent rencontrée en industrie, et est un peu plus complexe à mettre en place. Nous verrons tout de même un exemple de **Database first**. 
 
 ## Projet vs solution
 

@@ -25,9 +25,11 @@ En 2016, Microsoft a sorti une nouvelle plateforme Microsoft .NET Core. Cette pl
 
 La plateforme .NET Core et .NET Framework ont évolué indépendamment jusqu'en 2019. En 2020, Microsoft a sorti le .NET 5 qui consiste à l'évolution de la plateforme .NET Core et le .NET Framework a été abandonné. Il est toujours possible de développer avec le .NET Framework. Certaines technologies ont été republiées en .NET Core, comme pour le ASP.NET MVC et le WPF, mais d'autres ont été abandonnées comme pour les WebForm.
 
-La dernière version en date d'aujourd'hui est **.NET 7** qui est disponible depuis novembre 2022. **Nous utiliserons cette version en classe.**
+La dernière version en date d'aujourd'hui est **.NET 8** qui est disponible depuis novembre 2023. **Nous utiliserons cette version en classe.**
 
 Microsoft supporte également plusieurs langages de programmation. Le plus populaire est le c#, mais il était possible de programmer une application WinForm en c# ou en Visual Basic .NET. Les 2 langages offrent les mêmes possibilités. Un autre but de Microsoft .NET était de le rendre multi-langage et de les faire coexister facilement ensemble.
+
+[Pour en savoir plus](https://en.wikipedia.org/wiki/.NET#.NET_Core)
 
 ## Les bases de c#
 
@@ -56,11 +58,11 @@ Ce site illustre bien la version de c# avec la version du .NET : https://www.tut
 
 ### Les commentaires
 
-Pour faire des commentaires en c#, il fait utiliser le **`//`** pour écrire le commentaire sur une seule ligne.
+Pour faire des commentaires en c#, il fait utiliser le **//** pour écrire le commentaire sur une seule ligne.
 
-Pour écrire un commentaire sur plusieurs lignes, il faut utiliser **`/* */`.**
+Pour écrire un commentaire sur plusieurs lignes, il faut utiliser **/* */`.**
 
-Pour générer automatiquement des blocs de documentation pour les classes, méthodes, propriétés..., il faut faire **`///`** pour générer le bloc.
+Pour générer automatiquement des blocs de documentation pour les classes, méthodes, propriétés..., il faut faire **///** pour générer le bloc.
 
 ```csharp
 /// <summary>
@@ -89,7 +91,7 @@ public class MaClasse
 
 En c#, il est possible de faire du regroupement de code en utilisant les régions. Ceci permet de masquer rapidement une portion du code. Il est possible de l'utiliser partout dans un fichier c#. 
 
-Par exemple, on peut regrouper tous les constructeurs, les attributs... pour masquer une portion du code.
+Par exemple, on peut regrouper tous les constructeurs, les champs... pour masquer une portion du code.
 
 ```csharp
 #region Constructeurs
@@ -131,16 +133,16 @@ bool monBooleen = false;
 
 ### Le type var
 
-Par contre, dans beaucoup de documentation, le type **`var`** est utilisé. Par contre, il ne faut pas le considérer comme celui en **JavaScript**. Il est considéré comme un type implicite en c#. 
+Par contre, dans beaucoup de documentation, le type **var** est utilisé. Par contre, il ne faut pas le considérer comme celui en **JavaScript**. Il est considéré comme un type implicite en c#. 
 
 ```csharp
 int x = 10; //Type explicite
 var y = 12; //Type implicite. Le var est en réalité un int.
 ```
 
-Le **`var`** peut être utilisé uniquement en tant que variable locale.  Il n'est pas possible d'utiliser **`var`** en tant qu'attribut, propriété, paramètre ou de retour de méthode.
+Le **var** peut être utilisé uniquement en tant que variable locale.  Il n'est pas possible d'utiliser **var** en tant que champs, propriété, paramètre ou de retour de méthode.
 
-Il n'est pas recommandé de toujours utiliser le **`var`** et d'ignorer les types explicites, car le **`var`** va devenir le type de sa première assignation.
+Il n'est pas recommandé de toujours utiliser le **var** et d'ignorer les types explicites, car le **var** va devenir le type de sa première assignation.
 
 ```csharp
 //Le code ci-dessous ne compilera pas.
@@ -160,15 +162,15 @@ var z = 1M; //Assignation de la valeur en notation décimale, donc var est un d�
 z = 1.1M; //Cette assignation fonctionnera
 ```
 
-La plus grande utilité du type **`var`** est pour créer des types anonymes dynamiquement. Ce concept sera expliqué plus tard dans la session.
+La plus grande utilité du type **var** est pour créer des types anonymes dynamiquement. Ce concept sera expliqué plus tard dans la session.
 
 Pour en apprendre davantage : https://docs.microsoft.com/fr-ca/dotnet/csharp/language-reference/keywords/var
 
 ### Le *nullable* pour les types non nullable
 
-Par définition, les types primitifs ne peuvent pas avoir une valeur **`null`**. Par exemple, un booléen doit obligatoirement avoir **`True`** ou **`False`** pour être en mesure de l'utiliser.
+Par définition, les types primitifs ne peuvent pas avoir une valeur **null**. Par exemple, un booléen doit obligatoirement avoir **True** ou **False** pour être en mesure de l'utiliser.
 
-Dans certains cas, il peut être intéressant d'être en mesure d'avoir la valeur **`null`** pour un type primitif. c# est en mesure d'accepter la valeur **`null`** pour tous les types ***non nullable***.
+Dans certains cas, il peut être intéressant d'être en mesure d'avoir la valeur **null** pour un type primitif. c# est en mesure d'accepter la valeur **null** pour tous les types ***non nullable***.
 
 ```csharp
 //Booléen standard
@@ -178,7 +180,7 @@ b1 = false;
 b1 = null; //Erreur CS0037 : Impossible de convertir une valeur null en 'type', car il s’agit d’un type valeur qui n’autorise pas les valeurs null
 ```
 
-Pour rendre un type **nullable**, il faut ajouter un **`?`** à la fin du type. 
+Pour rendre un type **nullable**, il faut ajouter un **?** à la fin du type. 
 
 ```csharp
 //Booléen standard
@@ -192,7 +194,7 @@ DateTime? naissance = null; //Pourrait servir pour une date inconnue
 
 ### Le *nullable* pour les types nullables et classe
 
-Une variable de type **string** peut être **`null`** par définition.
+Une variable de type **string** peut être **null** par définition.
 
 Il est possible de compiler le code ci-dessous sans problème. Par contre, le compilateur donnera un avertissement.
 
@@ -201,17 +203,17 @@ string nom = null;
 //CS8600 - Conversion d’un littéral null ou d’une valeur null possible en type non nullable.
 ```
 
-Pour indiquer au compilateur que la valeur null est acceptée, il faut ajouter le **`?`** après le type ou la classe.
+Pour indiquer au compilateur que la valeur null est acceptée, il faut ajouter le **?** après le type ou la classe.
 
 ```csharp
 string? nom = null;
 ```
 
-Également, lors de l'utilisation d'API créé en .NET, le cadriciel refusera les valeurs **`null`** pour les propriétés qui n'auront pas le **`?`**. Il sera important de l'ajouter.
+Également, lors de l'utilisation d'API créé en .NET, le cadriciel refusera les valeurs **null** pour les propriétés qui n'auront pas le **?**. Il sera important de l'ajouter.
 
 ### Séparateur de nombre - _
 
-Il est possible de rendre les gros nombres plus facilement lisibles avec le séparateur **`_`**.
+Il est possible de rendre les gros nombres plus facilement lisibles avec le séparateur **_**.
 
 ```csharp
 double nombre1 = 45412974585674;
@@ -222,48 +224,46 @@ double nombre2 = 45_412_974_585_674;
 
 Il faut faire à l'occasion de la concaténation de string avec des variables et du texte fixe.
 
-Par exemple la méthode **`NomComplet()`** permet de créer la phrase **`"Mon nom est François St-Hilaire."`** si on reprend les valeurs de la section précédente.
+Par exemple la méthode **NomComplet()** permet de concaténer le prénom et le nom.
 
 ```csharp
-public string NomComplet()
+Console.WriteLine(NomComplet("Benoit", "Desrosiers"));
+
+static string NomComplet(string Prenom, string Nom)
 {
     return "Mon nom est " + Prenom + " " + Nom + ".";
 }
 ```
 
-La concaténation avec des **`+`** n'est pas la plus optimale. Il existe plusieurs façons de le faire.
+La concaténation avec des **+** n'est pas la plus optimale. Il existe plusieurs façons de le faire.
 
-L'utilisation de la fonction **`String.Format`**. Le **`{0}`** correspond au premier argument **`{1}`** au deuxième argument et ainsi de suite.
+L'utilisation de la fonction **String.Format**. Le **{0}** correspond au premier argument **{1}** au deuxième argument et ainsi de suite.
 
 ```csharp
-public string NomComplet()
-{
     return String.Format("Mon nom est {0} {1}.", Prenom, Nom);
-}
 ```
 
-Il est possible d'utiliser l'interpolation **`$`**. Il faut mettre le nom de la variable/attribut/propriété/logique... entre **`{ }`**.
+Il est possible d'utiliser l'interpolation **$**. Il faut mettre le nom de la variable/champs/propriété/logique... entre **\{ \}**.
 
 ```csharp
-public string NomComplet()
-{
     return $"Mon nom est {Prenom} {Nom}.";
-}
+```
 
-public string NomComplet2Lignes()
+```csharp
+static string NomComplet2Lignes(string Prenom, string Nom)
 {
-    return $"Mon nom est {Prenom}.{Environment.NewLine}Mon nom est {Nom}.";
+    return $"Mon prénom est {Prenom}.{Environment.NewLine}Mon nom est {Nom}.";
 }
 ```
 
-Il est possible de formater une valeur dans un format spécifique. L'exemple ci-dessous va afficher la date d'anniversaire selon le format spécifier dans votre système d'exploitation. Généralement en Français Canada, la date s'affiche en **`yyy/MM/dd`**.
+Il est possible de formater une valeur dans un format spécifique. L'exemple ci-dessous va afficher la date d'anniversaire selon le format spécifier dans votre système d'exploitation. Généralement en Français Canada, la date s'affiche en **yyy/MM/dd**.
 
 ```csharp
 string anniversaire1 = $"Mon anniversaire est le {DateNaissance}"; //Mon anniversaire est le 1980-02-20 00:00:00
 string anniversaire2 = $"Mon anniversaire est le {DateNaissance:dd/MM/yyyy}"; //Mon anniversaire est le 20-02-1980
 ```
 
-S'il faut inscrire réellement les caractères **`{`** et **`}`**, il faut le faire double.
+S'il faut inscrire réellement les caractères **\{** et **\}**, il faut le faire double.
 
 ```csharp
 string phrase = $"Mon nom est {Prenom} {Nom}. {{123}}"; 
@@ -271,7 +271,7 @@ string phrase = $"Mon nom est {Prenom} {Nom}. {{123}}";
 
 ```
 
-Il existe l'indicateur **`@`**. Il sert à ignorer le **`\`**  comme étant un caractère d'échappement et de permettre de faire une chaine de caractère sur plusieurs lignes. Le retour dans le texte sera considéré comme un **`\r\n`**.
+Il existe l'indicateur **@**. Il sert à ignorer le **\\**  comme étant un caractère d'échappement et de permettre de faire une chaine de caractère sur plusieurs lignes. Le retour dans le texte sera considéré comme un **\r\n**.
 
 ```csharp
 string phrase = @"Mon prénom est François.
@@ -279,14 +279,14 @@ Mon nom est St-Hilaire";
 //La valeur de phrase est : Mon nom est François\r\n.Mon nom est St-Hilaire.
 ```
 
-Il peut devenir difficile de gérer ce genre de string. Personnellement, j'utilise uniquement le **`@`** pour les chemins.
+Il peut devenir difficile de gérer ce genre de string. Personnellement, j'utilise uniquement le **@** pour les chemins.
 
 ```csharp
 string path1 = "C:\\Test\\Fichier.txt"; //On doit utiliser le double \ pour faire un \ en caractère écrit.
 string path2 = @"C:\Test\Fichier.txt"; //Plus facile à lire.
 ```
 
-Pour les requêtes SQL, le **`@`** est très utile pour appliquer une mise en forme à la SQL.
+Pour les requêtes SQL, le **@** est très utile pour appliquer une mise en forme à la SQL.
 
 ```csharp
 string sql = @"SELECT
@@ -298,7 +298,7 @@ string sql = @"SELECT
 					Etudiant = 1;";
 ```
 
-Il est possible de combiner le **`$`** et le **`@`**.
+Il est possible de combiner le **$** et le **@**.
 
 https://docs.microsoft.com/fr-ca/dotnet/csharp/language-reference/tokens/interpolated
 
@@ -417,9 +417,9 @@ public class Personne
 
 ### namespace
 
-Le **`namespace`** en c# consiste à une organisation logique de vos classes.  Lorsqu'une classe est créée dans un projet, le **`namespace`** se crée automatiquement en fonction de la structure physique du fichier.
+Le **namespace** en c# consiste à une organisation logique de vos classes.  Lorsqu'une classe est créée dans un projet, le **namespace** se crée automatiquement en fonction de la structure physique du fichier.
 
-Pour la structure de fichier ci-dessous, le **`namespace`** est **`DemoCours1.Modeles`**
+Pour la structure de fichier ci-dessous, le **namespace** est **DemoCours1.Modeles**
 
 ```
 DemoCours1/
@@ -427,9 +427,9 @@ DemoCours1/
 |	├── Personne.cs
 ```
 
-**ATTENTION** : Si une classe est déplacée dans un nouveau dossier ou si le dossier est renommé, le **`namespace`** ne sera pas mis à jour automatiquement. Il est important de le modifier afin d'avoir une structure logique et physique cohérente.
+**ATTENTION** : Si une classe est déplacée dans un nouveau dossier ou si le dossier est renommé, le **namespace** ne sera pas mis à jour automatiquement. Il est important de le modifier afin d'avoir une structure logique et physique cohérente.
 
-En réalité, le nom complet d'une classe consiste au **`namespace`** et au nom de la classe. Dans notre exemple, le nom complet de la classe est **`DemoCours1.Personne`** au niveau du projet. Il est possible d'avoir plusieurs classes **`Personne`** dans le même projet tant que leur **`namespace`** est différent.
+En réalité, le nom complet d'une classe consiste au **namespace** et au nom de la classe. Dans notre exemple, le nom complet de la classe est **DemoCours1.Personne** au niveau du projet. Il est possible d'avoir plusieurs classes **Personne** dans le même projet tant que leur **namespace** est différent.
 
 ```
 DemoCours1/
@@ -439,7 +439,7 @@ DemoCours1/
 |	├── Personne.cs  -- Le nom complet de la classe est DemoCours1.Modeles2.Personne
 ```
 
-Depuis **.Net 6**, il est possible d'utiliser la notation **étendue de fichier** pour la déclaration du **`namespace`**. Cette mise en forme est plus compacte et elle sera utilisé dans les cours. Le **`namespace`** est déclaré sur une seule ligne et se termine par un point-virgule **`;`**. La classe doit être déclarée à la suite du **`namespace`**. Cette notation n'est pas configuré par défaut dans Visual Studio 2022. Référez-vous au document d'installation et de configuration pour effectuer le changement.
+Depuis **.Net 6**, il est possible d'utiliser la notation **étendue de fichier** pour la déclaration du **namespace**. Cette mise en forme est plus compacte et elle sera utilisé dans les cours. Le **namespace** est déclaré sur une seule ligne et se termine par un point-virgule **;**. La classe doit être déclarée à la suite du **namespace**. Cette notation n'est pas configuré par défaut dans Visual Studio 2022. Référez-vous au document d'installation et de configuration pour effectuer le changement.
 
 ```csharp
 //Déclaration en étendue de fichier
@@ -451,7 +451,7 @@ public class Personne
 }
 ```
 
-L'ancienne notation est le **bloc** de code.  La classe est déclarée à l'intéreur du bloc de code du **`namespace`**.
+L'ancienne notation est le **bloc** de code.  La classe est déclarée à l'intéreur du bloc de code du **namespace**.
 
 ```csharp
 //Déclaration en bloc de code
@@ -466,9 +466,14 @@ namespace DemoCours1.Modeles
 
 
 
-### Attribut
+### Champs
 
-En c#, la convention la plus acceptée pour les attributs est d'utiliser le préfix **`_`** (*underscore*) au début de son nom.
+Aussi appelé **attribut**
+:::note
+En anglais, utilisé le terme **field** et non attribut car attribut réfère à autre chose en c# en anglais
+:::
+
+En c#, la convention la plus acceptée pour les champs est d'utiliser le préfix **_** (*underscore*) au début de son nom.
 
 ```csharp
 private string _prenom;
@@ -476,9 +481,9 @@ private string _nom;
 private DateTime _dateNaissance;
 ```
 
-Pour avoir accès rapidement à tous les attributs, il suffit de taper le **`_`** et l'intellisense s'occupe du reste.
+Pour avoir accès rapidement à tous les chanmps, il suffit de taper le **_** et l'intellisense s'occupe du reste.
 
-Les attributs sont également en haut de la classe.
+Les champs sont également en haut de la classe.
 
 ### Constructeur
 
@@ -651,7 +656,7 @@ public class Personne
 }
 ```
 
-Il est possible d'ajouter de la logique dans un **`get`** ou un **`set`**, mais elle doit être minimale. Il faut voir les propriétés comme étant des **getter/setter**.
+Il est possible d'ajouter de la logique dans un **get** ou un **set**, mais elle doit être minimale. Il faut voir les propriétés comme étant des **getter/setter**.
 
 Il est possible de faire plus simple encore en utilisant la notation ci-dessous.
 
@@ -671,7 +676,11 @@ public class Personne
 }
 ```
 
-En c#, les attributs sont rarement utilisés lorsqu'ils sont assignés par des propriétés sans aucune modification. La propriété devient donc un **champ** de la classe. C'est la notation la plus utilisée. L'attribut est disparu de la classe. 
+En c#, les champs sont rarement utilisés lorsqu'ils sont assignés par des propriétés sans aucune modification. La propriété devient donc un **champ** de la classe. C'est la notation la plus utilisée. 
+
+:::note
+La déclaration de le champs **_prenom** n'est plus là. 
+:::
 
 ```csharp
 public class Personne
@@ -686,9 +695,9 @@ public class Personne
 }
 ```
 
-Qu'est-ce qu'il faut faire dans le cas d'une classe immuable, c'est-à-dire qu'il n'est pas possible de modifier le contenu de ses attributs une fois l'objet créé ?
+Qu'est-ce qu'il faut faire dans le cas d'une classe immuable, c'est-à-dire qu'il n'est pas possible de modifier le contenu de ses champs une fois l'objet créé ?
 
-En notation plus classique, on enlève le bloc du **`set`** de la propriété.
+En notation plus classique, on enlève le bloc du **set** de la propriété.
 
 ```csharp
 public class Personne
@@ -714,7 +723,7 @@ public class Personne
 }
 ```
 
-Dans la notation avec des propriétés uniquement, il faut mettre un **`private set`**. Le **`private set`** indique que l'assignation est disponible uniquement à l'intérieur de la classe, mais de l'extérieur, il ne sera pas possible de mettre à jour le **champ**.
+Dans la notation avec des propriétés uniquement, il faut mettre un **private set**. Le **private set** indique que l'assignation est disponible uniquement à l'intérieur de la classe, mais de l'extérieur, il ne sera pas possible de mettre à jour le champ.
 
 ```csharp
 public class Personne
@@ -762,11 +771,11 @@ public class Personne
 
 ### using
 
-Il est possible d'utiliser une classe directement si elle est située dans le même **`namespace`**. Mais dans la majorité des cas, les classes ne sont pas dans le même **`namespace`**.
+Il est possible d'utiliser une classe directement si elle est située dans le même **namespace**. Mais dans la majorité des cas, les classes ne sont pas dans le même **namespace**.
 
 Il y a 2 façons d'utiliser les classes. 
 
-- En utilisant un **`using`**
+- En utilisant un **using**
 
   ```csharp
   using DemoCours1.Modeles;
@@ -787,9 +796,9 @@ Il y a 2 façons d'utiliser les classes.
 
   > **ASTUCES Visual Studio**
   >
-  > **ASTUCE #1** : Il est possible d'ajouter automatiquement le **`using`** en effectuant **ALT+Enter**,  **ALT+SHIFT+F10** ou **CTRL+.** pour afficher le menu contextuel lorsque le curseur est sur la classe à utiliser.
+  > **ASTUCE #1** : Il est possible d'ajouter automatiquement le **using** en effectuant **ALT+Enter**,  **ALT+SHIFT+F10** ou **CTRL+.** pour afficher le menu contextuel lorsque le curseur est sur la classe à utiliser.
   >
-  > **ASTUCE #2** : Il est possible de trier les **`using`** en ordre alphabétique et retirer ceux qui sont inutiles en effectuant **CTRL+R+G**.
+  > **ASTUCE #2** : Il est possible de trier les **using** en ordre alphabétique et retirer ceux qui sont inutiles en effectuant **CTRL+R+G**.
 
   
 
@@ -803,10 +812,10 @@ Il y a 2 façons d'utiliser les classes.
 
 ### global using
 
-Le **`global using`** permet de déclarer des **`using`** qui peuvent être nécessaire pour la majorité des classes d'un projet.
-Il faut déclarer les **`global using`** dans un fichier nommé **`Usings.cs`** à la racine du projet.
+Le **global using** permet de déclarer des **using** qui peuvent être nécessaire pour la majorité des classes d'un projet.
+Il faut déclarer les **global using** dans un fichier nommé **Usings.cs** à la racine du projet.
 
-Si la solution contient plusieurs projets, le **`global using`** est accessible uniquement dans le projet dans lequel il a été déclaré.
+Si la solution contient plusieurs projets, le **global using** est accessible uniquement dans le projet dans lequel il a été déclaré.
 
 ```csharp
 global using System;
@@ -862,9 +871,18 @@ Personne enseignant = new Personne()
 
 ### this
 
-Le terme **`this`** permet d'utiliser un élément appartenant à une classe. Par exemple, une classe a un attribut qui se nomme **`nom`** et une méthode utilise une variable **`nom`** également. Est-ce que le nom affiché sera **`Bart Simpson`** ou **`François St-Hilaire`** pour chacun des exemples ?
+Le terme **this** permet d'utiliser un élément appartenant à une classe. Par exemple, une classe a un champs qui se nomme **nom** et une méthode utilise une variable **nom** également. Est-ce que le nom affiché sera **Bart Simpson** ou **François St-Hilaire** pour chacun des exemples ?
 
 ```csharp
+
+
+Exemple exemple1 = new Exemple();
+exemple1.AfficheNom("Bart Simpson");
+
+Exemple exemple2 = new Exemple();
+exemple2.AssigneNom("Bart Simpson");
+exemple2.AfficheNom();
+
 public class Exemple
 {
 	private string nom = "François St-Hilaire";
@@ -885,20 +903,11 @@ public class Exemple
 	}
 }
 
-
-/**/
-
-Exemple exemple1 = new Exemple();
-exemple1.AfficheNom("Bart Simpson");
-
-Exemple exemple2 = new Exemple();
-exemple2.AssigneNom("Bart Simpson");
-exemple2.AfficheNom();
 ```
 
-La réponse est **`Bart Simpson`** pour l'exemple 1 et **`François St-Hilaire`** pour l'exemple 2.
+La réponse est **Bart Simpson** pour l'exemple 1 et **François St-Hilaire** pour l'exemple 2.
 
-Si un nom de variable est utilisé sans le **`this`**, le compilateur utilisera la variable qui a été déclarée le plus près de son bloc de code. Dans ce cas-ci, c'est le paramètre qui est le plus près. Il s'agit d'une assignation sur lui-même. Le compilateur donnera un avertissement pour ce code.
+Si un nom de variable est utilisé sans le **this**, le compilateur utilisera la variable qui a été déclarée le plus près de son bloc de code. Dans ce cas-ci, c'est le paramètre qui est le plus près. Il s'agit d'une assignation sur lui-même. Le compilateur donnera un avertissement pour ce code.
 
 ```csharp
 public void AssigneNom(string nom)
@@ -907,7 +916,7 @@ public void AssigneNom(string nom)
 }
 ```
 
-Pour assigner le contenu du paramètre **`nom`** dans de l'attribut **`nom**, il faut inscrire le code comme ci-dessous. 
+Pour assigner le contenu du paramètre **nom** dans de le champs **nom**, il faut inscrire le code comme ci-dessous. 
 
 ```csharp
 public void AssigneNom(string nom)
@@ -916,7 +925,7 @@ public void AssigneNom(string nom)
 }
 ```
 
-Pour éviter toute ambiguïté, la méthode **`AfficheNom()`** sans paramètre devrait être comme ci-dessous, même si elle fonctionne avec le code original.
+Pour éviter toute ambiguïté, la méthode **AfficheNom()** sans paramètre devrait être comme ci-dessous, même si elle fonctionne avec le code original.
 
 ```csharp
 public void AfficheNom()
@@ -925,7 +934,7 @@ public void AfficheNom()
 }
 ```
 
-Il est préférable d'utiliser des attributs avec le préfixe **`_`** pour éviter ces problèmes.
+Il est préférable d'utiliser des champs avec le préfixe **_** pour éviter ces problèmes.
 
 ## Interface, classe abstraite et héritage
 
@@ -946,7 +955,7 @@ Une interface peut avoir comme élément :
 
 Pour plus d'information sur les possibilités avancées des interfaces : https://docs.microsoft.com/fr-ca/dotnet/csharp/language-reference/keywords/interface
 
-Voici un exemple d'interface qui représente la classe créée au point 3.
+Voici un exemple d'interface qui représente la classe Personne créée au début de la leçon.
 
 ```csharp
 namespace DemoCours1.Modeles;
@@ -962,9 +971,9 @@ public interface IPersonne
 }
 ```
 
-La visibilité de l'interface va déterminer la visibilité de ses membres. Il n'est pas nécessaire d'ajouter **`public`** à la méthode **`NomComplet()`**. Elle sera **`public`** dans l'implémentation de la classe.
+La visibilité de l'interface va déterminer la visibilité de ses membres. Il n'est pas nécessaire d'ajouter **public** à la méthode **NomComplet()**. Elle sera **public** dans l'implémentation de la classe.
 
-Une interface utilise le même principe du **`namespace`** que les classes.
+Une interface utilise le même principe du **namespace** que les classes.
 
 ### Classe abstraite
 
@@ -973,10 +982,10 @@ Une classe abstraite est une classe qui ne peut pas être instanciée. Elle est 
 Il n'existe pas de convention officielle pour nommer une classe abstraite en c#. Il y a 3 options selon la communauté.
 
 - Avoir un nom significatif, sans aucun préfixe/suffixe;
-- Utiliser le préfixe **`Base`** suivi du nom de la classe;
-- Utiliser le préfixe **`A`** suivit du nom de la classe.
+- Utiliser le préfixe **Base** suivi du nom de la classe;
+- Utiliser le préfixe **A** suivit du nom de la classe.
 
-Pour ma part, je préfère utiliser le préfixe **`Base`**.
+Dans le cadre du cours, nous utiliserons le préfixe **Base**.
 
 Voici un exemple d'une classe abstraite.
 
@@ -1040,23 +1049,23 @@ public abstract class BasePersonne
 }
 ```
 
-Une classe abstraite respecte les mêmes conditions pour le constructeur pour une classe ordinaire (Point 3.3). 
+Une classe abstraite respecte les mêmes conditions pour le constructeur pour une classe ordinaire. 
 
-La méthode **`CalculeAge()`** est **`public`** et possède une implémentation. Elle sera la même pour tous les types de personnes.
+La méthode **CalculeAge()** est **public** et possède une implémentation. Elle sera la même pour tous les types de personnes.
 
-La méthode **`NomComplet()`** est **`virtual`**. Une méthode virtuelle consiste à l'implémentation générale de la méthode, mais il est possible pour une sous-classe d'avoir sa propre implémentation. Par exemple, une sous-classe **`Medecin`**, le résultat de cette méthode pourrait être **`"Mon nom est Dr ..."`**.
+La méthode **NomComplet()** est **virtual**. Une méthode virtuelle consiste à l'implémentation générale de la méthode, mais il est possible pour une sous-classe d'avoir sa propre implémentation. Par exemple, une sous-classe **Medecin**, le résultat de cette méthode pourrait être **"Mon nom est Dr ..."**.
 
-La méthode **`Salutation()`** est **`abstract`**. Ce qui signifie qu'elle doit obligatoirement avoir une implémentation spécifique dans la sous-classe.
+La méthode **Salutation()** est **abstract**. Ce qui signifie qu'elle doit obligatoirement avoir une implémentation spécifique dans la sous-classe.
 
-Pour les propriétés, le **`set`** est **`protected`**. Ce qui signifie que l'assignation est possible uniquement pour la classe abstraite et ses sous-classes. 
+Pour les propriétés, le **set** est **protected**. Ce qui signifie que l'assignation est possible uniquement pour la classe abstraite et ses sous-classes. 
 
-Il est possible de mettre **`abstract`** et **`virtual`** pour des propriétés également.
+Il est possible de mettre **abstract** et **virtual** pour des propriétés également.
 
 ### Héritage
 
-Pour ajouter de l'héritage à une classe, il fait ajouter les deux points **`:`** après le nom de la classe. 
+Pour ajouter de l'héritage à une classe, il faut ajouter les deux points **:** après le nom de la classe. 
 
-Dans l'exemple ci-dessous, la classe **`Personne`** hérite de l'interface **`IPersonne`**. La syntaxe est la même pour l'héritage d'une interface ou d'une classe.
+Dans l'exemple ci-dessous, la classe **Personne** hérite de l'interface **IPersonne**. La syntaxe est la même pour l'héritage d'une interface ou d'une classe.
 
 ```csharp
 /// <summary>
@@ -1069,7 +1078,7 @@ public class Personne : IPersonne
 
 Le c# ne supporte pas l'héritage multiple. Il est possible d'hériter d'une seule classe à la fois. Mais il est possible d'hériter de plusieurs interfaces.
 
-Pour être en mesure d'hériter de plusieurs éléments, il faut ajouter **`,`** (virgule) entre chacun des éléments. 
+Pour être en mesure d'hériter de plusieurs éléments, il faut ajouter **,** (virgule) entre chacun des éléments. 
 
 ```csharp
 /// <summary>
@@ -1080,7 +1089,7 @@ public class Etudiant : Personne, IEtudiant
 }
 ```
 
-**IMPORTANT** : Si la classe hérite d'une classe et aussi d'interfaces, la classe doit être obligatoirement le premier élément après les **`:`**. Le compilateur va générer l'erreur **`CS1722`**.
+**IMPORTANT** : Si la classe hérite d'une classe et aussi d'interfaces, la classe doit être obligatoirement le premier élément après les **:**. Le compilateur va générer l'erreur **CS1722**.
 
 ```csharp
 /// <summary>
@@ -1102,7 +1111,7 @@ public class Etudiant : IEtudiant, Personne //Erreur CS1722
 
 ### Héritage d'une classe abstraite
 
-Voici l'implémentation d'une classe **`Professionnel`** qui hérite de la classe abstraite **`BasePersonne`**.
+Voici l'implémentation d'une classe **Professionnel** qui hérite de la classe abstraite **BasePersonne**.
 
 ```csharp
 namespace DemoCours1.Modeles;
@@ -1116,7 +1125,8 @@ public class Professionnel : BasePersonne
     /// <param name="prenom">Le prénom de la personne</param>
     /// <param name="nom">Le nom de la personne</param>
     /// <param name="dateNaissance">La date de naissance de la personne</param>
-    public Professionnel(string titre, string prenom, string nom, DateTime dateNaissance) : base(prenom, nom, dateNaissance)
+    public Professionnel(string titre, string prenom, string nom, DateTime dateNaissance)
+             : base(prenom, nom, dateNaissance)
     {
         Titre = titre;
     }
@@ -1134,17 +1144,17 @@ public class Professionnel : BasePersonne
 }
 ```
 
-Au niveau du constructeur, il y a le **`: base(...)`**. Le terme **`base`** fait référence au parent d'une classe. 
+Au niveau du constructeur, il y a le **: base(...)**. Le terme **base** fait référence au parent d'une classe. 
 
 > **ASTUCE Visual Studio**
 >
 > **ASTUCE #1** : Il est possible de gérer automatiquement les constructeurs obligatoires en effectuant **ALT+Enter**,  **ALT+SHIFT+F10** ou **CTRL+.** pour afficher le menu contextuel lorsque le curseur est sur le nom de la classe. Par contre, seulement les paramètres obligatoires seront générés.
 >
-> La méthode **`Salutation()`** est obligatoire, car elle est **`abstract`** dans la classe **`BasePersonne`**. Pour être en mesure d'implémenter la méthode, il faut utiliser le terme **`override`**. 
+> La méthode **Salutation()** est obligatoire, car elle est **abstract** dans la classe **BasePersonne**. Pour être en mesure d'implémenter la méthode, il faut utiliser le terme **override**. 
 >
-> **ASTUCE #2** : Visual Studio propose tous les éléments disponibles lorsqu'on inscrit uniquement **`override`**. Il est donc possible de générer rapidement la méthode. 
+> **ASTUCE #2** : Visual Studio propose tous les éléments disponibles lorsqu'on inscrit uniquement **override**. Il est donc possible de générer rapidement la méthode. 
 
-La méthode **`NomComplet()`** n'est pas obligatoire, car elle est **`virtual`**. Mais si on désire de l'implémenter dans la classe enfant, il faut également utiliser le terme **`override`**. 
+La méthode **NomComplet()** n'est pas obligatoire, car elle est **virtual**. Mais si on désire de l'implémenter dans la classe enfant, il faut également utiliser le terme **override**. 
 
 Pour une méthode, la méthode autogénérée sera comme ci-dessous.
 
@@ -1155,7 +1165,7 @@ public override string NomComplet()
 }
 ```
 
-Le terme **`base`** permet également de spécifier l'utilisation d'un élément appartenant à la classe parent dans le cas d'une ambiguïté avec un élément de la classe enfant. Dans des méthodes liées à un cycle de vie, il est possible que nous désirions toujours appeler l'implémentation de la classe parent.
+Le terme **base** permet également de spécifier l'utilisation d'un élément appartenant à la classe parent dans le cas d'une ambiguïté avec un élément de la classe enfant. Dans des méthodes liées à un cycle de vie, il est possible que nous désirions toujours appeler l'implémentation de la classe parent.
 
 ```csharp
 public override string NomComplet()
@@ -1168,9 +1178,9 @@ public override string NomComplet()
 
 Il existe plusieurs opérateurs en c#. En voici des particuliers à c# que vous risquez de voir dans la documentation.
 
-### Opération conditionnelle ou ternaire (`? :`)
+### Opération conditionnelle ou ternaire (? :)
 
-L'opération ternaire consiste à faire un **`if/else`** sur une seule ligne.
+L'opération ternaire consiste à faire un **if/else** sur une seule ligne.
 
 ```csharp
 public string Salutation()
@@ -1191,9 +1201,9 @@ public string SalutationTernaire()
 }
 ```
 
-### Le `??`
+### Le ??
 
-Le **`??`** permet de prendre action si une valeur est **`null`**. Elle est utilisée dans un contexte de vérification.
+Le **??** permet de prendre action si une valeur est **null**. Elle est utilisée dans un contexte de vérification.
 
 ```csharp
 public string Prenom
@@ -1205,9 +1215,9 @@ public string Prenom
 
 https://docs.microsoft.com/fr-ca/dotnet/csharp/language-reference/operators/null-coalescing-operator 
 
-### Le `??=`
+### Le ??=
 
-Le **`??=`** permet d'assigner une valeur par défaut lorsque la valeur est **`null`**. 
+Le **??=** permet d'assigner une valeur par défaut lorsque la valeur est **null**. 
 
 ```csharp
 if(Prenom is null)
@@ -1221,15 +1231,16 @@ Prenom ??= "Bob";
 
 https://docs.microsoft.com/fr-ca/dotnet/csharp/language-reference/operators/null-coalescing-operator
 
-### Le `?.`
+### Le ?.
 
-Le **`?.`** permet d'accéder à des éléments d'un objet sans générer une exception **`null`** si on y accède directement.
+Le **?.** permet d'accéder à des éléments d'un objet sans générer une exception **null** si on y accède directement.
 
 Par exemple, une personne a un animal de compagnie. Nous voulons vérifier si c'est l'anniversaire de son animal aujourd'hui.
 
 ```csharp
 //La personne a un animal de compagnie
-if(DateTime.Now.Day == personne.animal.DateNaissance.Day && DateTime.Now.Month == personne.animal.DateNaissance.Month)
+if(DateTime.Now.Day == personne.animal.DateNaissance.Day   
+&& DateTime.Now.Month == personne.animal.DateNaissance.Month)
 {
 	//C'est l'anniversaire de l'animal de compagnie
 }
@@ -1244,17 +1255,19 @@ Pour éviter de générer une exception, il faut ajouter une vérification avant
 if(personne.animal != null)
 {
 	//La personne a un animal de compagnie
-	if(DateTime.Now.Day == personne.animal.DateNaissance.Day && DateTime.Now.Month == personne.animal.DateNaissance.Month)
+	if(DateTime.Now.Day == personne.animal.DateNaissance.Day   
+       && DateTime.Now.Month == personne.animal.DateNaissance.Month)
 	{
 		//C'est l'anniversaire de l'animal de compagnie
 	}
 }
 ```
 
-Il est possible d'alléger le code en utilisant le **`?.`** comme ci-dessous. Le **`?.`** indique que nous acceptons que l'animal puisse être **`null`** et la vérification sera en fait une vérification entre **`int`** et **`null`**, ce qui donne toujours faux.
+Il est possible d'alléger le code en utilisant le **?.** comme ci-dessous. Le **?.** indique que nous acceptons que l'animal puisse être **null** et la vérification sera en fait une vérification entre **int** et **null**, ce qui donne toujours faux.
 
 ```csharp
-if(DateTime.Now.Day == personne?.animal.DateNaissance.Day && DateTime.Now.Month == personne?.animal.DateNaissance.Month)
+if(DateTime.Now.Day == personne?.animal.DateNaissance.Day 
+&& DateTime.Now.Month == personne?.animal.DateNaissance.Month)
 {
 	//C'est l'anniversaire de l'animal de compagnie
 }

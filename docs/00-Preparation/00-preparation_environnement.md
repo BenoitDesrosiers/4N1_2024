@@ -36,8 +36,6 @@ Son logiciel de gestion est **SSMS**. Ce logiciel permet d'avoir des fenêtres p
 
 Ce logiciel permet également d'exécuter des requêtes et de faire de manipulation de données en **T-SQL**.
 
-La dernière version est **18.12.1**. Pour télécharger l'application : https://aka.ms/ssmsfullsetup
-
 **DERNIERE VERSION 19.2, 13 nov 2023**
 
 https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16
@@ -46,7 +44,10 @@ Il n'y a pas de configuration particulière pendant l'installation de ce logicie
 
 Par contre, ce logiciel est uniquement pour **Windows**.
 
-Une alternative multiplateforme pour faire des requêtes est **Azure Data Studio**. La gestion du serveur doit se faire principalement avec des commandes et des requêtes.
+Une alternative multiplateforme pour faire des requêtes est **Azure Data Studio** ([téléchargement](https://learn.microsoft.com/en-us/azure-data-studio/download-azure-data-studio?tabs=win-install%2Cwin-user-install%2Credhat-install%2Cwindows-uninstall%2Credhat-uninstall#download-azure-data-studio)) . 
+
+
+La gestion du serveur se fera principalement avec des commandes et des requêtes textes.
 
 ## SQL Server Express 2019
 
@@ -98,9 +99,9 @@ Vous devez également inscrire un mot de passe du compte **sa**. Ce compte est l
 
 
 
-# Connexion au serveur de données
+## Connexion au serveur de données
 
-## Avec l'outil SSMS
+### Avec l'outil SSMS
 
 Lorsque vous démarrez **SSMS**, vous avez la fenêtre de connexion ci-dessous.
 
@@ -162,9 +163,9 @@ Lorsque vous démarrez **SSMS**, vous avez la fenêtre de connexion ci-dessous.
 
 
 
-# Information de connexion
+## Information de connexion
 
-## Votre SQL Server Express
+### Votre SQL Server Express
 
 | Champ            | Valeur                   |
 | ---------------- | ------------------------ |
@@ -172,7 +173,7 @@ Lorsque vous démarrez **SSMS**, vous avez la fenêtre de connexion ci-dessous.
 | Authentification | Windows Authentification |
 
 
-## Serveur MS SQL Server du département
+### Serveur MS SQL Server du département
 
 | Champ                   | Valeur                            |
 | ----------------------- | --------------------------------- |
@@ -185,11 +186,11 @@ Lorsque vous démarrez **SSMS**, vous avez la fenêtre de connexion ci-dessous.
 Vous devez utiliser le **VPN** si vous êtes à l'extérieur du cégep.
 :::
 
-# Utilisation de SSMS
+## Utilisation de SSMS
 
 <img src="/4N1_2024/img/SSMS_2.jpg" />
 
-## Explorateur d'objets
+### Explorateur d'objets
 
 L'explorateur d'objets permet de voir tous les objets du serveur dans un environnement graphique.
 
@@ -197,7 +198,7 @@ Les deux éléments que nous utilisons le plus sont le dossier **Base de donnée
 
 Il est possible de faire plusieurs tâches ou requêtes avec un outil graphique.
 
-## Barre d'outils
+### Barre d'outils
 
 <img src="/4N1_2024/img/SSMS_3.jpg" />
 
@@ -209,7 +210,7 @@ En **vert**, c'est le bouton qui permet d'exécuter les requêtes dans la zone d
 
 En **rose**, c'est le bouton qui permet de créer une nouvelle page de requêtes.
 
-## Zone des requêtes
+### Zone des requêtes
 
 C'est l'endroit qu'on inscrit les requêtes en T-SQL.
 
@@ -217,24 +218,24 @@ C'est l'endroit qu'on inscrit les requêtes en T-SQL.
  La base de données en cours d'utilisation est celle sélectionnée dans la barre d'outils et non celle de l'explorateur d'objets.
 :::
 
-## Zone des résultats
+### Zone des résultats
 
 C'est l'endroit qui affiche les résultats des requêtes.
 
 Il est possible d'exporter les données en **CSV**.
 
-## Astuces
+### Astuces
 
 Voici un vidéo qui montre quelques astuces de **SSMS** : https://www.youtube.com/watch?v=ixstJijky6U.
 
-# Configuration de Visual Studio
+## Configuration de Visual Studio
 
 Ouvrez **Visual Studio** et sélectionnez l'option **Continuer sans code** en bas à droite.
 
 <img src="/4N1_2024/img/Installation_Visual_ Studio_2.jpg"  />
 
 
-## Connexion à SQL server dans VS
+### Connexion à SQL server dans VS
 
 Il est possible d'utiliser **Visual Studio** pour faire des requêtes à la base de données. **SSMS** sert à gérer le serveur et faire des requêtes. **Visual Studio** permet de faire des requêtes à la base de données.
 
@@ -257,7 +258,7 @@ Dans le cours, **SSMS** sera principalement utilisé, mais certains programmeurs
 
 
 1. Pour le champ **Sélectionner ou entrer un nom de base de données**, il faut spécifier le nom de la base de données.
-## NuGet
+### NuGet
 
 **NuGet** est le gestionnaire de paquets pour la plateforme .NET. C'est un incontournable pour être en mesure de télécharger des librairies additionnelles dans vos logiciels. Pour en s'avoir davantage sur la plateforme : https://docs.microsoft.com/fr-ca/nuget/what-is-nuget
 
@@ -271,7 +272,7 @@ Ensuite, assurez-vous d'avoir **nuget.org** dans la liste. Sinon, ajoutez-le ave
 
 <img src="/4N1_2024/img/Installation_Visual_ Studio_4.jpg" alt="image-20220113153643393"  />
 
-## Affectation de noms
+### Affectation de noms
 
 Visual Studio permet de générer des attributs automatiquement à partir des paramètres d'un constructeur. Par contre le modèle par défaut n'utilise pas la convention **_attribut** qui est la plus utilisée dans la convention C#.
 
@@ -295,7 +296,7 @@ Retournez à la fenêtre d'option et appuyez sur le bouton "**+**" pour ajouter 
 
 <img src="/4N1_2024/img/Installation_Visual_ Studio_9.jpg"  />
 
-## Déclaration d'espaces de noms
+### Déclaration d'espaces de noms
 
 Depuis **.Net 6**, il est possible de déclarer les **namespace** en étendue de fichier. Pour rendre cette notation par défaut, il faut modifier le style de code.
 
@@ -307,13 +308,13 @@ Ensuite, trouvez l'élément **Déclarations d'espaces de noms** dans la section
 
 <img src="/4N1_2024/img/Installation_Visual_ Studio_11.png"  />
 
-## Fichier modèle classe par défaut
+### Fichier modèle classe par défaut
 
 Pour la génération du modèle de base pour les classe, il faut modifier le fichier modèle par défaut.
 
-Si votre installation est en français, utilisez le dossier suivant : **`C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ItemTemplates\CSharp\Code\1036\Class`**.
+Si votre installation est en français, utilisez le dossier suivant : **C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ItemTemplates\CSharp\Code\1036\Class**.
 
-Si votre installation est en anglais, utilisez le dossier suivant : **`C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ItemTemplates\CSharp\Code\1033\Class`**.
+Si votre installation est en anglais, utilisez le dossier suivant : **C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ItemTemplates\CSharp\Code\1033\Class**.
 
 Modifiez le contenu du fichier **Class.cs** par le code ci-dessous.
 
@@ -326,13 +327,13 @@ namespace $rootnamespace$
 }
 ```
 
-## Fichier modèle interface par défaut
+### Fichier modèle interface par défaut
 
 Pour la génération du modèle de base pour les interfaces, il faut modifier le fichier modèle par défaut.
 
-Si votre installation est en français, utilisez le dossier suivant : **`C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ItemTemplates\CSharp\Code\1036\Interface`**.
+Si votre installation est en français, utilisez le dossier suivant : **C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ItemTemplates\CSharp\Code\1036\Interface**.
 
-Si votre installation est en anglais, utilisez le dossier suivant : **`C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ItemTemplates\CSharp\Code\1033\Interface`**.
+Si votre installation est en anglais, utilisez le dossier suivant : **C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\ItemTemplates\CSharp\Code\1033\Interface**.
 
 Modifiez le contenu du fichier **Interface.cs** par le code ci-dessous.
 

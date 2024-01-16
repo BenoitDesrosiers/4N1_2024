@@ -2,7 +2,7 @@
 sidebar_position : 10
 ---
 
-# Bogus Introduction
+# Bogus
 
 Pour générer une grosse quantité de données, il n'est pas réaliste de le faire manuellement.
 
@@ -10,7 +10,7 @@ Les données créées manuellement n'auront pas de grandes variabilités et sero
 
 Il existe des librairies de génération de données. Elles sont appelées **Faker** dans la plupart des cas.
 
-Une librairie populaire pour **C#** est **Bogus**.
+Une librairie populaire pour **CSHARP** est **Bogus**.
 
 Pour plus d'information sur la librairie : https://github.com/bchavez/Bogus
 
@@ -154,7 +154,7 @@ Cette commande va générer le contexte ainsi que les classes pour représenter 
 
 Modifiez le fichier **Program.cs** pour celui-ci.
 
-```c#
+```csharp
 using GenerateurBDGestionLivre.Data.Context;
 
 using (GestionLivreContext db = new GestionLivreContext())
@@ -194,7 +194,7 @@ Install-Package Bogus
 
 ## Classe Generateur
 
-Dans ce document, les générateurs seront créés par héritage de la classe **`Faker<T>`**. Le **`<T>`** correspond à la classe du générateur.
+Dans ce document, les générateurs seront créés par héritage de la classe **Faker\<T>**. Le **\<T>** correspond à la classe du générateur.
 
 Dans la documentation de **Bogus**, il existe plusieurs techniques. Par contre, celle par héritage permet de créer une classe qui contient toute la logique de génération de données.
 
@@ -204,19 +204,19 @@ La classe est séparée en 3 sections.
 
   Le constructeur permet d'associer une propriété à une méthode de génération.
 
-  La méthode **`RuleFor(i => i.[Propriete], Gen[Propriete])`** permet de faire le lien.
+  La méthode **RuleFor(i => i.[Propriete], Gen[Propriete])** permet de faire le lien.
 
 - **Méthode de génération**
 
   La méthode de génération contient la logique pour générer une valeur pour une propriété.
 
-  La méthode aura cette signature **`[Type Propriete] Gen[Propriete](Faker f)`** .
+  La méthode aura cette signature **[Type Propriete] Gen[Propriete](Faker f)** .
 
 - **Méthode d'assignation des dépendances (clé étrangère) - facultatif**
 
   Une méthode d'assignation des dépendances permet d'indiquer les dépendances disponibles pour cette classe.
 
-# Validation
+## Validation
 
 Il est important que le données générées soient valides pour la base de données.
 
@@ -224,15 +224,13 @@ Il faut que les contraintes de type et spécifiques soient respectées.
 
 Il est possible d'utiliser des librairies spécialisées pour ceci.
 
-Pour les besoins du **TP 2**, les méthodes de générations s'assureront que les données soient valides.
-
-## Extension de string - Tronquer
+### Extension de string - Tronquer
 
 Pour la longueur maximale des chaines de caractères, il faudra **tronquer** la chaine si elle est trop grande.
 
-Créez la classe d'extension **StringExtensions**.
+Créez la classe d'extension **StringExtensions** directement dans le projet.
 
-```c#
+```csharp
 namespace GenerateurBDGestionLivre;
 
 /// <summary>
@@ -265,7 +263,7 @@ public static class StringExtensions
 }
 ```
 
-# Table Collection
+## Table Collection
 
 La table **Collection** consiste aux collections de livres. Généralement, un livre fait partie d'une collection de livres.
 
@@ -283,7 +281,7 @@ La table possède 2 champs.
 
 Créez la classe **CollectionGenerateur**.
 
-```c#
+```csharp
 using Bogus;
 using GenerateurBDGestionLivre.Data;
 
@@ -328,7 +326,7 @@ Ce générateur est assez simple, car les modules de **Bogus** sont suffisants p
 
 Voici le constructeur.
 
-```c#
+```csharp title="NE PAS COPIER, C'EST DÉJÀ DANS LE CODE"
 public CollectionGenerateur()
 {
 	//Pour faire l'association entre une propriété et une méthode de génération, il faut utiliser la méthode RuleFor
@@ -343,7 +341,7 @@ Pour la propriété **NomCollection**, ce sera un générateur de mots.
 
 Il est important que les mots ne dépassent pas le 50 caractères, car le type **SQL** est **VARCHAR(50)**.
 
-```c#
+```csharp title="NE PAS COPIER, C'EST DÉJÀ DANS LE CODE"
 private string GenNomCollection(Faker f)
 {
 	//La méthode Words permet de générer des mots.
@@ -357,11 +355,11 @@ Pour la propriété **Description**, ce sera une phrase.
 
 Il est important que la phrase ne dépasse pas le 250 caractères, car le type **SQL** est **VARCHAR(250)**.
 
-Une autre particularité est que le champ peut être **`null`** dans la base de données. Il faut que le générateur en tienne compte pour avoir une variabilité dans les données.
+Une autre particularité est que le champ peut être **null** dans la base de données. Il faut que le générateur en tienne compte pour avoir une variabilité dans les données.
 
-La méthode **`OrNull(f, [probabilite])`** permet d'indiquer la probabilité d'obtenir une valeur nulle. Il faut envoyer dans la méthode le **Faker** de la méthode.
+La méthode **OrNull(f, [probabilite])** permet d'indiquer la probabilité d'obtenir une valeur nulle. Il faut envoyer dans la méthode le **Faker** de la méthode.
 
-```c#
+```csharp title="NE PAS COPIER, C'EST DÉJÀ DANS LE CODE"
 private string? GenDescription(Faker f)
 {
     //La méthode Sentence permet de générer une phrase de quelques mots.
@@ -371,11 +369,11 @@ private string? GenDescription(Faker f)
 }
 ```
 
-## Test
+### Test
 
 Modifiez le fichier **Program.cs** pour ceci.
 
-```c#
+```csharp
 using GenerateurBDGestionLivre;
 using GenerateurBDGestionLivre.Data;
 using GenerateurBDGestionLivre.Data.Context;
@@ -444,7 +442,7 @@ Ouvrez **SSMS** et effectuez la requête ci-dessous pour voir les données.
 SELECT * FROM [Collection];
 ```
 
-# Table Editeur
+## Table Editeur
 
 La table **Editeur** consiste aux éditeurs de livres.
 
@@ -466,7 +464,7 @@ La table possède 3 champs.
 
 Créez la classe **EditeurGenerateur**.
 
-```c#
+```csharp
 using Bogus;
 using GenerateurBDGestionLivre.Data;
 
@@ -511,15 +509,15 @@ public class EditeurGenerateur : Faker<Editeur>
 
 La plupart des méthodes ont la possibilité de mettre des paramètres.
 
-Par exemple, **`CompanyName()`** peut avoir 3 formats différents. Si aucun paramètre n'est spécifié, les 3 formats de nom de compagnie seront utilisés.
+Par exemple, **CompanyName()** peut avoir 3 formats différents. Si aucun paramètre n'est spécifié, les 3 formats de nom de compagnie seront utilisés.
 
 Pour le téléphone, il aurait été possible d'utiliser le format **(###) ###-####**. 
 
-## Test
+### Test
 
 Modifiez le fichier **Program.cs**.
 
-```c#
+```csharp
 using GenerateurBDGestionLivre;
 using GenerateurBDGestionLivre.Data;
 using GenerateurBDGestionLivre.Data.Context;
@@ -589,7 +587,7 @@ Site Web : https://kaley.net
 Téléphone : 133-806-2671
 ```
 
-## Amélioration - Utilisation d'une propriété de référence
+### Amélioration - Utilisation d'une propriété de référence
 
 Le site web n'a aucun lien avec le nom de la compagnie. Il serait intéressant que le nom de la compagnie soit dans le **Url**.
 
@@ -599,7 +597,7 @@ Il y a 3 options.
 
 Il faut s'assurer d'éliminer tous les caractères problématiques. 
 
-Dans l'exemple ci-dessus, il y a : **`, ' -`** et l'espace. 
+Dans l'exemple ci-dessus, il y a : **, \`  -** et l'espace. 
 
 2- On génère une adresse internet et la portion domaine devient le nom de la compagnie.
 
@@ -611,11 +609,11 @@ Les 3 approches dépendent d'une autre propriété pour se générer.
 
 Pour cet exemple, l'option 3 sera utilisée.
 
-L'ordre des **`RuleFor`** est important dans ce cas-ci, car il faut générer le nom de la compagnie avant le domaine.
+L'ordre des **RuleFor** est important dans ce cas-ci, car il faut générer le nom de la compagnie avant le domaine.
 
-Voici la nouvelle méthode **`GenNom()`**.
+Voici la nouvelle méthode **GenNom()**.
 
-```c#
+```csharp
 private string GenNom(Faker f)
 {
 	//Le nombre de mots sera aléatoire (entre 1 et 4)
@@ -636,9 +634,9 @@ private string GenNom(Faker f)
 }
 ```
 
-Voici la nouvelle méthode **`GenSiteWeb()`**.
+Voici la nouvelle méthode **GenSiteWeb()**.
 
-```c#
+```csharp
 private string GenSiteWeb(Faker f, Editeur editeur)
 {
 	//Le type est VARCHAR(3000)
@@ -665,82 +663,13 @@ private string GenSiteWeb(Faker f, Editeur editeur)
 
 Premièrement, la méthode a un 2e paramètre. Il s'agit de l'instance **Editeur** en cours de création.
 
-Ensuite, il est possible de remplacer les espaces du nom par des tirets ou de les retirer. Afin de varier le plus possible le domaine, l'utilisation de la méthode **`WeightedRandom()`** permet de mettre une probabilité sur chaque possibilité.  Il y a donc 60% plus de chance de retirer l'espace.
+Ensuite, il est possible de remplacer les espaces du nom par des tirets ou de les retirer. Afin de varier le plus possible le domaine, l'utilisation de la méthode **WeightedRandom()** permet de mettre une probabilité sur chaque possibilité.  Il y a donc 60% plus de chance de retirer l'espace.
 
-Finalement, la méthode **`DomainSuffix()`** permet de générer un **.xyz** valide.
+Finalement, la méthode **DomainSuffix()** permet de générer un **.xyz** valide.
 
-Voici le code complet de la classe **EditeurGenerateur**.
-
-```c#
-using Bogus;
-using GenerateurBDGestionLivre.Data;
-
-namespace GenerateurBDGestionLivre;
-
-public class EditeurGenerateur : Faker<Editeur>
-{
-	public EditeurGenerateur()
-	{
-		RuleFor(i => i.Nom, GenNom);
-		RuleFor(i => i.SiteWeb, GenSiteWeb);
-		RuleFor(i => i.Telephone, GenTelephone);
-	}
-
-	public Editeur Generer()
-	{
-		return base.Generate();
-	}
-
-	private string GenNom(Faker f)
-	{
-		//Le nombre de mots sera aléatoire (entre 1 et 4)
-		//Il faut mettre la première lettre du nom en majuscule
-
-		int nbMot = f.Random.Number(1, 4);
-		string[] mots = new string[nbMot];
-
-		for(int i = 0; i < nbMot; i++)
-		{
-			mots[i] = f.Internet.DomainWord();
-		}						
-
-		string nom = string.Join(" ", mots);
-
-		//Le type est VARCHAR(150)
-		return (nom.Substring(0, 1).ToUpper() + nom.Substring(1)).Tronquer(150)!;
-	}
-
-	private string GenSiteWeb(Faker f, Editeur editeur)
-	{
-		//Le type est VARCHAR(3000)
-		
-		//Les espaces du nom de l'éditeur peuvent être éliminés ou remplacés par des tirets.
-		//Il est possible de données des choix et de choisir en fonction d'une probabilité.
-
-		//Il est important que les 2 tableaux soient de la même longueur
-		string[] choixRemplacement = { string.Empty, "-" };
-		//La somme des probabilités doit être 1
-		//60% de retirer l'espace et 40% de mettre un tiret.
-		float[] probabiliteRemplacement = { 0.6f, 0.4f };
-
-        //La méthode WeightedRandom permet de faire un choix dans une liste en fonction de probabilité pour chacun des items.
-        string valeurRemplacement = f.Random.WeightedRandom(choixRemplacement, probabiliteRemplacement);
-
-		//La longueur maximale d'un domaine est de 63
-		string domaine = editeur.Nom.ToLower().Replace(" ", valeurRemplacement).Tronquer(63)!;
-
-        //Ajoute à la fin un suffixe de domaine
-        return ("https://www." + domaine + "." + f.Internet.DomainSuffix()).Tronquer(3000)!;
-    }
-
-	private string GenTelephone(Faker f)
-	{
-		//La méthode PhoneNumber peut avoir un format en paramètre.
-		return f.Phone.PhoneNumber("###-###-####");
-	}
-}
-```
-
+:::warning Attention
+Avant de générer 10 nouveaux Editeurs, veuillez vider la table Editeur dans la bd. 
+:::
 Voici un exemple de génération.
 
 ```
@@ -770,12 +699,7 @@ Téléphone : 892-446-1812
 ```
 
 
-
-**Pour le TP2**, vous devez générer un courriel pour le développeur. Habituellement, le courriel a un lien avec le nom du domaine.
-
-Dans le projet **GestionPersonnageApp**, le site web est généré autrement.
-
-# Table Auteur
+## Table Auteur
 
 La table **Auteur** contient l'information d'un auteur d'un livre.
 
@@ -805,22 +729,22 @@ La table possède 5 champs.
 
 Créez la classe **AuteurGenerateur**.
 
-```c#
+```csharp
 using Bogus;
-using GenerateurBDGestionLivre.Data;
+using GenerateurDBGestionLivre.Data;
 
 namespace GenerateurBDGestionLivre;
 
 public class AuteurGenerateur : Faker<Auteur>
 {
-	public AuteurGenerateur()
-	{
+    public AuteurGenerateur()
+    {
         RuleFor(i => i.Prenom, GenPrenom);
         RuleFor(i => i.Nom, GenNom);
         RuleFor(i => i.Biographie, GenBiographie);
-        RuleFor(i => i.DateNaissance, GenDateNaissance);
+        RuleFor(i => i.DateNaissance,  GenDateNaissance);
         RuleFor(i => i.DateDeces, GenDateDeces);
-    }    
+    }
 
     public Auteur Generer()
     {
@@ -846,81 +770,46 @@ public class AuteurGenerateur : Faker<Auteur>
         return f.Lorem.Paragraphs(1, 3).OrNull(f, 0.3f).Tronquer(5000)!;
     }
 
-    private DateTime GenDateNaissance(Faker f)
+    private DateOnly GenDateNaissance(Faker f)
     {
         //La date peut être entre 1800-01-01 et 15 ans dans le passé.
-        //Retourne la portion date seulement
-        return f.Date.Between(new DateTime(1800, 1, 1), DateTime.Now.AddYears(-15)).Date;
+        return f.Date.BetweenDateOnly(new DateOnly(1800, 1, 1), DateOnly.FromDateTime(DateTime.Now).AddYears(-15));
     }
 
-    private DateTime? GenDateDeces(Faker f, Auteur auteur)
+    private DateOnly? GenDateDeces(Faker f, Auteur auteur)
     {
         //Vérifie si la date de naissance est il y a plus de 95 ans
-        if(DateTime.Now.Date.Year - auteur.DateNaissance.Year > 95)
+        if (DateTime.Now.Date.Year - auteur.DateNaissance.Year > 95)
         {
             //La date de naissance est il y a plus de 95 ans
-            //Il faut obligatoirement générer ne date de décès.
+            //Il faut obligatoirement générer une date de décès.
             //L'auteur peut être mort entre 15 et 95 ans
-            return f.Date.Between(auteur.DateNaissance.AddYears(15), auteur.DateNaissance.AddYears(95)).Date;
+            return f.Date.BetweenDateOnly(auteur.DateNaissance.AddYears(15), auteur.DateNaissance.AddYears(95));
         }
         else
         {
             //La date de naissance est il y a 95 ans et moins.
             //Il y a seulement 5% de chance qu'il soit décédé.
 
-            return f.Date.Between(auteur.DateNaissance.AddYears(15), DateTime.Now.AddDays(-5)).Date.OrNull(f, 0.95f);
+            return f.Date.BetweenDateOnly(auteur.DateNaissance.AddYears(15), DateOnly.FromDateTime(DateTime.Now).AddDays(-5)).OrNull(f, 0.95f);
         }
     }
 }
 ```
 
-Voici la méthode **`GenDateNaissance()`**.
-
-```c#
-private DateTime GenDateNaissance(Faker f)
-{
-    //La date peut être entre 1800-01-01 et 15 ans dans le passé.
-    //Retourne la portion date seulement
-    return f.Date.Between(new DateTime(1800, 1, 1), DateTime.Now.AddYears(-15)).Date;
-}
-```
-
-Le générateur ne peut pas générer des auteurs de moins de 15 ans. 
+Pour la méthode **GenDateNaissance()** le générateur ne peut pas générer des auteurs de moins de 15 ans. 
 
 Il serait possible d'optimiser les auteurs récents en ajoutant beaucoup plus de logique. Il faut toujours se demander si les ajouts de logiques ont réellement de la valeur. Dans ce cas-ci, il n'est pas nécessaire d'optimiser les auteurs récents.
 
-Voici la méthode **`GenDateDeces()`**.
-
-```c#
-private DateTime? GenDateDeces(Faker f, Auteur auteur)
-{
-    //Vérifie si la date de naissance est il y a plus de 95 ans
-    if(DateTime.Now.Date.Year - auteur.DateNaissance.Year > 95)
-    {
-        //La date de naissance est il y a plus de 95 ans
-        //Il faut obligatoirement générer ne date de décès.
-        //L'auteur peut être mort entre 15 et 95 ans
-        return f.Date.Between(auteur.DateNaissance.AddYears(15), auteur.DateNaissance.AddYears(95)).Date;
-    }
-    else
-    {
-        //La date de naissance est il y a 95 ans et moins.
-        //Il y a seulement 5% de chance qu'il soit décédé.
-
-        return f.Date.Between(auteur.DateNaissance.AddYears(14), DateTime.Now.AddDays(-5)).Date.OrNull(f, 0.95f);
-    }
-}
-```
-
-Pour la date de décès, il est plus pertinent d'avoir plus de logique. Il est impossible d'avoir un auteur de 200 ans. Il faut avoir des dates de décès réaliste en fonction de la date de naissance. Pour cet outil, tous les auteurs qui ont plus de 95 ans doivent avoir une date de décès. Il faut également que l'auteur ait vécu un nombre d'années minimal. L'âge minimal est 15 ans.
+Pour la méthode **GenDateDeces()**,  il est plus pertinent pour la date de décès d'avoir plus de logique. Il est impossible d'avoir un auteur de 200 ans. Il faut avoir des dates de décès réaliste en fonction de la date de naissance. Pour cet outil, tous les auteurs qui ont plus de 95 ans doivent avoir une date de décès. Il faut également que l'auteur ait vécu un nombre d'années minimal. L'âge minimal est 15 ans.
 
 Dans le cas que l'auteur a moins de 95 ans, il y a 5% de chance qu'il soit décédé. Il doit avoir au moins 14 ans à la date de son décès. 
 
-## Test
+### Test
 
 Modifiez le fichier **Program.cs**.
 
-```c#
+```csharp
 using GenerateurBDGestionLivre;
 using GenerateurBDGestionLivre.Data;
 using GenerateurBDGestionLivre.Data.Context;
@@ -974,7 +863,7 @@ Date décès : 1865-05-10 00:00:00
 Biographie :
 ```
 
-# Table Livre
+## Table Livre
 
 La table **Livre** contient l'information d'un livre.
 
@@ -982,15 +871,15 @@ La table a 2 clés étrangères. Il est important de ne pas pendre des nombres a
 
 Créez la classe **LivreGenerateur**.
 
-```c#
+```csharp
 using Bogus;
-using GenerateurBDGestionLivre.Data;
+using GenerateurDBGestionLivre.Data;
 
 namespace GenerateurBDGestionLivre;
 
 public class LivreGenerateur : Faker<Livre>
 {
-    private List<int> _lstCollectionId= new List<int>();
+    private List<int> _lstCollectionId = new List<int>();
     private List<int> _lstEditeurId = new List<int>();
 
     public LivreGenerateur()
@@ -1036,19 +925,19 @@ public class LivreGenerateur : Faker<Livre>
         return f.Lorem.Paragraphs(1, 4).Tronquer(5000)!;
     }
 
-    private DateTime GenDatePublication(Faker f) 
+    private DateOnly GenDatePublication(Faker f)
     {
         //Retourne une date dans les 25 dernières années
-        return f.Date.Past(25).Date;
+        return f.Date.PastDateOnly(25);
     }
 
-    private decimal GenPrix(Faker f) 
+    private decimal GenPrix(Faker f)
     {
         //DECIMAL(5,2) => 0.00 et 999.99
         return f.Finance.Amount(0, 999.99m);
     }
 
-    private short GenNbPage(Faker f) 
+    private short GenNbPage(Faker f)
     {
         //Génère entre 20 et 5123 pages
         //TINYINT
@@ -1074,7 +963,7 @@ public class LivreGenerateur : Faker<Livre>
     {
         //Sélectionne un EditeurId dans la liste des EditeurId disponibles
         return f.PickRandom(_lstEditeurId);
-    }    
+    }
 }
 ```
 
@@ -1084,7 +973,7 @@ Elle a également les 2 méthodes d'assignation des dépendances.
 
 Avant de débuter une génération, il est important que ces listes soient assignées. Toutes les tables qui utilisent des clés étrangères doivent avoir cette approche.
 
-```c#
+```csharp title="NE PAS COPIER"
 /***/
 private List<int> _lstCollectionId= new List<int>();
 private List<int> _lstEditeurId = new List<int>();
@@ -1103,9 +992,9 @@ public void AssignerListeEditeurId(List<int> lstEditeurId)
 }
 ```
 
-Les méthodes **`GenCollectionId()`** et **`GenEditeurId()`** utilisent la fonctionnalité **`PickRandom()`** de **Bogus**. Cette fonctionnalité permet de choisir au hasard un item dans un tableau ou une collection.
+Les méthodes **GenCollectionId()** et **GenEditeurId()** utilisent la fonctionnalité **PickRandom()** de **Bogus**. Cette fonctionnalité permet de choisir au hasard un item dans un tableau ou une collection.
 
-```c#
+```csharp title="NE PAS COPIER"
 private int GenCollectionId(Faker f)
 {
     //Sélectionne un EditeurId dans la liste des CollectionId disponibles
@@ -1123,7 +1012,7 @@ Une autre particularité pour ce générateur est pour le champ **Categorie**. C
 
 Les 3 valeurs de la contrainte **CHECK** sont dans l'attribut **_categories** de la classe.
 
-```c#
+```csharp title="NE PAS COPIER"
 //La liste des valeurs possibles de la contrainte CK_Livre_Categorie
 private string[] _categories = { "Jeunesse", "Biographie", "Policier" };
 
@@ -1140,7 +1029,7 @@ Pour la propriété **Prix**, le module **Finance** est utilisé. Elle permet de
 
 Il est important de respecter la précision du **DECIMAL SQL**.
 
-```c#
+```csharp title="NE PAS COPIER"
 private decimal GenPrix(Faker f) 
 {
     //DECIMAL(5,2) => 0.00 et 999.99
@@ -1150,7 +1039,7 @@ private decimal GenPrix(Faker f)
 
 Pour la propriété **DatePublication**, la méthode **`Past()`** du module **Date** permet de générer une date dans le passée. 
 
-```c#
+```csharp title="NE PAS COPIER"
 private DateTime GenDatePublication(Faker f) 
 {
     //Retourne une date dans les 25 dernières année
@@ -1160,11 +1049,11 @@ private DateTime GenDatePublication(Faker f)
 
 Les autres méthodes de génération utilisent des concepts similaires des autres tables.
 
-## Test
+### Test
 
 Modifiez le fichier **Program.cs**.
 
-```c#
+```csharp showLineNumbers
 using GenerateurBDGestionLivre;
 using GenerateurBDGestionLivre.Data;
 using GenerateurBDGestionLivre.Data.Context;
@@ -1249,7 +1138,7 @@ CollectionId : 2
 EditeurId : 5
 ```
 
-# La table LivreAuteur
+## La table LivreAuteur
 
 La table **LivreAuteur** est une table pivot. Elle permet d'indiquer les auteurs d'un livre.
 
@@ -1261,21 +1150,21 @@ Donc, pour **LivreAuteur**, ce sont les classes **Livre** et **Auteur**.
 
 Dans la classe **Livre**, il y a une collection de type **Auteur**.
 
-```c#
+```csharp
 public virtual ICollection<Auteur> Auteur { get; } = new List<Auteur>();
 ```
 
 Dans la classe **Auteur**, il y a une collection de type **Livre**.
 
-```c#
+```csharp
 public virtual ICollection<Livre> Livre { get; } = new List<Livre>();
 ```
 
-Dans la classe **GestionLivreContext**,  dans la méthode **`OnModelCreating()`**, il y a l'explication de la table **LivreAuteur**.
+Dans la classe **GestionLivreContext**,  dans la méthode **onModelCreating()**, il y a l'explication de la table **LivreAuteur**.
 
 Il n'est pas nécessaire de comprendre à cette étape la relation, mais **Entity** est en mesure de créer les enregistrements dans la table **LivreAuteur** à partir des propriétés de navigation.
 
-```c#
+```csharp
 modelBuilder.Entity<Livre>(entity =>
 {
     /***/
@@ -1302,11 +1191,11 @@ Donc pour générer des données, il faut le faire à partir des générateurs  
 
 Pour cet exemple, le générateur **LivreGenerateur** sera utilisé.
 
-## Modification de LivreGenerateur
+### Modification de LivreGenerateur
 
 Voici la nouvelle classe **LivreGenerateur**.
 
-```c#
+```csharp
 using Bogus;
 using GenerateurBDGestionLivre.Data;
 
@@ -1316,10 +1205,13 @@ public class LivreGenerateur : Faker<Livre>
 {
     private List<int> _lstCollectionId= new List<int>();
     private List<int> _lstEditeurId = new List<int>();
+    //highlight-next-line
     private List<Auteur> _lstAuteur = new List<Auteur>();
 
+//highlight-start
     //La liste des valeurs possibles de la contrainte CK_Livre_Categorie
     private string[] _categories = { "Jeunesse", "Biographie", "Policier" };
+//highlight-end
 
     public LivreGenerateur()
     {
@@ -1335,11 +1227,11 @@ public class LivreGenerateur : Faker<Livre>
 
     public Livre Generer()
     {
+        //highlight-start
         Livre livre =  base.Generate();
-
         GenAuteurs(livre);
-
         return livre;
+        //highlight-end
     }
 
     public void AssignerListeCollectionId(List<int> lstCollectionId)
@@ -1354,12 +1246,14 @@ public class LivreGenerateur : Faker<Livre>
         _lstEditeurId.AddRange(lstEditeurId);
     }
 
+//highlight-start
     public void AssignerListeAuteur(List<Auteur> lstAuteur)
     {
         //Ce n'est pas des Id, mais une liste des enregistrements Auteur.
         _lstAuteur.Clear();
         _lstAuteur.AddRange(lstAuteur);
     }
+    //highlight-end
 
     private string GenTitre(Faker f)
     {
@@ -1375,10 +1269,10 @@ public class LivreGenerateur : Faker<Livre>
         return f.Lorem.Paragraphs(1, 4).Tronquer(5000)!;
     }
 
-    private DateTime GenDatePublication(Faker f) 
+   private DateOnly GenDatePublication(Faker f)
     {
         //Retourne une date dans les 25 dernières années
-        return f.Date.Past(25).Date;
+        return f.Date.PastDateOnly(25);
     }
 
     private decimal GenPrix(Faker f) 
@@ -1397,6 +1291,7 @@ public class LivreGenerateur : Faker<Livre>
     private string GenCategorie(Faker f)
     {
         //Selectionne une valeur dans la liste
+        //highlight-next-line
         return f.PickRandom(_categories);
     }
 
@@ -1412,6 +1307,7 @@ public class LivreGenerateur : Faker<Livre>
         return f.PickRandom(_lstEditeurId);
     }
 
+//highlight-start
     private void GenAuteurs(Livre livre)
     {
         //Vérifie si la liste d'auteur n'est pas vide
@@ -1439,14 +1335,15 @@ public class LivreGenerateur : Faker<Livre>
             } while (nbAuteur > 0);            
         }
     }
+    //highlight-end
 }
 ```
 
-Il y a maintenant un attribut **`List<Auteur> _lstAuteur`** qui contient les auteurs disponibles et sa méthode d'assignation.
+Il y a maintenant un attribut **List\<Auteur> _lstAuteur** qui contient les auteurs disponibles et sa méthode d'assignation.
 
 Dans ce cas, il est important que ce soit l'objet **Auteur** et non seulement les **Id**, car **Entity Framework** ne peut pas ajouter directement des enregistrements à partir de la clé, mais à partir de l'objet.
 
-```c#
+```csharp
 private List<Auteur> _lstAuteur = new List<Auteur>();
 
 /***/
@@ -1458,15 +1355,15 @@ public void AssignerListeAuteur(List<Auteur> lstAuteur)
 }
 ```
 
-Entuite, il y a la méthode **`GenAuteurs()`** qui permet de choisir la liste des auteurs de ce livre.
+Ensuite, il y a la méthode **GenAuteurs()** qui permet de choisir la liste des auteurs de ce livre.
 
 La méthode reçoit en paramètre l'objet **Livre** en cours de génération.
 
 À la ligne 11, le nombre d'auteurs pour ce livre est choisi au hasard. Il serait intéressant de favoriser 1 auteur seulement par rapport à 2 ou 3. Mais pour simplifier, chaque nombre aura la même probabilité.
 
-Il y a une protection pour éviter de sélectionner 2 fois le même auteur. La méthode **`PickRandom()`** peut choisir le même élément plus d'une fois. Entre les lignes 14 et 25, c'est la boucle de sélection. La vérification se fait à la ligne 18.
+Il y a une protection pour éviter de sélectionner 2 fois le même auteur. La méthode **PickRandom()** peut choisir le même élément plus d'une fois. Entre les lignes 14 et 25, c'est la boucle de sélection. La vérification se fait à la ligne 18.
 
-```c#
+```csharp showLineNumbers
 private void GenAuteurs(Livre livre)
 {
     //Vérifie si la liste d'auteur n'est pas vide
@@ -1496,11 +1393,11 @@ private void GenAuteurs(Livre livre)
 }
 ```
 
-La méthode **`Generer()`** est modifiée. Il n'est pas possible de mettre dans le constructeur une règle **`RuleFor`** pour l'ajout dans une collection. La méthode **`RuleFor`** permet de faire des assignations uniquement.
+La méthode **Generer()** est modifiée. Il n'est pas possible de mettre dans le constructeur une règle **RuleFor** pour l'ajout dans une collection. La méthode **RuleFor** permet de faire des assignations uniquement.
 
 Il faut donc générer un objet **Livre** et ensuite ajouter les auteurs avant de le retourner.
 
-```c#
+```csharp
 public Livre Generer()
 {
     //Génère un livre
@@ -1516,9 +1413,13 @@ public Livre Generer()
 
 ## Test
 
+:::warning Attention
+Avant d'exécuter ce code, vider la table Livre
+:::
+
 Modifiez le fichier **Program.cs**.
 
-```c#
+```csharp
 using GenerateurBDGestionLivre;
 using GenerateurBDGestionLivre.Data;
 using GenerateurBDGestionLivre.Data.Context;
@@ -1572,15 +1473,12 @@ Dans **SSMS**, effectuez cette requête. Vous devriez voir des enregistrements.
 SELECT * FROM LivreAuteur;
 ```
 
-## Pour le TP2
+:::note
 
-La table **ApplicationLangue** est une table pivot **"pure"**. Elle doit utiliser cette approche. Le générateur de la table **Application** devra générer les données de **ApplicationLangue**.
+Le générateur peut générer des livres après la mort d'un auteur. Ce n'est pas très logique. Il serait possible de régler ce problème, mais le générateur serait un peu plus complexe. Il faudrait faire de la vérification intertable. 
+:::
 
-Le générateur peut générer des livres après la mort d'un auteur. Ce n'est pas très logique. Il serait possible de régler ce problème, mais le générateur serait un peu plus complexe. Il faudrait faire de la vérification intertable. Il ne sera pas nécessaire de faire une vérification intertable pour le **TP 2**.
-
-Il n'y a pas de table pivot **"pure"** dans le projet **GestionPersonnageApp**.
-
-# Table Magasin et Inventaire
+## Table Magasin et Inventaire
 
 La table **Inventaire** est une table pivot entre **Magasin** et **Livre**, mais elle a une propriété **Quantite**.
 
@@ -1592,7 +1490,7 @@ Il faut donc générer **Inventaire** à partir de **Magasin** ou de **Livre**. 
 
 La table **Inventaire** a ses propres champs. Il faut donc créer une classe **InventaireGenerateur** également. 
 
-## MagaginGenerateur
+### MagaginGenerateur
 
 La table possède 4 champs.
 
@@ -1614,7 +1512,7 @@ La table possède 4 champs.
 
 Créez la classe **MagasinGenerateur**.
 
-```c#
+```csharp
 using Bogus;
 using GenerateurBDGestionLivre.Data;
 
@@ -1664,7 +1562,7 @@ public class MagasinGenerateur : Faker<Magasin>
 }
 ```
 
-## InventaireGenerateur
+### InventaireGenerateur
 
 La table **Inventaire** possède 3 champs.
 
@@ -1682,7 +1580,7 @@ La table **Inventaire** possède 3 champs.
 
 Créez la classe **InventaireGenerateur**.
 
-```c#
+```csharp
 using Bogus;
 using GenerateurBDGestionLivre.Data;
 
@@ -1744,7 +1642,7 @@ public class InventaireGenerateur : Faker<Inventaire>
 
 En gros, il s'agit d'un générateur comme les autres avec une assignation de dépendances.
 
-Par contre, la méthode **`Generer()`** est différente.
+Par contre, la méthode **Generer()** est différente.
 
 La méthode reçoit en paramètre un **Magasin**, une quantité minimum et maximum à générer.
 
@@ -1754,39 +1652,12 @@ Avant d'ajouter l'inventaire à la liste des inventaires de ce magasin, il faut 
 
 L'inventaire est ajouté à la collection **Inventaire** de l'objet **Magasin**. Cette étape permet d'assigner le champ **MagasinId** à l'enregistrement **Inventaire**.
 
-```c#
-public void Generer(Magasin magasin, int min, int max)
-{
-    Faker f = new Faker();
 
-    //Détermine le nombre d'inventaires à générer pour ce magasin
-    int nbInventaire = f.Random.Number(min, max);
-
-    //Le code ci-dessous permet de s'assurer que le même LivreId n'est pas pigé plusieurs fois.
-    List<int> lstLivreIdUtilise = new List<int>();
-    do
-    {
-        Inventaire inventaire = base.Generate();
-
-        //Vérifie s'il y a un inventaire pour ce magasin qui a déjà ce livre
-        if (magasin.Inventaire.Count(i => i.LivreId == inventaire.LivreId) == 0)
-        {
-            //Le livre n'a jamais été utilisé pour un inventaire de ce magasin
-            //L'inventaire est ajouté à la base de données, en assignant le MagasinId du magasin en cours
-            magasin.Inventaire.Add(inventaire);
-
-            nbInventaire--;
-        }
-
-    } while (nbInventaire > 0);
-}
-```
-
-## Test
+### Test
 
 La mécanique est différente pour le **Program.cs**.
 
-```c#
+```csharp showLineNumbers
 using GenerateurBDGestionLivre;
 using GenerateurBDGestionLivre.Data;
 using GenerateurBDGestionLivre.Data.Context;
@@ -1836,15 +1707,3 @@ Dans le générateur **InventaireGenerateur**, il faut assigner la liste des liv
 Ensuite, à la ligne 23, les inventaires pour ce magasin sont générés.
 
 Finalement, aux lignes 34 et 36, le magasin est ajouté dans le contexte et ensuite enregistré dans la base de données. Les inventaires qui ont été ajoutés dans la propriété **Magasin.Inventaire** sont également ajoutés. **Entity Framework** est en mesure d'assigner le **MagasinId** autogéréné à tous les enregistrements de la table **Inventaire**.
-
-## Pour le TP2
-
-Cette technique vous permettra de générer des données pour la table **Achat**. Il faudra choisir entre la table **Client** et **Application**   qui s'occupera d'ajouter les achats.
-
-Dans le projet, **GestionPersonnageApp**, les générateurs des tables **Film** et  **Distribution** utilisent cette technique.
-
-# Conclusion
-
-Pour le **TP2**, il faudra reproduire la génération des données en utilisant la structure par injection de dépendances.
-
-Le document **Application console avec injection de dépendances - Partie 4** explique la marche à suivre.

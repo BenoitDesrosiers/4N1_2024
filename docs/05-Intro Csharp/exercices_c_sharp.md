@@ -14,23 +14,23 @@ Créez une nouvelle application console .NET avec le framework .Net 7.0.
 2. Constructeurs
    - Par défaut
    - et avec paramètres
-3. Propriété **`public`** en get et set
+3. Propriété **public** en get et set
    - Auteur (string)
    - Titre (string)
    - Publication (DateTime)
-4. Méthode **`AfficherInfo()`**
+4. Méthode **AfficherInfo()**
    - **Abstraite**
    - Retourne une string
-5. Méthode **`AfficherPublication()`**
+5. Méthode **AfficherPublication()**
    - **Virtuelle**
    - Retourne un string
-   - Utilisez la notation **`$`**
-   - La date doit avoir le format suivant **`d MMMM yyyy`**
-   - Le message pour la date **`2022/01/18`** doit être **`"La date de publication est le 18 janvier 2022."`**
+   - Utilisez la notation **$**
+   - La date doit avoir le format suivant **d MMMM yyyy**
+   - Le message pour la date **2022/01/18** doit être **"La date de publication est le 18 janvier 2022."**
 
 #### Interface ILivre
 
-1. Interface **`public`**
+1. Interface **public**
 2. Propriété en get et set
    - NombrePage (int)
 
@@ -49,48 +49,48 @@ Créez une nouvelle application console .NET avec le framework .Net 7.0.
 
 #### Classe Livre
 
-1. Hérite de **`ILivre`** et **`BaseDocument`**
+1. Hérite de **ILivre** et **BaseDocument**
 2. Constructeurs
    - Par défaut
    - et avec paramètres
-3. Méthode **`AfficherInfo()`**
-   - Utilisez la notation **`$`**
-   - Le message doit être **`"L'auteur du livre intitulé ABC est François St-Hilaire. Le livre a 18 page(s)."`** pour les données ci-dessous :
-     - Titre : **`ABC`**
-     - Auteur : **`François St-Hilaire`**
-     - NombrePage : **`18`**
+3. Méthode **AfficherInfo()**
+   - Utilisez la notation **$**
+   - Le message doit être **"L'auteur du livre intitulé ABC est François St-Hilaire. Le livre a 18 page(s)."** pour les données ci-dessous :
+     - Titre : **ABC**
+     - Auteur : **François St-Hilaire**
+     - NombrePage : **18**
 
 #### Classe Disque
 
-1. Hérite de **`IDisque`** et **`BaseDocument`**
+1. Hérite de **IDisque** et **BaseDocument**
 2. Constructeurs
    - Par défaut
    - et avec paramètres
-3. Méthode **`AfficherInfo()`**
-   - Utilisez la notation **`string.format`**
-   - Le message doit être **`"L'auteur du disque intitulé Data123 est François St-Hilaire. Le disque a une taille de 63,3 Mo."`** pour les données ci-dessous :
-     - Titre : **`Data123`**
-     - Auteur : **`François St-Hilaire`**
-     - TailleMo: **`64.3`**
+3. Méthode **AfficherInfo()**
+   - Utilisez la notation **string.format**
+   - Le message doit être **"L'auteur du disque intitulé Data123 est François St-Hilaire. Le disque a une taille de 63,3 Mo."** pour les données ci-dessous :
+     - Titre : **Data123**
+     - Auteur : **François St-Hilaire**
+     - TailleMo: **64.3**
 
 #### Classe NoteCours
 
-1. Hérite de **`INoteCours`** et **`BaseDocument`**
+1. Hérite de **INoteCours** et **BaseDocument**
 2. Constructeurs
    - Par défaut
    - et avec paramètres
 
-3. Méthode **`AfficherInfo()`**
-   - Utilisez la notation **`$`**
-   - Le message doit être **`"L'auteur des notes intitulées Web IV est François St-Hilaire. La matière est Informatique."`** pour les données ci-dessous :
-     - Titre : **`Web IV`**
-     - Auteur : **`François St-Hilaire`**
-     - Matiere : **`Informatique`**
-4. Méthode **`AfficherPublication()`**
-   1. Utilisez la notation **`$`**
-   2. Le message doit être **`"Les notes ont été publiées le 18 janvier 2022 pour la session H22."`** pour les données ci-dessous :
-      - Publication : **`2022/01/18`**
-      - Session : **`H22`**
+3. Méthode **AfficherInfo()**
+   - Utilisez la notation **$**
+   - Le message doit être **"L'auteur des notes intitulées Web IV est François St-Hilaire. La matière est Informatique."** pour les données ci-dessous :
+     - Titre : **Web IV**
+     - Auteur : **François St-Hilaire**
+     - Matiere : **Informatique**
+4. Méthode **AfficherPublication()**
+   1. Utilisez la notation **$**
+   2. Le message doit être **"Les notes ont été publiées le 18 janvier 2022 pour la session H22."** pour les données ci-dessous :
+      - Publication : **2022/01/18**
+      - Session : **H22**
 
 
 ### solution
@@ -104,6 +104,7 @@ Créez une nouvelle application console .NET avec le framework .Net 7.0.
 
 
 ```csharp
+
 namespace ExercicesCours1;
 
 /// <summary>
@@ -387,24 +388,25 @@ public class NoteCours : BaseDocument, INoteCours
 ```
 
 </details>
+
 </details>
 
 ## Exercice 2
 
 #### Instance Livre
 
-1. Créez une instance **`Livre** et utilisez le constructeur avec paramètres.
-2. Affichez le retour des méthodes **`AfficheInfo()`** et **`AfficherPublication()`** dans la console.
+1. Créez une instance **Livre** et utilisez le constructeur avec paramètres.
+2. Affichez le retour des méthodes **AfficheInfo()** et **AfficherPublication()** dans la console.
 
 #### Instance Disque
 
-1. Créez une instance **`Disque`** et utilisez le constructeur avec paramètres.
-2. Affichez le retour des méthodes **`AfficheInfo()`** et **`AfficherPublication()`** dans la console.
+1. Créez une instance **Disque** et utilisez le constructeur avec paramètres.
+2. Affichez le retour des méthodes **AfficheInfo()** et **AfficherPublication()** dans la console.
 
 #### Instance NoteCours
 
 1. Créez une instance NoteCours et utilisez le constructeur avec paramètres.
-2. Affichez le retour des méthodes **`AfficheInfo()`** et **`AfficherPublication()`** dans la console.
+2. Affichez le retour des méthodes **AfficheInfo()** et **AfficherPublication()** dans la console.
 
 ### solution
 
@@ -571,11 +573,11 @@ Console.WriteLine(note3.AfficherInfo());
 
 #### Classe Livre
 
-Modifiez la méthode **`AfficheInfo()`** pour remplacer page(s). Utilisez une opération ternaire pour déterminer si "page" doit être au singulier ou au pluriel.
+Modifiez la méthode **AfficheInfo()** pour remplacer page(s). Utilisez une opération ternaire pour déterminer si "page" doit être au singulier ou au pluriel.
 
 Exemples 
-   - **`"L'auteur du livre intitulé ABC est François St-Hilaire. Le livre a 18 pages."`**
-   - **`"L'auteur du livre intitulé ABC est François St-Hilaire. Le livre a 1 page."`**
+   - **"L'auteur du livre intitulé ABC est François St-Hilaire. Le livre a 18 pages."**
+   - **"L'auteur du livre intitulé ABC est François St-Hilaire. Le livre a 1 page."**
 
 ### solution
 
@@ -593,11 +595,11 @@ remplacez le return de AfficherInfo() de Livre.cs par:
 
 #### Classe NoteCours
 
-1. Modifiez la méthode **`AfficheInfo()`** pour afficher **`"non disponible"`** lorsque la valeur de la propriété Auteur est **`null`**.
-2. Utilisez le **`??`**.
+1. Modifiez la méthode **AfficheInfo()** pour afficher **"non disponible"** lorsque la valeur de la propriété Auteur est **null**.
+2. Utilisez le **??**.
 3. Exemples
-   1. **`"L'auteur des notes intitulées ABC est François St-Hilaire. La matière est Informatique."`**
-   2. **`"L'auteur des notes intitulées ABC est non disponible. La matière est Informatique."`**
+   1. **"L'auteur des notes intitulées ABC est François St-Hilaire. La matière est Informatique."**
+   2. **"L'auteur des notes intitulées ABC est non disponible. La matière est Informatique."**
 
 ### solution
 
@@ -613,10 +615,10 @@ remplacez le return de AfficheInfo() de NoteCours par:
 
 #### Classe Disque
 
-1. Modifiez la méthode **`AfficheInfo()`** pour formater la taille avec 3 décimaux en tout temps.
-2. La valeur **`701.1`** doit afficher **`701.100`**.
-3. La valeur **`701.12`** doit afficher **`701.120`**.
-4. La valeur **`701.123`** doit afficher **`701.123`**.
+1. Modifiez la méthode **AfficheInfo()** pour formater la taille avec 3 décimaux en tout temps.
+2. La valeur **701.1** doit afficher **701.100**.
+3. La valeur **701.12** doit afficher **701.120**.
+4. La valeur **701.123** doit afficher **701.123**.
 
 ### solution
 
@@ -637,10 +639,10 @@ ramplacez le return de AfficheInfo() de Disque.cs par:
 
 #### Testez les méthodes
 
-1. Créez une instance de **`Livre`** avec 1 page et une autre instance avec 2 pages. Est-ce que le nombre de page s'affiche correctement ?
-2. Créez une instance **`NoteCours`** avec une valeur dans la propriété Auteur et une autre instance avec la valeur **`null`** dans la propriété Auteur. Est-ce "non disponible" est affiché correctement?
-3. Créez une instance de **`Disque `** avec la valeur 46.3189. Est-ce que l'arrondissement est fait correctement?
-4. Créez une instance de **`Disque `** avec la valeur 46.3184. Est-ce que l'arrondissement est fait correctement?
+1. Créez une instance de **Livre** avec 1 page et une autre instance avec 2 pages. Est-ce que le nombre de page s'affiche correctement ?
+2. Créez une instance **NoteCours** avec une valeur dans la propriété Auteur et une autre instance avec la valeur **null** dans la propriété Auteur. Est-ce "non disponible" est affiché correctement?
+3. Créez une instance de **Disque ** avec la valeur 46.3189. Est-ce que l'arrondissement est fait correctement?
+4. Créez une instance de **Disque ** avec la valeur 46.3184. Est-ce que l'arrondissement est fait correctement?
 
 ### solution
 

@@ -449,7 +449,7 @@ Console.WriteLine(note1.AfficherInfo());
 1. Refaites l'exercice #2, mais utilisez le constructeur par défaut.
 
 2. Effectuez l'assignation par les propriétés après la création.
-
+ 
    ```csharp
    Object obj = new Object();
    obj.Prop1 = "asd";

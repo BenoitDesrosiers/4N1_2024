@@ -16,7 +16,7 @@ Un deuxième avantage est que les composants sont peuvent être liés (*bindable
 
 ## Présentation de l'application
 
-L'application permet de gérer les cartes de jeux du style **Heartstone** pour des joueurs. Il s'agit du jeu **Super Carte**. Très original comme nom.
+L'application permet de gérer les cartes de jeux du style **[Heartstone](https://fr.wikipedia.org/wiki/Hearthstone)** pour des joueurs. Il s'agit du jeu **Super Carte**. Très original comme nom.
 
 Les cartes ont des caractéristiques propres pour déterminer leur pointage de vie, d’armure et de force.
 

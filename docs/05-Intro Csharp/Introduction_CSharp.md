@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Présentation de Microsoft .NET
+# Introduction à C#
 
 La plateforme de développement de Microsoft .NET existe depuis 2002. Elle était connue sous le nom de Microsoft .NET Framework. Son but était d'offrir une plateforme unifiée pour le développement d'application native Windows et Web. 
 
@@ -1272,3 +1272,153 @@ if(DateTime.Now.Day == personne?.animal.DateNaissance.Day
 	//C'est l'anniversaire de l'animal de compagnie
 }
 ```
+
+
+## Classe et méthode générique
+
+Pour plus d'information : https://learn.microsoft.com/fr-fr/dotnet/csharp/fundamentals/types/generics
+
+L'utilisation de classe générique permet de généraliser les classes afin d'éviter de créer plusieurs classes spécifiques et de méthodes spécifiques.
+
+Les classes et les méthodes génériques ont à la fin de leur nom le **\<\>**. Le **\<\>** permet d'indiquer le type réel qui doit être utilisé pour l'instance de la classe ou pour l'utilisation de la méthode.
+
+La classe générique la plus populaire en **C#** est **List\<T\>**. La lettre **T** est la norme pour indiquer que le type est générique.
+
+Prenez par exemple qu'il faut avoir une collection de la classe **Personne**.
+
+```csharp
+public class Personne
+{
+    public string Prenom { get; set; }
+    public string Nom { get; set; }
+    public int Age { get; set; }
+}
+```
+
+Avant d'avoir une collection de type **List\<T\>**, il avait 2 options.
+
+- **Créer une collection d'objets**
+
+  Par exemple, en **C#**, il y a la collection **ArrayList**. Voici la signature de la méthode **Add(objet? value)**. Cette collection permet d'ajouter des classes du type **objet**, donc tous les types de classes.
+
+  Il est possible d'ajouter plusieurs types de données dans la même collection. C'est rarement un comportement désiré dans une liste.
+
+  ```csharp
+  ArrayList listePersonne = new ArrayList();
+  liste.Add(1); //Un entier
+  liste.Add("une string"); //Une string
+  liste.Add(3.04m); //Un decimal
+  liste.Add(new DateTime(2011,11,11)); //Un objet DateTime
+  liste.Add(new Personne() {Prenom = "Francois", Nom = "St-Hilaire", Age = 21}); //Un objet de type personne
+  
+  ```
+
+- **Créer une classe Collection spécifique à un type.**
+
+  Cette approche permet de créer une classe qui s'occupera d'ajouter des objets d'un seul type. Cette classe permet d'encapsuler la mécanique interne pour ajouter, pour enlever et pour obtenir uniquement pour le type **Personne**. Le gros désavantage est qu'il faut créer une classe **Collection** spécifique pour toutes les classes de l'application qui nécessite une collection.
+  
+  ```csharp
+  public class CollectionPersonne
+  {
+      private ArrayList _arrPersonne = new ArrayList();
+  
+      public void Ajouter(Personne personne)
+      {
+          _arrPersonne.Add(personne);
+      }
+  
+      public Personne Obtenir(int index)
+      {
+          if (index < _arrPersonne.Count)
+          {
+              return (Personne)_arrPersonne[index];
+          }
+          else
+          {
+              throw new Exception($"La liste a {_arrPersonne.Count} élément(s)");
+          }
+      }
+  }
+  ```
+  
+  Voici comment l'utiliser.
+  
+  ```csharp
+  CollectionPersonne liste = new CollectionPersonne();
+  
+  liste.Ajouter(new Personne() { Prenom = "Francois", Nom = "St-Hilaire", Age = 21 });
+  liste.Ajouter(new Personne() { Prenom = "Stéphane", Nom = "Janvier", Age = 61 });
+  
+  Personne p2 = liste.Obtenir(1);
+  
+  Console.WriteLine($"La personne est {p2.Prenom} { p2.Nom }.");
+  
+  liste.Ajouter(4); //Erreur du compilateur. Seulement le type **Personne** qui est accepté.
+  ```
+
+Maintenant, avec les classes génériques, il est possible de généraliser un comportement et de spécifier un type à une instance précise.
+
+  Voici une simplification de la classe **List\<T\>**. 
+	
+```csharp
+public class ListeGenerique<T>
+{
+    private ArrayList _arr = new ArrayList();
+
+    public void Ajouter(T valeur)
+    {
+        _arr.Add(valeur);
+    }
+
+    public T Obtenir(int index)
+    {
+        if (index < _arr.Count)
+        {
+            return (T)_arr[index];
+        }
+        else
+        {
+            throw new Exception($"La liste a {_arr.Count} élément(s)");
+        }
+    }
+}
+```
+	
+	Dans la déclaration de la classe, il y a le **\<T\>** qui indique qu'il faut obligatoirement spécifier un type lors de la création d'un objet.
+	
+	Le type générique **T** est utilisé comme type pour le paramètre de la méthode **void Ajouter(T valeur)**.
+	
+	Le type générique **T** est utilisé comme type de retour de la méthode **T Obtenir(int index)**.
+	
+	Donc, si une liste est créé avec le type **Personne** **new ListeGenerique\<Personne\>()** , le compilateur va générer **void Ajouter(Personne valeur)** et  **Personne Obtenir(int index)**.
+	
+	Voici comment l'utiliser.
+	
+	```csharp
+	ListeGenerique<Personne> liste = new ListeGenerique<Personne>();
+	
+	liste.Ajouter(new Personne() { Prenom = "Francois", Nom = "St-Hilaire", Age = 21 });
+	liste.Ajouter(new Personne() { Prenom = "Stéphane", Nom = "Janvier", Age = 61 });
+	
+	Personne p2 = liste.Obtenir(1);
+	
+	Console.WriteLine($"La personne est {p2.Prenom} { p2.Nom }.");
+	
+	liste.Ajouter(4); //Erreur du compilateur
+	```
+	
+	Avec la même liste, il est possible de faire des ajouts de **DateTime** par exemple.
+	
+	```csharp
+	ListeGenerique<DateTime> listeDate = new ListeGenerique<DateTime>();
+	
+	listeDate.Ajouter(new DateTime(1967, 2, 1));
+	listeDate.Ajouter(new DateTime(1957, 6, 29));
+	
+	DateTime d2 = listeDate.Obtenir(1);
+	
+	Console.WriteLine($"La date est {d2}.");
+	
+	listeDate.Ajouter(4); //Erreur du compilateur
+	```
+	

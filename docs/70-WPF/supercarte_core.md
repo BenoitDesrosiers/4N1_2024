@@ -63,159 +63,14 @@ Sélectionnez le dossier **Dépendances** du projet **SuperCarte.Core** et chois
 
 Dans la fenêtre, il faut cocher **SuperCarte.EF**. Vous venez d'intégrer une librairie interne au projet.
 
-## Classe et méthode générique - Théorie
-
-Pour plus d'information : https://learn.microsoft.com/fr-fr/dotnet/csharp/fundamentals/types/generics
-
-L'utilisation de classe générique permet de généraliser les classes afin d'éviter de créer plusieurs classes spécifiques et de méthodes spécifiques.
-
-Les classes et les méthodes génériques ont à la fin de leur nom le **\<\>**. Le **\<\>** permet d'indiquer le type réel qui doit être utilisé pour l'instance de la classe ou pour l'utilisation de la méthode.
-
-La classe générique la plus populaire en **C#** est **List\<T\>**. La lettre **T** est la norme pour indiquer que le type est générique.
-
-Prenez par exemple qu'il faut avoir une collection de la classe **Personne**.
-
-```csharp
-public class Personne
-{
-    public string Prenom { get; set; }
-    public string Nom { get; set; }
-    public int Age { get; set; }
-}
-```
-
-Avant d'avoir une collection de type **List\<T\>**, il avait 2 options.
-
-- **Créer une collection d'objets**
-
-  Par exemple, en **C#**, il y a la collection **ArrayList**. Voici la signature de la méthode **Add(objet? value)**. Cette collection permet d'ajouter des classes du type **objet**, donc tous les types de classes.
-
-  Il est possible d'ajouter plusieurs types de données dans la même collection. C'est rarement un comportement désiré dans une liste.
-
-  ```csharp
-  ArrayList listePersonne = new ArrayList();
-  liste.Add(1); //Un entier
-  liste.Add("une string"); //Une string
-  liste.Add(3.04m); //Un decimal
-  liste.Add(new DateTime(2011,11,11)); //Un objet DateTime
-  liste.Add(new Personne() {Prenom = "Francois", Nom = "St-Hilaire", Age = 21}); //Un objet de type personne
-  
-  ```
-
-- **Créer une classe Collection spécifique à un type.**
-
-  Cette approche permet de créer une classe qui s'occupera d'ajouter des objets d'un seul type. Cette classe permet d'encapsuler la mécanique interne pour ajouter, pour enlever et pour obtenir uniquement pour le type **Personne**. Le gros désavantage est qu'il faut créer une classe **Collection** spécifique pour toutes les classes de l'application qui nécessite une collection.
-  
-  ```csharp
-  public class CollectionPersonne
-  {
-      private ArrayList _arrPersonne = new ArrayList();
-  
-      public void Ajouter(Personne personne)
-      {
-          _arrPersonne.Add(personne);
-      }
-  
-      public Personne Obtenir(int index)
-      {
-          if (index < _arrPersonne.Count)
-          {
-              return (Personne)_arrPersonne[index];
-          }
-          else
-          {
-              throw new Exception($"La liste a {_arrPersonne.Count} élément(s)");
-          }
-      }
-  }
-  ```
-  
-  Voici comment l'utiliser.
-  
-  ```csharp
-  CollectionPersonne liste = new CollectionPersonne();
-  
-  liste.Ajouter(new Personne() { Prenom = "Francois", Nom = "St-Hilaire", Age = 21 });
-  liste.Ajouter(new Personne() { Prenom = "Stéphane", Nom = "Janvier", Age = 61 });
-  
-  Personne p2 = liste.Obtenir(1);
-  
-  Console.WriteLine($"La personne est {p2.Prenom} { p2.Nom }.");
-  
-  liste.Ajouter(4); //Erreur du compilateur. Seulement le type **Personne** qui est accepté.
-  ```
-
-Maintenant, avec les classes génériques, il est possible de généraliser un comportement et de spécifier un type à une instance précise.
-
-  Voici une simplification de la classe **List\<T\>**. 
-	
-```csharp
-public class ListeGenerique<T>
-{
-    private ArrayList _arr = new ArrayList();
-
-    public void Ajouter(T valeur)
-    {
-        _arr.Add(valeur);
-    }
-
-    public T Obtenir(int index)
-    {
-        if (index < _arr.Count)
-        {
-            return (T)_arr[index];
-        }
-        else
-        {
-            throw new Exception($"La liste a {_arr.Count} élément(s)");
-        }
-    }
-}
-```
-	
-	Dans la déclaration de la classe, il y a le **\<T\>** qui indique qu'il faut obligatoirement spécifier un type lors de la création d'un objet.
-	
-	Le type générique **T** est utilisé comme type pour le paramètre de la méthode **void Ajouter(T valeur)**.
-	
-	Le type générique **T** est utilisé comme type de retour de la méthode **T Obtenir(int index)**.
-	
-	Donc, si une liste est créé avec le type **Personne** **new ListeGenerique\<Personne\>()** , le compilateur va générer **void Ajouter(Personne valeur)** et  **Personne Obtenir(int index)**.
-	
-	Voici comment l'utiliser.
-	
-	```csharp
-	ListeGenerique<Personne> liste = new ListeGenerique<Personne>();
-	
-	liste.Ajouter(new Personne() { Prenom = "Francois", Nom = "St-Hilaire", Age = 21 });
-	liste.Ajouter(new Personne() { Prenom = "Stéphane", Nom = "Janvier", Age = 61 });
-	
-	Personne p2 = liste.Obtenir(1);
-	
-	Console.WriteLine($"La personne est {p2.Prenom} { p2.Nom }.");
-	
-	liste.Ajouter(4); //Erreur du compilateur
-	```
-	
-	Avec la même liste, il est possible de faire des ajouts de **DateTime** par exemple.
-	
-	```csharp
-	ListeGenerique<DateTime> listeDate = new ListeGenerique<DateTime>();
-	
-	listeDate.Ajouter(new DateTime(1967, 2, 1));
-	listeDate.Ajouter(new DateTime(1957, 6, 29));
-	
-	DateTime d2 = listeDate.Obtenir(1);
-	
-	Console.WriteLine($"La date est {d2}.");
-	
-	listeDate.Ajouter(4); //Erreur du compilateur
-	```
-	
-	
 
 ## Généralisation du contexte
 
 Les méthodes de base de la classe **DBContext** utilisent les types génériques. Il est donc possible de généraliser les requêtes de base et répétitives dans le **Repository**.
+
+:::note
+Revoir la section sur les types génériques dans l'introduction à C#
+:::
 
 Voici une liste de requêtes **classiques** qui sont généralement identiques.
 
@@ -532,11 +387,9 @@ Le nom du champ de la clé primaire change pour chacune des tables. Généraleme
 
 Il y a aussi le cas d'une clé primaire composée.
 
-:::note
-Ne copiez pas les prochains exemples de code
-:::
 
-```csharp
+
+```csharp title="NE PAS COPIER"
 //Clé avec nom différent
 Carte carte = _bd.CarteTb.Where(c => c.CarteId == carteId).FirstOrDefault();
 Utilisateur utilisateur = _bd.UtilisateurTb.Where(c => c.UtilisateurId == utilisateurId).FirstOrDefault();
@@ -559,7 +412,7 @@ Le **contexte** possède une méthode **Find()** ou **FindAsync()**. Cette méth
 
 Cette méthode peut recevoir un **params object?[]? keyValues**. Le type est **object**, donc il peut recevoir une clé en **int**, en **string**, etc. selon le cas.
 
-```csharp
+```csharp title="NE PAS COPIER"
 //Clé avec nom différent
 Carte carte = _bd.CarteTb.Find(carteId).FirstOrDefault();
 Utilisateur utilisateur = _bd.UtilisateurTb.Find(utilisateurId).FirstOrDefault();
@@ -572,24 +425,24 @@ Le mot-clé **params** permet d'ajouter des paramètres illimités (max réel de
 
 Il est donc possible de récupérer un enregistrement qui a une clé primaire composée.
 
-```csharp
+```csharp title="NE PAS COPIER"
 UtilisateurCarte utilisateurCarte1 = _bd.UtilisateurCarteTb.Find(carteId, utilisateurId).FirstOrDefault();
 UtilisateurCarte utilisateurCarte2 = _bd.UtilisateurCarteTb.Find(utilisateurId, carte).FirstOrDefault();
 ```
 
 L'ordre des clés a-t-il son importance ? La réponse est **oui**. Lequel des 2 appels est la bonne ? Il faut retourner dans la méthode **OnModelCreating** du **contexte** pour voir dans quel ordre les clés ont été spécifiées.
 
-```csharp
+```csharp title="NE PAS COPIER"
 entity.HasKey(t => new { t.UtilisateurId, t.CarteId });
 ```
 
 C'est donc **UtilisateurCarte utilisateurCarte2 = _bd.UtilisateurCarteTb.Find(utilisateurId, carte).FirstOrDefault();** qui serait la bonne. Il est possible de généraliser la méthode **Find** dans le **Repo**, mais il faut l'encadrer.
 
-Le **Repo** générique ne permettra pas la gestion des clés multiples, car il y a trop de risque d'erreur que le programmeur doive toujours valider l'ordre des clés primaires. Ce sera une méthode spécifique pour les tables qui ont une clé primaire composée.
+Le **Repo** générique ne permettra pas la gestion des clés multiples, car la validation de l'ordre des clés primaires risque de provoquer des erreurs. Ce sera une méthode spécifique pour les tables qui ont une clé primaire composée.
 
 La méthode générique ressemblerait à celle-ci.
 
-```csharp
+```csharp title="NE PAS COPIER"
 public Task<TData?> ObtenirParCleAsync(int id)
 {
 	return await _bd.FindAsync<TData>(id);
@@ -600,7 +453,7 @@ Il y a 1 problème dans cette méthode. Elle fonctionne uniquement pour une clé
 
 Il est possible de mettre plusieurs types génériques dans une classe. 
 
-```csharp
+```csharp title="NE PAS COPIER"
 public class BaseRepo<TData, TClePrimaire> : IBaseRepo<TData, TClePrimaire> where TData : class
 {
     /**
@@ -613,30 +466,29 @@ public class BaseRepo<TData, TClePrimaire> : IBaseRepo<TData, TClePrimaire> wher
 }
 ```
 
-Le nombre de types génériques d'une classe n'est pas limité à 1 uniquement. Il suffit de mettre une virgule dans le **`<>`** pour ajouter des types génériques, par exemple  **`<T1, T2, T3, T4>`** . Lorsqu'il y a plusieurs types génériques, il est important de les nommer avec un nom significatif. 
+Le nombre de types génériques d'une classe n'est pas limité à 1 uniquement. Il suffit de mettre une virgule dans le **\<>** pour ajouter des types génériques, par exemple  **\<T1, T2, T3, T4>** . Lorsqu'il y a plusieurs types génériques, il est important de les nommer avec un nom significatif. 
 
 **TClePrimaire** sert uniquement pour le paramètre de la méthode **ObtenirParCleAsync()**.
 
-Mais est-ce le bon endroit pour mettre cette méthode ? Que devra-t-il être spécifié pour la table **UtilisateurCarte** ? Dans le cas ci-dessous, ce sera **int**, mais si le programmeur utilise quand même la méthode **ObtenirParCleAsync()**, il y aura une exception.
+Mais est-ce BaseRepo est le bon endroit pour mettre cette méthode ? Que devra-t-il être spécifié pour la table **UtilisateurCarte** ? Dans le cas ci-dessous, ce sera **int**, mais si le programmeur utilise quand même la méthode **ObtenirParCleAsync()**, il y aura une exception car cette table nécessite 2 clés.
 
-```csharp
-var utilisateurCarteRepo BaseRepo<UtilisateurCarte, int>();
+```csharp title="NE PAS COPIER"
+var utilisateurCarteRepo BaseRepo<UtilisateurCarte>();
 
 //La valeur 1 est-ce carteId ou utilisateurId ???
-utilisateurCarteRepo.ObtenirParCleAsync(1); //Il y aura une exception "System.ArgumentException : 'Entity type 'UtilisateurCarte' is defined with a 2-part composite key, but 1 values were passed to the 'Find' method.'
-"
+utilisateurCarteRepo.ObtenirParCleAsync(1); //Il y aura une exception "System.ArgumentException : 
+    'Entity type 'UtilisateurCarte' is defined with a 2-part composite key, 
+    but 1 values were passed to the 'Find' method.'"
 ```
 
 Cette approche va contre les principes **SOLID**. Il s'agit du **L ([Liskov substitution](https://fr.wikipedia.org/wiki/Principe_de_substitution_de_Liskov))**. Ça ne s'applique pas nécessairement au type générique dans sa définition pure, mais l'idée est tout de même respectée. Ce principe consiste au fait qu'une classe de **Base** doit fonctionner pour tous les types de données. Il ne doit pas avoir de méthode disponible dans une classe pour laquelle le programmeur sait qu'un cas particulier va générer une exception si elle est utilisée. Donc par conception, le programmeur concepteur sait que la méthode **ObtenirParCleAsync()** va générer une exception pour le modèle de données **UtilisateurCarte**. Le programmeur qui n'est pas concepteur et qui voit cette méthode disponible, ne saura pas nécessairement qu'il ne peut pas l'utiliser, d'où l'importance de respecter le **L** de **SOLID**.
 
 La solution a ce problème est de créer une classe de base intermédiaire.
 
-:::note
-la recopie du code recommence ici
-:::
+
 Créez l'interface **IBasePKUniqueRepo** dans le dossier **Repositories\Bases**.
 
-```csharp
+```csharp title="Bonne solution"
 namespace SuperCarte.Core.Repositories.Bases;
 
 /// <summary>
@@ -749,8 +601,8 @@ public abstract class BasePKUniqueRepo<TData, TClePrimaire> : BaseRepo<TData>, I
 
 La classe a 2 méthodes spécifiques aux tables avec une clé primaire unique. Il est possible d'obtenir un item à partir de sa clé primaire et de le supprimer. Il y a la version **synchrone** et **asynchrone**.
 
-### Utilisation du Repository - Théorie
-
+## Repository non standard - Théorie
+<!-- questions -->
 Pour utiliser un **Repository** générique, il faut l'injecter comme ceci. Voici l'exemple pour **Carte**.
 
 ```csharp
@@ -765,25 +617,25 @@ public classe CarteService
 }
 ```
 
-Par contre, si le logiciel doit obtenir les cartes qui ont plus de 10 points de vie, il faut une requête spécifique dans le **Repository**. 
+<!-- pourquoi 10 points ? -->
+Par contre, si le logiciel doit obtenir les cartes qui ont plus qu'un certain nombre de vies, il faut une requête spécifique dans le Repository . 
 
-Il faut avoir une classe **CarteRepo**.
+Il sera donc nécessaire de créer la classe **CarteRepo** afin de répondre à cette requête spécifique (**ObtenirListeParPointVieMin()**).
 
 Il y a 2 options. 
 
-- Utiliser 2 **Repositories** par modèle de données.
+- Option 1: Créer un deuxième type de Repository pour répondre à cette question spécifiquement.
 
-  Pour les modèles qui nécessitent des requêtes spécifiques, il serait possible d'injecter les 2 **Repositories** dans le **Service**.
 
   Voici l'interface et la classe du **Repository** spécifique.
 
-  ```csharp
+  ```csharp title="CE N'EST PAS LA MÉTHODE RECOMMANDÉE DANS LE COURS"
   public interface ICarteRepo
   {
   	List<Carte> ObtenirListeParPointVieMin(int vie);
   }
   
-  public classe CarteRepoICarteService
+  public classe CarteRepo : ICarteService
   {
       private readonly SuperCarteContext _bd;
       
@@ -797,17 +649,18 @@ Il y a 2 options.
           return _bd.CarteTb.Where(c => c.vie >= vie).ToList();
       }
   }
+
   ```
+  Pour les modèles qui nécessitent des requêtes spécifiques, il est possible d'injecter les 2 **Repositories** dans le **Service** de la façon suivante.
 
-  Et l'injection dans le **Service**.
-
-  ```csharp
+  ```csharp title="CE N'EST PAS LA MÉTHODE RECOMMANDÉE DANS LE COURS"
   public classe CarteService
   {
   	private readonly IBaseRepo<Carte> _carteBaseRepo;
   	private readonly ICarteRepo _carteSpecificRepo;
       
-  	public CarteService(IBaseRepo<Carte> _carteBaseRepo, ICarteRepo _carteSpecificRepo)
+  	public CarteService(IBaseRepo<Carte> _carteBaseRepo, 
+                        ICarteRepo _carteSpecificRepo)
   	{
   		_carteBaseRepo = carteBaseRepo;
   		_carteSpecificRepo = carteSpecificRepo;
@@ -817,13 +670,13 @@ Il y a 2 options.
 
   
 
-- Hériter de **BaseRepo**.
+- Option 2: Hériter de **BaseRepo**.
 
-  Il y aurait seulement un **Repository**. Le **Repository** spécifique hériterait du **Repository** générique de base.
+  Il y aurait seulement un Repository. Le Repository spécifique hériterait du Repository générique de base.
 
-  Voici l'interface et la classe du **Repository** spécifique.
+  Voici l'interface et la classe du Repository spécifique.
 
-  ```csharp
+  ```csharp title="MÉTHODE RECOMMANDÉE DANS LE COURS"
   public interface ICarteRepo : IBasePKUniqueRepo<Carte,int>
   {
   	List<Carte> ObtenirListeParPointVieMin(int vie);
@@ -836,7 +689,7 @@ Il y a 2 options.
           
       }
       
-  	public List<Carte> ObtenirListeParPointVieMin(int vie)
+      public List<Carte> ObtenirListeParPointVieMin(int vie)
       {
           return _bd.CarteTb.Where(c => c.vie >= vie).ToList();
       }
@@ -846,7 +699,7 @@ Il y a 2 options.
 
   Et l'injection dans le **Service**.
 
-  ```csharp
+  ```csharp title="MÉTHODE RECOMMANDÉE DANS LE COURS"
   public classe CarteService
   {
   	private readonly ICarteRepo _carteRepo;
@@ -866,6 +719,7 @@ L'approche par héritage permet d'avoir un seul **Repository** qui contient tout
 
 Dans une approche non standardisée, il faudrait injecter le **BaseRepo\<TData\>** dans le service lorsqu'il n'y a pas de requêtes spécifiques. Si un jour, il faut ajouter une requête spécifique, il faut créer le **Repository** spécifique et modifier tous les services qui utilisaient le **Repository** de base. Ceci peut demander beaucoup de refactorisation. 
 
+<!-- Questions expliquer derniere ligne de ce paragraphe -->
 L'approche avec 2 **Repositories** a l'avantage de créer uniquement un **Repo** spécialisé lorsque nécessaire. Par contre, le programmeur doit basculer d'un **Repository** à l'autre selon le contexte. Aussi, à chaque fois qu'il faut injecter le **Repository** de base, il faut s'assurer de spécifier le type de la bonne clé primaire. Rien n'empêche également d'injecter la mauvaise classe de base, par exemple **BaseRepo\<Carte\>**.
 
 Si l'enregistrement des services est bien fait dans l'injection des dépendances, le programme génèrera une exception lorsque la mauvaise classe de base sera utilisée. Par contre, si le programmeur l'ajoute dans l'enregistrement sans valider l'existence des autres, le programme va devenir non uniforme et moins maintenable dans le temps.

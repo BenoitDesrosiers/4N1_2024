@@ -580,3 +580,46 @@ Ouvrez **SSMS** et la base de données aura l'index avec la mention **Unique** s
 Il y a plusieurs autres types de modifications possibles. Nous en verrons d'autres dans l'exemple utilisant WPF. 
 
 
+## Comment retirer une migration
+
+Si une migration n'est pas correcte, il faut reculer la bd à un état antérieur. 
+
+Pour se faire, il faut:
+- exécuter la migration précédant celle que l'on désire annuler afin de remettre la bd dans un bon état, 
+- effacer les migrations suivantes, 
+- faire la correction, 
+- créer et appliquer une nouvelle migration
+
+Par exemple, voici 4 migrations.
+
+```
+CreationBD
+AjoutTableUtilisateur
+AjoutTableEnsemble -- Problématique
+AjoutTableCategorie -- Correct
+
+```
+
+Il faut remettre la base de données à un état valide. Le dernier état valide est **AjoutTableUtilisateur**.
+
+```powershell
+Update-Database -StartupProject SuperCarte.EF -Migration AjoutTableUtilisateur
+```
+
+Ensuite, il faut utiliser la commande **Remove-Migration**. Cette commande enlève seulement la dernière migration. Il faudra l'exécuter 2 fois pour retirer la migration problématique.
+
+Pour effacer **AjoutTableCategorie**
+
+```
+Remove-Migration -StartupProject SuperCarte.EF 
+```
+
+Pour effacer **AjoutTableEnsemble**
+
+```
+Remove-Migration -StartupProject SuperCarte.EF 
+```
+
+Malheureusement, la partie de **AjoutTableCategorie** doit être effacée, même si elle est valide.
+
+On peut ensuite corriger ce qui était erroné et recréer une nouvelle migration. Notez que tout les changements seront maintenant dans une seule migration. 

@@ -15,6 +15,8 @@ Voici tous les liens vers des ressoures utilisées dans le cours
 
 [FluentAPI](https://www.entityframeworktutorial.net/efcore/fluent-api-in-entity-framework-core.aspx)
 
+[hosting](https://learn.microsoft.com/fr-fr/dotnet/core/extensions/generic-host?tabs=appbuilder)
+
 [Injection de dépendance (vidéo)](https://youtu.be/Hhpq7oYcpGE?si=uyluJ3V_JQtpRzX8)
 
 [Méthode d'extension](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods)

@@ -1481,6 +1481,9 @@ constraint_type			constraint_name				delete_action	update_action
 FOREIGN KEY				FK_Utilisateur_Role_RoleId	No Action		No Action		
 ```
 
+
+
+
 ## Seed - Ajout des données
 
 Pour ajouter des données, il faut le faire dans la méthode **OnModelCreating()**. Cette action s'appelle **Seed** pour semer des données.

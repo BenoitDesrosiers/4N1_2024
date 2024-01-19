@@ -91,7 +91,7 @@ Utilisez cette version avec le paramètre **Trust Server Certificate=true;** si 
 }
 ```
 
-### Ajout de la structure pour injection des dépendances
+## Ajout de la structure pour injection des dépendances
 
 Le projet **WPF** n'a pas de fichier **program.cs**. Ce type de projet n'est pas conçu à la base pour être dans la structure du **hosting** de **.Net Core**. Il faut donc l'adapter.
 
@@ -111,7 +111,7 @@ public partial class App : Application
 
 Une classe partielle en **.NET** consiste à créer une classe dans plusieurs fichiers. Le fichier **App.xaml** est aussi une classe, sauf que le langage est **XAML**.
 
-```xaml
+```xaml showLineNumbers
 <Application x:Class="SuperCarte.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -125,17 +125,17 @@ Une classe partielle en **.NET** consiste à créer une classe dans plusieurs fi
 
  À la ligne 1, le nom de la classe est indiqué.
 
-C'est pour cette raison que le fichier **App.xaml.cs** est un sous-fichier de **App.xaml** dans l'**Explorateur de solutions**. Si la classe n'était pas partielle, il ne serait pas possible d'avoir 2 langages pour une même classe. La notion de classe partielle sert également à ajouter des fonctionnalités dans une classe générée automatiquement. Dans le **TP 2**, les classes du modèle sont **partial**. Il aurait été possible d'ajouter un 2e fichier interne pour ajouter des éléments à la classe de base.
+C'est pour cette raison que le fichier **App.xaml.cs** est un sous-fichier de **App.xaml** dans l'**Explorateur de solutions**. Si la classe n'était pas partielle, il ne serait pas possible d'avoir 2 langages pour une même classe. La notion de classe partielle sert également à ajouter des fonctionnalités dans une classe générée automatiquement. Il aurait été possible d'ajouter un 2e fichier interne pour ajouter des éléments à la classe de base.
 
 À la ligne 5, c'est la fenêtre de démarrage. Pour une application **WPF**, la classe **App** est le conteneur des fenêtres. Une fenêtre est l'équivalent d'une page.
 
 L'application **WPF** de ce projet sera comme un **SPA** ou une **Application à page unique**. Dans le cas d'une application native, il serait possible de dire un **SWA** pour une **Application à fenêtre unique**.
 
-Les applications **à fenêtres multiples** sont de plus en plus rares, car de nombreux appareils ne sont pas en mesure de les gérer correctement. C'est une approche pour les systèmes d'exploitation ordinateur, comme **Windows** ou **macOS**, car ils sont en mesure de gérer le **multifenêtre**.
+Les applications **à fenêtres multiples** sont de plus en plus rares, car de nombreux appareils, tel que les tablettes, ne sont pas en mesure de les gérer correctement. C'est une approche pour les systèmes d'exploitation ordinateur, comme **Windows** ou **macOS**, car ils sont en mesure de gérer le **multifenêtre**.
 
-L'application aura seulement une seule fenêtre, le classe **MainWindow.xaml**. À l'intérieur de cette classe, il y aura un **conteneur** qui aura un **contrôle utilisateur (user contrôle)** qui s'occupera d'une vue spécifique. Ce conteneur changera de **contrôle utilisateur** lorsqu'une nouvelle vue devra être affichée. Il s'agit de la même méganique que Blazor ou Angular, mais pour une application native.
+L'application aura seulement une seule fenêtre, le classe **MainWindow.xaml**. À l'intérieur de cette classe, il y aura un **conteneur** qui aura un **contrôle utilisateur (user contrôle)** qui s'occupera d'une vue spécifique. Ce conteneur changera de **contrôle utilisateur** lorsqu'une nouvelle vue devra être affichée. Il s'agit de la même mécanique que Blazor ou Angular, mais pour une application native.
 
-### Classes d'extension de méthodes
+### Enregistrement des services
 
 Comme pour le projet de **GestionPersonnage**, des extensions seront utilisées pour gérer l'enregistrement des dépendances.
 
@@ -241,9 +241,15 @@ public static class SCViewModelExtensions
 
 ```
 
-### Création du Host - App.xaml.cs
+## Création du Host - App.xaml.cs
 
-Dans la **Console du Gestionnaire de package**, inscrivez cette ligne. Il est important que le **Projet par défaut** soit **SuperCarte.WPF** dans la console. La librairie s'installera dans le projet indiqué dans le champ **Projet par défaut**.
+[Pour en savoir plus sur le hosting](https://learn.microsoft.com/fr-fr/dotnet/core/extensions/generic-host?tabs=appbuilder)
+
+Dans la **Console du Gestionnaire de package**, inscrivez cette ligne. 
+
+:::note
+Il est important que le **Projet par défaut** soit **SuperCarte.WPF** dans la console. La librairie s'installera dans le projet indiqué dans le champ **Projet par défaut**.
+:::
 
 ```
 Install-Package Microsoft.Extensions.Hosting
@@ -342,7 +348,7 @@ Démarrez l'application. Il y a 2 fenêtres.
 
 Ouvrez le fichier **App.xaml**.
 
-```xaml
+```xaml showLineNumbers
 <Application x:Class="SuperCarte.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -356,7 +362,7 @@ Ouvrez le fichier **App.xaml**.
 
 À la ligne 5, il y a la propriété **StartupUri**. Cette propriété indique également la fenêtre de démarrage. Il faut retirer cette propriété pour ne pas interférer avec l'injection de dépendances.
 
-```xaml
+```xaml showLineNumbers
 <Application x:Class="SuperCarte.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -371,9 +377,9 @@ Démarrez de nouveau l'application et il aura seulement une fenêtre.
 
 ## Hello World
 
-Pour avoir un premier contenu visuel, il faut modifier le fichier **MainWindows.xaml**.
+Pour avoir un premier contenu visuel, il faut modifier le fichier **MainWindow.xaml**.
 
-```xaml
+```xaml showLineNumbers
 <Window x:Class="SuperCarte.WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

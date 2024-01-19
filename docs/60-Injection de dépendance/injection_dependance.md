@@ -2,50 +2,8 @@
 sidebar_position: 40
 ---
 
-# Injection de dépendances
 
-
-https://learn.microsoft.com/fr-fr/dotnet/architecture/modern-web-apps-azure/architectural-principles#dependency-inversion
-
-https://learn.microsoft.com/fr-fr/dotnet/core/extensions/dependency-injection
-
-https://youtu.be/Hhpq7oYcpGE?si=uyluJ3V_JQtpRzX8
-
-
-
-## Définition
-
-L’injection de dépendances consiste, pour une classe, à déléguer la création de ses dépendances au code appelant qui va ensuite les injecter dans la classe correspondante. De ce fait, la création d’une instance de la dépendance est effectuée à l’extérieur de la classe dépendante et injectée dans la classe (le plus souvent dans le constructeur mais il existe d’autres possibilités). [source](https://www.softfluent.fr/blog/injection-de-dependances-a-quoi-ca-sert/#:~:text=L'injection%20de%20d%C3%A9pendances%20consiste,injecter%20dans%20la%20classe%20correspondante.)
-
-
-## Pourquoi opter pour l’injection de dépendances ?
-
-Il y a deux raisons principales : l’utilisation d’abstractions et les tests unitaires.
-
-### Les abstractions
-L’abstraction est un des principes fondamentaux de la programmation orientée objet. En suivant ce processus d’abstraction, le développeur masque toutes les informations non pertinentes d’un objet à des fins de simplification et d’efficacité.
-
-Les abstractions sont généralement implémentées en tant que classes ou interfaces abstraites et permettent d’introduire la notion de contrat, dans la syntaxe C# ce sont les interfaces. Ce sont elles qui vont permettre la mise en œuvre du principe d’inversion de dépendances.
-
-Lorsque les modules de bas niveau implémentent des interfaces et que ce sont ces interfaces qui sont injectées dans les modules de haut niveau, on ne dépend plus des implémentations (des « détails ») et on peut dès lors « remplacer » une implémentation par une autre tant que la nouvelle implémentation respecte l’abstraction (c’est-à-dire qu’elle implémente l’interface).
-
-On voit que grâce aux abstractions nous avons introduit un découplage des modules (on peut aussi parler de « couplage faible ») et que grâce à cela la modification ou le remplacement d’un module de bas niveau n’a pas d’impact sur les modules qui en dépendent (du moins tant que l’abstraction, le contrat, ne change pas).
-
- 
-
-### Les tests unitaires
-
-Le deuxième bénéfice principal de l’injection de dépendances réside dans la facilité de rédiger des tests unitaires.
-
-Les tests unitaires sont menés par le développeur lui-même, et consistent à vérifier la bonne exécution des fonctions dont il a la charge. Ces fonctions sont testées de manière indépendante, souvent avec des données réduites. Il est souhaitable de définir très tôt des jeux de tests représentatifs, car le développeur pourra réaliser les tests unitaires sur cette base et la qualité en sera améliorée.
-
-L’objectif d’un test unitaire est donc de tester une « unité de code » dans une situation donnée. Un test unitaire n’a surtout pas pour vocation de tester toute une chaine d’implémentations et notamment les différentes implémentations des dépendances de la classe testée.
-
-En l’absence d’un mécanisme d’injection de dépendances, une des principales difficultés pour écrire des tests unitaires corrects va être de s’affranchir des dépendances de la classe puisqu’elle les instancie elle-même.
-
-[source](https://www.softfluent.fr/blog/injection-de-dependances-a-quoi-ca-sert/#:~:text=L'injection%20de%20d%C3%A9pendances%20consiste,injecter%20dans%20la%20classe%20correspondante.)
-
-# Utilisation de l'injection de dépendances dans le projet
+# Utilisation
 
 L'application consiste à faire la gestion d'une base de données contenant des univers de personnages. 
 
@@ -256,7 +214,7 @@ public interface IUniversRepo
 ```
 
 :::note
-Remarquez également que la méthode retourne le type **`Univers?`**. Le **`?`** n'est pas obligatoire, mais si il n'est pas mis, le compilateur retournera un avertissement que l'objet peut être **`null`**. Le point d'interrogation permet d'indiquer au compilateur que la valeur **`null`** est possible dans notre logique. Si la méthode retourne **`null`**, c'est que l'univers n'a pas été trouvé.
+Remarquez également que la méthode retourne le type **Univers?**. Le **?** n'est pas obligatoire, mais si il n'est pas mis, le compilateur retournera un avertissement que l'objet peut être **null**. Le point d'interrogation permet d'indiquer au compilateur que la valeur **null** est possible dans notre logique. Si la méthode retourne **null**, c'est que l'univers n'a pas été trouvé.
 :::
 
 Créez la classe **UniversV1Repo**. 
@@ -344,7 +302,7 @@ public class UniversV2Repo : IUniversRepo
 
 Vous pouvez mettre un **break point** à la ligne 22 des 2 classes UniversV1Repo et UniversV2Repo pour bien visualiser quelle classe sera utilisée. 
 
-Également, le **`System.Diagnostics.Debug.WriteLine`** permet d'écrire dans la console de développement. Il y a beaucoup d'information dans cette console, mais le code de cette console est seulement pour le développeur.
+Également, le **System.Diagnostics.Debug.WriteLine** permet d'écrire dans la console de développement. Il y a beaucoup d'information dans cette console, mais le code de cette console est seulement pour le développeur.
 
 <img src="/4N1_2024/img/05_debug_console_1.png"  />
 
@@ -356,7 +314,6 @@ La dernière technique devra être utilisée pour les travaux pratiques.
 :::
 
 
-************** rendu ici **************
 ## Création directe - new class (à ne pas faire)
 
 Il faut modifier le **Manager** Univers pour utiliser le **Repository**. 
@@ -434,9 +391,9 @@ builder.ConfigureServices((context, services) =>
 });
 ```
 
-La classe **UniversManager** sera comme ci-dessous.
+La classe **UniversManager** serait comme ci-dessous.
 
-```csharp
+```csharp title="NE PAS UTILISER"
 using GestionPersonnageApp.Data;
 using GestionPersonnageApp.Repositories;
 
@@ -492,7 +449,7 @@ Lorsque l'enregistrement de la dépendance sera remplacé par la nouvelle versio
 
 Remplacez la section de la configuration des services du fichier **Program.cs** par le code ci-dessous.
 
-```csharp
+```csharp title="NE PAS UTILISER"
 
 //Configuration des services
 builder.ConfigureServices((context, services) =>
@@ -508,9 +465,9 @@ builder.ConfigureServices((context, services) =>
 });
 ```
 
-Démarrez le programme. Toutes les classes qui utilisent **UniversV1Repo** ne seront plus utilisables. Le programme aura cette exception lorsqu'il essayera de l'utiliser : **`'Unable to resolve service for type 'GestionPersonnageApp.Repositories.UniversV1Repo' while attempting to activate 'GestionPersonnageApp.Managers.UniversManager'.'`**.
+Démarrez le programme. Toutes les classes qui utilisent **UniversV1Repo** ne seront plus utilisables. Le programme aura cette exception lorsqu'il essayera de l'utiliser : **'Unable to resolve service for type 'GestionPersonnageApp.Repositories.UniversV1Repo' while attempting to activate 'GestionPersonnageApp.Managers.UniversManager'.'**.
 
-Pour simuler cette erreur, dans la classe **UniversManager**, conserver le constructeur **`public UniversManager(UniversV1Repo universRepo)`**.
+Pour simuler cette erreur, dans la classe **UniversManager**, conserver le constructeur **public UniversManager(UniversV1Repo universRepo)**.
 
 > **ASTUCE :** Lorsque vous avez l'exception **Unable to resolve service for type**, la plupart du temps c'est que la classe n'est pas enregistrée dans les services disponibles par injection de dépendances.
 
@@ -522,7 +479,7 @@ La meilleure approche est d'injecter l'**interface** par le constructeur. Le **M
 
 Modifiez le code de **UniversManager** pour celui-ci. Le constructeur reçoit l'interface **IUniversRepo** comme dépendance.
 
-```csharp
+```csharp title="APPROCHE RECOMMANDÉE"
 using GestionPersonnageApp.Data;
 using GestionPersonnageApp.Repositories;
 
@@ -567,7 +524,7 @@ public class UniversManager : IUniversManager
 
 Remplacez la section de la configuration des services du fichier **Program.cs** par le code ci-dessous. À la ligne 9, l'enregistrement se fait par l'interface.
 
-```csharp
+```csharp title="APPROCHE RECOMMANDÉE"
 //Configuration des services
 builder.ConfigureServices((context, services) =>
 {
@@ -586,7 +543,7 @@ Démarrez le programme. Il sera fonctionnel et il utilisera la classe **UniversV
 
 Remplacez la section de la configuration des services du fichier **Program.cs** par le code ci-dessous pour que la classe soit maintenant **UniversV2Repo**.
 
-```csharp
+```csharp title="APPROCHE RECOMMANDÉE"
 //Configuration des services
 builder.ConfigureServices((context, services) =>
 {

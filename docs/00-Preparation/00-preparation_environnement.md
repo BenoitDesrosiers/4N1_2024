@@ -16,6 +16,11 @@ En résumé, pour les particuliers, il n'y a aucune restriction tant que vous tr
 
 Il faut utiliser la version 2022. Cette version supporte les versions **.Net Framework 4.8**, **.Net 6**, **.Net 7** et **.NET 8**.
 
+:::danger ATTENTION
+Veuillez attendre que VS soit complètement installé avant de commencer l'installation des autres applications.
+:::
+
+
 Pour télécharger l'application : https://visualstudio.microsoft.com/fr/thank-you-downloading-visual-studio/?sku=Community&rel=17
 
 Dans l'onglet **Charges de travai**l, sélectionnez **Développement web et ASP.Net** et **Développement .NET Desktop**.
@@ -33,6 +38,10 @@ Pour être en mesure d'utiliser Visual Studio, il faut avoir un compte **Microso
 Pour gérer un serveur de base de données, il faut utiliser un logiciel de gestion. La base de données qui sera utilisée pour ce cours est **SQL Server**.
 
 Son logiciel de gestion est **SSMS**. Ce logiciel permet d'avoir des fenêtres pour effectuer plusieurs configurations dans l'environnement serveur.
+
+:::danger ATTENTION
+Veuillez attendre que VS soit complètement installé avant de commencer l'installation des autres applications.
+:::
 
 Ce logiciel permet également d'exécuter des requêtes et de faire de manipulation de données en **T-SQL**.
 
@@ -69,6 +78,9 @@ En résumé, les limitations pour la version 2019 sont :
 
 Donc, si votre ordinateur à 16 Go et 8 coeurs, **SQL Server Express 2019** utilisera au maximum 4 coeurs et 4 Go.
 
+:::danger ATTENTION
+Veuillez attendre que VS soit complètement installé avant de commencer l'installation des autres applications.
+:::
 Pour télécharger l'application : https://go.microsoft.com/fwlink/?linkid=866658
 
 Dans la fenêtre d'installation, sélectionnez l'option **Personnalisé**. 

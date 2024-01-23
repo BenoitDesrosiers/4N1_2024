@@ -12,7 +12,7 @@ Il faut voir **LINQ** comme un langage de requêtes qui permet d'interagir avec 
 
 
 
-# LINQ
+## LINQ
 
 Pour être en mesure d'avoir accès aux requêtes LINQ, il faut ajouter la référence **System.Linq** à la classe.
 
@@ -23,6 +23,8 @@ using System.Data.Linq;
 **LINQ** utilise l'extension de méthodes pour ajouter des méthodes additionnelles à certaines collections. Ce concept sera étudié plus tard dans la session. 
 
 La collection la plus utilisée sous **LINQ** est la **List\<T\>**.
+
+## Query vs Lambda
 
 Il existe 2 types de syntaxes pour effectuer des requêtes LINQ.
 

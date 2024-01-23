@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Niveau supérieur
 
-Les applications consoles que vous avez fait jusqu'à maintenant dans vos autres cours utilisaient l'approche classique. Lors de l'exécution du programme, une instance de la classe principale est créée et la méthode de démarrage (généralement **`Main`**) est appelée. La logique du programme débute dans le **`Main`**.
+Les applications consoles que vous avez fait jusqu'à maintenant dans vos autres cours utilisaient l'approche classique. Lors de l'exécution du programme, une instance de la classe principale est créée et la méthode de démarrage (généralement **Main**) est appelée. La logique du programme débute dans le **Main**.
 
 Certains environnements de travail, comme **.NET 6** et plus, ne nécessitent pas de classe de démarrage. Le code dans le fichier est exécuté automatiquement. L'environnement de travail s'occupe de générer automatiquement l'encapsulation du code. En **.NET**, cette approche s'appelle **Instructions de niveau supérieur**. 
 
@@ -20,7 +20,7 @@ Nommez votre projet **DemoC4_Classique**. Sélectionnez l'infrastructure **.Net 
 
 La classe **Program.cs** contient le code de démarrage.
 
-À l'intérieur de la méthode  **`Main`**, ce sera le code du programme.
+À l'intérieur de la méthode  **Main**, ce sera le code du programme.
 
 ```csharp
 namespace DemoC4_Classique

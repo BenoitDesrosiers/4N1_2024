@@ -123,6 +123,9 @@ Par exemple **DECIMAL(4,2)** indique qu'il peut avoir 4 chiffres au total avec 2
 
 Si nous ajoutons une plus grande précision lors de l'insertion, exemple **99.986**, SQL Server fera un arrondi, donc **99.99**.
 
+Et **99.085** retournera **99.08**.
+
+
 Essayez pour la valeur **99.996**. Le système vous retourne une erreur, car l'arrondi correspond à **100.00** et la valeur n'est plus dans la plage permise.
 
 ```sql
@@ -190,13 +193,13 @@ DROP TABLE MaTable;
 
 Par défaut, si aucune spécification n'est indiquée, le champ sera considéré comme optionnel ou pouvant contenir la valeur **NULL**.
 
-Pour s'assurer qu'une valeur soit entrer dans une colonne, il faut indiquer `NOT NULL`
+Pour s'assurer qu'une valeur soit entrer dans une colonne, il faut indiquer **NOT NULL**
 ```sql
 CREATE TABLE MaTable
 (
 	MaTableId INT NOT NULL PRIMARY KEY IDENTITY, --Champ obligatoire
 	Description VARCHAR(30) NULL, --Champ optionnel
-    Detail VARCHAR(500), --Champ optionnel
+	Detail VARCHAR(500), --Champ optionnel
 );
 ```
 
@@ -252,7 +255,7 @@ FROM MaTable;
 
 Le **--** est pour une seule ligne.
 
-Le **/**/** est pour un bloc de commentaires.
+Le **/*** et ***/** est pour un bloc de commentaires.
 
 ```sql
 --Mon commentaire sur une seule ligne
@@ -322,7 +325,7 @@ CREATE TABLE Client
 );
 ```
 
-Le comportement des actions par défaut est **NO ACTION ** s'il n'est pas spécifié.
+Le comportement des actions par défaut est **NO ACTION** s'il n'est pas spécifié.
 
 ### Table pivot - Clé primaire composée avec clé étrangère
 
@@ -335,15 +338,20 @@ L'approche recommandée pour la table pivot est celle-ci :
 ```sql
 CREATE TABLE CommandeProduit
 (
-	CommandeId INT NOT NULL CONSTRAINT FK_CommandeProduit_CommandeId FOREIGN KEY REFERENCES Commande(CommandeId),
-    	ON DELETE NO ACTION	
-    	ON UPDATE CASCADE
-    ProduitId INT NOT NULL CONSTRAINT FK_CommandeProduit_ProduitId FOREIGN KEY REFERENCES Produit(ProduitId),
-       	ON DELETE NO ACTION	
-    	ON UPDATE CASCADE
+	CommandeId INT NOT NULL CONSTRAINT FK_CommandeProduit_CommandeId 
+		FOREIGN KEY REFERENCES Commande(CommandeId),
+    		ON DELETE NO ACTION	
+    		ON UPDATE CASCADE
+	ProduitId INT NOT NULL CONSTRAINT FK_CommandeProduit_ProduitId FOREIGN 
+		KEY REFERENCES Produit(ProduitId),
+       		ON DELETE NO ACTION	
+    		ON UPDATE CASCADE
+	--highlight-next-line
     CONSTRAINT PK_CommandeProduit PRIMARY KEY(ComandeId, ProduitId)
 );
 ```
+
+Notez la contrainte de clé primaire à la fin. 
 
 ### Contrainte de vérification 
 

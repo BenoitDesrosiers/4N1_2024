@@ -13,7 +13,8 @@ Cette planification peut être modifiée en cours de session dans le but de s’
   * (1.5)  révision sql 
     * Exercice: création BD univers
   * énoncé TP1 Création en SQL d'une BD simple (Resto chez Benou :) )
-
+  * (2024 rendu a transaction, pas fait exercices)
+   
 * Semaine 2
   * (4)    finir révision SQL
     * Exercice adventureworks

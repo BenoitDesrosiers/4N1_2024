@@ -36,7 +36,7 @@ AS
 GO
 ```
 
-Par défaut, une procédure stockée retourne le nombre de lignes traitées dans son exécution. La commande **`SET NOCOUNT ON;`** permet de désactiver ceci.
+Par défaut, une procédure stockée retourne le nombre de lignes traitées dans son exécution. La commande **SET NOCOUNT ON;** permet de désactiver ceci.
 
 Le nom de la procédure doit être significatif à son utilité. Elle doit être en **camelCase**.
 

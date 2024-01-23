@@ -58,8 +58,9 @@ CREATE TABLE Personnage
 	Nom VARCHAR(100) NOT NULL,
 	IdentiteReelle VARCHAR(100) NULL,
 	DateNaissance DATE NULL,
-    EstVilain BIT NOT NULL,
-	UniversId INT NOT NULL CONSTRAINT FK_Personnage_UniversId FOREIGN KEY REFERENCES Univers(UniversId)
+	EstVilain BIT NOT NULL,
+	UniversId INT NOT NULL CONSTRAINT FK_Personnage_UniversId 
+		FOREIGN KEY REFERENCES Univers(UniversId)
 );
 GO
 ```
@@ -74,7 +75,7 @@ EXEC initialiserBD;
 
 Une transaction est une unité de travail pouvant inclure plusieurs activités qui modifient et interrogent les données et qui peuvent aussi en modifier la définition.
 
-On peut définir explicitement une transaction à l’aide de **`BEGIN TRANSACTION`** et la terminer avec **`COMMIT TRANSACTION`** ou **`ROLLBACK TRANSACTION`**.
+On peut définir explicitement une transaction à l’aide de **BEGIN TRANSACTION** et la terminer avec **COMMIT TRANSACTION** ou **ROLLBACK TRANSACTION**.
 
 Si on ne définit pas la transaction explicitement, elle est alors définie implicitement pour chaque expression (chaque commande).
 

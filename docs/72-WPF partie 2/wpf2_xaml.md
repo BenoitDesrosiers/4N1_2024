@@ -207,7 +207,10 @@ public static void EnregistrerViewModels(this IServiceCollection services)
 <!--- explications ? -->
 Le **ViewModel** n'a pas d'interface. Il sera enregistré automatiquement. Il n'est pas nécessaire pour cette classe d'utiliser une interface, car l'assignation **ViewModel** et **Vue** ne peut pas se faire par l'interface. De plus, il n'y a pas de bénéfice au niveau des tests d'utiliser une interface pour le **ViewModel**.
 
-Également, il est enregistré en **Singleton**. Il faut avoir seulement une fenêtre active dans le programme. Les autres **ViewModels** seront enregistrés en **Transient**.
+:::warning Important
+Notez que MainWindowVM a été enregistré en **Singleton**. Il faut avoir seulement une fenêtre active dans le programme. Les autres **ViewModels** seront enregistrés en **Transient**.
+:::
+
 
 ### Modification du design de la vue - MainWindows.xaml
 
@@ -253,7 +256,7 @@ Le **DataContext** consiste au **ViewModel**. La ligne 10 sert à indiquer quel 
 
 Modifiez le code du fichier **MainWindow.xaml.cs**.
 
-```csharp
+```csharp showLineNumbers
 using System.Windows;
 
 namespace SuperCarte.WPF;
@@ -273,7 +276,7 @@ public partial class MainWindow : Window
 }
 ```
 
-Le constructeur reçoit le **MainWindowVM** en dépendance. Le **ViewModel** est assigné au **DataContext** de la fenêtre.
+Le constructeur reçoit le **MainWindowVM** en dépendance. Le **ViewModel** est assigné au **DataContext** de la fenêtre à la ligne 15.
 
 Il faut également assigner la langue de la vue. Généralement, lors de l'affichage d'une donnée, elle utilise le format correspondant dans les paramètres régionaux du système d'exploitation. Cette valeur provient de **CultureInfo.CurrentUICulture**. Par contre, avec WPF, il faut le spécifier dans la structure de la vue.
 

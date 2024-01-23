@@ -171,7 +171,7 @@ VALUES
 	(7,'Joker', '2019-10-04', 4, 99)
 GO
 
-INSERT INTO [Distribution](PersonnageId, FilmId, Acteur)
+INSERT INTO Distribution(PersonnageId, FilmId, Acteur)
 VALUES
 	(1,3,'Tobey Maguire'),
 	(1,5,'Tom Holland'),
@@ -221,17 +221,17 @@ SELECT
 	Film.Titre AS FilmTitre,
 	Film.DateSortie,
 	Personnage.Nom AS PersonnageNom,	
-	[Distribution].Acteur	
-FROM [Distribution]
-INNER JOIN Personnage ON [Distribution].PersonnageId = Personnage.PersonnageId
+	Distribution.Acteur	
+FROM Distribution
+INNER JOIN Personnage ON Distribution.PersonnageId = Personnage.PersonnageId
 INNER JOIN Univers ON Personnage.UniversId = Univers.UniversId
-INNER JOIN Film ON [Distribution].FilmId = Film.FilmId
+INNER JOIN Film ON Distribution.FilmId = Film.FilmId
 ORDER BY
 	Univers.Nom,
 	Film.DateSortie,
 	Film.Titre,
 	Personnage.Nom,
-	[Distribution].Acteur
+	Distribution.Acteur
 
 ```
 
@@ -255,11 +255,27 @@ ADD CONSTRAINT CK_Film_Etoile CHECK(Etoile >= 1 AND Etoile <= 10)
 
 </details>
 
+Quel commande permet de vérifier rapidement si la contrainte a bien été changée?
+<details>
+  <summary>Solution</summary>
+
+  ```sql
+  sp_help Film
+```
+
+</details>
+
+
 ## Exercice 5
+:::warning Attention
+Ce numéro ne peut pas être exécuté sur le serveur départementale
+:::
 
 Effectuez une sauvegarde de votre base de données. Assurez-vous d'avoir le dossier **C:\Backup** dans votre ordinateur.
 
-
+:::note
+pour répondre à cette question, vous devez faire une recherche car ce n'est pas dans les notes de cours. 
+:::
 <details>
   <summary>Solution</summary>
 
@@ -267,7 +283,7 @@ Effectuez une sauvegarde de votre base de données. Assurez-vous d'avoir le doss
 USE e1234_BDExercice;
 GO
 
-DECLARE @nomBD NVARCHAR(256) -- Nom base de donn�es
+DECLARE @nomBD NVARCHAR(256) -- Nom base de données
 DECLARE @dossierBck NVARCHAR(512) -- Chemin dossier backup. 
 DECLARE @date NVARCHAR(40) -- Date du jour
 DECLARE @fichierBck NVARCHAR(512) -- Nom du fichier
@@ -292,11 +308,11 @@ Ajoutez la vérification que la table existe avant la suppression.
   <summary>Solution</summary>
 
   ```sql
-  USE BDExercice
+  USE e1234_BDExercice
 GO
 
 IF OBJECT_ID('Distribution', 'U') IS NOT NULL 
-	DROP TABLE [Distribution];
+	DROP TABLE Distribution;
 IF OBJECT_ID('Personnage', 'U') IS NOT NULL 
 	DROP TABLE Personnage;
 IF OBJECT_ID('Univers', 'U') IS NOT NULL
@@ -308,9 +324,11 @@ GO
 </details>
 
 ## Exercice 7
+:::warning Attention
+Ce numéro ne peut être exécuté seulement si vous avez fait le numéro 5
+:::
 
 Restaurer la base de données en utilisant l'explorateur d'objet. 
-
 
 <details>
   <summary>Solution</summary>

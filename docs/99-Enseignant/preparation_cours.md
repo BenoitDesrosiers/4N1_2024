@@ -1,3 +1,7 @@
+---
+draft: true
+---
+
 # Preparation 
 
 Voir les instructions dans les commentaires de la page source 

@@ -179,7 +179,7 @@ using (UniversContext db = new UniversContext())
 }
 ```
 
-Il est possible d'utiliser le **`using`** sans créer un sous bloc de code. Si le **contexte** doit exister tout le long de la durée de vie de la méthode, il est possible de déclarer comme ci-dessous.
+Il est possible d'utiliser le **using** sans créer un sous bloc de code. Si le **contexte** doit exister tout le long de la durée de vie de la méthode, il est possible de déclarer comme ci-dessous.
 
 ```csharp
 MaMethode();
@@ -207,7 +207,7 @@ void MaMethode()
 
 Il peut être intéressant de voir le SQL généré.
 
-Le contexte doit être créé avec ces options. Le SQL sera généré dans le fichier **`C:\eflog\{tick}.txt`**. Il faut que le dossier **c:\eflog** existe.
+Le contexte doit être créé avec ces options. Le SQL sera généré dans le fichier **C:\eflog\{tick}.txt**. Il faut que le dossier **c:\eflog** existe.
 
 
 ```csharp
@@ -402,7 +402,7 @@ using (UniversContext db = new UniversContext(optBuilder.Options))
 
 Remarquez que la clé n'est pas spécifiée lors de la création de l'objet. À la ligne 22, la valeur de la clé est 0, car le contexte ne s'est pas mis à jour avec la base de données.
 
-Une fois que la méthode **`SaveChanges()`** a été appelée, la valeur de la propriété **FranchiseId** a été mise à jour avec celle qui a été autogénérée par la base de données.
+Une fois que la méthode **SaveChanges()** a été appelée, la valeur de la propriété **FranchiseId** a été mise à jour avec celle qui a été autogénérée par la base de données.
 
 
 ### Exercice
@@ -666,13 +666,13 @@ using (UniversContext db = new UniversContext(optBuilder.Options))
 
 Exécutez le code et allez voir dans la base de données. Est-ce que l'enregistrement s'y retrouve ? Non il n'est pas dans la base de données. 
 
-Pourtant, le **`foreach`** sur tous les enregistrements de la table l'a affiché. 
+Pourtant, le **foreach** sur tous les enregistrements de la table l'a affiché. 
 
 Regardez le code **SQL** généré. Il aura seulement les 2 **SELECT**.
 
 L'enregistrement n'est pas dans la base de données, car l'ajout a été fait en mémoire uniquement dans le **contexte**. 
 
-Il est important d'appeler la méthode **`SaveChanges()`** pour indiquer au contexte qu'il faut appliquer les modifications à la base de données.
+Il est important d'appeler la méthode **SaveChanges()** pour indiquer au contexte qu'il faut appliquer les modifications à la base de données.
 
 Exécutez ce code. La modification sera appliquée.
 
@@ -753,7 +753,7 @@ using (UniversContext db = new UniversContext(optBuilder.Options))
 }
 ```
 
-Remarquez que le **`SaveChanges()`** se fait uniquement à la fin. Il est possible de faire plusieurs modifications et d'enregistrer les modifications à la fin.
+Remarquez que le **SaveChanges()** se fait uniquement à la fin. Il est possible de faire plusieurs modifications et d'enregistrer les modifications à la fin.
 
 Est-ce qu'il aura un seul ou plusieurs **UPDATE** ? Voici le **SQL généré**.
 
@@ -866,9 +866,9 @@ info: 2023-02-22 14:07:33.395 RelationalEventId.CommandExecuted[20101] (Microsof
 
 **Entity Framework** effectue toutes les modifications(ajout, suppression, mise à jour) de la base de données dans la mémoire de son contexte.
 
-Toutes les actions sont effectuées lors de l'exécution de la méthode **`SaveChanges()`**.
+Toutes les actions sont effectuées lors de l'exécution de la méthode **SaveChanges()**.
 
-Est-ce que le comportement de **`SaveChanges()`** est comme celui d'une transaction ?
+Est-ce que le comportement de **SaveChanges()** est comme celui d'une transaction ?
 
 ```csharp
 var optBuilder = new DbContextOptionsBuilder<UniversContext>();
@@ -911,13 +911,13 @@ using (UniversContext db = new UniversContext(optBuilder.Options))
 }
 ```
 
-Lors de l'exécution du **`SaveChanges()`**, il y aura une exception.
+Lors de l'exécution du **SaveChanges()**, il y aura une exception.
 
 ```powershell
 SqlException : The MERGE statement conflicted with the CHECK constraint "CK_Film_Etoile". The conflict occurred in database "eDA_4N1_GestionPersonnage", table "dbo.Film", column 'Etoile'.
 ```
 
-Est-ce qu'une partie des données seront dans la base de données ? Il n'y aura aucun des 3 films, car la méthode **`SaveChanges()`** effectue une transaction.
+Est-ce qu'une partie des données seront dans la base de données ? Il n'y aura aucun des 3 films, car la méthode **SaveChanges()** effectue une transaction.
 
-La gestion de transaction se fait automatiquement, il faut seulement bien gérer quand est-ce que la méthode **`SaveChanges()`** doit être appelée.
+La gestion de transaction se fait automatiquement, il faut seulement bien gérer quand est-ce que la méthode **SaveChanges()** doit être appelée.
 

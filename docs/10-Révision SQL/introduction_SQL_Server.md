@@ -391,7 +391,7 @@ CREATE TABLE Client
     	ON DELETE NO ACTION	
     	ON UPDATE CASCADE,
 			--highlight-next-line
-	DateCreation DATETIME NOT NULL CONSTRAINT DF_DateCreation DEFAULT GetDate(),
+	DateCreation DATETIME NOT NULL CONSTRAINT DF_Client_DateCreation DEFAULT GetDate(),
 		--highlight-next-line
 	EstActif BIT NOT NULL CONSTRAINT DF_Client_EstActif DEFAULT 1
 );

@@ -1,5 +1,6 @@
 ---
 sidebar_position: 30
+draft: true
 ---
 
 # Préparation du projet

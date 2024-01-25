@@ -178,10 +178,9 @@ Par exemple, pour la classe **Carte.cs**, il y a la clé étrangère vers la tab
 
 ```csharp title="NE PAS COPIER"
 //Convention
-public int CategorieId { get; set; }
-public Categorie Categorie { get; set; } = null!;
+public int CategorieId { get; set; } //clé étrangère
+public Categorie Categorie { get; set; } = null!; //propriété de navigation
 
-/***/
 //Ceci ferait également une relation entre la table Categorie et Carte
 public int CatId { get; set; }
 public Categorie Cat { get; set; } = null!;
@@ -261,11 +260,15 @@ Avec le nom des tables de cette base de données, il serait possible d'utiliser 
 
 Il est possible de choisir le nom des **DbSet**. Pour ce projet, le suffixe **Tb** sera ajouté pour indiquer que c'est la table.
 
-La table **UtilisateurCarte** est volontairement **exclue** des **DbSet** pour l'instant, car elle n'a pas de clé primaire unique, mais une clé primaire composée. Ce concept sera présenté plus tard.
+
 
 La méthode **OnConfiguring** contient la logique pour la configuration du serveur par un fichier externe ou par une variable d'environnement. 
 
 La clause **#if DEBUG** indique au compilateur de tenir compte du code seulement si l'application est en mode **Debug**. Il ne faut pas que cette configuration soit accessible en production.
+
+:::note
+La table **UtilisateurCarte** est volontairement **exclue** des **DbSet** pour l'instant, car elle n'a pas de clé primaire unique, mais une clé primaire composée. Ce concept sera présenté plus tard.
+:::
 
 ### MIGRATION_CONNECTION_STRING
 
@@ -281,7 +284,11 @@ Il est important que le **Projet par défaut** de **Entity Framework** soit sél
 
 À ce stade, il y a un seul projet, **SuperCarte.EF** sera le seul de la liste.
 
-Pour ce projet, utilisez cette chaine de connexion. Le nom de la base de données est **eDA_4N1_SuperCarte**. Modifiez le **DA** par votre numéro d'admission.
+Pour ce projet, utilisez cette chaine de connexion. Le nom de la base de données est **eDA_4N1_SuperCarte**. 
+
+:::danger Attention
+Modifiez le **DA** par votre numéro d'admission.
+:::
 
 ```powershell
 $env:MIGRATION_CONNECTION_STRING = "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;"
@@ -473,7 +480,7 @@ namespace SuperCarte.EF.Migrations
 
 Les fichiers de migration sont incrémentaux. La génération d'une migration se base sur le fichier **snapshot** du dossier de migration. 
 :::danger Attention
-Il est important d'utiliser la commande **Remove-Migration** pour retirer une migration de la liste et non supprimer le fichier manuellement. L'annexe à la fin du document explique le fonctionnement du **Remove-Migration**.
+Il est important d'utiliser la commande **Remove-Migration** pour retirer une migration de la liste et non supprimer le fichier manuellement. Revoir [comment retirer une migration](../30-Entity%20Framework/EF_modification_bd.md#comment-retirer-une-migration).
 :::
 
 ### Synchronisation de la base de données
@@ -580,9 +587,9 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 }
 ```
 
-Pour chacune des **entités (modèles/tables)**, il faut utiliser le **modelBuilder** pour faire la configuration. Dans une modélisation de données, le terme **Entité** est utilisé pour représenter un concept. **DEA** est pour **Diagramme Entité Association**. Donc une **entité** dans une base de données est une table et pour un modèle objet une classe de modèle de données.
+Pour chacune des **entités (modèles/tables)**, il faut utiliser le **modelBuilder** pour faire la configuration. Dans une modélisation de données, le terme **Entité** est utilisé pour représenter un concept.  Donc une **entité** dans une base de données est une **table** et pour un modèle objet une classe de **modèle de données**.
 
-La méthode **ToTable()** permet d'indiquer le nom de la table dans la base de données. Il serait possible de s'adapter aux standards propres de l'organisation/technologie en utilisant que des minuscules, PascalCase, camelCase, la pluralisation, le underscore pour une table pivot...
+La méthode **ToTable()** permet d'indiquer le nom que devra avoir la table dans la base de données (rappelez-vous que présentement, les tables ont le suffix Tb car il était utilisé dans le DbSet). Il serait possible de s'adapter aux standards propres de l'organisation/technologie en utilisant que des minuscules, PascalCase, camelCase, la pluralisation, le underscore pour une table pivot...
 
 Dans la **Console du gestionnaire de Package**, créez la migration **RenommerTables**.
 
@@ -594,7 +601,7 @@ Si vous ouvrez le fichier **xxx_RenommerTables.cs** dans le dossier de migration
 
 Appliquez la migration avec la commande **Update-Database**. Il faut spécifier la migration **RenommerTables**.
 
-Pour ce projet, utilisez cette commande. Le nom de la base de données est **eDA_4N1_SuperCarte**. Modifiez le **DA** par votre numéro d'admission.
+Pour ce projet, utilisez cette commande. 
 
 ```csharp
 Update-Database -StartupProject SuperCarte.EF -Migration RenommerTables 
@@ -900,7 +907,7 @@ Voici les exemples pour la configuration des différents cas. La classe complèt
 
 Pour la table **Role**
 
-```csharp
+```csharp title="NE PAS COPIER"
 //Table Role
 modelBuilder.Entity<Role>(entity =>
 {
@@ -915,7 +922,7 @@ modelBuilder.Entity<Role>(entity =>
 
 Pour la table **Utilisateur**, le champ **MotPasseHash** est un **CHAR(60)**. La longueur d'un **Hash** est fixe à 60 caractères pour l'algorithme **Bcrypt**. Ce sera l'algorithme utilisé pour ce projet. Pour ce cas, il est pertinent pour le concepteur de fixer la longueur. La méthode **IsFixedLength()** permet d'indiquer que c'est un **NCHAR** ou un **CHAR**. 
 
-```csharp
+```csharp title="NE PAS COPIER"
 //Table Utilisateur
 modelBuilder.Entity<Utilisateur>(entity =>
 {
@@ -933,7 +940,7 @@ modelBuilder.Entity<Utilisateur>(entity =>
 
 Pour la table **Carte**, le champ **PrixRevente** doit être un **DECIMAL(8,2)**. La méthode **HasPrecision()** permet de préciser la précision d'un **DECIMAL**.
 
-```csharp
+```csharp title="NE PAS COPIER"
 //Table Carte
 modelBuilder.Entity<Carte>(entity =>
 {
@@ -947,7 +954,7 @@ modelBuilder.Entity<Carte>(entity =>
 
 Pour la table **Ensemble**, le champ **Disponibilite** doit être de type **DATE**. Actuellement c'est un **DATETIME2**. La méthode **HasColumnType()** permet de spécifier directement un type. Il faut s'assurer que le type est compatible avec celui de la classe.
 
-```csharp
+```csharp title="NE PAS COPIER"
 //Table Ensemble
 modelBuilder.Entity<Ensemble>(entity =>
 {
@@ -961,7 +968,7 @@ modelBuilder.Entity<Ensemble>(entity =>
 
 Voici la classe **SuperCarteContext.cs** au complet avec tous les ajustements pour les champs.
 
-```csharp
+```csharp title="CELLE LA, COPIEZ LA"
 using Microsoft.EntityFrameworkCore;
 
 namespace SuperCarte.EF.Data.Context;
@@ -1231,7 +1238,7 @@ Pour la classe **Carte** et **UtilisateurCarte**, il y a 2 clés étrangères. I
 
 Pour la table **Carte**.
 
-```csharp
+```csharp title="NE PAS COPIER"
 //Table Carte
 modelBuilder.Entity<Carte>(entity =>
 {
@@ -1249,7 +1256,7 @@ modelBuilder.Entity<Carte>(entity =>
 
 Pour la table **UtilisateurCarte**.
 
-```csharp
+```csharp title="NE PAS COPIER"
 //Table UtilisateurCarte
 modelBuilder.Entity<UtilisateurCarte>(entity =>
 {
@@ -1267,7 +1274,7 @@ modelBuilder.Entity<UtilisateurCarte>(entity =>
 
 Voici le code du contexte **SuperCarteContext.cs** au complet.
 
-```csharp
+```csharp title="CELLE LA, COPIEZ LA"
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 
@@ -1488,15 +1495,16 @@ FOREIGN KEY				FK_Utilisateur_Role_RoleId	No Action		No Action
 
 Pour ajouter des données, il faut le faire dans la méthode **OnModelCreating()**. Cette action s'appelle **Seed** pour semer des données.
 
+:::danger ATTENTION
 Avant de poursuivre, il faut retirer l'enregistrement de la table **Role** qui a été fait manuellement.
 
 ```sql
-DELETE FROM [Role];
+DELETE FROM Role;
 ```
-
+:::
 ### Préparation du contexte
 
-Pour éviter que le **Seed** soit toujours exécuté en mémoire, il est préférable de modifier le contexte. Ce sera l'attribut **_executerSeed** qui s'occupera de ceci.
+Pour éviter que le **Seed** soit toujours exécuté, il est préférable de modifier le contexte. Ce sera l'attribut **_executerSeed** qui indiquera si le seeder doit ou non être exécuté.
 
 ```csharp showLineNumbers
 using Microsoft.EntityFrameworkCore;
@@ -1703,7 +1711,7 @@ public class SuperCarteContext : DbContext
 
 À la ligne 45, l'activation du **Seed** se fait uniquement si le contexte est initialisé en mode **Migration** dans la méthode **OnConfiguring()**.
 
-À la ligne 171, il y a une vérification avant d'exécuter le **Seed **dans la méthode **OnModelCreating()**.
+À la ligne 171, il y a une vérification avant d'exécuter le **Seed** dans la méthode **OnModelCreating()**.
 
 À la ligne 181, les données seront créées dans cette méthode.
 
@@ -1744,7 +1752,8 @@ private void Seed(ModelBuilder modelBuilder)
             Prenom = "François",
             Nom = "St-Hilaire",
             NomUtilisateur = "fsthilaire",
-            MotPasseHash = "$2y$11$IY6NG9FkTSI1dnjLfSbuOuNkuyI7IZHxHSOD5Td6AlwvroUz/vzLK", //Native3! avec Bcrypt
+            MotPasseHash = "$2y$11$IY6NG9FkTSI1dnjLfSbuOuNkuyI7IZHxHSOD5Td6AlwvroUz/vzLK", 
+			//Native3! avec Bcrypt
             RoleId = 1 //Admin
         },
         new Utilisateur()
@@ -1753,7 +1762,8 @@ private void Seed(ModelBuilder modelBuilder)
             Prenom = "Benoit",
             Nom = "Tremblay",
             NomUtilisateur = "btremblay",
-            MotPasseHash = "$2y$11$ewK3YsMGQ1IMKEzJUAjyVe0P19I0gEbTO998mwfVbSSA8nZ6MG/ha", //Web4MVC! avec Bcrypt
+            MotPasseHash = "$2y$11$ewK3YsMGQ1IMKEzJUAjyVe0P19I0gEbTO998mwfVbSSA8nZ6MG/ha", 
+			//Web4MVC! avec Bcrypt
             RoleId = 2 //Utilisateur
         },
         new Utilisateur() 
@@ -1762,7 +1772,8 @@ private void Seed(ModelBuilder modelBuilder)
             Prenom = "Tony",
             Nom = "Stark",
             NomUtilisateur = "tstark",
-            MotPasseHash = "$2y$11$VfcNowkWResPQKl0AA3MJ.w1LXBqmMM77YKlyf32Glr9TWG4xxyD2", //#NotAdmin! avec Bcrypt
+            MotPasseHash = "$2y$11$VfcNowkWResPQKl0AA3MJ.w1LXBqmMM77YKlyf32Glr9TWG4xxyD2", 
+			//#NotAdmin! avec Bcrypt
             RoleId = 2 //Utilisateur
         }
     };
@@ -1786,10 +1797,6 @@ Appliquez les modifications à la base de données. Spécifiez la migration **Se
 ```powershell
 Update-Database -StartupProject SuperCarte.EF -Migration Seed_RoleEtUtilisateur
 ```
-
-:::note
-Pour votre **TP 3**, vous devez créer un jeu de données initial pour chacune des tables. Il devra être créé par un **Seed**.
-:::
 
 Ouvrez **SSMS** et la base de données aura des données dans les tables **Utilisateur** et **Role**.
 

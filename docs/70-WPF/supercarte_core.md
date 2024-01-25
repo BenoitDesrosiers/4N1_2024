@@ -3,23 +3,7 @@ sidebar_position: 4
 ---
 # SuperCarte.Core
 
-## Création du projet dans une solution existante
-
-Il faut ajouter le projet **Core** dans la solution.
-
-Ce projet aura les classes de type **Service**, de type **Repository**, de type **Validateur** et les modèles du domaine.
-
-Créez un projet de type **Bibliothèque de classe**. Il est important **de ne pas choisir** la version **.NET Framework**.
-
-- **Nom du projet** : SuperCarte.Core
-- **Infrastructure** : .NET 7
-
-Pour le champ **Solution**, indiquez d'**Ajouter à la solution** et gardez SuperCarteApp. 
-
-
-Supprimez le fichier **Class1.cs**.
-
-Créez un dossier **Models** à la racine du projet. Ce dossier contient les classes du modèle du domaine. 
+Dans la section précédente, nous avons créé la structure pour gérer la base de données associée à notre projet. Nous allons maintenant créer la logique du domaine de l'application. 
 
 Il faut différencier les classes du modèle de données et du modèle du domaine. 
 
@@ -31,6 +15,30 @@ Il faut différencier les classes du modèle de données et du modèle du domain
   - La logique applicative travaille avec la classe du modèle de domaine.
   - Le **Service** s'occupe de faire la transition (**mapping**) entre la classe du modèle de données et la classe du domaine du domaine.
   - Le **Repository** peut également utiliser les classes du domaine pour insérer les données de plusieurs tables dans un seul objet.
+
+Ce projet introduira les classes de type **Service**, de type **Repository**, de type **Validateur** et les modèles du domaine.
+
+Ces 
+
+
+## Création du projet dans une solution existante
+
+
+Créez un projet de type **Bibliothèque de classe**. 
+
+:::warning attention
+Il est important **de ne pas choisir** la version **.NET Framework**.
+:::
+
+- **Nom du projet** : SuperCarte.Core
+- **Infrastructure** : .NET 7
+
+Pour le champ **Solution**, indiquez d'**Ajouter à la solution** et gardez SuperCarteApp. 
+
+
+Supprimez le fichier **Class1.cs**.
+
+Créez un dossier **Models** à la racine du projet. Ce dossier contient les classes du modèle du domaine. 
 
 Avec **Entity Framework**, il n'est pas recommandé que la classe du modèle de données soit également la classe du modèle du domaine. **Dapper** offre un plus grand contrôle sur la création de l'objet, il serait possible de donner les 2 rôles à la même classe.
 
@@ -72,16 +80,21 @@ Les méthodes de base de la classe **DBContext** utilisent les types générique
 Revoir la section sur les types génériques dans l'introduction à C#
 :::
 
-Voici une liste de requêtes **classiques** qui sont généralement identiques.
+Voici une liste de requêtes *classiques* qui sont généralement identiques.
 
 - Obtenir tous les éléments de la table
 - Ajouter un ou des éléments
 - Supprimer un ou des éléments
-- Enregistrer les modifications
+- Modifier des éléments
+
+Et une requête qui devra être traité séparément:
+- Obtenir un enregistrement par sa clé
 
 Créez le dossier **Bases** dans le dossier **Repositories**. Ce dossier contiendra les classes génériques de base.
 
 L'injection de dépendances du **Repository** se fera par les interfaces. Il faut donc que les classes de base possèdent une interface.
+
+### IBaseRepo
 
 Créez l'interface **IBaseRepo** dans le dossier **Repositories\Bases**.
 
@@ -180,13 +193,12 @@ Il est possible de mettre des contraintes au type générique. Le mot-clé **whe
 
 Pour plus d'information pour le **where** https://learn.microsoft.com/fr-ca/dotnet/csharp/language-reference/keywords/where-generic-type-constraint
 
-```csharp
-public interface IBaseRepo<TData> where TData : class
-```
 
 Pour chacune des méthodes, il y a le **TData** pour le type d'un paramètre ou pour le retour.
 
 Également, l'application doit pouvoir fonctionner en **asynchrone**. Par convention en **C#**, une méthode **asynchrone** doit avoir le suffixe **Async**, mais ce n'est pas obligatoire. De plus, les méthodes doivent retourner un type **Task** ou **Task\<T\>**. L'explication du fonctionnement de l'asynchrone sera expliquée plus tard. Il faut également le méthode **synchrone**, car selon le cas d'utilisation, l'appel peut être obligatoirement synchrone.
+
+### BaseRepo
 
 Créez la classe **BaseRepo** dans le dossier **Repositories\Bases**.
 
@@ -377,24 +389,32 @@ Les méthodes ressemblent à ce que vous avez déjà fait, mais elles sont gén�
 - **ToListAsync()**
 - **SaveChangesAsync()**
 
-La déclaration de la classe **public class BaseRepo\<TData\> : IBaseRepo\<TData\> where TData : class** doit également inclure le **\<TData\>**. Elle doit la répliquer dans l'implémentation de l'interface avec la même contrainte **where**. Retirez le **where** et le compilateur indiquera que la classe est en erreur.
+La déclaration de la classe **public class BaseRepo\<TData\> : IBaseRepo\<TData\> where TData : class** doit également inclure le **\<TData\>**. Elle doit répliquer l'implémentation de l'interface avec la même contrainte **where**. Retirez le **where** et le compilateur indiquera que la classe est en erreur.
 
 ### Obtenir un enregistrement spécifique par sa clé
 
-Une opération de base dans les opérations de la base de données est d'obtenir un enregistrement spécifique en fonction de sa clé primaire.
+Une opération de base dans les opérations de la base de données est d'obtenir un enregistrement spécifique en fonction de sa clé primaire. Cette opération n'a pas été traitée jusqu'à maintenant. 
 
-Le nom du champ de la clé primaire change pour chacune des tables. Généralement, le type de la clé primaire est un entier, mais ce n'est pas une garantie.
+Mais quel est le nom, le type, et même la composition de la clé primaire?
 
-Il y a aussi le cas d'une clé primaire composée.
+Si toutes les tables avaient une clé unique de type entier s'appelant *id*, il serait simple de trouver la clé. 
+
+Mais ce n'est pas le cas. 
+
+- Pour le nom, au lieu de toujours utiliser *id*, nous avons utilisé la technique de nommer la clé primaire *NomDeLaTable* suivit de *id* (CarteId, UtilisateurId). 
+
+- Pour le type, généralement c'est un int, mais ce n'est pas nécessairement toujours le cas. Certaine entité un une clé *naturelle* tel que le DA pour un étudiant. 
+
+- Et finalement, certaines tables on une clé primaire composée.
 
 
 
 ```csharp title="NE PAS COPIER"
-//Clé avec nom différent
+//Clé avec nom différent que id
 Carte carte = _bd.CarteTb.Where(c => c.CarteId == carteId).FirstOrDefault();
 Utilisateur utilisateur = _bd.UtilisateurTb.Where(c => c.UtilisateurId == utilisateurId).FirstOrDefault();
 
-//Clé pas un entier. DA est une string, car les DA peuvent débuter par 0, pour ceux qui ont été inscrits entre 2000 et 2009
+//Clé qui n'est pas un entier. DA est une string, car les DA peuvent débuter par 0, pour ceux qui ont été inscrits entre 2000 et 2009
 Etudiant etudiant = _bd.EtudiantTb.Where(e => e.DA == da).FirstOrDefault();
 
 //Clé composée
@@ -408,7 +428,7 @@ Remarquez ici que le nom des tables se termine par **Tb**. C'est donc le nom du 
 
 Est-ce possible de généraliser ceci ? Oui et non.
 
-Le **contexte** possède une méthode **Find()** ou **FindAsync()**. Cette méthode permet de recevoir un enregistrement en fonction de sa clé primaire.
+Le **contexte** possède une méthode **Find()** ou **FindAsync()**. Cette méthode permet de rechercher un enregistrement en fonction de sa clé primaire.
 
 Cette méthode peut recevoir un **params object?[]? keyValues**. Le type est **object**, donc il peut recevoir une clé en **int**, en **string**, etc. selon le cas.
 
@@ -436,9 +456,9 @@ L'ordre des clés a-t-il son importance ? La réponse est **oui**. Lequel des 2 
 entity.HasKey(t => new { t.UtilisateurId, t.CarteId });
 ```
 
-C'est donc **UtilisateurCarte utilisateurCarte2 = _bd.UtilisateurCarteTb.Find(utilisateurId, carte).FirstOrDefault();** qui serait la bonne. Il est possible de généraliser la méthode **Find** dans le **Repo**, mais il faut l'encadrer.
+C'est donc **UtilisateurCarte utilisateurCarte2 = _bd.UtilisateurCarteTb.Find(utilisateurId, carte).FirstOrDefault();** qui serait la bonne. Il est possible de généraliser la méthode **Find** dans **BaseRepo**, mais il faudrait s'assurer de sa bonne utilisation.
 
-Le **Repo** générique ne permettra pas la gestion des clés multiples, car la validation de l'ordre des clés primaires risque de provoquer des erreurs. Ce sera une méthode spécifique pour les tables qui ont une clé primaire composée.
+La classe **BaseRepo** générique ne permettra donc pas la gestion des clés multiples, car la validation de l'ordre des clés primaires risque de provoquer des erreurs. Ce sera une méthode spécifique pour les tables qui ont une clé primaire composée (tel que **UtilisateurCarte**).
 
 La méthode générique ressemblerait à celle-ci.
 
@@ -451,7 +471,7 @@ public Task<TData?> ObtenirParCleAsync(int id)
 
 Il y a 1 problème dans cette méthode. Elle fonctionne uniquement pour une clé primaire qui est un **entier**.
 
-Il est possible de mettre plusieurs types génériques dans une classe. 
+Mais le nombre de types génériques d'une classe n'est pas limité à 1. Il suffit de mettre une virgule dans le **\<>** pour ajouter des types génériques, par exemple  **\<T1, T2, T3, T4>**. Ici nous avons **TData** et **TCleprimaire**. Lorsqu'il y a plusieurs types génériques, il est important de les nommer avec un nom significatif.
 
 ```csharp title="NE PAS COPIER"
 public class BaseRepo<TData, TClePrimaire> : IBaseRepo<TData, TClePrimaire> where TData : class
@@ -466,11 +486,11 @@ public class BaseRepo<TData, TClePrimaire> : IBaseRepo<TData, TClePrimaire> wher
 }
 ```
 
-Le nombre de types génériques d'une classe n'est pas limité à 1 uniquement. Il suffit de mettre une virgule dans le **\<>** pour ajouter des types génériques, par exemple  **\<T1, T2, T3, T4>** . Lorsqu'il y a plusieurs types génériques, il est important de les nommer avec un nom significatif. 
+ 
 
-**TClePrimaire** sert uniquement pour le paramètre de la méthode **ObtenirParCleAsync()**.
+**TClePrimaire** sert uniquement pour le paramètre des méthodes **ObtenirParCleAsync()** et **ObtenirParCle**.
 
-Mais est-ce BaseRepo est le bon endroit pour mettre cette méthode ? Que devra-t-il être spécifié pour la table **UtilisateurCarte** ? Dans le cas ci-dessous, ce sera **int**, mais si le programmeur utilise quand même la méthode **ObtenirParCleAsync()**, il y aura une exception car cette table nécessite 2 clés.
+Mais est-ce BaseRepo est le bon endroit pour mettre cette méthode ? Que devra-t-il être spécifié pour la table **UtilisateurCarte** ? Dans le cas ci-dessous, ce sera **int**, mais si le programmeur utilise quand même la méthode **ObtenirParCleAsync()**, il y aura une exception car cette table nécessite 2 clés (l'id de la carte et l'id de l'utilisateur).
 
 ```csharp title="NE PAS COPIER"
 var utilisateurCarteRepo BaseRepo<UtilisateurCarte>();
@@ -481,9 +501,9 @@ utilisateurCarteRepo.ObtenirParCleAsync(1); //Il y aura une exception "System.Ar
     but 1 values were passed to the 'Find' method.'"
 ```
 
-Cette approche va contre les principes **SOLID**. Il s'agit du **L ([Liskov substitution](https://fr.wikipedia.org/wiki/Principe_de_substitution_de_Liskov))**. Ça ne s'applique pas nécessairement au type générique dans sa définition pure, mais l'idée est tout de même respectée. Ce principe consiste au fait qu'une classe de **Base** doit fonctionner pour tous les types de données. Il ne doit pas avoir de méthode disponible dans une classe pour laquelle le programmeur sait qu'un cas particulier va générer une exception si elle est utilisée. Donc par conception, le programmeur concepteur sait que la méthode **ObtenirParCleAsync()** va générer une exception pour le modèle de données **UtilisateurCarte**. Le programmeur qui n'est pas concepteur et qui voit cette méthode disponible, ne saura pas nécessairement qu'il ne peut pas l'utiliser, d'où l'importance de respecter le **L** de **SOLID**.
+Cette approche va contre un des principes **SOLID**. Il s'agit du **L ([Liskov substitution](https://fr.wikipedia.org/wiki/Principe_de_substitution_de_Liskov))**. Il ne s'applique pas nécessairement au type générique dans sa définition pure, mais l'idée est tout de même respectée. Ce principe consiste au fait qu'une classe de base doit fonctionner pour tous les types de données. Il ne doit pas avoir de méthode disponible dans une classe pour laquelle le programmeur sait qu'un cas particulier va générer une exception si elle est utilisée. Donc par conception, le programmeur concepteur sait que la méthode **ObtenirParCleAsync()** va générer une exception pour le modèle de données **UtilisateurCarte**. Le programmeur qui n'est pas concepteur et qui voit cette méthode disponible, ne saura pas nécessairement qu'il ne peut pas l'utiliser, d'où l'importance de respecter le **L** de **SOLID**.
 
-La solution a ce problème est de créer une classe de base intermédiaire.
+La solution a ce problème est de créer une classe de base intermédiaire qui servira pour les classes ayant une clé unique. Les classes ayant des clés composées hériteront directement de **BaseRepo**, mais devront redéfinir les méthodes pour obtenir un enregistrement par sa clé. 
 
 
 Créez l'interface **IBasePKUniqueRepo** dans le dossier **Repositories\Bases**.
@@ -603,10 +623,10 @@ La classe a 2 méthodes spécifiques aux tables avec une clé primaire unique. I
 
 ## Repository non standard - Théorie
 <!-- questions -->
-Pour utiliser un **Repository** générique, il faut l'injecter comme ceci. Voici l'exemple pour **Carte**.
+Pour utiliser un **Repository** générique tel que **IBasePKUniqueRepo**, il faut l'injecter comme ceci. Voici l'exemple pour **Carte**.
 
-```csharp
-public classe CarteService
+```csharp title="Ne pas copier"
+public class CarteService
 {
 	private readonly IBasePKUniqueRepo<Carte, int> _baseRepoCarte;
     
@@ -617,8 +637,7 @@ public classe CarteService
 }
 ```
 
-<!-- pourquoi 10 points ? -->
-Par contre, si le logiciel doit obtenir les cartes qui ont plus qu'un certain nombre de vies, il faut une requête spécifique dans le Repository . 
+Par contre, il est facile d'imaginer que le logiciel doive obtenir les cartes qui ont plus qu'un certain nombre de vies, il faudra donc une requête spécifique dans le repository pour y répondre. 
 
 Il sera donc nécessaire de créer la classe **CarteRepo** afin de répondre à cette requête spécifique (**ObtenirListeParPointVieMin()**).
 
@@ -635,7 +654,7 @@ Il y a 2 options.
   	List<Carte> ObtenirListeParPointVieMin(int vie);
   }
   
-  public classe CarteRepo : ICarteService
+  public class CarteRepo : ICarteRepo
   {
       private readonly SuperCarteContext _bd;
       
@@ -649,12 +668,16 @@ Il y a 2 options.
           return _bd.CarteTb.Where(c => c.vie >= vie).ToList();
       }
   }
-
   ```
+
+:::note
+Notez que ICarteRepo n'hérite pas de IBaseRepo.
+:::
+
   Pour les modèles qui nécessitent des requêtes spécifiques, il est possible d'injecter les 2 **Repositories** dans le **Service** de la façon suivante.
 
   ```csharp title="CE N'EST PAS LA MÉTHODE RECOMMANDÉE DANS LE COURS"
-  public classe CarteService
+  public class CarteService
   {
   	private readonly IBaseRepo<Carte> _carteBaseRepo;
   	private readonly ICarteRepo _carteSpecificRepo;
@@ -670,7 +693,7 @@ Il y a 2 options.
 
   
 
-- Option 2: Hériter de **BaseRepo**.
+- Option 2: Hériter de **IBasePKUniqueRepo**.
 
   Il y aurait seulement un Repository. Le Repository spécifique hériterait du Repository générique de base.
 
@@ -682,7 +705,7 @@ Il y a 2 options.
   	List<Carte> ObtenirListeParPointVieMin(int vie);
   }
   
-  public classe CarteRepo : BasePKUniqueRepo<Carte,int>, ICarteService
+  public class CarteRepo : BasePKUniqueRepo<Carte,int>, ICarteRepo
   {   
       public CarteRepo(SuperCarteContext bd) : base(bd)
       {
@@ -700,7 +723,7 @@ Il y a 2 options.
   Et l'injection dans le **Service**.
 
   ```csharp title="MÉTHODE RECOMMANDÉE DANS LE COURS"
-  public classe CarteService
+  public class CarteService
   {
   	private readonly ICarteRepo _carteRepo;
       

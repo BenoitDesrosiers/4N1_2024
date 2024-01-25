@@ -1,21 +1,22 @@
 ---
 sidebar_position: 40
+draft : true
 ---
 
 
-# Utilisation
+# Injection de dépendance
 
 L'application consiste à faire la gestion d'une base de données contenant des univers de personnages. 
 
 Présentement, nos données sur l'Univers de superhéros sont entreposées dans une bd relationnel SQLServer. Mais rien n'empêche de mettre ces données dans une structure de liste, dans une bd sqlite, un API, ou encore une bd NoSQL. Il est courant dans un projet de ne pas connaitre la technologie exacte d'entreposage des données. Afin de s'isoler de celle-ci, il est courant d'utiliser une classe qui fera le lien entre l'entrepot de données et le reste du programme: un **Repository**. Il suffira alors de simplement changer cette classe afin de changer l'entrepot de donnés. 
 
-Mais comment "isoler" le reste du code afin de rendre cette classe intermédiaire échangeable? C'est ici que l'injection de dépendance entre en jeu.
+Mais comment *isoler* le reste du code afin de rendre cette classe intermédiaire échangeable? C'est ici que l'injection de dépendance entre en jeu.
 
-Cette classe intermédiaire nous fournira quelques fonctionnalités que nous désirons avoir. La connexion entre notre programme et la "bd" se fera selon la solution utilisée. L'injection de dépendances nous permettra de choisir le mode de connexion au moment de l'exécution. 
+Cette classe intermédiaire nous fournira quelques fonctionnalités que nous désirons avoir. La connexion entre notre programme et la *bd* se fera selon la solution utilisée. L'injection de dépendances nous permettra de choisir le mode de connexion au moment de l'exécution. 
 
 ## Classe de coordination - Manager
 
-Il faut maintenant ajouter la logique pour la gestion de l'affichage de l'univers. Cette logique ne doit pas être dans la classe **App**.
+La première étape sera la logique pour la gestion de l'affichage de l'univers. Cette logique ne doit pas être dans la classe **App**.
 
 Afin de respecter le **S** de **SOLID**, les classes doivent avoir une seule responsabilité. La responsabilité de la classe **App** est de déterminer la tâche et d'appeler le bonne classe de coordination.
 
@@ -104,6 +105,9 @@ builder.ConfigureServices((context, services) =>
 
 Cette ligne indique que si le code demande qqchose qui implémente IUniversManager, l'injection de dépendances va fournir une instance de UniversManager. 
 
+Vous venez de faire votre première injection de dépendance. Si on veut changer la classe qui sera utilisé quand le code demande un IUniversManager, il suffit de changer cette ligne et le reste du code suivra. 
+
+
 
 ## IServiceProvider
 
@@ -113,12 +117,21 @@ Il serait possible d'injecter les **Manager** dans le constructeur comme l'exemp
 public App(IUniversManager universManager, IPersonnageManager personnageManager)
 ```
 
-Par contre, le programme risque d'avoir plusieurs **Manager**. Un seul **Manager** est nécessaire par exécution du programme. Si tous les **Manager** sont injectés automatiquement lors de la création de la classe **App**, beaucoup de mémoire sera utilisée inutilement. Si le programme nécessite uniquement **UniversManager**, la création de **PersonnageManager** sera inutile et consommera de la mémoire et des ressources inutiles.
+Par contre, le programme risque d'avoir plusieurs **Manager** (ici nous en avons déjà 2, mais ca en prendra un pour les film et un pour la distribution). Un seul **Manager** est présentement nécessaire par exécution du programme. Si tous les **Manager** sont injectés automatiquement lors de la création de la classe **App**, beaucoup de mémoire sera utilisée inutilement. Si le programme nécessite uniquement **UniversManager**, la création de **PersonnageManager** sera inutile et consommera de la mémoire et des ressources inutiles.
 
 Le service **IServiceProvider**, est en mesure de créer uniquement les classes nécessaires à l'application console. Si l'application peut effectuer plusieurs tâches selon la réception des paramètres, il est préférable d'injecter uniquement la classe qui s'occupera de la coordination de la tâche demandée. 
 
+Lors de la création de la classe **App** nous avons déjà prévu l'injection d'un **IServiceProvider** (voir le constructeur dans App.cs). 
+
 :::important
 Il est recommandé de limiter l'utilisation du **IServiceProvider** au maximum. Il faut le mettre à un seul endroit dans le programme si c'est nécessaire. C'est une mauvaise pratique d'injecter partout le **IServiceProvider**.
+:::
+
+:::note
+On peut noter que dans App.cs, le service provider est injecté. Donc l'injecteur de services se fait aussi injecter via une interface!?!?
+
+Pour faire une histoire courte, c'est lors de l'appel de **Host.CreateDefaultBuilder** dans **Program.cs** que la magie s'opère. 
+
 :::
 
 Il faut donc créer **UniversManager** par cette technique.
@@ -307,14 +320,16 @@ Vous pouvez mettre un **break point** à la ligne 22 des 2 classes UniversV1Repo
 <img src="/4N1_2024/img/05_debug_console_1.png"  />
 
 
-Les 3 prochaines sections illustrent 3 façons pour utiliser le **repository** dans **UniversManager**.
+## 3 Méthodes de création
+
+Les 3 prochaines sections illustrent 3 façons d'insérer le **repository** dans **UniversManager**.
 
 :::important
 La dernière technique devra être utilisée pour les travaux pratiques.
 :::
 
 
-## Création directe - new class (à ne pas faire)
+### Création directe - new class (à ne pas faire)
 
 Il faut modifier le **Manager** Univers pour utiliser le **Repository**. 
 
@@ -370,7 +385,7 @@ Si vous exécutez le programme, le code fonctionnera.
 
 Par contre, une création directe rend la classe entièrement dépendante de la classe **UniversV1Repo**. Si nous désirons utiliser **UniversV2Repo**, il faudra modifier dans tout le programme les emplacements appelant **new UniversV1Repo()** . Si cette classe est créée 1 million de fois, il faut le modifier 1 million de fois. Il existe des outils de refactorisation pour nous aider, mais ce n'est pas l'idéal. Seulement dans **UniversManager**, elle est créée 2 fois.
 
-## Injection de la classe (à éviter)
+### Injection de la classe (à éviter)
 
 La 2e technique serait de l'injecter par le constructeur, en utilisant la classe.
 
@@ -473,7 +488,7 @@ Pour simuler cette erreur, dans la classe **UniversManager**, conserver le const
 
 
 
-## Injection par interface (approche recommandée)
+### Injection par interface (approche recommandée)
 
 La meilleure approche est d'injecter l'**interface** par le constructeur. Le **Manager** n'est plus dépendant d'une classe, mais d'une interface. Il sera maintenant plus efficace d'utiliser une 2e version du **repo**.
 

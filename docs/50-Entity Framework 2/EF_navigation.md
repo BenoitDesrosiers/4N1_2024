@@ -12,9 +12,11 @@ Pour cette section, nous allons réutiliser la bd **GestionPersonnage**
 
 <img src="/4N1_2024/img/07_dea_GestionFilm.jpg" />
 
+:::note
 Notez que nous avons renommé la table **Univers** pour **Franchise** afin de régler un problème de conflit de nom. 
+:::
 
-:::warning
+:::warning Attention
 Veuillez changer le projet de démarrage pour **LinqCRUD**
 :::
 
@@ -22,7 +24,7 @@ Veuillez changer le projet de démarrage pour **LinqCRUD**
 
 La table **Personnage** a une relation **plusieurs à 1** avec la table **Franchise**. Un personnage à une seule franchise.
 
-À l'inverse, un **Franchise** a une relation **1 à plusieurs** avec la table **Personnage. Une franchise contient plusieurs personnages.
+À l'inverse, un **Franchise** a une relation **1 à plusieurs** avec la table **Personnage**. Une franchise contient plusieurs personnages.
 
 La table **Personnage** a une relation **1 à plusieurs** avec la table **Distribution**. Un personnage peut faire partie de la distribution de plusieurs films.
 
@@ -58,7 +60,7 @@ Ces propriétés se nomment **navigation**, car il est possible de naviguer vers
 
 ## Log des opérations SQL
 
-Afin de créer un log des commandes SQL exécutées lors d'un scrpt LINQ, ajouter ces lignes avant vos requêtes dans **Program.cs** du projet **LinqCRUD**:
+Afin de créer un log des commandes SQL exécutées lors d'un script LINQ, ajoutez ces lignes avant vos requêtes dans **Program.cs** du projet **LinqCRUD**:
 
 ```csharp
 var optBuilder = new DbContextOptionsBuilder<UniversContext>();
@@ -69,8 +71,9 @@ optBuilder.EnableSensitiveDataLogging();
 
 ## Jointure classique
 
+:::note
 Les exemples ci-dessous sont tous des **INNER JOIN**. Le **LEFT OUTER JOIN** sera présenté plus tard en session.
-
+:::
 ### join
 
 Cette approche est identique à **SQL**. Il faut effectuer la jointure en utilisant les clés étrangères. Pour les grosses requêtes, cette approche est parfois plus performante, car elle reproduit généralement la requête **SQL** optimale. 

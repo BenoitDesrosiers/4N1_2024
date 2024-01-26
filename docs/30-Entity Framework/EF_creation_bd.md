@@ -97,7 +97,7 @@ Créez toutes les classes ci-dessous dans le dossier **Data**.
 - Distribution.cs
 - Film.cs
 
-:::note
+:::info
 Une propriété de navigation qui représente la relation **1 à Plusieurs** auront le suffixe **Liste** pour les différencier des relations **Plusieurs à 1**, car il s'agit d'une collection d'éléments.
 
 Pour une propriété de navigation qui représente une relation **Plusieurs à 1**, le nom de la propriété de navigation sera le nom de la classe.
@@ -136,20 +136,20 @@ public class Univers
 }
 
 ```
-:::note
+:::info
 Pour l'instant, nous ne créerons pas le code pour **Distribution.cs**. Nous y reviendrons plus tard
 :::
 
-:::note
+:::info
 Pour trouver l'équivalent d'un type de sql-server vs celui de C#, référez-vous à [cette adresse](https://learn.microsoft.com/en-us/sql/relational-databases/clr-integration-database-objects-types-net-framework/mapping-clr-parameter-data?view=sql-server-ver16&viewFallbackFrom=sql-server-2014&redirectedfrom=MSDN)
 :::
-:::note
+:::info
 À quoi sert **= null!** https://stackoverflow.com/questions/54724304/what-does-null-statement-mean
 
 Sommairement: ce n'est que pour enlever l'avertissement du compilateur. 
 :::
 
-:::note
+:::info
 À quoi sert **string?**
 
 Si on ne met pas de ? alors le champs ne peut être null dans la bd. 
@@ -298,7 +298,7 @@ La variable SQL_CONNECTION_STRING n'est pas spécifiée. Effectuez la commande s
 
 Le contexte n'est pas complet, mais il est possible de créer une base de données. 
 
-:::note
+:::info
 [EF Core Migrations](https://www.learnentityframeworkcore.com/migrations)
 :::
 

@@ -273,7 +273,7 @@ Ce numéro ne peut pas être exécuté sur le serveur départementale
 
 Effectuez une sauvegarde de votre base de données. Assurez-vous d'avoir le dossier **C:\Backup** dans votre ordinateur.
 
-:::note
+:::info
 pour répondre à cette question, vous devez faire une recherche car ce n'est pas dans les notes de cours. 
 :::
 <details>

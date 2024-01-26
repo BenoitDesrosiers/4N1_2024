@@ -97,7 +97,7 @@ public class App
 }
 ```
 
-:::note
+:::info
 Remarquez que les variables private sont préfixées par **_**. Cette nomenclature est recommandée par MS
 :::
 
@@ -156,7 +156,7 @@ App application = host.Services.GetRequiredService<App>();
 await application.DemarrerApplicationAsync();
 ```
 
-:::note
+:::info
 sur la ligne services.AddTransientApp();
 
 App réfère à la classe App

@@ -187,7 +187,7 @@ La liste ci-dessus peut accepter uniquement des objets de type **Personne**, car
 List<Personne> lesFrancois = personnes.FindAll(p => p.Prenom == "François");
 ```
 
-:::note
+:::info
 Ici, le paramètre de FindAll est un **prédicat** utilisant une fonction lambda. Nous y reviendrons plus en détails. 
 Il faut le lire de la facon suivante:  
 Dans personnes, trouve toutes les personnes p dont le Prenom est Francois, et mets chacun de ces p dans la listes lesFrancois. 

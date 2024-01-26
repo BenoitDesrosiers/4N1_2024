@@ -484,7 +484,7 @@ Pour plus d'information : https://en.wikipedia.org/wiki/Transact-SQL
 
 ### DB_ID()
 
-:::note
+:::info
 **SQL Server** n'utilise pas le **IF EXISTS** et le **IF NOT EXISTS** comme avec **SQLite** et **MariaDB**.
 :::
 
@@ -502,7 +502,7 @@ IF DB_ID('Demo4N1') IS NOT NULL
 
 ### OBJECT_ID()
 
-:::note
+:::info
 **SQL Server** n'utilise pas le **IF EXISTS** et le **IF NOT EXISTS** comme avec **SQLite** et **MariaDB**.
 :::
 

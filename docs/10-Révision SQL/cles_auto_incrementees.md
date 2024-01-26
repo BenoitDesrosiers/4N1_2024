@@ -544,7 +544,7 @@ Il faut créer les tables temporaires, ensuite faire les procédures stockées d
 
 Pour la procédure stockée, il est possible de faire l'insertion avec un **SCOPE IDENTITY** ou le **OUTPUT**.
 
-:::note
+:::info
 Pour le TP 1, il est demandé d'utiliser le **OUTPUT**, donc nous allons faire les exemples avec le **OUTPUT**.
 :::
 
@@ -696,7 +696,7 @@ SET XACT_ABORT OFF;
 GO
 ```
 
-:::note
+:::info
 Ici la clé naturelle temporaire pour les personnages ne sert à rien. 
 Mais il est facile d'imaginer qu'on voudrait associer des superpouvoirs aux  personnages. Dans ce cas, cette clé temporaire servirait. 
 :::

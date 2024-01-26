@@ -12,7 +12,7 @@ Pour cette section, nous allons réutiliser la bd **GestionPersonnage**
 
 <img src="/4N1_2024/img/07_dea_GestionFilm.jpg" />
 
-:::note
+:::info
 Notez que nous avons renommé la table **Univers** pour **Franchise** afin de régler un problème de conflit de nom. 
 :::
 
@@ -71,7 +71,7 @@ optBuilder.EnableSensitiveDataLogging();
 
 ## Jointure classique
 
-:::note
+:::info
 Les exemples ci-dessous sont tous des **INNER JOIN**. Le **LEFT OUTER JOIN** sera présenté plus tard en session.
 :::
 ### join
@@ -236,7 +236,7 @@ var infoDistribution = (from lqDistribution in db.DistributionTb
             }).ToList();
 ```
 
-:::note
+:::info
 Notez ici qu'on ne peut pas utiliser InfoPersonnage car ce n'est plus la bonne information
 :::
 

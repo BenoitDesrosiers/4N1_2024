@@ -81,7 +81,7 @@ public interface IUniversManager
 }
 ```
 
-:::note
+:::info
 En **c#**, si un membre provient de l'interface, il faut seulement le documenter dans l'interface pour respecter le principe **DRY (Don't Repeate Yourself) ou Ne te répète pas.** 
 :::
 
@@ -127,7 +127,7 @@ Lors de la création de la classe **App** nous avons déjà prévu l'injection d
 Il est recommandé de limiter l'utilisation du **IServiceProvider** au maximum. Il faut le mettre à un seul endroit dans le programme si c'est nécessaire. C'est une mauvaise pratique d'injecter partout le **IServiceProvider**.
 :::
 
-:::note
+:::info
 On peut noter que dans App.cs, le service provider est injecté. Donc l'injecteur de services se fait aussi injecter via une interface!?!?
 
 Pour faire une histoire courte, c'est lors de l'appel de **Host.CreateDefaultBuilder** dans **Program.cs** que la magie s'opère. 
@@ -204,7 +204,7 @@ public class Univers
 }
 ```
 
-:::note
+:::info
 Selon la communauté **csharp**, il n'est pas nécessaire de documenter une propriété lorsque son nom est significatif.
 :::
 
@@ -226,7 +226,7 @@ public interface IUniversRepo
 }
 ```
 
-:::note
+:::info
 Remarquez également que la méthode retourne le type **Univers?**. Le **?** n'est pas obligatoire, mais si il n'est pas mis, le compilateur retournera un avertissement que l'objet peut être **null**. Le point d'interrogation permet d'indiquer au compilateur que la valeur **null** est possible dans notre logique. Si la méthode retourne **null**, c'est que l'univers n'a pas été trouvé.
 :::
 

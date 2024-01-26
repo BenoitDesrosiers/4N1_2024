@@ -14,7 +14,7 @@ Une procédure stockée peut modifier la base de données.
 
 Une procédure stockée peut recevoir des paramètres d'entrée et elle peut retourner des valeurs.
 
-:::note
+:::info
 Pour en savoir plus: https://sql.sh/cours/procedure-stockee
 :::
 

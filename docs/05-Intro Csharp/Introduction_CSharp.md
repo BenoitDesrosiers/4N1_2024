@@ -469,7 +469,7 @@ namespace DemoCours1.Modeles
 ### Champs
 
 Aussi appelé **attribut**
-:::note
+:::info
 En anglais, utilisé le terme **field** et non attribut car attribut réfère à autre chose en c# en anglais
 :::
 
@@ -678,7 +678,7 @@ public class Personne
 
 En c#, les champs sont rarement utilisés lorsqu'ils sont assignés par des propriétés sans aucune modification. La propriété devient donc un **champ** de la classe. C'est la notation la plus utilisée. 
 
-:::note
+:::info
 La déclaration de le champs **_prenom** n'est plus là. 
 :::
 

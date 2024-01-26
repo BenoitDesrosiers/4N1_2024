@@ -253,7 +253,7 @@ Appliquez les modifications à la base de données. Spécifiez la migration **Se
 Update-Database -StartupProject Univers.EF -Migration Seed_UniversEtPersonnage
 ```
 
-:::note
+:::info
 Pour votre **TP 3**, vous devez créer un jeu de données initial pour chacune des tables. Il devra être créé par un **Seed**.
 :::
 

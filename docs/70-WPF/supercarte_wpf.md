@@ -5,18 +5,27 @@ draft: true
 
 # SuperCarte.WPF
 
-## Préparation du projet WPF
+Nous avons maintenant le projet **.EF** servant à gérer la bd; le projet **.core** servant à faire le lien entre les objets du domaine et les objet de la bd. Il reste à faire l'interface de l'application. 
 
-### Création du projet dans une solution existante
+C'est ici que WPF entre en jeu. 
+
+## Création du projet dans une solution existante
 
 Il faut ajouter le projet **WPF** dans la solution.
 
 Pour ce faire, sélectionnez la solution **SuperCarteApp** en haut de l'**Explorateur de solution** et choisissez **Ajouter -> Nouveau projet...** dans le menu contextuel.
 
-Créez un projet de type **Application WPF**. Il est important **de ne pas choisir** la version **.NET Framework**.
+Créez un projet de type **Application WPF**. 
+
+:::warning attention
+Il est important **de ne pas choisir** la version **.NET Framework**.
+:::
+
 
 - **Nom du projet** : SuperCarte.WPF
 - **Infrastructure** : .NET 7
+
+Pour le champ **Solution**, indiquez d'**Ajouter à la solution** et gardez SuperCarteApp. 
 
 Ensuite, sélectionnez le projet **SuperCarte.WPF** dans l'**Explorateur de solution** et choisissez **Définir en tant que projet de démarrage** dans le menu contextuel.
 
@@ -72,8 +81,11 @@ Pour que le fichier soit pris en compte par le compilateur, il faut indiquer dan
 :::
 Copiez ce code **json** dans le fichier.
 
-Utilisez cette version si vous n'avez pas le message d'erreur du certificat **SSL**. Il faut également modifier le nom de la base de données pour celui que vous avez utilisé.
+Utilisez cette version si vous n'avez pas le message d'erreur du certificat **SSL**. 
 
+:::warning Attention
+Vous devez modifier le nom de la base de données pour celui que vous avez utilisé.
+:::
 ```powershell
 {
   "ConnectionStrings": {
@@ -98,7 +110,7 @@ Le projet **WPF** n'a pas de fichier **program.cs**. Ce type de projet n'est pas
 
 Le fichier de démarrage de l'application est **App.xaml.cs**. Il est inclus dans le fichier **App.xaml**.
 
-:::note
+:::info
 Remarquez la flèche à côté de App.xaml. Si vous cliquez sur celle-ci, vous y trouverez App.xaml.cs
 :::
 
@@ -132,9 +144,9 @@ C'est pour cette raison que le fichier **App.xaml.cs** est un sous-fichier de **
 
 L'application **WPF** de ce projet sera comme un **SPA** ou une **Application à page unique**. Dans le cas d'une application native, il serait possible de dire un **SWA** pour une **Application à fenêtre unique**.
 
-Les applications **à fenêtres multiples** sont de plus en plus rares, car de nombreux appareils, tel que les tablettes, ne sont pas en mesure de les gérer correctement. C'est une approche pour les systèmes d'exploitation ordinateur, comme **Windows** ou **macOS**, car ils sont en mesure de gérer le **multifenêtre**.
+Les applications **à fenêtres multiples** sont de plus en plus rares, car de nombreux appareils, tel que les tablettes, ne sont pas en mesure de les gérer correctement. L'approche multi-fenêtres est plutôt pour les systèmes d'exploitation d'ordinateur, comme Windows ou macOS, car ils sont en mesure de gérer ce type d'application. 
 
-L'application aura seulement une seule fenêtre, le classe **MainWindow.xaml**. À l'intérieur de cette classe, il y aura un **conteneur** qui aura un **contrôle utilisateur (user contrôle)** qui s'occupera d'une vue spécifique. Ce conteneur changera de **contrôle utilisateur** lorsqu'une nouvelle vue devra être affichée. Il s'agit de la même mécanique que Blazor ou Angular, mais pour une application native.
+L'application aura une seule fenêtre, le classe **MainWindow.xaml**. À l'intérieur de cette classe, il y aura un **conteneur** qui aura un **contrôle utilisateur (user contrôle)** qui s'occupera d'une vue spécifique. Ce conteneur changera de **contrôle utilisateur** lorsqu'une nouvelle vue devra être affichée. Il s'agit de la même mécanique que Blazor ou Angular, mais pour une application native.
 
 ### Enregistrement des services
 
@@ -144,7 +156,7 @@ Créez le dossier **Extensions\ServiceCollections** à la racine du projet **Sup
 
 Créez la classe **SCRepositories.cs** dans le dossier.
 
-Les **Repositories** sont déjà créés, alors il faut les ajouter dans l'enregistrement. Remarquez que la création est maintenant en **Scoped**. L'instance du **Repo** sera partagée entre les différents services qui l'utilisent.
+Les Repositories sont déjà créés, alors il faut les ajouter dans l'enregistrement. Remarquez que la création est maintenant en **Scoped**. L'instance du dépot sera partagée entre les différents services qui l'utilisent.
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
@@ -194,8 +206,8 @@ public static class SCServiceExtensions
     }
 }
 ```
-
-Créez la classe **SCValidateurExtensions.cs** dans le dossier . Cette classe s'occupera de l'enregistrement des **Validateurs**. Ce concept sera présenté dansun autre document.
+<!-- déplacer quand on en aura vraiment besoin -->
+Créez la classe **SCValidateurExtensions.cs** dans le dossier . Cette classe s'occupera de l'enregistrement des **Validateurs**. Ce concept sera présenté dans un autre document.
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
@@ -217,6 +229,7 @@ public static class SCValidateurExtensions
     }
 }
 ```
+<!-- déplacer quand on en aura vraiment besoin -->
 
 Créez la classe **SCViewModelExtensions.cs** dans le dossier . Cette classe s'occupera de l'enregistrement des **ViewModel**. Ce concept sera présenté dans le prochain document.
 
@@ -248,7 +261,7 @@ public static class SCViewModelExtensions
 
 Dans la **Console du Gestionnaire de package**, inscrivez cette ligne. 
 
-:::note
+:::warning attention
 Il est important que le **Projet par défaut** soit **SuperCarte.WPF** dans la console. La librairie s'installera dans le projet indiqué dans le champ **Projet par défaut**.
 :::
 
@@ -322,8 +335,12 @@ public partial class App : Application
     }
 }
 ```
+:::info
+Notez que ce code est similaire à celui qui avait été mis dans Program.cs dans l'exemple [d'injection de dépendance](../60-Injection%20de%20d%C3%A9pendance/preparation_projet.md#fichier-programcs)
 
+:::
 Voici le détail de la classe.
+
 
 À la ligne 14 du bloc de code ci-dessous, il y a un attribut pour le **host** de l'application. Le **host**  doit être en attribut, car il sera utilisé dans plusieurs méthodes de la classe. 
 
@@ -333,7 +350,7 @@ Ensuite, le constructeur de la classe s'occupe de configurer le **host** comme i
 
 À la ligne 23, il faut enregistrer la fenêtre principale dans les dépendances de l'application.
 
-À la ligne 23, le contexte est enregistré avec le fichier de configuration. 
+À la ligne 26, le contexte est enregistré avec le fichier de configuration. 
 
 Aux lignes 29 à 32, le service utilise les méthodes d'extension pour enregistrer les différents concepts.
 
@@ -349,11 +366,12 @@ Démarrez l'application. Il y a 2 fenêtres.
 
 Ouvrez le fichier **App.xaml**.
 
-```xaml showLineNumbers
+```xaml showLineNumbers title="Ne pas copier"
 <Application x:Class="SuperCarte.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SuperCarte.WPF"
+			 //highlight-next-line
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          
@@ -374,7 +392,7 @@ Ouvrez le fichier **App.xaml**.
 </Application>
 ```
 
-Démarrez de nouveau l'application et il aura seulement une fenêtre.
+Démarrez de nouveau l'application et il aura une seule fenêtre.
 
 ## Hello World
 

@@ -69,7 +69,7 @@ namespace Univers.EF.Migrations
 
 ```
 
-:::note
+:::info
 Il n'y a pas de syntaxe en LINQ pour la création de la view. Il est donc nécessaire d'utiliser une commande SQL
 :::
 
@@ -116,7 +116,7 @@ modelBuilder.Entity<VNombrePersonnageFranchise>(entity =>
 
 La view est maintenant prête à être utiliser pour les select. 
 
-:::note
+:::info
 Comme toute view, il est impossible d'ajouter ou d'enlever des données dans cette view. Seule les SELECT sont permis
 :::
 

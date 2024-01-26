@@ -1,5 +1,6 @@
 ---
 sidebar_position: 10
+draft: true
 ---
 
 # Introduction
@@ -286,7 +287,7 @@ La langue s'applique à la balise en cours et à ses enfants.
 
 Cette section permet de tester le **MVVM** et certains éléments du **XAML** sans se soucier du service.
 
-:::note
+:::info
 Ca ne doit pas être reproduit dans votre **TP 3**.
 :::
 

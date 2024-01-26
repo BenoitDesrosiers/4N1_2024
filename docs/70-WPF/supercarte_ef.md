@@ -53,7 +53,7 @@ Créez toutes les classes ci-dessous dans le dossier **Data**.
 - Carte.cs
 - UtilisateurCarte.cs
 
-:::note
+:::info
 Une propriété de navigation qui représente la relation **1 à Plusieurs** auront le suffixe **Liste** pour les différencier des relations **Plusieurs à 1**, car il s'agit d'une collection d'éléments.
 
 Pour une propriété de navigation qui représente une relation **Plusieurs à 1**, le nom de la propriété de navigation sera le nom de la classe.
@@ -267,7 +267,7 @@ La méthode **OnConfiguring** contient la logique pour la configuration du serve
 
 La clause **#if DEBUG** indique au compilateur de tenir compte du code seulement si l'application est en mode **Debug**. Il ne faut pas que cette configuration soit accessible en production.
 
-:::note
+:::info
 La table **UtilisateurCarte** est volontairement **exclue** des **DbSet** pour l'instant, car elle n'a pas de clé primaire unique, mais une clé primaire composée. Ce concept sera présenté plus tard.
 :::
 

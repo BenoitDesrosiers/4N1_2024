@@ -15,7 +15,7 @@ Il faut différencier les classes du modèle de données et du modèle du domain
   - Il s'agit d'une classe qui représente un élément du domaine de l'application. Elle peut être très similaire à une classe du modèle de données, mais peut également contenir des champs de plusieurs tables et de la logique propre.
   - La logique applicative travaille avec la classe du modèle de domaine.
   - Le **Service** s'occupe de faire la transition (**mapping**) entre la classe du modèle de données et la classe du domaine du domaine.
-  - Le **Repository** peut également utiliser les classes du domaine pour insérer les données de plusieurs tables dans un seul objet.
+  - Le **Repository** (ou dépôt) peut également utiliser les classes du domaine pour insérer les données de plusieurs tables dans un seul objet.
 
 Ce projet introduira les classes de type **Service**, de type **Repository**, de type **Validateur** et les modèles du domaine.
 
@@ -77,7 +77,7 @@ Dans la fenêtre, il faut cocher **SuperCarte.EF**. Vous venez d'intégrer une l
 
 Les méthodes de base de la classe **DBContext** utilisent les types génériques. Il est donc possible de généraliser les requêtes de base et répétitives dans le **Repository**.
 
-:::note
+:::info
 Revoir la section sur les types génériques dans l'introduction à C#
 :::
 
@@ -422,7 +422,7 @@ Etudiant etudiant = _bd.EtudiantTb.Where(e => e.DA == da).FirstOrDefault();
 UtilisateurCarte utilisateurCarte = _bd.UtilisateurCarteTb.Where(uc => uc.CarteId == carteId && uc.utilisateurId == UtilisateurId).FirstOrDefault();
 ```
 
-:::note
+:::info
 Remarquez ici que le nom des tables se termine par **Tb**. C'est donc le nom du **DbSet** dans **SuperCarteContext.cs**
 :::
 
@@ -647,7 +647,7 @@ Il y a 2 options.
 - Option 1: Créer un deuxième type de Repository pour répondre à cette question spécifiquement.
 
 
-  Voici l'interface et la classe du **Repository** spécifique.
+  Voici l'interface et la classe de ce nouveau type de repository:
 
   ```csharp title="CE N'EST PAS LA MÉTHODE RECOMMANDÉE DANS LE COURS"
   public interface ICarteRepo
@@ -671,7 +671,7 @@ Il y a 2 options.
   }
   ```
 
-:::note
+:::info
 Notez que ICarteRepo n'hérite pas de IBaseRepo.
 :::
 
@@ -739,12 +739,12 @@ Notez que ICarteRepo n'hérite pas de IBaseRepo.
 
 Les 2 approches ont leurs avantages et leurs inconvénients.
 
-L'approche par héritage permet d'avoir un seul **Repository** qui contient toutes les méthodes nécessaires à l'entité. Par contre, ce n'est pas tous les **Repository** qui nécessitent des requêtes spécifiques. Dans une approche standardisée, il pourrait être exigé au programmeur de créer des classes spécifiques, même s'il n'y a pas de requête spécifique. 
+L'approche par héritage permet d'avoir un seul Repository qui contient toutes les méthodes nécessaires à l'entité. Par contre, ce n'est pas tous les Repository qui nécessitent des requêtes spécifiques. Dans une approche standardisée, il pourrait être exigé au programmeur de créer des classes spécifiques, même s'il n'y a pas de requête spécifique. 
 
-Dans une approche non standardisée, il faudrait injecter le **BaseRepo\<TData\>** dans le service lorsqu'il n'y a pas de requêtes spécifiques. Si un jour, il faut ajouter une requête spécifique, il faut créer le **Repository** spécifique et modifier tous les services qui utilisaient le **Repository** de base. Ceci peut demander beaucoup de refactorisation. 
+Dans une approche non standardisée, il faudrait injecter le BaseRepo\<TData\> dans le service lorsqu'il n'y a pas de requêtes spécifiques. Si un jour, il faut ajouter une requête spécifique, il faut créer le Repository spécifique et modifier tous les services qui utilisaient le Repository de base. Ceci peut demander beaucoup de refactorisation. 
 
 <!-- Questions expliquer derniere ligne de ce paragraphe -->
-L'approche avec 2 **Repositories** a l'avantage de créer uniquement un **Repo** spécialisé lorsque nécessaire. Par contre, le programmeur doit basculer d'un **Repository** à l'autre selon le contexte. Aussi, à chaque fois qu'il faut injecter le **Repository** de base, il faut s'assurer de spécifier le type de la bonne clé primaire. Rien n'empêche également d'injecter la mauvaise classe de base, par exemple **BaseRepo\<Carte\>**.
+L'approche avec 2 Repositories a l'avantage de créer uniquement un Repository spécialisé lorsque nécessaire. Par contre, le programmeur doit basculer d'un Repository à l'autre selon le contexte. Aussi, à chaque fois qu'il faut injecter le Repository de base, il faut s'assurer de spécifier le type de la bonne clé primaire. Rien n'empêche également d'injecter la mauvaise classe de base, par exemple BaseRepo\<Carte\>.
 
 Si l'enregistrement des services est bien fait dans l'injection des dépendances, le programme génèrera une exception lorsque la mauvaise classe de base sera utilisée. Par contre, si le programmeur l'ajoute dans l'enregistrement sans valider l'existence des autres, le programme va devenir non uniforme et moins maintenable dans le temps.
 
@@ -796,6 +796,7 @@ public class RoleRepo : BasePKUniqueRepo<Role,int>, IRoleRepo
     /// Constructeur
     /// </summary>
     /// <param name="bd">Contexte de la base de données</param>
+	//highlight-next-line
     public RoleRepo(SuperCarteContext bd) : base(bd)
 	{
         //Vide, il sert uniquement a recevoir le contexte et à l'envoyer à la classe parent.
@@ -803,7 +804,11 @@ public class RoleRepo : BasePKUniqueRepo<Role,int>, IRoleRepo
 }
 ```
 
-La classe hérite de **`BasePKUniqueRepo<Role,int>`**, car il y a seulement une clé primaire et c'est un entier.
+La classe hérite de **BasePKUniqueRepo\<Role,int>**, car il y a seulement une clé primaire et c'est un entier.
+
+:::info Rappel
+Rappellez-vous que **base(bd)** indique d'envoyer bd au constructeur de la superclasse; ici c'est **BasePKUniqueRepo** qui l'enverra à **BaseRepo**. 
+:::
 
 ### UtilisateurRepo
 

@@ -22,7 +22,7 @@ Il est toujours préférable d'utiliser une valeur proche de la réalité.
 
 Pour ce document, une nouvelle base de données sera utilisée. La base de données est pour la gestion de livres dans des magasins. Elle contient tous les cas nécessaires pour le **TP 2**.
 
-:::note
+:::info
 Pour cet exemple, nous allons utiliser la méthode **Database first** afin de générer le modèle à partir de la base de données. 
 :::
 
@@ -1473,7 +1473,7 @@ Dans **SSMS**, effectuez cette requête. Vous devriez voir des enregistrements.
 SELECT * FROM LivreAuteur;
 ```
 
-:::note
+:::info
 
 Le générateur peut générer des livres après la mort d'un auteur. Ce n'est pas très logique. Il serait possible de régler ce problème, mais le générateur serait un peu plus complexe. Il faudrait faire de la vérification intertable. 
 :::

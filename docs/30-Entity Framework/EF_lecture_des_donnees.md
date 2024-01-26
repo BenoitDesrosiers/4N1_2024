@@ -268,7 +268,7 @@ SELECT [f].[FilmId], [f].[Budget], [f].[DateSortie], [f].[Duree], [f].[Etoile], 
 FROM [Film] AS [f]
 WHERE [f].[Etoile] >= CAST(2 AS tinyint)
 ```
-:::note
+:::info
 Il y a 2 logs de générées car il y a 2 requêtes identiques de faites: une en query, l'autre en lambda
 :::
 

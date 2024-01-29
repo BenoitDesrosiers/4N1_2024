@@ -54,7 +54,7 @@ exec nomProcedure parametre1, parametre2
 
 ### Exemple
 
-Dans la base de données **AdventureWorks2019**, créez une procédure stockée qui supprime tous les logs de la BD qui appartient au schéma demandé en paramètre, et qui ajoute un log pour indiquer la suppression.
+Dans la base de données **AdventureWorks2019**, voici une procédure stockée qui supprime tous les logs de la BD qui appartient au schéma demandé en paramètre, et qui ajoute un log pour indiquer la suppression.
 
 ```sql
 IF OBJECT_ID('supprimeDatabaseLog', 'P') IS NOT NULL 
@@ -71,3 +71,33 @@ AS
 GO
 ```
 
+### Exercice
+
+Créez une procédure stockée qui fait la même chose que l'exercice 2 de la section précédente, mais qui demande le type de personne (demandez en juste 1)
+
+<details>
+  <summary>Solution</summary>
+
+```sql
+IF OBJECT_ID('affichePersonParType', 'P') IS NOT NULL
+	DROP PROCEDURE affichePersonParType;
+GO
+
+CREATE PROCEDURE affichePersonParType
+	@type CHAR(2)
+AS
+SELECT
+	BusinessEntityID, 
+	FirstName, 
+	LastName,
+	PersonType
+FROM Person.Person 
+WHERE 
+	PersonType = @type
+ORDER BY
+	LastName,
+	FirstName;
+GO
+```
+
+</details>

@@ -49,7 +49,7 @@ VALUES (19898989, 'Teenage mutant ninja turtles');
 SET IDENTITY_INSERT Univers OFF; -- Indique que la table Univers n'accepte pas l'insertion de valeur dans le champ IDENTITY
 ```
 
-Pour être en mesure de connaitre la dernière identité utilisée, il faut utiliser la fonction **IDENT_CURRENT( 'table' ) **.
+Pour être en mesure de connaitre la dernière identité utilisée, il faut utiliser la fonction **IDENT_CURRENT( 'table' )**.
 
 Exécutez le script ci-dessous.
 

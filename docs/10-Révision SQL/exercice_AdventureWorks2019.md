@@ -121,7 +121,8 @@ Vous devriez avoir 290 lignes.
 SELECT
 	BusinessEntityID, 
 	FirstName, 
-	LastName  
+	LastName,
+	PersonType
 FROM Person.Person 
 WHERE 
 	PersonType = 'SP' OR 

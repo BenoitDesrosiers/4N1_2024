@@ -71,11 +71,11 @@ Wiki : https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel
 
 ### Modèle du domaine ou modèle de données
 
-Il n'est pas recommandé d'utiliser un objet du modèle de données pour l'interaction utilisateur. Le **ViewModel** ne doit pas les utiliser. Il arrive souvent que le modèle de données soit pratiquement identique au modèle du domaine dans ses propriétés, il est donc tentant d'utiliser directement l'objet du modèle de données.
+Il n'est pas recommandé d'utiliser un objet du modèle de données (EF) pour l'interaction utilisateur. Le **ViewModel** ne doit pas les utiliser. Il arrive souvent que le modèle de données soit pratiquement identique au modèle du domaine dans ses propriétés, il est donc tentant d'utiliser directement l'objet du modèle de données.
 
-L'objet du modèle de données est surveillé par le contexte qui l'a créé tant que le contexte est actif. Si l'objet est modifié, mais il ne doit pas être mis à jour dans la base de données, l'objet sera pris en considération si l'instense de son contexte se met à jour par la méthode **SaveChanges()**.
+L'objet du modèle de données est surveillé par le contexte qui l'a créé tant que le contexte est actif. Si l'objet est modifié, l'objet sera pris en considération si son instance dans le contexte se met à jour par la méthode **SaveChanges()** et cela même s'il n'aurait pas du être modifié dans la bd.
 
-Pour faciliter la conversion entre les différents types de **modèles**, il est possible d'utiliser une librairie **Mapper**. Pour ce projet, ce sera des **extensions** qui s'occuperont de faire la transition entre 2 types de modèles.
+Pour faciliter la conversion entre les différents types de **modèles**, il est possible d'utiliser une librairie **Mapper**. Pour ce projet, ce sera des **extensions** qui s'occuperont de faire la transition entre les 2 types de modèles.
 
 ## Préparation du projet WPF
 
@@ -93,10 +93,15 @@ Cette librairie offre énormément de fonctionnalités pour accélérer le déve
 
 La librairie sera utilisée pour la classe **ObservableObject** et pour les classes **RelayCommand**. Il aurait été possible de créer manuellement ces classes, mais elles ont déjà été créées. Il n'est pas utile de recréer ces classes identiques.
 
+<!-- Je comprends pas ce que ca veut dire, alors aussi bien pas en parler
 La librairie intègre également un générateur de code pour rendre certaines actions **magiques**. En ajoutant des **Annotations** spécifiques sur des propriétés, une classe parallèle est créée pour générer le code. Pour ce projet, ce générateur de code ne sera pas utilisé, car il faut bien comprendre la mécanique du **MVVM** avant de l'utiliser.
+-->
 
-Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. Il est important que le **Projet par défaut** **WPF** soit sélectionné dans la console. Pour ce projet, ce doit être **SuperCarte.WPF**. À ce stade, il y a **plusieurs projets** et il est important de le modifier dans la liste.
+Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. 
 
+:::warning Attention
+Il est important que le **Projet par défaut** **WPF** soit sélectionné dans la console. Pour ce projet, ce doit être **SuperCarte.WPF**. À ce stade, il y a **plusieurs projets** et il est important de le modifier dans la liste.
+:::
 ```
 Install-Package CommunityToolkit.Mvvm
 ```
@@ -150,7 +155,9 @@ public abstract class ObservableObject : INotifyPropertyChanged, INotifyProperty
     }
 
     
-    protected bool SetProperty<T>([NotNullIfNotNull(nameof(newValue))] ref T field, T newValue, [CallerMemberName] string? propertyName = null)
+    protected bool SetProperty<T>([NotNullIfNotNull(nameof(newValue))] ref T field, 
+					T newValue, 
+					[CallerMemberName] string? propertyName = null)
     {        
         if (EqualityComparer<T>.Default.Equals(field, newValue))
         {

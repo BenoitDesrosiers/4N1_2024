@@ -121,6 +121,8 @@ Vérifiez que la migration c'est bien faite.
 
 Comme vous pouvez le voir, il arrive qu'on ait des erreurs de design qui n'apparaissent que beaucoup plus tard. Les migrations peuvent nous sortir de ce genre de problème dans certains cas, mais il est toujours mieux de bien réfléchir au système avant de trop coder. 
 
+Il est aussi intéressant de noter que dans la migration RenommerClasseUnivers.cs, les données qui avaient déjà été seedées ont été traitées. 
+
 
 Revenons à notre premier test de requête sur la bd utilisant Linq. Notre code devrait fonctionner maintenant en changeant la classe Univers par Franchise:
 
@@ -203,7 +205,7 @@ void MaMethode()
 } //Fin du contexte
 ```
 
-## Voir le SQL généré
+### Voir le SQL généré
 
 Il peut être intéressant de voir le SQL généré.
 
@@ -225,7 +227,7 @@ using (UniversContext db = new UniversContext(optBuilder.Options))
 Il y aura un fichier de créer par requête effectuée à la base de données.
 
 
-### Exemple 1
+### Exemple Lecture 1
 
 Code **SQL**
 
@@ -272,7 +274,7 @@ WHERE [f].[Etoile] >= CAST(2 AS tinyint)
 Il y a 2 logs de générées car il y a 2 requêtes identiques de faites: une en query, l'autre en lambda
 :::
 
-### Exemple 2
+### Exemple Lecture 2
 
 Code **SQL**
 
@@ -316,7 +318,7 @@ FROM [Film] AS [f]
 WHERE DATEPART(year, [f].[DateSortie]) = 2021
 ```
 
-### Exemple 3
+### Exemple Lecture 3
 
 Code **SQL**
 
@@ -468,6 +470,220 @@ Et tant qu'à se pratiquer, utilisez une **List\<Distribution\>** afin de créer
 | Black Widow 	| The Avengers       	| Scarlett Johansson 	|
 | Black Widow 	| Avengers : Endgame 	| Scarlett Johansson 	|
 | Black Widow 	| Black Widow        	| Scarlett Johansson 	|
+
+
+Voici le début du code
+
+```csharp
+global using Univers.EF.Data; //Les classes du modèle du contexte
+global using Univers.EF.Data.Context; // La classe du contexte
+global using System;
+global using System.Collections.Generic;
+global using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+using (UniversContext db = new UniversContext())
+{
+
+	//insérez votre code ici
+}
+```
+
+#### étape 1: Lecture des franchises
+
+Ajoutez le code pour lire les 2 franchises (Marvels et DC Comics) et les mettre dans des variables aux noms significatifs
+
+<details>
+  <summary>Solution</summary>
+```csharp
+    Franchise marvel = db.FranchiseTb.Where(f => f.Nom == "Marvel").First();
+    Franchise dc = db.FranchiseTb.Where(f => f.Nom == "DC Comics").First();
+```
+
+</details>
+
+#### étape 2: Création d'un personnage
+
+Ajoutez le code pour créer le premier personnage, de l'ajouter dans la bd, et de sauvegarder la nouvelle info. (la solution contient le code pour tous les personnages)
+
+<details>
+  <summary>Solution</summary>
+
+```csharp
+//highlight-start
+    Personnage joker = new Personnage()
+    {
+        Nom = "Joker",
+        IdentiteReelle = null,
+        DateNaissance = new DateOnly(1966, 01, 01),
+        EstVilain = true,
+        FranchiseId = dc.FranchiseId,
+
+    };
+//highlight-end
+    Personnage thor = new Personnage()
+    {
+        Nom = "Thor",
+        IdentiteReelle = "Thor",
+        DateNaissance = new DateOnly(01, 01, 01),
+        EstVilain = false,
+        FranchiseId = marvel.FranchiseId,
+
+    };
+    Personnage blackwidow = new Personnage()
+    {
+        Nom = "Black Widow",
+        IdentiteReelle = "Nathasha Romanoff",
+        DateNaissance = new DateOnly(1985, 08, 31),
+        EstVilain = false,
+        FranchiseId = marvel.FranchiseId,
+
+    };
+//highlight-next-line
+    db.Add(joker);
+    db.Add(thor);
+    db.Add(blackwidow);
+
+	//il est important de faire la sauvegarde afin d'avoir des id pour les 3
+    // personnages ajoutés. 
+//highlight-next-line
+    db.SaveChanges();
+
+```
+</details>
+
+#### étape 3: Création d'un film
+
+Ajoutez le film The Dark Night (la solution ajoute tous les films )
+
+<details>
+  <summary>Solution</summary>
+
+```csharp
+//highlight-start
+   Film darkknight = new Film()
+    {
+        Titre = "The Dark Knight",
+        DateSortie = new DateOnly(2008, 07, 18),
+        Etoile = 5, 
+        Duree = 142,
+    };
+	//highlight-end
+    Film endgame = new Film()
+    {
+        Titre = "Avengers : Endgame",
+        DateSortie = new DateOnly(2019, 04, 26),
+        Etoile = 4,
+        Duree = 132,
+    };
+    Film ironman = new Film()
+    {
+        Titre = "Iron Man",
+        DateSortie = new DateOnly(2008, 05, 02),
+        Etoile = 4,
+        Duree = 96,
+    };
+
+    Film jokerf = new Film()
+    {
+        Titre = "Joker",
+        DateSortie = new DateOnly(2019, 10, 04),
+        Etoile = 4,
+        Duree = 99,
+    };
+//highlight-next-line
+    db.Add(darkknight);
+    db.Add(endgame);
+    db.Add(ironman); 
+    db.Add(jokerf);
+
+//highlight-next-line
+    db.SaveChanges();
+```
+</details>
+
+#### étape 4: lecture des personnages qui sont déjà dans la bd
+
+Allez chercher les 3 personnages et les 5 films qui ont été "seedés" durant les migrations
+<details>
+  <summary>Solution</summary>
+
+```csharp
+//highlight-start
+  //Pour compléter l'inventaire des personnages et films qui sont déjà dans la bd
+    Personnage spidey = db.PersonnageTb.Where(p => p.Nom == "Spiderman").First();
+    Personnage ironmanP = db.PersonnageTb.Where(p => p.Nom == "Iron Man").First();
+    Personnage batman = db.PersonnageTb.Where(p => p.Nom == "Batman").First();
+
+    Film spidermanF = db.FilmTb.Where(f => f.Titre == "Spiderman").First();
+    Film ironmanF  = db.FilmTb.Where(f => f.Titre == "Iron Man").First();
+    Film batmanF = db.FilmTb.Where(f => f.Titre == "The Dark Knight").First();
+    Film avenger = db.FilmTb.Where(f => f.Titre == "The Avengers").First();
+    Film blackwidowF = db.FilmTb.Where(f => f.Titre == "Black Widow").First();
+
+```
+</details>
+
+#### étape 5: Ajoutez la distribution
+
+Faites le lien entre les films et les personnages. 
+
+Vous devez utiliser une **List\<Distribution>**
+
+<details>
+  <summary>Solution</summary>
+```csharp
+
+   List<Distribution> distributions = new List<Distribution>()
+    {
+        new Distribution(){PersonnageId=spidey.PersonnageId,
+                            FilmId = spidermanF.FilmId, 
+                            Acteur = "Tobey Maguire"},
+        new Distribution(){PersonnageId=spidey.PersonnageId,
+                            FilmId = endgame.FilmId,
+                            Acteur = "Tom Holland"},
+        new Distribution(){PersonnageId=ironmanP.PersonnageId,
+                            FilmId = ironmanF.FilmId,
+                            Acteur = "Robert Downey Jr"},
+        new Distribution(){PersonnageId=ironmanP.PersonnageId,
+                            FilmId = endgame.FilmId,
+                            Acteur = "Robert Downey Jr"},
+        new Distribution(){PersonnageId=batman.PersonnageId,
+                            FilmId = darkknight.FilmId,
+                            Acteur = "Christian Bale"},
+        new Distribution(){PersonnageId=joker.PersonnageId,
+                            FilmId = darkknight.FilmId,
+                            Acteur = "Heath Ledger"},
+        new Distribution(){PersonnageId=joker.PersonnageId,
+                            FilmId = jokerf.FilmId,
+                            Acteur = "Joaquin Phoenix"},
+        new Distribution(){PersonnageId=thor.PersonnageId,
+                            FilmId = endgame.FilmId,
+                            Acteur = "Chris Hemsworth"},
+        new Distribution(){PersonnageId=thor.PersonnageId,
+                            FilmId = avenger.FilmId,
+                            Acteur = "Chris Hemsworth"},
+        new Distribution(){PersonnageId=blackwidow.PersonnageId,
+                            FilmId = endgame.FilmId,
+                            Acteur = "Scarlett Johansson"},
+        new Distribution(){PersonnageId=blackwidow.PersonnageId,
+                            FilmId = avenger.FilmId,
+                            Acteur = "Scarlett Johansson"},
+        new Distribution(){PersonnageId=blackwidow.PersonnageId,
+                            FilmId = blackwidowF.FilmId,
+                            Acteur = "Scarlett Johansson"},
+    };
+
+    foreach (Distribution d  in distributions)
+    {
+        db.Add(d);
+    }
+    db.SaveChanges();
+}
+```
+</details>
+
+#### La solution complète 
 
 <details>
   <summary>Solution</summary>
@@ -642,7 +858,7 @@ optBuilder.EnableSensitiveDataLogging();
 
 using (UniversContext db = new UniversContext(optBuilder.Options))
 {
-    //Obetnir la franchise à modifier
+    //Obtenir la franchise à modifier
     Franchise franchise = (from lqFranchise in db.FranchiseTb
                         where
                              lqFranchise.FranchiseId == 2
@@ -693,7 +909,7 @@ using (UniversContext db = new UniversContext(optBuilder.Options))
 
     //Appliquer la modification
     franchise.Nom = "DC Comics modifié";
-
+//highlight-next-line
     db.SaveChanges();    
 }
 ```

@@ -165,7 +165,7 @@ public class UniversContext : DbContext
 
 À la ligne 44, l'activation du **Seed** se fait uniquement si le contexte est initialisé en mode **Migration** dans la méthode **OnConfiguring()**.
 
-À la ligne 119, il y a une vérification avant d'exécuter le **Seed **dans la méthode **OnModelCreating()**.
+À la ligne 119, il y a une vérification avant d'exécuter le **Seed** dans la méthode **OnModelCreating()**.
 
 À la ligne 129, les données seront créées dans cette méthode.
 
@@ -240,6 +240,10 @@ private void Seed(ModelBuilder modelBuilder)
     modelBuilder.Entity<Personnage>().HasData(personnages);
 }
 ```
+
+:::note
+Il faut fournir l'id. EF s'occupe de faire le SET IDENTITY_INSERT ON
+:::
 
 Créez la migration **Seed_UniversEtPersonnage**.
 

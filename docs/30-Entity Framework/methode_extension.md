@@ -10,7 +10,7 @@ Dans une conception objet, il serait intéressant d'ajouter une méthode dans la
 
 Ajoutez cette méthode dans la classe **Franchise**.
 
-```csharp
+```csharp title="Cette méthode n'est pas celle recommandée dans le cours"
 public void AfficherConsole()
 {
     Console.WriteLine($"Id : {FranchiseId}");
@@ -59,7 +59,7 @@ Effacer la méthode AfficherConsole que vous venez de créer
 
 Créez un nouveau dossier **Extensions** dans le projet **LinqCRUD** et créez la classe **FranchiseConsoleExtensions**. Cette classe contiendra les méthodes pour la console.
 
-```csharp
+```csharp title="Cette méthode est recommandée"
 using Univers.EF.Data;
 
 namespace LinqCRUD.Extensions;

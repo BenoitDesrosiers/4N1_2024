@@ -10,18 +10,13 @@ sidebar_position: 4
 
   Version 2008 du diagramme complet de la base de données. Certains correctifs ont été mis à la main.
 
-<img src="/4N1_2024/img/adventureworks2008_schema-1.gif"  />
 
+<img src="https://moidulhassan.files.wordpress.com/2014/07/adventureworks2008_schema.gif" />
 
-- Diagramme - Schéma Person - 2019
-
-Diagramme généré par SQL Server pour la version 2019. Le diagramme contient uniquement les tables du schéma Person.
-
-<img src="/4N1_2024/img/person.png"  />
 
   
 
-- [Dictionnaire de données 2014](/4N1_2024/img/AdventureWorks_DataDictionary.pdf)
+- [Dictionnaire de données 2014](https://dataedo.com/download/AdventureWorks.pdf)
 
   Document qui contient l'explication de chacune des tables et des champs pour la version 2014.
 

@@ -262,7 +262,7 @@ La méthode **OnConfiguring** contient la logique pour la configuration du serve
 
 La clause **#if DEBUG** indique au compilateur de tenir compte du code seulement si l'application est en mode **Debug**. Il ne faut pas que cette configuration soit accessible en production.
 
-### MIGRATION_CONNECTION_STRING
+### Chaine de connexion
 
 Il faut assigner la chaine de connexion dans la variable d'environnement **MIGRATION_CONNECTION_STRING**.
 

@@ -2,9 +2,9 @@
 sidebar_position: 40
 ---
 
-# Aggrégation
+# Agrégation
 
-L'aggrégation en **LINQ** permet de faire des calculs sur une collection en fonction du modèle objet.
+L'agrégation en **LINQ** permet de faire des calculs sur une collection en fonction du modèle objet.
 
 Ajoutez ce film dans la base de données pour avoir un film sans aucune distribution.
 

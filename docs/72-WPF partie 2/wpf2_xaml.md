@@ -294,11 +294,10 @@ La langue s'applique à la balise en cours et à ses enfants.
 
 Cette section permet de tester le **MVVM** et certains éléments du **XAML** sans se soucier du service.
 
-:::info
+:::danger ATTENTION
 Ca ne doit pas être reproduit dans votre **TP 3**.
 :::
 
-Vous pouvez conserver le code de cette section dans ce projet.
 
 
 ### Création du ViewModel - HelloWorldVM
@@ -326,9 +325,10 @@ namespace SuperCarte.WPF.ViewModels
 }
 ```
 
-<!--- explications ? -->
-<!--- question: c'est quoi un assembly ? -->
+:::note
 En **MVVM**, il n'est pas possible d'utiliser une propriété auto-implémentée si elle est liée à la vue, car il faut notifier le changement de valeur. Il faut donc de la logique dans le **set**. Lorsqu'il y a de la logique, il faut utiliser un attribut pour contenir la valeur de la propriété.
+
+:::
 
 Le constructeur permet d'assigner les valeurs initiales de la **Vue**. Les valeurs initiales peuvent provenir du service. Par contre, il n'est pas possible de faire de l'asynchrone dans le constructeur.
 
@@ -363,7 +363,7 @@ Toutes les **Vues** seront du type **Contrôle utilisateur (WPF)**.
 
 La première étape consiste à indiquer le **ViewModel** qui sera utilisé. Ce n'est pas obligatoire, mais en ajoutant les lignes 7 et 8 ci-dessous, il sera possible d'avoir des suggestions lors du **Binding**.
 
-À la ligne 17, il y a le **Binding** de la propriété **Text** avec la propriété **DateHeure** du **ViewModel**. L'autocomplétion sera fonctionnelle grâce aux lignes 7 et 8.
+À la ligne 15, il y a le **Binding** de la propriété **Text** avec la propriété **DateHeure** du **ViewModel**. 
 
 ### Enregistrer le ViewModel - SCViewModelExtensions
 
@@ -381,7 +381,7 @@ public static void EnregistrerViewModels(this IServiceCollection services)
 
 ### Ajout de la ressource pour créer le lien entre ViewModel et Vue - MainWindow.xaml
 
-Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue**.
+Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue** dans **MainWindow.xaml**.
 
 ```xaml showLineNumbers
 <Window x:Class="SuperCarte.WPF.MainWindow"
@@ -397,10 +397,12 @@ Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue**
         Title="Super Carte App" 
         Height="450" Width="800" WindowState="Maximized">
     <Window.Resources>
+	//highlight-start
         <!--Assignation du ViewModel à Vue-->
         <DataTemplate DataType="{x:Type TypeName=vm:HelloWorldVM}">
             <v:UcHelloWorld />
         </DataTemplate>
+		//highlight-end
     </Window.Resources>
     <Grid>
         <ContentControl Content="{Binding VMActif}" />
@@ -411,6 +413,7 @@ Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue**
 La ligne 15 à 17 indique que lorsque le **DataContext** est de type **HelloWorldVM** (ligne 15), il faut utiliser le contrôle utilisateur **UcHelloWorld** (ligne 16).
 
 À la ligne 20, lorsque le **Content** du **ContentControl** sera un **HelloWorldVM**, il chargera le contrôle utilisateur correspondant.
+
 
 ### Assignation du ViewModel initial - MainWindowVM
 
@@ -426,6 +429,7 @@ public class MainWindowVM : BaseVM
     public MainWindowVM(IServiceProvider serviceProvider)
 	{   
         //Sélectionner le ViewModel de démarrage
+		//highlight-next-line
         VMActif = serviceProvider.GetRequiredService<HelloWorldVM>();
     }
 
@@ -436,6 +440,7 @@ public class MainWindowVM : BaseVM
 À la ligne 10, le **ServiceProvider** obtiendra une instance de **HelloWorldVM**.
 
 Démarrez l'application et vous devriez voir le message **HelloWorld** avec la date et l'heure.
+
 
 ### Formater des données
 

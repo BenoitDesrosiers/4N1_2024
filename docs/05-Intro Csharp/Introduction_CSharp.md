@@ -481,7 +481,9 @@ private string _nom;
 private DateTime _dateNaissance;
 ```
 
-Pour avoir accès rapidement à tous les chanmps, il suffit de taper le **_** et l'intellisense s'occupe du reste.
+:::tip
+Pour avoir accès rapidement à tous les champs, il suffit de taper le **_** et l'intellisense s'occupe du reste.
+:::
 
 Les champs sont également en haut de la classe.
 

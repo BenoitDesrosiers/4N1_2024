@@ -157,7 +157,7 @@ await application.DemarrerApplicationAsync();
 ```
 
 :::info
-sur la ligne services.AddTransientApp();
+sur la ligne services.AddTransient\<App>();
 
 App réfère à la classe App
 :::

@@ -3,7 +3,7 @@ sidebar_position: 10
 draft: true
 ---
 
-# Introduction
+# Intro à XAML et MVVM
 
 Dans ce document,  l'application aura ses premières interfaces visuelles. Les interfaces seront des listes d'éléments.
 
@@ -284,7 +284,13 @@ public partial class MainWindow : Window
 }
 ```
 
-Le constructeur reçoit le **MainWindowVM** en dépendance. Le **ViewModel** est assigné au **DataContext** de la fenêtre à la ligne 15.
+Le constructeur reçoit le **MainWindowVM** en dépendance. 
+
+Le **ViewModel** est assigné au **DataContext** de la fenêtre à la ligne 15. 
+
+:::note
+bien que le DataContext ait été indiqué dans le fichier xaml, ce n'était que pour aider intellisense. L'assignation à la ligne 15 est la "vrai". 
+:::
 
 Il faut également assigner la langue de la vue. Généralement, lors de l'affichage d'une donnée, elle utilise le format correspondant dans les paramètres régionaux du système d'exploitation. Cette valeur provient de **CultureInfo.CurrentUICulture**. Par contre, avec WPF, il faut le spécifier dans la structure de la vue.
 
@@ -448,9 +454,9 @@ Il est possible de formater la valeur des propriétés dans un format spécifiqu
 
 Lors du **Binding**, il est possible d'indiquer la transformation avec la propriété **StringFormat**, Le choix de l'affichage appartient à la **Vue**, donc il faut faire les transformations d'affichage dans la **Vue** et non dans le **ViewModel**.
 
-Pour la date, il faut afficher en mode **dd MMM yyyy HH:mm:ss**. Donc pour **2023-03-03 15:23:03.452121 ** se sera **3 Mars 2023 15:23:03**.
+Pour la date, il faut afficher en mode **dd MMM yyyy HH:mm:ss**. Donc pour **2023-03-03 15:23:03.452121** se sera **3 Mars 2023 15:23:03**.
 
-Pour le nombre décimal, il faut avoir un séparateur de milliers et avoir une précision au millième (3 décimaux). Le format sera **N3` **.
+Pour le nombre décimal, il faut avoir un séparateur de milliers et avoir une précision au millième (3 décimaux). Le format sera **N3**.
 
 ```csharp
 <UserControl x:Class="SuperCarte.WPF.Views.UcHelloWorld"
@@ -467,8 +473,10 @@ Pour le nombre décimal, il faut avoir un séparateur de milliers et avoir une p
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="Hello World" />
+			//highlight-start
             <TextBlock Text="{Binding DateHeure , StringFormat=\{0:d MMMM yyyy HH:mm:ss\}}"/>
-            <TextBlock Text="{Binding ValeurDecimal, StringFormat=\{0:N3\}}" />            
+            <TextBlock Text="{Binding ValeurDecimal, StringFormat=\{0:N3\}}" />     
+			//highlight-end       
             <CheckBox IsChecked="{Binding ValeurBool}" />
         </StackPanel>        
     </Grid>

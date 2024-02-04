@@ -1,9 +1,9 @@
 ---
-sidebar_position: 90
+sidebar_position: 12
 draft: true
 ---
 
-# Résumé de wpf Partie 2
+# Résumé de WPF XAML et MVVM
 
 le constructeur de App.xaml.cs est appelé   
 - C'est toujours App.xaml qui est appelé pour démarrer l'application. 
@@ -30,6 +30,7 @@ Constructeur de MainWindow.xaml
   - recoit un MainWindowVM  (pas d'injection, c'est pas une interface)
   - Initialise MainWindow.xaml (InitializeComponent())
   - set le DataContext au MainWindowVM recu en argument
+  
   
 - Dans MainWindow.xaml: 
   - la première ligne indique c'est une Window, et que le code behing sera dans Supercarte.WPF.Mainwindow. C'est x:class qui indique ca. 

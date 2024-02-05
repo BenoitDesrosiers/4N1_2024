@@ -34,7 +34,15 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+  // Config Markdown
+  markdown: {
+    mermaid: true,
+  },
 
+  // Themes
+  themes: [
+    '@docusaurus/theme-mermaid',
+  ], 
   presets: [
     [
       'classic',
@@ -65,11 +73,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-		docs: {
+	docs: {
       sidebar: {
         hideable: true,
       },
     },
+	
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
@@ -144,6 +153,8 @@ const config = {
         darkTheme: prismThemes.dracula,
         additionalLanguages: ['csharp'],
       },
+
+	  
     }),
 };
 

@@ -5,6 +5,7 @@ draft: true
 
 # Supprimer une catégorie
 
+
 Pour être en mesure de supprimer un élément d'une liste, il faut au préalable vérifier les dépendances.
 
 Car, si une carte utilise la catégorie, il ne faut pas qu'il soit possible de supprimer la catégorie.

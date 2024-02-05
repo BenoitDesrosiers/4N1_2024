@@ -5,6 +5,8 @@ draft: true
 
 # Résumé de WPF XAML et MVVM
 
+
+
 le constructeur de App.xaml.cs est appelé   
 - C'est toujours App.xaml qui est appelé pour démarrer l'application. 
 - crée le builder 

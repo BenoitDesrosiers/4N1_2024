@@ -34,7 +34,7 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-
+	 
   presets: [
     [
       'classic',
@@ -65,11 +65,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-		docs: {
+	docs: {
       sidebar: {
         hideable: true,
       },
     },
+	
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
@@ -79,11 +80,7 @@ const config = {
           src: 'img/logo420.svg',
         },
         items: [
-		{type: 'doc',
-          position: 'left',
-          docId: 'introduction',
-          label: 'Docs'
-		},
+		
           {
             type: 'docSidebar',
             sidebarId: 'NotesSidebar',
@@ -148,6 +145,8 @@ const config = {
         darkTheme: prismThemes.dracula,
         additionalLanguages: ['csharp'],
       },
+
+	  
     }),
 };
 

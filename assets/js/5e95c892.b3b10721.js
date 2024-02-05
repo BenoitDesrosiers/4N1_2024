@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunknotes_de_cours_4_n_1_2024=self.webpackChunknotes_de_cours_4_n_1_2024||[]).push([[9661],{1892:(e,s,r)=>{r.r(s),r.d(s,{default:()=>o});r(7294);var _=r(6905),n=r(1944),u=r(5281),c=r(8790),t=r(7293),a=r(5893);function o(e){return(0,a.jsx)(n.FG,{className:(0,_.Z)(u.k.wrapper.docsPages),children:(0,a.jsx)(t.Z,{children:(0,c.H)(e.route.routes)})})}}}]);

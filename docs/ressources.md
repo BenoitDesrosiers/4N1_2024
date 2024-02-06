@@ -1,5 +1,10 @@
+---
+draft: true
+---
 
-# Liens 
+# Ressources
+
+## Liens 
 
 Voici tous les liens vers des ressoures utilisées dans le cours
 
@@ -32,3 +37,21 @@ Voici tous les liens vers des ressoures utilisées dans le cours
 [Repository pattern](https://www.umlboard.com/design-patterns/repository.html)
 
 [SQL type vs C# type](https://learn.microsoft.com/en-us/sql/relational-databases/clr-integration-database-objects-types-net-framework/mapping-clr-parameter-data?view=sql-server-ver16&viewFallbackFrom=sql-server-2014&redirectedfrom=MSDN)
+
+
+## Termes
+
+
+- Attribut
+- Migration
+- Property
+	- \{get; set }
+	- \{get; private set }
+	- \{get; init } Le mot clé init sert à indiquer qu'il n'est pas possible de modifier la valeur après la construction de l'objet. [voir plus](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/init)
+- Repository
+- Seed
+- Service
+- ViewModel
+- View
+- xaml
+

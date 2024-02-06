@@ -1,5 +1,5 @@
 ---
-sidebar_position: 20
+sidebar_position: 220
 draft: true
 ---
 
@@ -133,6 +133,7 @@ Il n'est pas nécessaire de les déclarer dans un ordre spécifique. Le **TextBl
 
 Ici, le composant parent **[StackPanel](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.controls.stackpanel?view=winrt-22621)** est positionné (Grid.Row et Grid.Column), il n'est donc pas nécessaire de positionner **[TextBlock](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.controls.textblock?view=winrt-22621)**.
 
+Dans **Views/UcHelloWorld.xaml**
 ```xaml title="Vous pouvez l'essayer"
 <UserControl x:Class="SuperCarte.WPF.Views.UcHelloWorld"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -186,7 +187,8 @@ Dans l'exemple ci-dessous, il y a 4 rangées. Il y a un élément par rangées. 
 
 Le nombre correspond au nombre de pixels.
 
-```xaml
+Dans **Views/UcHelloWorld.xaml**
+```xaml title="Vous pouvez l'essayer"
 <UserControl x:Class="SuperCarte.WPF.Views.UcHelloWorld"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -231,7 +233,8 @@ Le nombre correspond au nombre de pixels.
 
 Dans l'exemple ci-dessous, il y a également des colonnes à taille fixe.
 
-```xaml
+Dans **Views/UcHelloWorld.xaml**
+```xaml title="Vous pouvez l'essayer"
 <UserControl x:Class="SuperCarte.WPF.Views.UcHelloWorld"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -281,7 +284,8 @@ Dans l'exemple ci-dessous, il y a également des colonnes à taille fixe.
 
 La valeur étoile **\*** consiste à prendre toute l'espace disponible sur la hauteur ou la largeur. Si la valeur n'est pas spécifiée, la valeur par défaut est **\***.
 
-```xaml
+Dans **Views/UcHelloWorld.xaml**
+```xaml title="Vous pouvez l'essayer"
 <UserControl x:Class="SuperCarte.WPF.Views.UcHelloWorld"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -333,7 +337,8 @@ Il est possible de définir des proportions relatives dans la taille.
 
 Il est possible d'utiliser l'étoile **\*** avec un nombre pour représenter une proportion. La fenêtre sera alors **responsive** et la proportion sera respectée.
 
-```xaml
+Dans **Views/UcHelloWorld.xaml**
+```xaml title="Vous pouvez l'essayer"
 <UserControl x:Class="SuperCarte.WPF.Views.UcHelloWorld"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -384,7 +389,8 @@ Il est possible d'utiliser l'étoile **\*** avec un nombre pour représenter une
 
 Il est possible de faire une combinaison des 2. Il peut avoir une section fixe pour représenter une barre d'outils, mais le reste de la page doit prendre l'espace disponible.
 
-```xaml
+Dans **Views/UcHelloWorld.xaml**
+```xaml title="Vous pouvez l'essayer"
 <UserControl x:Class="SuperCarte.WPF.Views.UcHelloWorld"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -432,7 +438,8 @@ Dans la vue ci-dessous, la première rangée est automatique. Elle contient une 
 
 La 2e rangée est dynamique. Elle va prendre l'espace disponible et la 3e rangée est fixe à 10 pixels.
 
-```xaml
+Dans **Views/UcHelloWorld.xaml**
+```xaml title="Vous pouvez l'essayer"
 <UserControl x:Class="SuperCarte.WPF.Views.UcHelloWorld"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -488,9 +495,7 @@ Lors de la création de la commande, il faut indiquer la méthode qui effectuera
 
 La librairie **MVVM ToolKit** fournit l'objet **RelayCommand** qui permet de créer des commandes dynamiquement.
 
-:::warning Attention
-L'assignation **set** est privée, car il est préférable que ce soit le **ViewModel** qui s'occupe de la création de la commande et non une classe externe. Le **get** doit être public pour qu'il soit visible par la **Vue**.
-:::
+
 
 Dans l'exemple ci-dessous, il faut créer un bouton pour mettre à jour l'heure.
 
@@ -528,6 +533,10 @@ namespace SuperCarte.WPF.ViewModels
     }
 }
 ```
+
+:::warning Attention
+L'assignation **set** est privée, car il est préférable que ce soit le **ViewModel** qui s'occupe de la création de la commande et non une classe externe. Le **get** doit être public pour qu'il soit visible par la **Vue**.
+:::
 
 À la ligne 11, il y a la propriété **RafraichirDateHeureCommande** qui sera liée à la propriété **Command** du bouton.
 
@@ -649,6 +658,7 @@ namespace SuperCarte.WPF.ViewModels
         /// </summary>
         private void RafraichirDateHeure()
         {
+			//highlight-next-line
             Task.Delay(5000).Wait();
             DateHeure = DateTime.Now;
         }
@@ -695,7 +705,6 @@ namespace SuperCarte.WPF.ViewModels
         /// Rafraichir la date et l'heure
         /// </summary>
 	//highlight-next-line
-
         private async Task RafraichirDateHeureAsync()
         {
             await Task.Delay(5000);
@@ -812,13 +821,14 @@ Modifiez le fichier **UcHelloWorld.xaml** .
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">            
             <TextBlock Text="{Binding DateHeure , StringFormat=\{0:d MMMM yyyy HH:mm:ss\}}"/>
             <Button Content="Rafraichir" Command="{Binding RafraichirDateHeureCommande}"/>
+			//highlight-next-line
             <ProgressBar Height="10" IsIndeterminate="{Binding EstEnTravail}" />
         </StackPanel>
     </Grid>
 </UserControl>
 ```
 
-À la ligne 16, il y a une barre de progression. Sa propriété **IsIndeterminate** est liée à la propriété **EstEnTravail** du **ViewModel**. La propriété **IsIndeterminate** permet de faire une barre de progression pour signaler une activité et non par une progression de pourcentage.
+À la ligne 16, il y a une barre de progression. Sa propriété **IsIndeterminate** est liée à la propriété **EstEnTravail** du **ViewModel**. La propriété **IsIndeterminate** permet de faire une barre de progression pour en continue au lieu d'une progression en pourcentage.
 
 ### Asynchrone et constructeur
 
@@ -826,7 +836,7 @@ Avez-vous remarqué que la date et heure n'est pas généré en partant l'applic
 
 Le principe suggéré est d'inclure la méthode dans le constructeur. Par contre, il n'est pas possible d'appeler une méthode asynchrone et rester asynchrone à partir du constructeur. Il serait possible de faire une version *synchrone* de la méthode, mais le contrôle ne s'affichera pas tant que le constructeur n'a pas terminé.
 
-```csharp titre="Ne pas utiliser"
+```csharp title="Ne pas utiliser"
 public HelloWorldVM()
 {
     RafraichirDateHeureAsync();

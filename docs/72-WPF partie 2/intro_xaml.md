@@ -1,5 +1,5 @@
 ---
-sidebar_position: 10
+sidebar_position: 210
 draft: true
 ---
 
@@ -78,6 +78,12 @@ L'objet du modèle de données est surveillé par le contexte qui l'a créé tan
 Pour faciliter la conversion entre les différents types de **modèles**, il est possible d'utiliser une librairie **Mapper**. Pour ce projet, ce sera des **extensions** qui s'occuperont de faire la transition entre les 2 types de modèles.
 
 ## Préparation du projet WPF
+
+:::danger AVERTISSEMENT
+Il est possible que vous ayez des erreurs indiquant qu'une classe n'est pas dans disponible dans l'espace de nom. Cette erreur se produit parfois quand on efface ou renomme une classe ou répertoire.
+
+Pour régler cette erreur, il faut ré-écrire le namespace soit dans la classe qui est introuvable alors qu'elle est à la bonne place, soit dans la classe donnant l'erreur. Vous verrez que parfois vous aurez 2 namespaces avec le même nom. Utiliser le deuxième aide parfois. 
+:::
 
 Il faut préparer le projet **WPF** pour être en mesure d'intégrer un **Contrôle utilisateur (WPF)** dans le **MainWindow**.
 
@@ -203,17 +209,17 @@ La classe a une propriété **VMACtif** pour indiquer le **ViewModel** qui doit 
 
 ### Enregistrer le ViewModel - SCViewModelExtensions
 
-Dans la classe **SCViewModelExtensions**, il faut enregistrer le **ViewModel**.
+Dans la classe **Extensions/ServiceCollections/SCViewModelExtensions**, il faut enregistrer le **ViewModel**.
 
 ```csharp
 public static void EnregistrerViewModels(this IServiceCollection services)
 {
+	//highlight-next-line
     services.AddSingleton<MainWindowVM>();
 }
 ```
 
-<!--- explications ? -->
-Le **ViewModel** n'a pas d'interface. Il sera enregistré automatiquement. Il n'est pas nécessaire pour cette classe d'utiliser une interface, car l'assignation **ViewModel** et **Vue** ne peut pas se faire par l'interface. De plus, il n'y a pas de bénéfice au niveau des tests d'utiliser une interface pour le **ViewModel**.
+Remarquez ici qu'il n'y a pas d'interface lors de l'enregistrement du **ViewModel MainWindowVM**. Il n'est pas nécessaire pour cette classe d'utiliser une interface, car l'assignation entre **ViewModel** et la **Vue** associée ne peut pas se faire par l'interface (nous verrons comment le faire plus tard). De plus, il n'y a pas de bénéfice au niveau des tests d'utiliser une interface pour le **ViewModel**.
 
 :::warning Important
 Notez que MainWindowVM a été enregistré en **Singleton**. Il faut avoir seulement une fenêtre active dans le programme. Les autres **ViewModels** seront enregistrés en **Transient**.
@@ -379,6 +385,7 @@ Dans la classe **SCViewModelExtensions**, il faut enregistrer le **ViewModel**.
 public static void EnregistrerViewModels(this IServiceCollection services)
 {
     services.AddSingleton<MainWindowVM>();
+	//highlight-next-line
     services.AddTransient<HelloWorldVM>();
 }
 ```
@@ -420,6 +427,9 @@ La ligne 15 à 17 indique que lorsque le **DataContext** est de type **HelloWorl
 
 À la ligne 20, lorsque le **Content** du **ContentControl** sera un **HelloWorldVM**, il chargera le contrôle utilisateur correspondant.
 
+:::note
+Souvenez-vous qu'on avait dit qu'il était inutile d'avoir une interface pour l'ajout du ViewModel dans le service, c'est ici qu'il est impossible de spécifier une interface pour HelloWorldVM.
+:::
 
 ### Assignation du ViewModel initial - MainWindowVM
 
@@ -447,3 +457,4 @@ public class MainWindowVM : BaseVM
 
 Démarrez l'application et vous devriez voir le message **HelloWorld** avec la date et l'heure.
 
+<!-- la solution "SuperCarteApp_WPF_partie_2_helloworld" correspond au code jusqu'ici -->

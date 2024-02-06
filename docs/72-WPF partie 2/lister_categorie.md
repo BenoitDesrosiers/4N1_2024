@@ -1,11 +1,13 @@
 ---
-sidebar_position: 30
+sidebar_position: 230
 draft: true
 ---
 
 # Liste des catégories
 
 Cette section utilise les techniques apprises dans la section précédente afin de faire l'affichage des catégories dans SuperCarte (Le R du CRUD). 
+
+Nous commencons par catégorie car cette entité n'a pas de FK. Elle est donc facile à afficher. 
 
 
 La première interface utilisateur à effectuer sera de lister les enregistrements de la table **Catégorie**.
@@ -18,7 +20,7 @@ La liste sera un **DataGrid**. Il faut afficher à l'utilisateur la clé, le nom
 
 Les tables **Categorie**, **Ensemble** et **Cartes** ne contiennent pas de données. Il faut donc créer une nouvelle migration qui contient ce nouveau **Seed**.
 
-Dans la méthode **Seed()** de la classe **SuperCarteContext**, il faut ajouter les données. Il est important de ne pas supprimer les données existantes, car la migration va voir qu'ils ne sont plus là, donc qu'il faut les supprimer.
+Dans la méthode **Seed()** de la classe **SuperCarteContext**, il faut ajouter les données. Il est important de ne pas supprimer les données existantes, car la migration va croire qu'ils ne sont plus là, et donc qu'il faudrait les supprimer. 
 
 Pour ajouter des données, il faut créer un tableau qui contient les objets et l'ajouter à l'entité avec la méthode **HasData**.
 
@@ -217,13 +219,14 @@ public class CategorieModel
 
 ### Classe d'extension - CategorieMapExtensions
 
-Les extensions seront associées au modèle de données. Que la conversion s'effectue de **Modèle de données -> Modèle du domaine** ou à l'inverse **Modèle du domaine -> Modèle de données**, elles seront dans la classe d'extension du **Modèle de données**.
+L'application WPF utilise des modèles du domaine, alors que EF utilise des modèles de données. Le projet Core fait le lien entre ces deux projets. Afin de faire les transformations, des extensions seront utilisées.
+Les extensions seront associées au modèle du domaine dans Core. Que la conversion s'effectue de **Modèle de données -> Modèle du domaine** ou à l'inverse **Modèle du domaine -> Modèle de données**, elles seront dans la classe d'extension du **Modèle du domaine** (**CategorieModel**).
 
 Il faut faire la méthode qui récupèrera la liste de **Categorie** (modèle de donnée dans EF) et la convertira en **CategorieModel** (modèle du domaine dans Core). 
 
 Il y a également la version pour les **List\<\>**. **Linq** est utilisé pour transformer la liste au lieu d'utiliser une boucle.
 
-Créez la classe **CategorieMapExtensions.cs** dans le répertoire **Extensions**.
+Créez la classe **CategorieMapExtensions.cs** dans le répertoire **Core/Extensions**.
 
 ```csharp
 using SuperCarte.Core.Models;
@@ -290,7 +293,7 @@ public static class CategorieMapExtension
 
 ### Création du service - CategorieService
 
-Il faut créer la classe qui s'occupera de la logique du modèle **Catégorie**.
+Il faut créer la classe qui s'occupera de la logique de conversion modèle de domaine **CategorieModel**.
 
 Créez l'interface **ICategorieService.cs** dans le dossier **Services**.
 
@@ -351,7 +354,7 @@ public class CategorieService : ICategorieService
 }
 ```
 
-Remarquez la méthode **ObtenirListeAsync()**. Elle a le mot-clé **async** pour indiquer qu'elle fonctionne en asynchrone.
+
 
 ## Théorie sur le **async Task**
 
@@ -484,7 +487,7 @@ global using SuperCarte.WPF.ViewModels.Bases;
 
 Le **CategorieService** est maintenant créé, il faut maintenant créer le **ViewModel**.
 
-Créez la classe **ListeCategoriesVM.cs** dans le dossier **ViewModels**. La classe au complet est à la fin de la section.
+Créez la classe **ListeCategoriesVM.cs** dans le dossier **ViewModels**. 
 
 Premièrement, il faut définir les éléments que la **Vue** a besoin de connaitre pour fonctionner.
 
@@ -496,11 +499,9 @@ En **MVVM**, il n'est pas possible d'utiliser une propriété auto-implémentée
 
 Ensuite, il faut injecter les dépendances à la ligne 11, car les catégories seront obtenues par le service.
 
-Ensuite, il faut penser aux commandes. La liste doit se rafraichir. Cette commande doit être **asynchrone**. Cette commande se nomme **ObtenirListeCommande**.
+Ensuite, il faut penser aux commandes. La liste doit se rafraichir. Cette commande doit être **asynchrone**. Cette commande se nomme **ObtenirListeCommande**. La propriété de la commande est à la ligne 37. Les commandes doivent avoir le suffixe **Commande**. La commande doit utiliser un verbe d'action dans la mesure du possible.
 
-La propriété de la commande est à la ligne 37. Les commandes doivent avoir le suffixe **Commande**. La commande doit utiliser un verbe d'action dans la mesure du possible.
-
-La méthode que la commande utilise est à la ligne 31. Par convention, la méthode doit avoir le même nom que la commande dans le suffixe.
+La méthode que la commande utilise est à la ligne 31. Par convention, la méthode doit avoir le même nom que la commande sans le mot *Commande* en suffix (ObtenirListeCommande devient ObjetListeAsync).
 
 À la ligne 25, la commande est créée dans le constructeur.
 
@@ -580,6 +581,7 @@ Dans la classe **SCViewModelExtensions**, il faut enregistrer le **ViewModel**.
 public static void EnregistrerViewModels(this IServiceCollection services)
 {
     services.AddTransient<MainWindowVM>();
+	//highlight-next-line
     services.AddTransient<ListeCategoriesVM>();
 }
 ```
@@ -625,7 +627,7 @@ Il faut ensuite déclarer les colonnes.
 
 Toutes les colonnes sont du texte, car même le **Id** sera transformé en texte. Elles sont toutes du type **\<DataGridTextColumn\>**. 
 
-La propriété **Header** est pour le nom de la colonne. La propriété **Binding** est pour indiquer la propriété à utiliser dans la classe **CategorieModel**. Il n'est pas obligatoire de créer systématiquement une colonne par propriété. La clé pourrait être masquée à l'utilisateur. 
+La propriété **Header** est pour le nom de la colonne. La propriété **Binding** est pour indiquer la propriété à utiliser dans la classe **CategorieModel**. Il n'est pas obligatoire de créer systématiquement une colonne par propriété, par exemple la clé pourrait être masquée à l'utilisateur. 
 
 À la ligne 61, la largeur de la colonne est **Width="*"**, ce qui indique qu'elle prendra l'espace restant. Si l'espace restant est plus petit que 300, la colonne restera à 300, car la propriété **MinWidth="300"** (ligne 58).
 
@@ -777,7 +779,7 @@ Dans le fichier **UcListeCategories.xaml**.
 
 À la ligne 11, il y a la déclaration de l'événement.
 
-```xaml
+```xaml showLineNumbers
 <UserControl x:Class="SuperCarte.WPF.Views.UcListeCategories"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

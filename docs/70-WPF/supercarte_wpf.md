@@ -418,3 +418,4 @@ Pour avoir un premier contenu visuel, il faut modifier le fichier **MainWindow.x
 À la ligne 10, il y a un **Label** pour afficher du texte statique.  L'intérieur de la balise **\<Grid\>**, c'est le contenu de la fenêtre.
 
 
+<!-- le projet "SuperCarte_WPF_partie_1" correspond au code jusqu'ici -->

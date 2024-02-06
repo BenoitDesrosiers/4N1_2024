@@ -173,7 +173,7 @@ personne3.Nom = "Morin";
 
 // Notez ici que la liste porte le nom du type au pluriel car elle contient DES personneS.
 // D'autres noms qui seraient intéressants: groupe, classe, employes ... 
-List<Personne> personnes = new List<Personne\>(); 
+List<Personne> personnes = new List<Personne>(); 
 personnes.Add(personne1);
 personnes.Add(personne2);
 personnes.Add(personne3);
@@ -260,7 +260,7 @@ L'accès par les **[]** indique la valeur de la clé et non une position.
 La valeur peut également être une collection. 
 
 ```csharp
-Dictionary<string, List<Personne> dicNom = new Dictionary<string, List<Personne>();
+Dictionary<string, List<Personne>> dicNom = new Dictionary<string, List<Personne>();
 
 dicNom.Add("François", new List<Personne>());
 //le .Add est le .Add de List et non le .Add du Dictionary, car dicNom[""] retourne la valeur.
@@ -274,7 +274,7 @@ dicNom["Stéphane"].Add(personne2);
 
 Dans le cas-ci dessus, l'accès se fait par **[]** et à l'intérieur c'est une **string**. 
 
-Également **dicNom["François"]** retourne une **List\<Personne\>**.
+Également **dicNom["François"]** retourne une **List\<Personne>**.
 
 ```csharp
 List<Personne> lesFrancois = dicNom["François"];

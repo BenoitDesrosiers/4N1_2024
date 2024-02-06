@@ -117,7 +117,7 @@ Dans le fichier **Program.cs**, débutez avec cette ligne pour récupérer la li
 ```csharp
 using ConsoleLINQ;
 
-List<Animal> lstAnimal = GenerateurListeAnimal.ObtenirListe();
+List<Animal> listAnimal = GenerateurListeAnimal.ObtenirListe();
 ```
 
 Pour chacun des exercices, nommez votre objet de retour comme indiqué ci-dessous. Inscrivez directement les requêtes dans le fichier **Program.cs**.
@@ -295,7 +295,7 @@ List<Animal> ex8Query = (from lqAnimal in listeAnimal
 
 Retournez un objet qui contient le **nom** de l'animal,  **l'espèce** et le **type**.
 
-Utilisez un type **var **pour l'objet de retour.
+Utilisez un type **var** pour l'objet de retour.
 
 <details>
   <summary>Solution</summary>
@@ -423,7 +423,7 @@ var ex13Query = (from lqAnimal in listeAnimal
 
 ### Exercice 14
 
-Retournez tous les animaux nés en décembre.
+Retournez tous les animaux nés en décembre ou en mai.
 
 Triez le résultat du plus vieux au plus jeune.
 
@@ -508,7 +508,7 @@ var ex16Query = new
 
 ### Exercice 17
 
-Retournez la liste des animaux que leur propriétaire on un **prénom composé**. Utilisez un **split** et un **contains**.
+Retournez la liste des animaux que leur propriétaire ont un **prénom composé**. Utilisez un **split** et un **contains**.
 
 Triez la liste par le nom du propriétaire.
 
@@ -536,7 +536,7 @@ Retournez la liste des **propriétaires** qui ont des **chiens**. La liste doit 
 
 Retournez la liste des **propriétaires** qui ont des **chats**. La liste doit avoir seulement des éléments **distincts**. Utilisez la syntaxe **Query**.
 
-Utilisez 2 listes différentes. Exemple : **List\<string\> ex18ChienLambda** et **List\<string\> ex18ChatQuery`** . 
+Utilisez 2 listes différentes. Exemple : **List\<string\> ex18ChienLambda** et **List\<string\> ex18ChatQuery** . 
 
 Retournez la liste des propriétaires qui ont des chats et des chiens. Utilisez la méthode **Intersect** (intersection).
 

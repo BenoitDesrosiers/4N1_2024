@@ -5,7 +5,49 @@ draft: true
 
 # Résumé de WPF XAML et MVVM
 
+```mermaid
+sequenceDiagram
+    participant System
 
+    create participant App_xaml_cs as App.<br>xaml.cs
+    System->>App_xaml_cs: new()
+    activate App_xaml_cs
+    participant serv as ServiceProvider
+    Note right of App_xaml_cs: Enregistrement des services
+    App_xaml_cs->>serv: AddSingleton<MainWindow>
+    App_xaml_cs->>serv: SCViewModelExtensions <br/> AddTransient<MainWindowVM>()
+    App_xaml_cs->>serv: SCViewModelExtensions <br/> AddTransient<HelloWorldVM>()
+    deactivate App_xaml_cs
+    System->>App_xaml_cs: OnStartup
+    activate App_xaml_cs
+    App_xaml_cs->>serv: GetRequiredService<MainWindow>
+    create participant MainWindow_xaml_cs as MainWindow<br>.xaml.cs
+    serv->>MainWindow_xaml_cs: Singleton new<br/>MainWindowVM
+    activate MainWindow_xaml_cs
+    create participant MainWindowVM_cs as MainWindowVM<br>.cs 
+    MainWindow_xaml_cs->>MainWindowVM_cs: Transient new()
+    MainWindowVM_cs->>serv: GetRequiredService<HelloWorldVM>
+    create participant HelloWorldVM.cs
+    serv->>HelloWorldVM.cs: Transient new()
+    MainWindow_xaml_cs-->HelloWorldVM.cs: VMActif =
+    create participant MainWindow_xaml as MainWindow<br>.xaml
+    MainWindow_xaml_cs->>MainWindow_xaml:InitializeComponent()
+    MainWindow_xaml-->>HelloWorldVM.cs: <DataTemplate <br>"{vm:HelloWorldVM}"><br><v:UcHelloWorld /> >
+    MainWindow_xaml_cs-->MainWindowVM_cs: DataContext =
+    deactivate MainWindow_xaml_cs
+
+    App_xaml_cs->>MainWindow_xaml: Show()
+    MainWindow_xaml-->MainWindow_xaml_cs:Content = Binding VMActif
+    Note over MainWindow_xaml,HelloWorldVM.cs: VMactif = HelloWorldVM, <br/> donc c'est la view associée<br/>UcHelloWorld qui est affichée
+    create participant UcHelloWorld_xaml_cs as UcHelloWorld<br>.xaml.cs
+    MainWindow_xaml->>UcHelloWorld_xaml_cs:Transient new()
+    create participant UcHelloWorld_xaml as UcHelloWorld<br>.xaml
+    UcHelloWorld_xaml_cs->>UcHelloWorld_xaml:Initialize<br>Component()
+    UcHelloWorld_xaml-->HelloWorldVM.cs: DateHeure, ValeurDecimal, ValeurBool
+
+    deactivate App_xaml_cs
+    
+```
 
 le constructeur de App.xaml.cs est appelé   
 - C'est toujours App.xaml qui est appelé pour démarrer l'application. 

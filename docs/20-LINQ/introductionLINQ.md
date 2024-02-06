@@ -76,7 +76,7 @@ La **Syntaxe Lambda** est plus compacte et elle est parfois plus simple pour les
 
 La méthode **FirstOrDefault** permet de retourner le premier élément en fonction de la recherche demandée. 
 
-La méthode **LastOrDefault** permet de retourner le premier élément en fonction de la recherche demandée. 
+La méthode **LastOrDefault** permet de retourner le dernier élément en fonction de la recherche demandée. 
 
 Si aucun élément n’est trouvé, ce sera la valeur par défaut qui sera retournée. 
 
@@ -136,7 +136,7 @@ Personne premierQuery = (from lqPersonne in list
               	            lqPersonne).FirstOrDefault(); //Retourne François St-Hilaire
 
 //Lambda
-Personne premierLambda = list.where(lqPersonne.Prenom == "François").FirstOrDefault();
+Personne premierLambda = list.Where(lqPersonne => lqPersonne.Prenom == "François").FirstOrDefault();
 ```
 
 Dans le cas qu'il y a plusieurs conditions, il faut utiliser le **&&** et le **||** comme pour un **if**
@@ -150,7 +150,7 @@ Personne premierQuery = (from lqPersonne in list
         	              select
 		                      lqPersonne).FirstOrDefault(); //François
 //Lambda
-Personne premierLambda = list.where(lqPersonne.Prenom == "François" && lqPersonne.Id > 1).FirstOrDefault();
+Personne premierLambda = list.Where(lqPersonne.Prenom == "François" && lqPersonne.Id > 1).FirstOrDefault();
 ```
 
 ## ToList()
@@ -166,7 +166,7 @@ List<Personne> lstQuery = (from lqPersonne in list
               	              lqPersonne).ToList(); //Retourne François St-Hilaire et François Morin
 
 //Lambda
-List<Personne> lstLambda = list.where(lqPersonne.Prenom == "François").ToList();
+List<Personne> lstLambda = list.Where(lqPersonne => lqPersonne.Prenom == "François").ToList();
 ```
 
 Dans le cas que la requête retourne uniquement 1 seul item, la liste contiendra 1 seul item.
@@ -180,7 +180,7 @@ List<Personne> lstQuery = (from lqPersonne in list
               	              lqPersonne).ToList(); //Retourne Stéphane Janvier
 
 //Lambda
-List<Personne> lstLambda = list.where(lqPersonne.Prenom == "Stéphane").ToList();
+List<Personne> lstLambda = list.Where(lqPersonne => lqPersonne.Prenom == "Stéphane").ToList();
 
 Console.WriteLine(lstQuery.Count); //Retoune 1
 ```
@@ -198,7 +198,7 @@ List<Personne> lstQuery = (from lqPersonne in list
               	              lqPersonne).ToList(); //Retourne rien
 
 //Lambda
-List<Personne> lstLambda = list.where(lqPersonne.Prenom == "Benoit" || lqPersonne.Prenom == "Louis" || lqPersonne.Prenom == "Frederic").ToList();
+List<Personne> lstLambda = list.Where(lqPersonne => lqPersonne.Prenom == "Benoit" || lqPersonne.Prenom == "Louis" || lqPersonne.Prenom == "Frederic").ToList();
 
 Console.WriteLine(lstQuery.Count); //Retoune 0
 ```

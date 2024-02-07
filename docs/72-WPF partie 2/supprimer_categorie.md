@@ -409,8 +409,8 @@ Avant d'exécuter une méthode, il faut vérifier si elle peut être exécutée.
 Il faut également modifier la propriété **CategorieSelection**.
 - Si la propriété est modifiée, il faut indiquer à la commande **SupprimerCommande** de vérifier de nouveau si elle peut être exécutée. Cette propriété a un lien avec la logique de vérification, il faut donc appeler **NotifyCanExecuteChanged** pour que l'état du bouton change dans la vue.
 
-Finalement, il faut créer la commande avec les 2 méthodes à la ligne 27. La première méthode **SupprimerAsync** sera exécutée si la commande est appelée. La deuxième méthode **PeutSupprimer** sert à empêcher d'appeler cette commande (si c'est faux).
-<!-- ******** a confirmer ***** -->
+Finalement, il faut créer la commande avec les 2 méthodes à la ligne 27. La première méthode **SupprimerAsync** sera exécutée si la commande est appelée. La deuxième méthode **PeutSupprimer** sert à empêcher d'appeler cette commande (si c'est faux). Cette deuxième méthode sera exécuté quand le bouton apparaitra, et chaque fois que CanExecuteChanged sera appelé (ligne 131)
+
 
 :::warning Important
 Bien que le VM fait en sorte que le bouton S de l'interface ne sera pas disponible (**PeutSupprimer**) s'il y a des dépendances pour une catégorie, il est important que le service empêche d'effacer une catégorie ayant des dépendances. Le service est le dernier point de vérification. Il est possible que le programmeur d'interface n'ait pas pensé à ça. 
@@ -447,3 +447,4 @@ Update-Database -StartupProject SuperCarte.EF -Migration Seed_RoleEtUtilisateur
 Update-Database -StartupProject SuperCarte.EF -Migration Seed_Carte
 ```
 
+<!-- le code jusqu'ici est dans SuperCarteApp_WPF_partie2_avant_localisation -->

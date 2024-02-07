@@ -9,11 +9,11 @@ Pour rendre l'application multilingue, il faut utiliser des fichiers ressources.
 
 Le terme localisation est utilisé, car il peut avoir une version pour le français de France et le français du Québec.
 
-Pour faciliter la localisation des vues, il existe la librairie **WPFLocalizeExention**.
+Pour faciliter la localisation des vues, il existe la librairie **WPFLocalizeExtention**.
 
 ## Installation de la librairie
 
-Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. Il est important que le **Projet par défaut** **WPF** soit sélectionné dans la console. Pour ce projet, ce doit être **SuperCarte.WPF**. À ce stade, il y a **plusieurs projets** et il est important de le modifier dans la liste.
+Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. Il est important que le **Projet par défaut**    **SuperCarte.WPF** soit sélectionné dans la console. Pour ce projet, ce doit être **SuperCarte.WPF**. À ce stade, il y a **plusieurs projets** et il est important de le modifier dans la liste.
 
 ```
 Install-Package WPFLocalizeExtension
@@ -27,7 +27,7 @@ Créez le dossier **Resx**, dans le projet **SuperCarte.WPF**.
 
 Il existe plusieurs stratégies pour gérer les fichiers ressources. Pour ce projet, ce sera un fichier ressource par vue.
 
-Créez le fichier **ResListeCategories.resx** avec le modèle **Fichier de ressources**. Il est important que le nom du fichier ressource ne soit pas réutilisé pour d'autres ressources.
+Créez le fichier **ResListeCategories.resx** avec le modèle **Fichier de ressources** dans le répertoire **Resx**. Il est important que le nom du fichier ressource ne soit pas réutilisé pour d'autres ressources.
 
 Ce fichier sera le fichier ressource principal. Si aucun fichier ressource n’existe pour la culture du programme, ce sera celui-ci.
 
@@ -58,6 +58,11 @@ Il faut que les éléments de la colonne **Nom** soient identiques dans tous les
 | Col_Description | Description     |
 
 S'il avait une version italienne, il faudrait que le fichier se nomme **ResListeCategories.it.resx**. S'il avait une version française de France, il faudrait que le fichier se nomme **ResListeCategories.fr-Fr.resx**.
+
+:::tip
+Vous pouvez télécharger ce fichier zip et le décompresser dans le répertoire Resx afin de vous sauver du temps. 
+[fichier ressources](./fichiers_localisation.zip)
+:::
 
 ## Création du fichier ressource - ResGlobalListeBouton
 
@@ -91,11 +96,9 @@ Créez le fichier **ResGlobalListeBouton.en.resx**.
 
 ## Utilisation dans la vue - UcListeCategories.xaml
 
-Le fichier au complet sera à la fin de la section
-
 Pour être en mesure de l'utiliser dans une **Vue**, il faut ajouter des déclarations dans la balise initiale **\<UserControl\>**.
 
-La ligne 8 indique qu'il faut inclure le **namespace ** de la librairie **WPFLocalizeExtension**.
+La ligne 8 indique qu'il faut inclure le **namespace** de la librairie **WPFLocalizeExtension**.
 
 La ligne 9 indique qu'elle est la langue à utiliser pour l'aperçu du design.
 
@@ -103,23 +106,6 @@ La ligne 10 indique le projet dans lequel le fichier ressource se trouve.
 
 La ligne 11 est le nom du fichier ressource par défaut de la **Vue**.
 
-```xaml
-<UserControl x:Class="SuperCarte.WPF.Views.UcListeCategories"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SuperCarte.WPF.Views"
-             xmlns:vm="clr-namespace:SuperCarte.WPF.ViewModels"
-             xmlns:lex="http://wpflocalizeextension.codeplex.com"
-             lex:LocalizeDictionary.DesignCulture="fr"
-             lex:ResxLocalizationProvider.DefaultAssembly="SuperCarte.WPF"
-             lex:ResxLocalizationProvider.DefaultDictionary="ResListeCategories"             
-             d:DataContext="{d:DesignInstance vm:ListeCategoriesVM}"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             Loaded="UserControl_Loaded">
-```
 
 Pour sélectionner un élément du fichier ressource de la vue, il faut utiliser cette syntaxe. La clé est le nom de la colonne.
 
@@ -127,46 +113,26 @@ Pour sélectionner un élément du fichier ressource de la vue, il faut utiliser
 {lex:Loc Clé}
 ```
 
-Par exemple pour le titre de la **Vue**. Il faut prendre la valeur de l'élément **Titre** du fichier **ResListeCategories**.
+Par exemple pour le titre de la **Vue** ligne 33, il faut prendre la valeur de l'élément **Titre** du fichier **ResListeCategories**. 
 
-```xaml
-<TextBlock 
-	Grid.Row="0" 
-	VerticalAlignment="Center" HorizontalAlignment="Center"
-	FontSize="16" FontWeight="Bold"
-	Text="{lex:Loc Titre}"/>
-```
-
-Pour sélectionner un élément d'un autre fichier ressource, il faut utiliser cette syntaxe. Le fichier est le fichier **Resx**. La clé est le nom de la colonne.
+Pour sélectionner un élément d'un autre fichier ressource, il faut utiliser cette syntaxe. Le fichier est le fichier **.resx**. La clé est le nom de la colonne.
 
 ```
 {lex:Loc Fichier:Clé}
 ```
 
-Voici pour le bouton **Nouveau**. Il prend l'élément  **Bouton_Nouveau_Content** du fichier **ResGlobalListeBouton** pour la propriété **Content**.
+Par exemple pour le bouton **Nouveau**, à la ligne 39, il prend l'élément  **Bouton_Nouveau_Content** du fichier **ResGlobalListeBouton** pour la propriété **Content**.
 
-```xaml
-<Button Content="{lex:Loc ResGlobalListeBouton:Bouton_Nouveau_Content}" ToolTip="{lex:Loc ResGlobalListeBouton:Bouton_Nouveau_Tooltip}"
-        Margin="5" Width="32" Height="32" />
-```
 
-Voici pour l'entête de colonne **Id**. L'entête est dans le fichier ressource de la vue.
-
-```xaml
-<DataGridTextColumn Header="{lex:Loc Col_CategorieId}"
-                    MinWidth="50"
-                    Binding="{Binding CategorieId}"/>
-```
-
-Tout ce qui est du texte doit être dans un fichier ressource, même si le texte est identique dans les 2 langues.
+Tous les textes doivent être dans un fichier ressource, même si le texte est identique dans les 2 langues.
 
 Il devient difficile à faire évoluer le programme si certains libellés ne sont pas dans le fichier ressource.
 
-Également, il est préférable de créer un élément par composant, même s'il y a une répétition dans la valeur.
+Également, il est préférable de créer un élément par composant, même s'il y a une répétition dans la valeur. Un mot dans un contexte n'aura pas nécessairement la même traduction dans un autre contexte. 
 
 Voici le fichier au complet.
 
-```xaml
+```xaml showLineNumbers
 <UserControl x:Class="SuperCarte.WPF.Views.UcListeCategories"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -246,6 +212,10 @@ Voici le fichier au complet.
 </UserControl>
 ```
 
+:::tip
+Maintenant que vous savez comment se fait la localisation, vous devriez y penser dès le départ et inscrire les clés pour chaque mot au moment de la création de la vue, et inscrire chacun de ces mots dans les fichiers .resx au fur et à mesure
+:::
+
 ## Test
 
 Par défaut, la culture sera celle spécifiée dans le système d'exploitation.
@@ -257,10 +227,12 @@ Dans le fichier **App.xaml.cs**, modifiez  le constructeur de la classe **App**.
 ```csharp
 public App()
 {
-    //Modification de la langue dans l'extension et du thread principal
-	CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-CA");
+	//highlight-start
+    //Modification de la langue dans l'extension et du thread principale
+    CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-CA");
     WPFLocalizeExtension.Engine.LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
     WPFLocalizeExtension.Engine.LocalizeDictionary.Instance.Culture = CultureInfo.DefaultThreadCurrentCulture;
+	//highlight-end
 
     var builder = Host.CreateDefaultBuilder();
 

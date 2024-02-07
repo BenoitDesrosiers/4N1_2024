@@ -14,3 +14,7 @@ Vous pouvez suivre les exemples en exécutant les étapes une par une, ou voir l
 Dans cette partie, nous allons modifier la BD à l'aide de migration. Veuillez les exécuter au bon moment. 
 
 Il est possible que le code intermédiaire ne corresponde pas directement au code final. 
+
+:::note
+Une petite erreur s'est introduite lors de le création du projet EF. Au lieu de SuperCarte.EF, le projet a été nommé Supercarte.EF avec un c minuscule. 
+:::

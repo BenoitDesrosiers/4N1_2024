@@ -57,10 +57,12 @@ Pour débuter, il faut créer le projet qui contiendra le **contexte** et les cl
 Créez un projet de type **Bibliothèque de classe**. Il est important **de ne pas choisir** la version **.NET Framework**.
 
 - **Nom du projet** : Univers.EF
-- **Nom de la solution** : Univers
+- **Nom de la solution** : Univers   \<\<\<--- **attention, le nom de la solution est différent du projet**
 - **Infrastructure** : la dernière version de .Net disponible
 
+:::warning Attention
 Remarquez que le nom de la solution n'est pas identique au projet, car la solution représente l'application et le projet une partie de l'application.
+:::
 
 Supprimez la classe **Class1.cs**.
 
@@ -84,7 +86,7 @@ Install-Package Microsoft.EntityFrameworkCore.Tools
 
 ## Création du modèle
 
-Il faut reproduire les classes du modèle pour représenter le **DEA**.
+Il faut reproduire les classes du modèle pour représenter le **DEA**. Étant donné que nous utilisons l'approche **Code first**, ces classes seront utilisées pour générer les tables dans la base de données. 
 
 En premier lieu, il faut créer toutes les classes vides, car les propriétés de navigation font des références circulaires. Si la classe n'existe pas, Visual Studio va indiquer une erreur.
 
@@ -97,10 +99,10 @@ Créez toutes les classes ci-dessous dans le dossier **Data**.
 - Distribution.cs
 - Film.cs
 
-:::info
-Une propriété de navigation qui représente la relation **1 à Plusieurs** auront le suffixe **Liste** pour les différencier des relations **Plusieurs à 1**, car il s'agit d'une collection d'éléments.
+:::tip
+Une propriété de navigation qui représente la relation **1 à Plusieurs** aura le suffixe **Liste** pour la différencier des relations **Plusieurs à 1**. Le suffixe **Liste** permet de rapidement voir qu'il s'agit d'une collection d'éléments.
 
-Pour une propriété de navigation qui représente une relation **Plusieurs à 1**, le nom de la propriété de navigation sera le nom de la classe.
+Pour une propriété de navigation qui représente une relation **Plusieurs à 1** (donc une FK), le nom de la propriété de navigation sera le nom de la classe pointée par cette FK.
 :::
 
 Voici le code de la classe **Personnage.cs**
@@ -124,7 +126,7 @@ public class Personnage
 Pour **Univers.cs**
 
 ```csharp
-nnamespace Univers.EF.Data;
+namespace Univers.EF.Data;
 public class Univers
 {
     public int UniversId { get; set; }
@@ -182,14 +184,16 @@ public class Film
 
 ## Création du contexte
 
-Nous allons maintenant créer le code qui va générer la base de données à partir des classes. Pour ce faire, nous allons créer un **contexte** qui sera la connexion à la bd. Nous allons ensuite créer des **DBSet** qui indiqueront quelles classes utiliser pour générer les tables.  
+Nous allons maintenant créer le code qui va générer la base de données à partir des classes. Pour ce faire, nous allons créer un **contexte** qui sera la connexion à la bd. 
+
+Nous allons ensuite créer des **DBSet** qui feront le lien entre les classes du modèle et les tables de la bd.  
 
 
 Créez le dossier **Data\Context**.
 
 Créez la classe **UniversContext** dans le dossier **Data\Context**.
 
-```csharp
+```csharp showLineNumbers
 using Microsoft.EntityFrameworkCore;
 
 namespace Univers.EF.Data.Context;
@@ -250,17 +254,21 @@ public class UniversContext : DbContext
 }
 ```
 
-Premièrement, la classe hérite de **DbContext**. Cette classe contient toute la mécanique de communication et de synchronisation du modèle objet avec la base de données. La classe spécifique **UniversContext** contient uniquement la définition de la base de données relationnelle.
+Premièrement, à la ligne 8, la classe hérite de **DbContext**. Cette classe contient toute la mécanique de communication et de synchronisation du modèle objet avec la base de données. La classe spécifique **UniversContext** contient uniquement la définition de la base de données relationnell de ce projet.
 
-Avec le nom des tables de cette base de données, il n'est déjà pas possible d'utiliser la convention du pluriel à cause de la table **Univers**.
 
-Il est possible de choisir le nom des **DbSet**. Pour ce projet, le suffixe **Tb** sera ajouté pour indiquer que c'est la table.
 
 La table **Distribution** est volontairement **exclue** des **DbSet** pour l'instant, car elle n'a pas de clé primaire unique, mais une clé primaire composée. Ce concept sera présenté plus tard.
 
-La méthode **OnConfiguring** contient la logique pour la configuration du serveur par un fichier externe ou par une variable d'environnement. 
+La méthode **OnConfiguring** à la ligne 28 contient la logique pour la configuration du serveur par un fichier externe ou par une variable d'environnement. 
 
-La clause **#if DEBUG** indique au compilateur de tenir compte du code seulement si l'application est en mode **Debug**. Il ne faut pas que cette configuration soit accessible en production.
+La clause **#if DEBUG** indique au compilateur de tenir compte du code seulement si l'application est en mode **Debug**. Il ne faut pas que cette configuration soit accessible en production. Nous verrons plus tard comment mettre une configuration pour un projet réel. 
+
+Avec le nom des tables de cette base de données, il n'est déjà pas possible d'utiliser la convention du pluriel à cause de la table **Univers**.
+
+Il est possible de choisir le nom des **DbSet**. Pour ce projet, le suffixe **Tb** sera ajouté pour indiquer que c'est la table aux lignes 52 à 56.
+
+Comme indiqué précédemment, le **DbSet** est un objet permettant d'accéder à une table dans la bd et de transférer les données dans une classe du modèle (ex: Personnage). Par défaut le nom de la table dans la bd sera le nom du DbSet, mais nous verrons qu'il peut être changé par la suite.
 
 ### Chaine de connexion
 
@@ -454,5 +462,48 @@ Vous devez ensuite enlever les migration
 
 Si c'est la première migration que vous désirez défaire ... vous devez alors détruire la bd avec la commande **Drop-Database**. 
 
+## Résumé
+
+Avec l'approche **Code First** d'Entity Framework
+
+- créer le projet de type **Bibliothèque de classe**
+  - ajouter les dépendances pour SqlServer et Tools
+- créer les modèles de données dans **Data**
+  - pour chaque entité/table de la bd, mettre une propriété pour chaque champ
+- créer le context
+  - ajouter la fonction OnConfiguring qui sert à faire la connexion à la bd en mode debug
+  - créer un **DbSet** pour chaque modèle de données
+    - DbSet\<nom_du_modèle> nom_de_la_table
+- créer le fichier de migration à l'aide de **Add-Migration**
+- effectuer la migration à l'aide de **Update-Database**
+  
+## Processus
+
+
+```mermaid
+sequenceDiagram
+    actor Usager
+    participant tool as EntityFrameWorkCore.<br>Tools
+    Usager->>tool:Add-Migration
+    participant migration as Fichier de<br>Migration
+    tool->>migration: Creation
+    participant contexte as Data/Context:<br>Context.cs
+    loop Pour chaque DbSet
+        tool->>contexte: get nom de la table dans DbSet
+        tool->>migration: ajoute CreateTable
+        tool->>contexte: get nom de<br>modèle de bd dans DbSet
+        participant personnage as Data:<br><NomModele>.cs
+        loop Pour chaque Propriété du modèle
+            tool->>personnage: get détails de la Propriété
+            tool->>migration:ajoute champs<br>dans table
+        end
+    end
+    Usager->>tool:Update-Database
+    tool->>contexte: OnConfiguring
+    contexte->>environnement:get chaine de connexion<br>MIGRATION_CONNECTION_STRING
+    contexte->>bd:connexion<br>UseSqlServer()
+    tool->>migration:lecture des opérations
+    tool->>bd:création et modification des tables
+```
 
 

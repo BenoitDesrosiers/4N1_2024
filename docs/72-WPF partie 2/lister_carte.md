@@ -7,15 +7,15 @@ draft: true
 
 Pour faire la liste des cartes, il faut reproduire la même technique que la liste des catégories.
 
-Par contre, la liste des cartes à 2 clés étrangères. Dans une **Vue**, l'utilisateur veut rarement voir les clés étrangères, mais un élément significatif à celle-ci.
+Par contre, la liste des cartes à 2 clés étrangères. Dans une **Vue**, l'utilisateur veut rarement voir les clés étrangères, mais plutôt les éléments de la table associée.
 
 Dans le cas des cartes, il faut afficher le nom de la catégorie et le nom de l'ensemble. Il faut créer un modèle qui contient ces deux nouveaux champs.
 
 Dans cette section, ce sera uniquement la mécanique pour **Obtenir la liste**. Il faudrait tout de même ajouter la mécanique de suppression.
 
-### SuperCarte.Core
+## SuperCarte.Core
 
-#### Création du modèle - CarteDetailModel
+### Création du modèle - CarteDetailModel
 
 Les modèles qui seront utilisés pour les listes de données auront le suffixe **Detail**, car elles contiennent le détail des clés étrangères.
 
@@ -30,34 +30,30 @@ namespace SuperCarte.Core.Models;
 public class CarteDetailModel
 {
     public int CarteId { get; set; }
-
     public string Nom { get; set; } = null!;
-
     public short Vie { get; set; }
-
     public short Armure { get; set; }
-
     public short Attaque { get; set; }
-
     public bool EstRare { get; set; }
-
     public decimal PrixRevente { get; set; }
 
+//highlight-start
+	//Les champs des tables associées via les FK
     public int CategorieId { get; set; }
-
     public string CategorieNom { get; set; } = null!;
-
     public int EnsembleId { get; set; }
-
     public string EnsembleNom { get; set; } = null!;
+//highlight-end
 }
 ```
 
-#### Ajout de la requête dans Repository - CarteRepo
+### Ajout de la requête dans Repository - CarteRepo
 
 Pour être en mesure de récupérer l'information des clés étrangères, il faut adapter la requête.
 
-Il y a 2 options. La première serait d'utiliser le **EagerLoading**. Le **Service** aurait la responsabilité de prendre les champs nécessaires pour construire l'objet **CarteModelDetail**. Il serait possible de généraliser le **EagerLoading** avec la réflexion.
+Il y a 2 options. La première serait d'utiliser le **EagerLoading**. Le **Service** aurait la responsabilité de prendre les champs nécessaires pour construire l'objet **CarteModelDetail**. 
+
+<!-- Il serait possible de généraliser le **EagerLoading** avec la réflexion. -->
 
 La 2e option est de créer l'objet directement dans la requête du **Repository**. Pour ce projet, ce sera cette option qui sera utilisée.
 
@@ -75,17 +71,19 @@ namespace SuperCarte.Core.Repositories;
 /// </summary>
 public interface ICarteRepo : IBasePKUniqueRepo<Carte, int>
 {
+	//highlight-start
     /// <summary>
     /// Obtenir la liste des cartes avec le modèle CarteDetailModel en asynchrone.
     /// </summary>
     /// <returns>Liste des cartes</returns>
     Task<List<CarteDetailModel>> ObtenirListeCarteDetailAsync();
+	//highlight-end
 }
 ```
 
 Dans la classe **CarteRepo.cs**.
 
-```csharp
+```csharp showLineNumbers
 using Microsoft.EntityFrameworkCore;
 using SuperCarte.Core.Models;
 using SuperCarte.Core.Repositories.Bases;
@@ -108,6 +106,7 @@ public class CarteRepo : BasePKUniqueRepo<Carte, int>, ICarteRepo
         //Vide, il sert uniquement a recevoir le contexte et à l'envoyer à la classe parent.
     }
 
+	//highlight-start
     public async Task<List<CarteDetailModel>> ObtenirListeCarteDetailAsync()
     {
         return await(from lqCarte in _bd.CarteTb
@@ -127,12 +126,14 @@ public class CarteRepo : BasePKUniqueRepo<Carte, int>, ICarteRepo
                              EnsembleNom = lqCarte.Ensemble.Nom
                          }).ToListAsync();
     }
+		//highlight-end
+	
 }
 ```
 
-Les jointures sont effectuées par la propriété de navigation dans la création de l'objet.
+Les jointures sont effectuées aux lignes 37 et 39 par la propriété de navigation dans la création de l'objet.
 
-#### Création du service - CarteService
+### Création du service - CarteService
 
 Créez l'interface **ICarteService.cs** dans le dossier **Services**.
 
@@ -187,23 +188,24 @@ public class CarteService : ICarteService
 
 Pour cette méthode, le **Service** appelle directement le **Repository**.
 
-### Projet SuperCarte.WPF
+## Projet SuperCarte.WPF
 
-#### Enregistrement du service - SCServiceExtensions
+### Enregistrement du service - SCServiceExtensions
 
-Il faut enregistrer le **Service** dans la classe **SCServiceExtensions**.
+Il faut enregistrer le **Service** dans la classe **Extensions/ServiceCollections/SCServiceExtensions**.
 
 ```csharp
 public static void EnregistrerServices(this IServiceCollection services)
 {
     services.AddScoped<ICategorieService, CategorieService>();
+	//highlight-next-line
     services.AddScoped<ICarteService, CarteService>();
 }
 ```
 
 Le service est également enregistré en **Scoped** pour permettre d'utiliser la même instance dans le programme dans le même **scope**.
 
-#### Création du ViewModel - ListeCartesVM
+### Création du ViewModel - ListeCartesVM
 
 Créez la classe **ListeCartesVM.cs**.
 
@@ -297,7 +299,7 @@ Il y a beaucoup de similitudes entre **ListeCategoriesVM** et **ListeCartesVM**.
 
 Également, dans ce **ViewModel**, il y a des **#region** utilisées pour classer les différentes sections. Les **ViewModel** peuvent devenir assez gros selon la complexité de la vue. Le classement des différentes sections peut aider.
 
-#### Enregistrer le ViewModel - SCViewModelExtensions
+### Enregistrer le ViewModel - SCViewModelExtensions
 
 Dans la classe **SCViewModelExtensions**, il faut enregistrer le **ViewModel**.
 
@@ -306,13 +308,18 @@ public static void EnregistrerViewModels(this IServiceCollection services)
 {
     services.AddTransient<MainWindowVM>();
     services.AddTransient<ListeCategoriesVM>();
+	//highlight-next-line
     services.AddTransient<ListeCartesVM>();
 }
 ```
 
-#### Création du fichier ressource - ResUcListeCartes
+### Création du fichier ressource - ResUcListeCartes
 
 Généralement, la conception de la **Vue** et du fichier ressource se fait en parallèle. À chaque élément qu'il faut faire un libellé, il faut créer un élément dans le fichier ressource.
+
+:::note
+Ces fichiers sont déjà présents si vous avez  utilisez le fichier zip dans la section Localisation des notes de cours
+:::
 
 Créez le fichier **ResListeCartes.resx**. 
 
@@ -344,7 +351,7 @@ Créez le fichier **ResListeCartes.en.resx**.
 | Col_CategorieNom | Category     |
 | Col_EnsembleNom  | Set          |
 
-#### Création de la vue - UcListeCartes.xaml
+### Création de la vue - UcListeCartes.xaml
 
 Créez un **Contrôle utilisateur (WPF)** nommé **UcListeCartes.xaml** dans le dossier **Views**. Le modèle se retrouve dans la section **WPF** à gauche.
 
@@ -477,11 +484,11 @@ private async void UserControl_Loaded(object sender, RoutedEventArgs e)
  }
 ```
 
-#### Ajout de la ressource pour créer le lien entre ViewModel et Vue - MainWindow.xaml
+### Ajout de la ressource pour créer le lien entre ViewModel et Vue - MainWindow.xaml
 
 Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue**.
 
-```xaml
+```xaml showLineNumbers
 <Window x:Class="SuperCarte.WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -503,9 +510,11 @@ Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue**
         <DataTemplate DataType="{x:Type TypeName=vm:ListeCategoriesVM}">
             <v:UcListeCategories />
         </DataTemplate>
+		//highlight-start
         <DataTemplate DataType="{x:Type TypeName=vm:ListeCartesVM}">
             <v:UcListeCartes />
         </DataTemplate>
+		//highlight-end
     </Window.Resources>
     <Grid>
         <ContentControl  Content="{Binding VMActif}" />
@@ -519,7 +528,7 @@ La ligne 22  à 24 indique que lorsque le **DataContext** est de type **ListeCar
 
 À la ligne 27, lorsque le **Content** du **ContentControl** sera un **ViewModel** de la liste des ressources, il chargera le contrôle utilisateur correspondant.
 
-#### Test - MainWindowVM
+### Test - MainWindowVM
 
 Dans la classe **MainWindowVM.cs**, il faut assigner **ListeCategoriesVM** à la propriété **VMActif**.
 
@@ -542,13 +551,14 @@ public class MainWindowVM : BaseVM
 
 Démarrez l'application.
 
-#### Alignement à droite des nombres
+### Alignement à droite des nombres
 
 Dans une grille, les nombres sont généralement alignés à droite pour faciliter la lecture. 
 
 Pour être en mesure de le faire, il faut ajouter un style dans la définition de la colonne.
+Modifiez **UcListeCartes.xaml**, aux lignes 66-68
 
-```xaml
+```xaml title="Ne pas copier"
 <DataGridTextColumn Header="{lex:Loc Col_Vie}" 
                     MinWidth="50"                                    
                     Binding="{Binding Vie}">
@@ -564,7 +574,7 @@ La balise **\<DataGridTextColumn.ElementStyle\>** permet de spécifier le style 
 
 Il est important de mettre **Control.** dans la propriété pour indiquer que la valeur s'applique au contenu de la cellule au complet. Il est possible de faire des cellules avancées avec plusieurs sous-contrôles dans son contenu. Il serait possible d'appliquer un style à seulement un des éléments de la cellule.
 
-Voici le fichier au complet.
+Voici le fichier au complet avec les alignements pour tous les champs numériques.
 
 ```xaml
 <UserControl x:Class="SuperCarte.WPF.Views.UcListeCartes"

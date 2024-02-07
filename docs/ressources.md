@@ -43,6 +43,8 @@ Voici tous les liens vers des ressoures utilisées dans le cours
 
 
 - Attribut
+- Commande: fonction (AsyncRelayCommand) qui fait le pont entre une action (d'un bouton) et une fonction du VM.
+- eager loading
 - Migration
 - Property
 	- \{get; set }
@@ -51,7 +53,7 @@ Voici tous les liens vers des ressoures utilisées dans le cours
 - Repository
 - Seed
 - Service
-- ViewModel
+- ViewModel (VM) 
 - View
 - xaml
 

@@ -542,11 +542,7 @@ Pour être optimal, cette technique est un mixte des techniques ci-dessus. L'ava
 
 Il faut créer les tables temporaires, ensuite faire les procédures stockées d'insertions et les insertions par les procédures stockées.
 
-Pour la procédure stockée, il est possible de faire l'insertion avec un **SCOPE IDENTITY** ou le **OUTPUT**.
-
-:::info
-Pour le TP 1, il est demandé d'utiliser le **OUTPUT**, donc nous allons faire les exemples avec le **OUTPUT**.
-:::
+Pour la procédure stockée, il est possible de faire l'insertion avec un **SCOPE IDENTITY** ou le **OUTPUT**. Cet exemple sera fait avec **SCOPE IDENTITY**
 
 Réinitialisez les tables.
 

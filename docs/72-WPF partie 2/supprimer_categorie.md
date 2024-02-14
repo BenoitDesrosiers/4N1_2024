@@ -36,7 +36,9 @@ S'il avait d'autres tables qui utiliseraient **Categorie** comme clé étrangèr
 
 La classe a également la clé primaire correspondant.
 
+:::tip
 Le mot clé **[init](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/init)** sert à indiquer qu'il n'est pas possible de modifier la valeur après la construction de l'objet.
+:::
 
 ### Ajouter la requête dans le Repository - CategorieRepo
 
@@ -239,7 +241,7 @@ Dans une commande, il est possible d'ajouter une logique pour indiquer s'il est 
 
 Premièrement, il doit avoir une catégorie sélectionnée dans le **DataGrid**. Deuxièmement, la catégorie ne doit pas avoir de dépendance. 
 
-À chaque fois que la sélection sera modifiée, il faudra appliquer la logique si la commande supprimée peut s'appliquer.
+À chaque fois que la sélection sera modifiée, il faudra appliquer la logique si la commande supprimer peut s'appliquer.
 
 Modifiez la classe **ListeCategoriesVM** par le code ci-dessous.
 

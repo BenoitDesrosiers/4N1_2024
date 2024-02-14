@@ -1,17 +1,15 @@
 ---
-sidebar_position: 115
+sidebar_position: 229
 draft: true
 ---
 
-# Code Partie 1
+# Code Partie 2
 
-Vous trouverez le code de la solution pour la partie 1 de WPF dans ce fichier
+Afin de vous permettre de suivre les explications sans avoir à faire tous les copier-coller, vous trouverez le code du projet SuperCarte tel qu'il sera à la fin de la partie 2 de WPF dans ce fichier
 
-[code source](SuperCarteApp_WPF_partie1_clean.zip)
+[code source](SuperCarteApp_WPF_partie2_clean.zip)
 
 Vous pouvez suivre les exemples en exécutant les étapes une par une, ou voir la solution finale à l'aide de ce code.
-
-Dans cette partie, nous allons modifier la BD à l'aide de migration. Veuillez les exécuter au bon moment. 
 
 Il est possible que le code intermédiaire ne corresponde pas directement au code final. 
 

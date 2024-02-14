@@ -54,8 +54,7 @@ public class UniversContext : DbContext
         {
             //Aucune configuration à partir d'un fichier de configuration
             //Option de base pour la migration
-            //string? chaineConnexion = Environment.GetEnvironmentVariable("MIGRATION_CONNECTION_STRING");
-            string? chaineConnexion = "Server=localhost\\SQLExpress;Database=eDA_4N1_Univers;Trusted_Connection=True;Trust Server Certificate=True;";
+            string? chaineConnexion = Environment.GetEnvironmentVariable("MIGRATION_CONNECTION_STRING");
             //Vérifie si la variable n'est pas vide
             if (string.IsNullOrEmpty(chaineConnexion) == false)
             {
@@ -137,6 +136,7 @@ public class UniversContext : DbContext
                 .HasMaxLength(100);
         });
 
+//highlight-start
         if (_executerSeed == true)
         {
             Seed(modelBuilder);
@@ -151,6 +151,7 @@ public class UniversContext : DbContext
     {
         //Les données à ajouter
     }
+	//highlight-end
     public DbSet<Personnage> PersonnageTb { get; set; }
 
     public DbSet<Univers> UniversTb { get; set; }
@@ -257,9 +258,6 @@ Appliquez les modifications à la base de données. Spécifiez la migration **Se
 Update-Database -StartupProject Univers.EF -Migration Seed_UniversEtPersonnage
 ```
 
-:::info
-Pour votre **TP 3**, vous devez créer un jeu de données initial pour chacune des tables. Il devra être créé par un **Seed**.
-:::
 
 Ouvrez **SSMS** et la base de données aura des données dans les tables **Personnage** et **Univers**.
 
@@ -271,6 +269,12 @@ Vous pouvez vous baser sur les données de l'exercices de création de la BD uni
 
 Ajoutez seulement les 3 premiers.
 
+**Table Film**
+| FilmId 	| Titre              	| DateSortie 	| Etoile 	| Duree 	|
+|--------	|--------------------	|------------	|--------	|-------	|
+| 1      	| Black Widow        	| 2021-07-09 	| 3      	| 121   	|
+| 2      	| The Avengers       	| 2012-05-04 	| 5      	| 98    	|
+| 3      	| Spiderman          	| 2003-05-03 	| 5      	| 110   	|
 
 <details>
   <summary>Solution</summary>

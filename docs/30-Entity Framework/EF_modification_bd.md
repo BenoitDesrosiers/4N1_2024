@@ -9,7 +9,7 @@ Ouvrez **SSMS** et la base de données sera présente.
 Il y a par contre quelques erreurs. 
 * Les tables se terminent par **Tb**.
 * Toutes les propriétés **string** sont des **NVARCHAR(max)**. 
-* Le champ **Univers.Nom** n'est pas unique. (ce n'était pas dans le diagramme, mais ca fait du sens :smile:
+* Le champ **Univers.Nom** n'est pas unique. (ce n'était pas dans le diagramme, mais ca a du sens :smile:
   
 Ceci ne respecte pas le **DEA**. Il faut configurer le contexte pour respecter le **DEA**.
 
@@ -360,7 +360,7 @@ Voici les exemples pour la configuration des différents cas. La classe complèt
 
 Pour la table **Personnage**
 
-```csharp
+```csharp title="Ne pas copier, utiliser la classe au complet ci-bas"
 //Table Personnage
 modelBuilder.Entity<Personnage>(entity =>
 {
@@ -603,7 +603,7 @@ AjoutTableCategorie -- Correct
 Il faut remettre la base de données à un état valide. Le dernier état valide est **AjoutTableUtilisateur**.
 
 ```powershell
-Update-Database -StartupProject SuperCarte.EF -Migration AjoutTableUtilisateur
+Update-Database -StartupProject Univers.EF -Migration AjoutTableUtilisateur
 ```
 
 Ensuite, il faut utiliser la commande **Remove-Migration**. Cette commande enlève seulement la dernière migration. Il faudra l'exécuter 2 fois pour retirer la migration problématique.
@@ -611,13 +611,13 @@ Ensuite, il faut utiliser la commande **Remove-Migration**. Cette commande enlè
 Pour effacer **AjoutTableCategorie**
 
 ```
-Remove-Migration -StartupProject SuperCarte.EF 
+Remove-Migration -StartupProject Univers.EF 
 ```
 
 Pour effacer **AjoutTableEnsemble**
 
 ```
-Remove-Migration -StartupProject SuperCarte.EF 
+Remove-Migration -StartupProject Univers.EF 
 ```
 
 Malheureusement, la partie de **AjoutTableCategorie** doit être effacée, même si elle est valide.

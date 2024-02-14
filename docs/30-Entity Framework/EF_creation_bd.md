@@ -18,8 +18,7 @@ Pour interagir facilement avec le modèle objet de la base de données, il faut 
 Pour cette section des notes de cours, il faut utiliser ce DEA. 
 
 
-<img src="/4N1_2024/img/07_dea_GestionFilm.jpg"  />
-
+<img src="/4N1_2024/img/07_dea_gestionfilm.png"  />
 
 
 ## Approches
@@ -100,7 +99,8 @@ Créez toutes les classes ci-dessous dans le dossier **Data**.
 - Film.cs
 
 :::tip
-Une propriété de navigation qui représente la relation **1 à Plusieurs** aura le suffixe **Liste** pour la différencier des relations **Plusieurs à 1**. Le suffixe **Liste** permet de rapidement voir qu'il s'agit d'une collection d'éléments.
+Une propriété de navigation qui représente la relation **1 à Plusieurs** aura soit le suffixe **Liste** pour la différencier des relations **Plusieurs à 1**, soit se terminera par **s** pour indiquer qu'il y en a plusieurs. Le suffixe **Liste** ou **s** permet de rapidement voir qu'il s'agit d'une collection d'éléments.
+<!-- à corriger pour la prochaine version: changer Personnages par PersonnageListe -->
 
 Pour une propriété de navigation qui représente une relation **Plusieurs à 1** (donc une FK), le nom de la propriété de navigation sera le nom de la classe pointée par cette FK.
 :::
@@ -312,7 +312,7 @@ Le contexte n'est pas complet, mais il est possible de créer une base de donné
 
 Il faut créer un fichier de migration. La syntaxe de la commande est celle-ci: 
 
-```powershell
+```powershell title="NE PAS COPIER"
 Add-Migration [nom migration] -StartupProject [Nom Projet Entity Framework]
 ```
 
@@ -330,7 +330,7 @@ Il y a maintenant un dossier **Migration**. À l'intérieur, il y a un fichier a
 
 Voici le fichier. La méthode **Up** permet d'appliquer la migration à la base de données et la méthode **Down** est de la retirer. Il n'est pas recommandé de modifier ce fichier s'il a été généré par un outil., car il ne sera plus en **synchronisation** avec le **contexte**.
 
-```csharp
+```csharp title="NE PAS COPIER"
 using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -434,7 +434,7 @@ Pour synchroniser une migration avec la base de données, il faut utiliser l'uti
 
 Voici la syntaxe.
 
-```powershell
+```powershell title="NE PAS COPIER"
 Update-Database -StartupProject [Nom Projet Entity Framework] -Migration [Nom migration]
 ```
 
@@ -471,7 +471,7 @@ Avec l'approche **Code First** d'Entity Framework
 - créer les modèles de données dans **Data**
   - pour chaque entité/table de la bd, mettre une propriété pour chaque champ
 - créer le context
-  - ajouter la fonction OnConfiguring qui sert à faire la connexion à la bd en mode debug
+  - ajouter la fonction **OnConfiguring** qui sert à faire la connexion à la bd en mode debug
   - créer un **DbSet** pour chaque modèle de données
     - DbSet\<nom_du_modèle> nom_de_la_table
 - créer le fichier de migration à l'aide de **Add-Migration**

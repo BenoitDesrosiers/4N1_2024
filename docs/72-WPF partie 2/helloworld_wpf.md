@@ -52,7 +52,7 @@ Le constructeur permet d'assigner les valeurs initiales de la **Vue**. Les valeu
 Créez une nouvelle classe nommée **UcHelloWorld.xaml** dans le dossier **Views**. Sélectionnez le modèle **WPF** à gauche de l'écran de création de la classe, et choisissez **Contrôle utilisateur (WPF)**. 
 
 Toutes les **Vues** seront du type **Contrôle utilisateur (WPF)**.
-<!--- question: tu avais mis UcHelloWorld au lieu de UCListeCategories -->
+
 ```xaml showLineNumbers
 <UserControl x:Class="SuperCarte.WPF.Views.UcHelloWorld"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

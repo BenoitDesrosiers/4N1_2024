@@ -501,7 +501,7 @@ Ensuite, il faut injecter les dépendances à la ligne 11, car les catégories s
 
 Ensuite, il faut penser aux commandes. La liste doit se rafraichir. Cette commande doit être **asynchrone**. Cette commande se nomme **ObtenirListeCommande**. La propriété de la commande est à la ligne 37. Les commandes doivent avoir le suffixe **Commande**. La commande doit utiliser un verbe d'action dans la mesure du possible.
 
-La méthode que la commande utilise est à la ligne 31. Par convention, la méthode doit avoir le même nom que la commande sans le mot *Commande* en suffix (ObtenirListeCommande devient ObjetListeAsync).
+La méthode que la commande utilise est à la ligne 31. Par convention, la méthode doit avoir le même nom que la commande sans le mot *Commande* en suffix (ObtenirListeCommande devient ObtenirListeAsync).
 
 À la ligne 25, la commande est créée dans le constructeur.
 
@@ -592,45 +592,6 @@ Créez un **Contrôle utilisateur (WPF)** nommé **UcListeCategories.xaml** dans
 
 Toutes les **Vues** seront du type  **Contrôle utilisateur (WPF)**.
 
-La première étape consiste à indiquer le **ViewModel** qui sera utilisé. Ce n'est pas obligatoire, mais en ajoutant les lignes 7 et 8 ci-dessous, il sera possible d'avoir des suggestions lors du **Binding**.
-
-
-La deuxième étape consiste à créer une disposition. La vue aura 4 rangées. 
-- La première rangée (0) contiendra le titre de la vue. La hauteur est automatique.
-- La deuxième rangée (1) contiendra la liste des boutons **Nouveau**, **Édition**, **Supprimer** et **Rafraichir**. La hauteur est automatique.
-- La troisième rangée (2) contiendra le **DataGrid**. La hauteur est **\***. Elle va prendre tout l'espace restant de la vue.
-- La quatrième rangée (3) contiendra la barre de chargement.
-
-Ensuite, il faut créer le titre. Le composant **\<TextBloc\>** sera utilisé. Se composant permet d'afficher du texte facilement.
-
-Il prend tout l'espace disponible, donc en le centrant verticalement et horizontalement, il restera toujours en centre en fonction de la grosseur de la fenêtre.
-
-Contrairement au **\<div\>** en **HTML**, le système de **Grid** n'a pas de balise encapsulée. Il faut spécifier l'emplacement avec la propriété **Grid.Row**. L'ajout de commentaires permet de mieux voir la séparation des composants dans le **Grid**.
-
-À la ligne 40, le bouton **Rafraichir** est lié à la commande **ObtenirListeCommande**. 
-
-Si les lignes 7 et 8 ne sont pas inscrites, il n'y aura pas d'autosuggestion après **\{Binding}** Le risque de se tromper est plus grand.
-
-Ensuite, il faut ajouter le **DataGrid**. Le **DataGrid** peut autogénéré les colonnes en fonction des propriétés. 
-
-Par contre, il ne sera pas possible de faire des ajustements si ce mode est activé. À la ligne 47 du code ci-dessous, la propriété **AutoGenerateColumns=false** désactive ce mode.
-
-La propriété **SelectionMode="Single"** permet de sélectionner une seule ligne à la fois.
-
-La propriété **IsReadOnly="True"** rend la grille non éditable. Il est possible d'avoir des designs qui permettent de modifier des valeurs directement dans une grille et de sauvegarder l'ensemble.
-
-La propriété **ItemsSource="\{Binding ListeCategories\}"** indique la propriété du **ViewModel** qui contient la source des données. Si les lignes 7 et 8 ne sont pas inscrites, il n'y aura pas d'autosuggestion après **\{Binding\}** Le risque de se tromper est plus grand.
-
-La propriété **SelectedItem="\{Binding CategorieSelection\}"** permet d'indiquer la propriété qui aura la référence de la propriété sélectionnée.
-
-Il faut ensuite déclarer les colonnes.
-
-Toutes les colonnes sont du texte, car même le **Id** sera transformé en texte. Elles sont toutes du type **\<DataGridTextColumn\>**. 
-
-La propriété **Header** est pour le nom de la colonne. La propriété **Binding** est pour indiquer la propriété à utiliser dans la classe **CategorieModel**. Il n'est pas obligatoire de créer systématiquement une colonne par propriété, par exemple la clé pourrait être masquée à l'utilisateur. 
-
-À la ligne 61, la largeur de la colonne est **Width="*"**, ce qui indique qu'elle prendra l'espace restant. Si l'espace restant est plus petit que 300, la colonne restera à 300, car la propriété **MinWidth="300"** (ligne 58).
-
 ```xaml showLineNumbers
 <UserControl x:Class="SuperCarte.WPF.Views.UcListeCategories"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -706,6 +667,46 @@ La propriété **Header** est pour le nom de la colonne. La propriété **Bindin
 </UserControl>
 
 ```
+La première étape consiste à indiquer le **ViewModel** qui sera utilisé. Ce n'est pas obligatoire, mais en ajoutant les lignes 7 et 8, il sera possible d'avoir des suggestions lors du **Binding**.
+
+
+La deuxième étape consiste à créer une disposition (ligne 12 à 21) 
+
+La vue aura 4 rangées. 
+- La première rangée (0) contiendra le titre de la vue. La hauteur est automatique.
+- La deuxième rangée (1) contiendra la liste des boutons **Nouveau**, **Édition**, **Supprimer** et **Rafraichir**. La hauteur est automatique.
+- La troisième rangée (2) contiendra le **DataGrid**. La hauteur est **\***. Elle va prendre tout l'espace restant de la vue.
+- La quatrième rangée (3) contiendra la barre de chargement d'une hauteur de 20.
+
+Ensuite, il faut créer le titre. Le composant **\<TextBloc\>** sera utilisé (ligne24) . Se composant permet d'afficher du texte facilement. Il prend tout l'espace disponible, donc en le centrant verticalement et horizontalement, il restera toujours en centre en fonction de la grosseur de la fenêtre.
+
+Contrairement au **\<div\>** en **HTML**, le système de **Grid** n'a pas de balise encapsulée. Il faut spécifier l'emplacement avec la propriété **Grid.Row**. L'ajout de commentaires (ligne 30) permet de mieux voir la séparation des composants dans le **Grid**.
+
+À la ligne 40, le bouton **Rafraichir** est lié à la commande **ObtenirListeCommande**. 
+
+Si les lignes 7 et 8 ne sont pas inscrites, il n'y aura pas d'autosuggestion après **\{Binding}** Le risque de se tromper est plus grand.
+
+Ensuite, il faut ajouter le **DataGrid** (ligne 46 à 67 ). Le **DataGrid** peut autogénéré les colonnes en fonction des propriétés. 
+
+Par contre, il ne sera pas possible de faire des ajustements si ce mode est activé. À la ligne 47 du code ci-dessous, la propriété **AutoGenerateColumns=false** désactive ce mode.
+
+La propriété **SelectionMode="Single"** permet de sélectionner une seule ligne à la fois.
+
+La propriété **IsReadOnly="True"** rend la grille non éditable. Il est possible d'avoir des designs qui permettent de modifier des valeurs directement dans une grille et de sauvegarder l'ensemble.
+
+La propriété **ItemsSource="\{Binding ListeCategories\}"** indique la propriété du **ViewModel** qui contient la source des données.
+
+La propriété **SelectedItem="\{Binding CategorieSelection\}"** permet d'indiquer la propriété qui aura la référence de la propriété sélectionnée.
+
+Il faut ensuite déclarer les colonnes.
+
+Toutes les colonnes sont du texte, car même le **Id** sera transformé en texte. Elles sont toutes du type **\<DataGridTextColumn\>**. 
+
+La propriété **Header** est pour le nom de la colonne. La propriété **Binding** est pour indiquer la propriété à utiliser dans la classe **CategorieModel**. Il n'est pas obligatoire de créer systématiquement une colonne par propriété, par exemple la clé pourrait être masquée à l'utilisateur. 
+
+À la ligne 61, la largeur de la colonne est **Width="*"**, ce qui indique qu'elle prendra l'espace restant. Si l'espace restant est plus petit que 300, la colonne restera à 300, car la propriété **MinWidth="300"** (ligne 58).
+
+
 
 ### Ajout de la ressource pour créer le lien entre ViewModel et Vue - MainWindow.xaml
 
@@ -746,7 +747,7 @@ La ligne 19 à 21 indique que lorsque le **DataContext** est de type **ListeCate
 
 À la ligne 24, lorsque le **Content** du **ContentControl** sera un **ViewModel** de la liste des ressources, il chargera le contrôle utilisateur correspondant.
 
-## Test - MainWindowVM
+## MainWindowVM
 
 Dans la classe **MainWindowVM.cs**, il faut assigner **ListeCategoriesVM** à la propriété **VMActif**.
 

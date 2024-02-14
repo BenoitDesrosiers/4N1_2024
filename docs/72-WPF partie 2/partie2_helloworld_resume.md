@@ -25,11 +25,11 @@ sequenceDiagram
     serv->>MainWindow_xaml_cs: Singleton new<br/>MainWindowVM
     activate MainWindow_xaml_cs
     create participant MainWindowVM_cs as MainWindowVM<br>.cs 
-    MainWindow_xaml_cs->>MainWindowVM_cs: Transient new()
+    MainWindow_xaml_cs->>MainWindowVM_cs: Injecté par<br>le constructeur
     MainWindowVM_cs->>serv: GetRequiredService<HelloWorldVM>
     create participant HelloWorldVM.cs
     serv->>HelloWorldVM.cs: Transient new()
-    MainWindow_xaml_cs-->HelloWorldVM.cs: VMActif =
+    MainWindowVM_cs-->HelloWorldVM.cs: VMActif =
     create participant MainWindow_xaml as MainWindow<br>.xaml
     MainWindow_xaml_cs->>MainWindow_xaml:InitializeComponent()
     MainWindow_xaml-->>HelloWorldVM.cs: <DataTemplate <br>"{vm:HelloWorldVM}"><br><v:UcHelloWorld /> >
@@ -48,6 +48,8 @@ sequenceDiagram
     deactivate App_xaml_cs
     
 ```
+
+Pour voir ce diagramme plus gros sur [Kroki!](https://kroki.io/mermaid/svg/eNqlVcGO2jAQvfMV1l7aSkDvERtpF1bdHtJWzTZ7XHmdASw5dmqbQFv1g_od_bGODSxO4rBIzYVkPPPm-c2zMfB9A5LBgtOVptWI4FNTbTnjNZWW5D-MhWrk40wDtdBavqnrpx2txBMzhBr3OZ0969SFpsz4qj3CJE2D3IRI2L5959cps7xxuMF6j4YB3bgGOf5yBl-0angJ2ud9Ulis-WptiVqSVpc7qWHFjdVQAaKUYDwSIuxbBMlI0C0l5KYscy5XAqySs4xy-chlqbbpYEE-LzhsM1WCuNtZkIYraQjK8D51YA-aYgjbB2BFlh52_1-A9yCEelRalCfAEgYFjU_is8wtKr2pz08jRvQD2K_oH66hPAymJ1jEM6eU0DqnqDPQNHSQa4Y9-3Uo1XFSzlBeoVDk9o769a8zLLIevSLzBDHsy_uoLaoeICEvMwuM30k6p2pr0EOsw6SOdJ2l1_i87GTSryyyGxR0Sa4vHO_AbC_RzgeTj5JbTgX_CXNV1Uoi6TjhSWyjswW19AGqWjierv3Vr6ZKwrzfV6mLz5rkGzvFCR62dFiX3oRdn7mSFnb2oE1wEiPWixyq7s5Jvlbbwb1GjoPvjyO4Jre4gEfjOK3TPaka0F2wcWTIdD_klqnGhzuoVJIR9gaMJYKSBu8qHLJRjP_9Az6jpSM6mbhUulxytsaUIeOEVeHNEMZ7d0NXlzSNwSQxv19CYbC_R4i1ijEIPOwAuj7u5cfOHfoL7mGjYUwKKvBlAYxXVBw_b5USo3P_AP8ARcDBAg==)
 
 le constructeur de App.xaml.cs est appelé   
 - C'est toujours App.xaml qui est appelé pour démarrer l'application. 

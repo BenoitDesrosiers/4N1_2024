@@ -23,7 +23,7 @@ La navigation est propre à la vue. Dans certaines technologies, c'est entièrem
 
 Il est important que le **ViewModel** ne connaisse pas la mécanique de changement de **Vue**. Il doit seulement indiquer qu'il faut changer de **ViewModel** et c'est la couche **Vue** qui gère la mécanique.
 
-Pour ce projet, ce sera le **ViewModel ** qui va demander les changements de **Vue**.
+Pour ce projet, ce sera le **ViewModel** qui va demander les changements de **Vue**.
 
 ## Classe d'assistance - Navigateur
 
@@ -31,7 +31,7 @@ Une classe d'assistance, d'aide ou **helper** en anglais est une classe qui assi
 
 Elle est parfois nommée **fournisseur** ou **provider**, car elle fournit un service précis à une composante.
 
-Il peut avoir des classes d'assistance à toutes les couches de l'application.
+Il peut y avoir des classes d'assistance à toutes les couches de l'application.
 
 Le navigateur est une classe d'assistance pour le **ViewModel**.
 
@@ -59,7 +59,7 @@ public interface INavigateur
 
 L'interface possède la propriété **VMActif**. Cette propriété indique à la fenêtre principale qu'elle est le **ViewModel** qu'elle doit utiliser.
 
-Ensuite, la méthode **`Naviguer`** est générique. Il faudra spécifier le type du **ViewModel** qui doit être affiché. Le type générique peut être uniquement une classe qui hérite de la classe abstraite **BaseVM**.
+Ensuite, la méthode **Naviguer** est générique. Il faudra spécifier le type du **ViewModel** qui doit être affiché. Le type générique peut être uniquement une classe qui hérite de la classe abstraite **BaseVM**.
 
 Créez la classe **Navigateur.cs**.
 
@@ -107,13 +107,13 @@ public class Navigateur : ObservableObject, INavigateur
 
 La classe a besoin du **ServiceProvider** pour créer des instances de **ViewModel**.
 
-La méthode **`Naviguer`** utilise le **ServiceProvider** pour créer une instance en fonction du type du **ViewModel** demandé.
+La méthode **Naviguer** utilise le **ServiceProvider** pour créer une instance en fonction du type du **ViewModel** demandé.
 
 L'instance est associée à la propriété **VMActif**. Cette propriété sera liée dans la fenêtre principale. Pour cette raison, la classe doit hériter de **ObservableObject** de la librairie **MVVM Toolkit** pour avoir accès à la mécanique de notification.
 
 ## Ajout de références dans Usings.cs
 
-Dans le fichier **Usings.cs**, ajoutez le nouveau **`namespace`**.
+Dans le fichier **Usings.cs**, ajoutez le nouveau **namespace**.
 
 ```c#
 global using SuperCarte.WPF; //Les classes à la racine de l'application WPF
@@ -209,7 +209,7 @@ public class MainWindowVM : BaseVM
 
 La propriété de liaison est maintenant le **Navigateur** et non directement **VMActif**. La mécanique de notification est dans le **Navigateur**.
 
-Il n'est pas possible de le faire comme ci-dessous. Car la **Vue** est liée à la propriété parent et elle ne considèrera pas la notification de changement de la propriété enfant **`_navigateur.ActiveVM`** comme lui appartenant. La notification doit se faire directement sur la propriété qui est liée. Il n'est pas possible de recevoir la notification par des intermédiaires.
+Il n'est pas possible de le faire comme ci-dessous. Car la **Vue** est liée à la propriété parent et elle ne considèrera pas la notification de changement de la propriété enfant **_navigateur.ActiveVM** comme lui appartenant. La notification doit se faire directement sur la propriété qui est liée. Il n'est pas possible de recevoir la notification par des intermédiaires.
 
 ```c#
 public BaseVM ActiveVM
@@ -223,9 +223,9 @@ public BaseVM ActiveVM
 
 ## Liaison du navigateur - MainWindow.xaml
 
-Il faut modifier la liaison du composant **`<ContentControl>`** pour utiliser le navigateur.
+Il faut modifier la liaison du composant **\<ContentControl>** pour utiliser le navigateur.
 
-Le changement est à la ligne 27. **` <ContentControl  Content="{Binding Navigateur.VMActif}" />`**.
+Le changement est à la ligne 27. **\<ContentControl  Content="\{Binding Navigateur.VMActif}" />**.
 
 ```c#
 <Window x:Class="SuperCarte.WPF.MainWindow"
@@ -374,13 +374,13 @@ La hauteur de la première rangée est automatique afin d'avoir un menu qui s'ad
 </Grid.RowDefinitions>
 ```
 
-Ensuite, la barre de menu classique utilise le composant **`<Menu>`**. Chaque élément du menu est un composant **`<MenuItem>`**. Il est possible d'imbriquer les **`<MenuItem>`** pour faire des sous-menus.
+Ensuite, la barre de menu classique utilise le composant **\<Menu>**. Chaque élément du menu est un composant **\<MenuItem>**. Il est possible d'imbriquer les **\<MenuItem>** pour faire des sous-menus.
 
-Les propriétés **`HorizontalContentAlignment`** et **`VerticalAlignment`** ont la valeur **`Stretch`** pour prendre tout l'espace disponible. Il n'est pas nécessaire de mettre le menu dans un **`<WrapPanel>`**.
+Les propriétés **HorizontalContentAlignment** et **VerticalAlignment** ont la valeur **Stretch** pour prendre tout l'espace disponible. Il n'est pas nécessaire de mettre le menu dans un **\<WrapPanel>**.
 
-Le **`<MenuItem>`** peut être assigné à une commande.
+Le **\<MenuItem>** peut être assigné à une commande.
 
-La navigation d'une barre de menu classique peut se faire par le clavier en appuyant sur la touche **ALT**. Le menu indique la lettre qu'il faut appuyer pour sélectionner le menu. Cette lettre est soulignée. Pour être en mesure d'assigner cette lettre, il faut mettre la barre en bas **(underscore)** avant la lettre. Pour le menu fichier, le nom est **`_Fichier`** , donc c'est le **F**. Pour le menu **Liste des c_atégories**, c'est le **a**, car le **c**  est déjà utilisé dans ce sous-menu.
+La navigation d'une barre de menu classique peut se faire par le clavier en appuyant sur la touche **ALT**. Le menu indique la lettre qu'il faut appuyer pour sélectionner le menu. Cette lettre est soulignée. Pour être en mesure d'assigner cette lettre, il faut mettre la barre en bas **(underscore)** avant la lettre. Pour le menu fichier, le nom est **_Fichier** , donc c'est le **F**. Pour le menu **Liste des c_atégories**, c'est le **a**, car le **c**  est déjà utilisé dans ce sous-menu.
 
 Par convention, on prend la première lettre si elle est disponible.
 
@@ -564,11 +564,11 @@ L'avantage de la 2e approche est qu'il n'est pas nécessaire de faire la transfo
 
 Pour ce projet et le **TP 3**, la première approche sera utilisée.
 
-Il faut créer les propriétés liées. Pour s'aider à faire l'assignation entre le **ViewModel** et le **modèle**, les méthodes **`VersModele()`** et **`VersVM()`** sont ajoutées. Il serait possible d'utiliser une librairie **Mapper** pour ceci. Si le **CategorieModel** est **`null`**, les valeurs par défaut du **ViewModel** seront assignées.
+Il faut créer les propriétés liées. Pour s'aider à faire l'assignation entre le **ViewModel** et le **modèle**, les méthodes **VersModele()** et **VersVM()** sont ajoutées. Il serait possible d'utiliser une librairie **Mapper** pour ceci. Si le **CategorieModel** est **null**, les valeurs par défaut du **ViewModel** seront assignées.
 
 Également, la propriété **CategorieId** qui représente la clé primaire peut seulement être assignée par le **ViewModel**. Il ne faut pas que la **Vue** soit en mesure de la modifier.
 
-À la ligne 90, l'assignation de la propriété a une vérification de chaine vide. Dans le cas que la chaine est vide ou avec uniquement des espaces, il faut retourner **`null`**, car c'est un champ non obligatoire. Il sera important de faire ceci pour tous les champs non obligatoires du **TP 3**.
+À la ligne 90, l'assignation de la propriété a une vérification de chaine vide. Dans le cas que la chaine est vide ou avec uniquement des espaces, il faut retourner **null**, car c'est un champ non obligatoire. Il sera important de faire ceci pour tous les champs non obligatoires du **TP 3**.
 
 ```c#
 #region Attributs des propriétés
@@ -668,7 +668,7 @@ public string? Description
 
 Ensuite, il faut créer la commande **Enregistrer**. L'ajout et la modification utiliseront la même commande. Selon l'état du **ViewModel**, le **ViewModel** déterminera si c'est un ajout ou une modification. Pour l'instant, la logique est uniquement pour l'ajout.
 
-Dans la méthode **`EnregistrerAsync()`**, l'utilisation des méthodes d'assignation est nécessaire pour récupérer les valeurs de la vue et de les mettre à jour.
+Dans la méthode **EnregistrerAsync()**, l'utilisation des méthodes d'assignation est nécessaire pour récupérer les valeurs de la vue et de les mettre à jour.
 
 ```c#
 public GestionCategorieVM(ICategorieService categorieService)
@@ -943,7 +943,7 @@ Pour faire le formulaire, il est possible d'intégrer un **Grid** dans un autre 
 
 Il faut 2 colonnes pour le formulaire. La première pour le titre et la 2e pour le composant de saisie.
 
-Le formulaire s'adapte à la largeur de la fenêtre, mais si la largeur est trop petite, elle ne sera pas fonctionnelle. Il serait possible de faire comme en Web de passer à une colonne si la largeur est insuffisante, mais il faudrait intégrer des **`<WrapPanel>`** et plusieurs sous **Grid**.
+Le formulaire s'adapte à la largeur de la fenêtre, mais si la largeur est trop petite, elle ne sera pas fonctionnelle. Il serait possible de faire comme en Web de passer à une colonne si la largeur est insuffisante, mais il faudrait intégrer des **\<WrapPanel>** et plusieurs sous **Grid**.
 
 Il faut prévoir un espace en dessous du contrôle pour afficher le message de validation. Il est assez compliqué en **XAML** de rendre ceci dynamique, car le message n'est pas considéré dans la grille. Il est plus facile d'utiliser une taille fixe.
 
@@ -1253,9 +1253,9 @@ Premièrement, il faut créer une commande pour obtenir la catégorie. (ligne 81
 
 Ensuite, il faut créer la méthode qui sera utilisée par la commande. (ligne 63)
 
-Dans le constructeur, la commande est créée pour la lier à la méthode **`ObtenirAsync()`**. (ligne 28)
+Dans le constructeur, la commande est créée pour la lier à la méthode **ObtenirAsync()**. (ligne 28)
 
-La méthode **`EnregistrerAsync()`** est modifiée. Il y a maintenant une vérification en fonction de la clé primaire. Si elle est à 0, c'est-à-dire que c'est une nouvelle catégorie. Par contre, si la clé primaire a une valeur différente de 0, la vue est en mode modification.
+La méthode **EnregistrerAsync()** est modifiée. Il y a maintenant une vérification en fonction de la clé primaire. Si elle est à 0, c'est-à-dire que c'est une nouvelle catégorie. Par contre, si la clé primaire a une valeur différente de 0, la vue est en mode modification.
 
 Dans le constructeur, à la ligne 30, une clé primaire est assignée pour simuler la modification de la catégorie #2.
 
@@ -1544,7 +1544,7 @@ Vérifiez dans la base de données. Les valeurs seront modifiées.
 
 #### Test 3 - Nouveau et rafraichir
 
-Dans le **ViewModel**, retirez la ligne **`CategorieId = 2; //Pour tester uniquement`** du constructeur.
+Dans le **ViewModel**, retirez la ligne **CategorieId = 2; //Pour tester uniquement** du constructeur.
 
 Le **ViewModel** sera en mode **ajouter**.
 
@@ -1570,7 +1570,7 @@ Lorsque le formulaire est en cours d'enregistrement, il est toujours modifiable.
 
 Pour le visualiser, il faut ajouter un délai artificiel dans la commande **Enregistrer**.
 
-Dans la classe **GestionCategorieVM.cs**, modifiez temporairement la méthode **`EnregistrerAsync()`** par celle-ci.
+Dans la classe **GestionCategorieVM.cs**, modifiez temporairement la méthode **EnregistrerAsync()** par celle-ci.
 
 ```c#
 private async Task EnregistrerAsync()
@@ -1607,9 +1607,9 @@ Lorsque l'enregistrement débutera, il faut mettre à jour la propriété **Cham
 
 Modifiez la classe **GestionCategorieVM.cs**.
 
-À la ligne 21, il y a l'attribut **`_champsModifiables`** et sa propriété **`ChampsModifiables`** à la ligne 136.
+À la ligne 21, il y a l'attribut **_champsModifiables** et sa propriété **ChampsModifiables** à la ligne 136.
 
-Aux lignes 40 et 62 de la méthode **`EnregistrerAsync()`**, la commande indique si le formulaire est modifiable ou non.
+Aux lignes 40 et 62 de la méthode **EnregistrerAsync()**, la commande indique si le formulaire est modifiable ou non.
 
 ```c#
 using CommunityToolkit.Mvvm.Input;
@@ -1807,7 +1807,7 @@ public class GestionCategorieVM : BaseVM
 }
 ```
 
-Dans le fichier **UcGestionCategorie.xaml**, il faut lier la propriété **`IsEnabled`** à la propriété **`ChampsModifiables`** du **ViewModel **(ligne 42).
+Dans le fichier **UcGestionCategorie.xaml**, il faut lier la propriété **IsEnabled** à la propriété **ChampsModifiables** du **ViewModel **(ligne 42).
 
 ```xaml
 <UserControl x:Class="SuperCarte.WPF.Views.UcGestionCategorie"
@@ -1897,7 +1897,7 @@ Il reste à régler la disponibilité des boutons.
 
 Dans la classe **GestionCategorieVM**, il faut ajouter une méthode pour le **CanExecute** pour la commande.
 
-Pour ce cas, ce sera la propriété **`EstEnTravail`** qui déterminera si les commandes sont disponibles ou non.Il est possible de le faire directement sans créer de sous-méthode.
+Pour ce cas, ce sera la propriété **EstEnTravail** qui déterminera si les commandes sont disponibles ou non.Il est possible de le faire directement sans créer de sous-méthode.
 
 ```c#
 EnregistrerCommande = new AsyncRelayCommand(EnregistrerAsync, () => !EstEnTravail);
@@ -2140,7 +2140,7 @@ Voici la classe **GestionCategorieVM.cs**.
 
 À la ligne 92, la commande est déclarée. Elle est en **synchrone**, car elle n'appelle aucune méthode **asynchrone**. Elle effectue seulement la réinitialisation des propriétés du **ViewModel**.
 
-À la ligne 79, la méthode **`Nouveau()`** met le champ **CategorieId** à zéro et les autres champs avec leur valeur initiale.
+À la ligne 79, la méthode **Nouveau()** met le champ **CategorieId** à zéro et les autres champs avec leur valeur initiale.
 
 À la ligne 30, la commande est assignée à la méthode dans le constructeur. La commande à la même logique de **CanExecute** que les autres. 
 
@@ -2392,17 +2392,17 @@ public abstract class BaseParametreVM<TParametre> : BaseVM
 
 La classe est abstraite et elle hérite de **BaseVM** pour permettre la notification de paramètre. Également, le **ViewModel** actif est de type **BaseVM**.
 
-La méthode **`AssignerParametre`** est également abstraite. Elle devra être implémentée obligatoirement dans la classe enfant.
+La méthode **AssignerParametre** est également abstraite. Elle devra être implémentée obligatoirement dans la classe enfant.
 
-La classe utilise le type générique **`TParametre`** pour contrôler ce que la classe peut recevoir comme paramètre.
+La classe utilise le type générique **TParametre** pour contrôler ce que la classe peut recevoir comme paramètre.
 
 S'il faut envoyer plusieurs paramètres, il faudra spécifier une classe. Dans le cas que c'est seulement une clé primaire, un type primitif sera suffisant.
 
 ## Modification du ViewModel de type gestion - GestionCategorieVM
 
-Il faut que la classe **GestionCategorieVM** hérite de la nouvelle classe de base **`BaseParametreVM<int>`**.  Elle spécifie un **`int`** pour le type du paramètre, car la clé primaire est un entier (ligne 10).
+Il faut que la classe **GestionCategorieVM** hérite de la nouvelle classe de base **BaseParametreVM\<int>**.  Elle spécifie un **int** pour le type du paramètre, car la clé primaire est un entier (ligne 10).
 
-Il faut également implémenter la méthode **`AssignerParametre`**. La méthode fait l'assignation du paramètre à la propriété **CategorieId** (ligne 130).
+Il faut également implémenter la méthode **AssignerParametre**. La méthode fait l'assignation du paramètre à la propriété **CategorieId** (ligne 130).
 
 Voici la nouvelle classe **GestionCategorieVM**.
 
@@ -2626,7 +2626,7 @@ Il faut ajouter la nouvelle méthode de navigation avec paramètre dans le navig
 
 Dans l'interface **INavigateur**, il faut ajouter la signature de méthode ci-dessous.
 
-Le type **`TViewModel`** a une restriction. Il doit être du type **`BaseParametreVM<TParameter>`**. Il n'est donc pas possible d'envoyer un type de paramètre qui n'est pas supporté par le **ViewModel** avec cette restriction.
+Le type **TViewModel** a une restriction. Il doit être du type **BaseParametreVM\<TParameter>**. Il n'est donc pas possible d'envoyer un type de paramètre qui n'est pas supporté par le **ViewModel** avec cette restriction.
 
 ```c#
 /// <summary>
@@ -2663,7 +2663,7 @@ Premièrement, il faut injecter le **Navigateur** dans le **ViewModel**, car c'e
 
 Il faut créer 2 nouvelles commandes dans la liste. La commande **Nouveau** et **Editer**. Ces commandes sont **synchrones**, car aucun appel asynchrone n’est utilisé (lignes 103 et 105).
 
-À la ligne 31, la commande **NouveauCommande** a comme fonction d'exécution la méthode **`Naviguer`** du **Navigateur**.
+À la ligne 31, la commande **NouveauCommande** a comme fonction d'exécution la méthode **Naviguer** du **Navigateur**.
 
 Il faut spécifier le type du **ViewModel** ainsi que le type du paramètre. Pour une nouvelle catégorie, il faut envoyer le paramètre **0**. Également, il faut utiliser une fonction **Lambda**, car la méthode a un paramètre.
 
@@ -2671,7 +2671,7 @@ Il faut spécifier le type du **ViewModel** ainsi que le type du paramètre. Pou
 NouveauCommande = new RelayCommand(() => _navigateur.Naviguer<GestionCategorieVM, int>(0));
 ```
 
-À la ligne 32, la commande **EditerCommande** a comme fonction d'exécution la méthode **`Naviguer`** du **Navigateur**.
+À la ligne 32, la commande **EditerCommande** a comme fonction d'exécution la méthode **Naviguer** du **Navigateur**.
 
 Il faut spécifier le type du **ViewModel** ainsi que le type du paramètre. Pour une nouvelle catégorie, il faut envoyer le **CategorieId** de la catégorie sélectionnée dans la liste. Également, il faut utiliser une fonction **Lambda**, car la méthode a un paramètre.
 
@@ -2990,7 +2990,7 @@ public CategorieModel? Obtenir(int categorieId)
 
 ### Modification du ViewModel - GestionCategorieVM 
 
-Il faut mettre à jour la méthode **`AssignerParametre`** dans la classe **GestionCategorieVM** pour appeler la méthode **synchrone** pour obtenir la catégorie.
+Il faut mettre à jour la méthode **AssignerParametre** dans la classe **GestionCategorieVM** pour appeler la méthode **synchrone** pour obtenir la catégorie.
 
 ```c#
 public override void AssignerParametre(int parametre)
@@ -3077,7 +3077,7 @@ public class ValidationModel
 
 Il faut créer une méthode d'extension pour passer de **ValidationResult** qui provient de la librairie **FluentValidation** à **ValidationModel**.
 
-Attention, la classe **ValidationResult** se retrouve dans plusieurs **`namespace`**. Assurez-vous d'utiliser celle de **`FluentValidation.Results;`**
+Attention, la classe **ValidationResult** se retrouve dans plusieurs **namespace**. Assurez-vous d'utiliser celle de **FluentValidation.Results;**
 
 Créez la classe **ValidationModelExtension** dans le dossier **Extensions**.
 
@@ -3184,13 +3184,13 @@ public class CategorieValidateur : AbstractValidator<CategorieModel>, IValidateu
 
 Voici le fonctionnement.
 
-La première étape consiste à indiquer la propriété dans la méthode **`RuleFor`**. Ensuite, il faut indiquer la règle de **Cascase**. Lorsque la valeur est **CascadeMode.Stop**, la validation s'arrête dès qu'il y a une erreur.
+La première étape consiste à indiquer la propriété dans la méthode **RuleFor**. Ensuite, il faut indiquer la règle de **Cascase**. Lorsque la valeur est **CascadeMode.Stop**, la validation s'arrête dès qu'il y a une erreur.
 
 ```c#
 RuleFor(i => i.Nom).Cascade(CascadeMode.Stop)
 ```
 
-Ensuite il faut appliquer chacune des règles. Il existe plusieurs méthodes internes. Lisez la documentation pour voir les différentes méthodes disponibles. Dans ce cas-ci, la méthode de validation est **`NotNull()`**. La méthode **`WithMessage()`** permet de spécifier le message d'erreur. Si ce n'est pas spécifié, ce sera un message générique et en anglais.
+Ensuite il faut appliquer chacune des règles. Il existe plusieurs méthodes internes. Lisez la documentation pour voir les différentes méthodes disponibles. Dans ce cas-ci, la méthode de validation est **NotNull()**. La méthode **WithMessage()** permet de spécifier le message d'erreur. Si ce n'est pas spécifié, ce sera un message générique et en anglais.
 
 ```c#
 .NotNull().WithMessage("Le nom est obligatoire.") //Pas null
@@ -3202,7 +3202,7 @@ Il est possible que la validation à effectuer soit personnalisée.
 
 Prenez par exemple qu'il faut également vérifier que les champs obligatoires ne contiennent pas uniquement des espaces.
 
-Il faut utiliser la méthode de validation **`Must()`** et indiquer la méthode de validation. La méthode de validation doit recevoir un paramètre du type de la propriété et doit retourner un booléen.
+Il faut utiliser la méthode de validation **Must()** et indiquer la méthode de validation. La méthode de validation doit recevoir un paramètre du type de la propriété et doit retourner un booléen.
 
 ```c#
 public CategorieValidateur()
@@ -3226,7 +3226,7 @@ private bool ValiderStringObligatoire(string valeur)
 }
 ```
 
-La méthode **`ValiderObligatoire()`** est une méthode qui risque d'être réutilisée souvent. Il serait intéressant de créer une classe **BaseValidateur** et y intégrer les méthodes réutilisables.
+La méthode **ValiderObligatoire()** est une méthode qui risque d'être réutilisée souvent. Il serait intéressant de créer une classe **BaseValidateur** et y intégrer les méthodes réutilisables.
 
 ### Modification du service - CategorieService
 
@@ -3261,7 +3261,7 @@ public CategorieService(ICategorieRepo categorieRepo, IValidateur<CategorieModel
 }
 ```
 
-Ensuite, il faut ajouter la méthode **`ValiderAsync()`**.
+Ensuite, il faut ajouter la méthode **ValiderAsync()**.
 
 ```c#
 public async Task<ValidationModel> ValiderAsync(CategorieModel categorieModel)
@@ -3270,9 +3270,9 @@ public async Task<ValidationModel> ValiderAsync(CategorieModel categorieModel)
 }
 ```
 
-Pour la méthode **`AjouterAsync()`**, il faut valider avant de faire l'enregistrement (ligne 3). Il faut éviter les exceptions inutiles.
+Pour la méthode **AjouterAsync()**, il faut valider avant de faire l'enregistrement (ligne 3). Il faut éviter les exceptions inutiles.
 
-Si l'objet n'est pas valide, il faut retourner **`false`** pour indiquer que l'ajout n'a pas été fait.
+Si l'objet n'est pas valide, il faut retourner **false** pour indiquer que l'ajout n'a pas été fait.
 
 ```c#
 public async Task<bool> AjouterAsync(CategorieModel categorieModel)
@@ -3297,9 +3297,9 @@ public async Task<bool> AjouterAsync(CategorieModel categorieModel)
 }
 ```
 
-Pour la méthode **`ModifierAsync()`**, il faut valider avant de faire l'enregistrement (ligne 3). Il faut éviter les exceptions inutiles.
+Pour la méthode **ModifierAsync()**, il faut valider avant de faire l'enregistrement (ligne 3). Il faut éviter les exceptions inutiles.
 
-Si l'objet n'est pas valide, il faut retourner **`false`** pour indiquer que l'ajout n'a pas été fait.
+Si l'objet n'est pas valide, il faut retourner **false** pour indiquer que l'ajout n'a pas été fait.
 
 ```c#
 public async Task<bool> ModifierAsync(CategorieModel categorieModel)
@@ -3576,13 +3576,13 @@ public abstract class BaseVM : ObservableObject, INotifyDataErrorInfo
 }
 ```
 
-Premièrement, il y a un dictionnaire de type **`<string,List<string>>`**. La clé du dictionnaire est le nom de la propriété et pour chaque propriété, il est possible d'avoir une liste d'erreurs. Par contre, la validation retourne uniquement une erreur par propriété à la fois. Il faut tout de même respecter l'implémentation de l'interface **INotifyDataErrorInfo** qui supporte plusieurs erreurs.
+Premièrement, il y a un dictionnaire de type ** \<string,List \<string>> ** . La clé du dictionnaire est le nom de la propriété et pour chaque propriété, il est possible d'avoir une liste d'erreurs. Par contre, la validation retourne uniquement une erreur par propriété à la fois. Il faut tout de même respecter l'implémentation de l'interface **INotifyDataErrorInfo** qui supporte plusieurs erreurs.
 
 ```c#
 private readonly Dictionary<string, List<string>> _lstErreursParPropriete = new Dictionary<string, List<string>>();
 ```
 
-Ensuite, il y a un événement **ErrorsChanged**. Lorsqu'un composant est lié, il écoute cet événement pour voir si sa propriété a une erreur. Le composant appelle la méthode **`GetErrors()`** pour obtenir la liste d'erreurs.
+Ensuite, il y a un événement **ErrorsChanged**. Lorsqu'un composant est lié, il écoute cet événement pour voir si sa propriété a une erreur. Le composant appelle la méthode **GetErrors()** pour obtenir la liste d'erreurs.
 
 La propriété **HasErrors** indique s'il y a au moins une propriété en erreur dans le **ViewModel**.
 
@@ -3630,7 +3630,7 @@ protected void AssignerValidation(ValidationModel validationModel)
 }
 ```
 
-La méthode **`EffacerErreurs()`** permet d'enlever les erreurs. À la ligne 6, l'événement est appelé pour indiquer que la propriété n'a plus d'erreur.
+La méthode **EffacerErreurs()** permet d'enlever les erreurs. À la ligne 6, l'événement est appelé pour indiquer que la propriété n'a plus d'erreur.
 
 ```c#
 protected void EffacerErreurs()
@@ -3645,7 +3645,7 @@ protected void EffacerErreurs()
 
 ### Modification du ViewModel - GestionCategorieVM
 
-Il faut modifier la méthode **`EnregistrerAsync()`** pour y inclure la validation.
+Il faut modifier la méthode **EnregistrerAsync()** pour y inclure la validation.
 
 À la ligne 3, il faut effacer les erreurs, car il est possible que des erreurs soient corrigées par l'utilisateur.
 
@@ -3703,11 +3703,11 @@ private async Task EnregistrerAsync()
 
 Démarrez l'application et testez l'ajout d'une nouvelle catégorie sans inscrire de nom.
 
-Le **`<Textbox>`** sera rouge, mais il n'y aura aucun message.
+Le **\<Textbox>** sera rouge, mais il n'y aura aucun message.
 
 ### Ajout d'un template dans les ressources
 
-Pour être en mesure de voir le message d'erreur d'un composant, il faut ajouter le **`<Validation.ErrorTemplate>` **. Cette propriété du composant permet d'indiquer comment le composant s'affiche lorsqu'il y a une erreur.
+Pour être en mesure de voir le message d'erreur d'un composant, il faut ajouter le **\<Validation.ErrorTemplate>` **. Cette propriété du composant permet d'indiquer comment le composant s'affiche lorsqu'il y a une erreur.
 
 Il est possible de le faire composant par composant, mais l'idéal est d'utiliser un modèle **(template)** global dans les ressources de l'application.
 
@@ -3739,13 +3739,13 @@ Un dictionnaire de ressources permet de configurer des éléments de l'applicati
 
 Dans l'exemple ci-dessous, il y a un modèle **erreurTemplate** qui permet de gérer l'affichage des erreurs. Le nom **erreurTemplate** peut être considéré comme une classe **CSS**. Les contrôles qui utilisent le modèle **erreurTemplate** pour les erreurs auront le même comportement.
 
-À la ligne 5, le contrôle **`<AdornedElementPlaceholder>`** représente le contrôle utilisateur normal. Si le contrôle est un **`<TextBox`>**, **`<AdornedElementPlaceholder>`** correspond au  **`<TextBox`>**.
+À la ligne 5, le contrôle **\<AdornedElementPlaceholder>** représente le contrôle utilisateur normal. Si le contrôle est un **\<TextBox`>**, **\<AdornedElementPlaceholder>** correspond au  **\<TextBox`>**.
 
 À la ligne 6, une bordure rouge est ajoutée à l'intérieur du contrôle. C'est le comportement par défaut, mais en spécifiant un **template**, il faut le reproduire.
 
 À la ligne 8, c'est un contrôle de répétition. Il est lié à la liste des erreurs. 
 
-À la ligne 11, un **`<TextBlock>`** est créé avec le contenu de l'erreur pour chaque erreur de la liste d'erreur. Le message d'erreur est dans la propriété **`Text="{Binding ErrorContent}"`**. Le texte est en rouge.
+À la ligne 11, un **\<TextBlock>** est créé avec le contenu de l'erreur pour chaque erreur de la liste d'erreur. Le message d'erreur est dans la propriété **Text="\{Binding ErrorContent}"**. Le texte est en rouge.
 
 Dans le fichier **App.xaml**, il faut importer le dictionnaire.
 
@@ -3768,7 +3768,7 @@ Dans le fichier **App.xaml**, il faut importer le dictionnaire.
 
 Modifiez le fichier **UcGestionCategorie.xaml**.
 
-Dans le **contrôle utilisateur**, il faut assigner le template avec cette propriété sur le composant **`Validation.ErrorTemplate="{StaticResource erreurTemplate}"`** (lignes 59 et 71).
+Dans le **contrôle utilisateur**, il faut assigner le template avec cette propriété sur le composant **Validation.ErrorTemplate="\{StaticResource erreurTemplate}"** (lignes 59 et 71).
 
 ```xaml
 <UserControl x:Class="SuperCarte.WPF.Views.UcGestionCategorie"
@@ -3856,7 +3856,7 @@ Démarrez le programme et testez la validation. Le message d'erreur s'affichera 
 
 ### Propriété MaxLength - UcGestionCategorie.xaml
 
-Il est possible de limiter le nombre de caractères dans un **`<TextBox>`** avec la propriété **`MaxLength`**. 
+Il est possible de limiter le nombre de caractères dans un **\<TextBox>** avec la propriété **MaxLength**. 
 
 Il est préférable de l'utiliser dans la vue (lignes 61 et 74).
 
@@ -3952,9 +3952,9 @@ Pensez à utiliser cette propriété pour le **TP 3**.
 
 Pour faire la localisation dans le code, il faut utiliser la librairie de localisation de **.NET**.
 
-Cette librairie donne accès à la classe **`IStringLocalizer<T>`** qui est possible d'injecter dans une classe.
+Cette librairie donne accès à la classe **IStringLocalizer\<T>** qui est possible d'injecter dans une classe.
 
-Il faut également utiliser les fichiers ressources avec cette technique. Le type générique du **`IStringLocalizer<T>`** correspond au fichier ressource.
+Il faut également utiliser les fichiers ressources avec cette technique. Le type générique du **IStringLocalizer\<T>** correspond au fichier ressource.
 
 Il existe plusieurs visions pour la gestion des fichiers ressources. Il est possible d'en faire un par classe qui l'utilise et d'utiliser des fichiers globaux pour les éléments généraux qui sont utilisés par plusieurs classes.
 
@@ -3974,7 +3974,7 @@ Dans le fichier **App.xaml.cs**, il faut enregistrer le service de pour la local
 
 Modifiez le constructeur par le code ci-dessous.
 
-L'enregistrement se fait à la ligne 13. **`services.AddLocalization();`**
+L'enregistrement se fait à la ligne 13. **services.AddLocalization();**
 
 ```c#
 public App()
@@ -4098,7 +4098,7 @@ public class CategorieValidateur : AbstractValidator<CategorieModel>, IValidateu
 
 Pour être en mesure de récupérer une valeur du fichier ressource, il faut spécifier le nom de la clé dans l'index.
 
-Par exemple, **`_resCategorieValidateur["Nom_Obligatoire"]`** permet d'obtenir la valeur de la clé **Nom_Obligatoire**.
+Par exemple, **_resCategorieValidateur["Nom_Obligatoire"]** permet d'obtenir la valeur de la clé **Nom_Obligatoire**.
 
 Démarrez le programme et testez en français et en anglais la validation.
 
@@ -4392,13 +4392,13 @@ Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous
 Install-Package BCrypt.Net-Next
 ```
 
-Pour être en mesure d'utiliser la librairie dans une classe, il faut mettre ce **`using`**.
+Pour être en mesure d'utiliser la librairie dans une classe, il faut mettre ce **using**.
 
 ```c#
 using BC = BCrypt.Net.BCrypt;
 ```
 
-La classe a le même nom qu'une partie du **`namespace`**. Il n'est pas possible d'utiliser la classe directement, car il y a ambiguïté entre la classe et le **`namespace`**. La syntaxe indique que la classe **BCrypt** dans ce fichier sera renommée sous le nom **BC**.
+La classe a le même nom qu'une partie du **namespace**. Il n'est pas possible d'utiliser la classe directement, car il y a ambiguïté entre la classe et le **namespace**. La syntaxe indique que la classe **BCrypt** dans ce fichier sera renommée sous le nom **BC**.
 
 ### Création du service - UtilisateurService
 
@@ -4532,7 +4532,7 @@ public class UtilisateurService : IUtilisateurService
 }
 ```
 
-Premièrement, la méthode **`AjouterAsync()`**  a 2 paramètres. Le premier est le modèle et le 2e est le mot de passe en texte. Le mot de passe ne fait pas partie du modèle du domaine, il doit être envoyé comme un 2e paramètre.
+Premièrement, la méthode **AjouterAsync()**  a 2 paramètres. Le premier est le modèle et le 2e est le mot de passe en texte. Le mot de passe ne fait pas partie du modèle du domaine, il doit être envoyé comme un 2e paramètre.
 
 Le mot de passe en texte est **haché** avec **BCrypt** et le **hash** est assigné dans le modèle de données.
 
@@ -4904,7 +4904,7 @@ public class GestionUtilisateurVM : BaseParametreVM<int>
 }
 ```
 
-Pour débuter, le **ViewModel** a besoin de 2 services. Il doit avoir accès aux méthodes de gestion de l'utilisateur et également au service du **Role** pour obtenir la liste de **`ListeItem`**.
+Pour débuter, le **ViewModel** a besoin de 2 services. Il doit avoir accès aux méthodes de gestion de l'utilisateur et également au service du **Role** pour obtenir la liste de **ListeItem**.
 
 À la ligne 10 du code ci-dessous, la propriété **ListeRoles** contient la liste des rôles disponibles pour la vue. L'assignation se fait dans le constructeur, car il s'agit d'une dépendance de la vue. La liste doit exister avant d'afficher l'utilisateur.
 
@@ -4944,7 +4944,7 @@ public List<ListeItem<int>> ListeRoles
 
 Il faut également indiquer à la **Vue** si le champ **MotPasse** est modifiable ou non. Le champ peut être modifié uniquement lorsque c'est un nouvel utilisateur. Cette propriété n'utilise pas un attribut et elle a une logique en fonction d'une autre propriété.
 
-Il est important que lorsque la propriété **UtilisateurId** est modifiée, il faut également indiquer que la propriété **MotPasseModifiable** est modifiée. À la ligne 19 de la méthode ci-dessous, la méthode **`OnPropertyChanged()`** indique aux composants qui sont liés à la propriété **MotPasseModifiable** de se mettre à jour. La méthode **`OnPropertyChanged`** provient de la classe **ObservableObject** du **MVVM Toolkit**.
+Il est important que lorsque la propriété **UtilisateurId** est modifiée, il faut également indiquer que la propriété **MotPasseModifiable** est modifiée. À la ligne 19 de la méthode ci-dessous, la méthode **OnPropertyChanged()** indique aux composants qui sont liés à la propriété **MotPasseModifiable** de se mettre à jour. La méthode **OnPropertyChanged** provient de la classe **ObservableObject** du **MVVM Toolkit**.
 
 ```c#
 public bool MotPasseModifiable
@@ -5132,9 +5132,9 @@ Aux lignes 7 et 8, il y a l'indicateur du **ViewModel** pour faciliter la liaiso
 </UserControl>
 ```
 
-Pour le mot de passe, idéalement, il faut utiliser le composant **`<PasswordBox>`**. Ce composant ne peut pas être lié à une propriété du **ViewModel** pour des raisons de sécurité par sa conception. Ce composant n'est pas très **MVVM**. Pour l'instant, ce sera un **`<TextBox>`**. Dans le cours sur l'intégration, il faudra modifier le **`<PasswordBox>`** pour qu'il soit **liable**. Il faudra penser de le corriger ici.
+Pour le mot de passe, idéalement, il faut utiliser le composant **\<PasswordBox>**. Ce composant ne peut pas être lié à une propriété du **ViewModel** pour des raisons de sécurité par sa conception. Ce composant n'est pas très **MVVM**. Pour l'instant, ce sera un **\<TextBox>**. Dans le cours sur l'intégration, il faudra modifier le **\<PasswordBox>** pour qu'il soit **liable**. Il faudra penser de le corriger ici.
 
-Également, la propriété **`IsEnabled`** est liée à la propriété **`MotPasseModifiable`** du **ViewModel**. Le composant sera disponible uniquement lors de l'ajout.
+Également, la propriété **IsEnabled** est liée à la propriété **MotPasseModifiable** du **ViewModel**. Le composant sera disponible uniquement lors de l'ajout.
 
 ```xaml
 <!-- Mot de passe -->
@@ -5151,13 +5151,13 @@ Pour le mot de passe, idéalement, il faut utiliser le composant **`<PasswordBox
          Margin="0 10 5 10"/>
 ```
 
-Ensuite, le composant **`<ComboBox>`** doit avoir les propriétés **`ItemsSource`** et **`SelectedValue`** associées au **ViewModel**. 
+Ensuite, le composant **\<ComboBox>** doit avoir les propriétés **ItemsSource** et **SelectedValue** associées au **ViewModel**. 
 
-**`ItemsSource`** correspond à la liste des éléments et la propriété **`SelectedValue`** à l'item sélectionné dans la liste.
+**ItemsSource** correspond à la liste des éléments et la propriété **SelectedValue** à l'item sélectionné dans la liste.
 
-La propriété **`SelectedValuePath`** permet d'indiquer la propriété du **`ListeItem<int>`** qui sera utilisée pour la valeur. C'est la valeur de cette propriété qui sera envoyée dans la propriété **`SelectedValue`**. Il est important que leur type soit le même.
+La propriété **SelectedValuePath** permet d'indiquer la propriété du **ListeItem\<int>** qui sera utilisée pour la valeur. C'est la valeur de cette propriété qui sera envoyée dans la propriété **SelectedValue**. Il est important que leur type soit le même.
 
-La propriété **`DisplayMemberPath`** permet d'indiquer la propriété du **`ListeItem<int>`** qui sera utilisée pour l'affichage.
+La propriété **DisplayMemberPath** permet d'indiquer la propriété du **ListeItem\<int>** qui sera utilisée pour l'affichage.
 
 ```xaml
  <!-- Rôle -->
@@ -5269,17 +5269,17 @@ L'utilisateur doit valider des éléments dans la base de données pour 2 champs
 
 Il est possible d'injecter un **Repository** dans le **Validateur**.
 
-Il faut créer une règle avec la fonction **`Must`**.
+Il faut créer une règle avec la fonction **Must**.
 
 Voici une coquille de **UtilisateurValidateur** pour le rôle et le nom d'utilisateur. Cette coquille est incomplète et donne uniquement un alignement pour faire de la validation avec un **Repository**.
 
-À la ligne 12, le méthode **`Must()`** utilise une fonction **lambda** **`(i,p)`**. 
+À la ligne 12, le méthode **Must()** utilise une fonction **lambda** **(i,p)**. 
 
-La variable **`i`** représente l'item en cours de validation. Dans ce cas-ci, c'est un objet de type **UtilisateurModel**. 
+La variable **i** représente l'item en cours de validation. Dans ce cas-ci, c'est un objet de type **UtilisateurModel**. 
 
-La variable **`p`** représente la valeur de la propriété en cours de validation. Dans ce cas-ci, c'est la valeur de **NomUtilisateur**. 
+La variable **p** représente la valeur de la propriété en cours de validation. Dans ce cas-ci, c'est la valeur de **NomUtilisateur**. 
 
-La méthode de validation doit avoir la signature **`bool Methode(string p, UtilisateurModel i)`** pour répondre à la fonction attendue par la méthode **`Must()`**.
+La méthode de validation doit avoir la signature **bool Methode(string p, UtilisateurModel i)** pour répondre à la fonction attendue par la méthode **Must()**.
 
 ```c#
 /****/
@@ -5339,7 +5339,7 @@ Le mot de passe doit être robuste. La définition d'un mot de passe robuste peu
 
 Pour le **TP 3**, il faut faire une méthode de validation spécifique que la méthode **.Must()** utilisera pour sa validation.
 
-Pour vous aider à déterminer les critères du contenu, il est possible d'utiliser des 4 **Regex**. Il faut que 3 des 4 **Regex** soit à **`true`** et que la longueur soit plus grand que 8.
+Pour vous aider à déterminer les critères du contenu, il est possible d'utiliser des 4 **Regex**. Il faut que 3 des 4 **Regex** soit à **true** et que la longueur soit plus grand que 8.
 
 ```
 bool minuscule = Regex.Match(motPasse,"[a-z]") //Contient une minuscule
@@ -5383,7 +5383,7 @@ public class CarteDetailModel
 
 Par contre, pour la gestion d'une seule carte, l'information des clés étrangères n'est pas nécessaire. 
 
-Il y a des programmeurs qui utilisent la même classe. La propriété **`public string EnsembleNom`** n'accepte pas les **null** par sa définition. En laissant le champ vide, ça indique tout de même au programmeur qu'il devrait avoir une valeur. C'est le même principe que le modèle de données et les propriétés de navigation de **Entity Framework**. Ça évite de créer plusieurs classes dans un projet.
+Il y a des programmeurs qui utilisent la même classe. La propriété **public string EnsembleNom** n'accepte pas les **null** par sa définition. En laissant le champ vide, ça indique tout de même au programmeur qu'il devrait avoir une valeur. C'est le même principe que le modèle de données et les propriétés de navigation de **Entity Framework**. Ça évite de créer plusieurs classes dans un projet.
 
 Il y a des programmeurs qui préfèrent avoir des modèles de données qui ont seulement les données nécessaires pour diminuer la taille des objets en mémoire, le temps de transfert et d'éviter d'avoir une **méga-classe** avec une bonne proportion des champs inutilisés selon le cas d'utilisation. Il faut donc une 2e classe pour respecter cette vision.
 

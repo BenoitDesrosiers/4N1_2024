@@ -3,6 +3,9 @@ sidebar_position: 260
 draft: true
 ---
 
+# Résumé de la partie 2
+
+
 ```mermaid
 sequenceDiagram
     participant System
@@ -68,10 +71,11 @@ sequenceDiagram
     ListeCartesVM_cs--XCarteDetailModel_cs: ListeCartes =
     ListeCartesVM_cs->>ListeCartesVM_cs: EstEnTravail = false
     ListeCartesVM_cs-->>UcListeCartes_xaml: arrête d'afficher le ProgressBar 
-
-
-%% rendu a afficher CarteDetailModel dans UcListeCartes_xaml
-%% faudrait ajouter le transfert de repo a modèle de bd
+    ListeCartesVM_cs-->>UcListeCartes_xaml: via le binding
+    UcListeCartes_xaml-->>UcListeCartes_xaml: DataGrid.ItemsSources ListeCartesVM.cs:ListeCartes<br>SelectedItem=VM.CarteSelection
+    UcListeCartes_xaml-->>UcListeCartes_xaml: affiche la liste des cartes<br>highlight la carte sélectionnée
+    actor Usager 
+    Usager->>UcListeCartes_xaml: appuie sur Supprimer .... à suivre
 
     deactivate App_xaml_cs
 ```

@@ -13,10 +13,12 @@ Veuillez vous référer aux notes de cours pour les détails.
 ```mermaid
 sequenceDiagram
     actor prog as Programmeur
-    box  Projet.EF
-    participant ef_context as context
+    
+    box  Projet.EF<br>Bibliothèque de classes
+    participant ef_context as Data/Context<br>ProjetContext.cs
     participant ef_classe as classes
     end
+    note over prog: _________EF_________
     prog->>ef_classe: création des classes
     note over ef_classe: ajouter une classe<br>pour chaque entité
     prog->>ef_context: création du context
@@ -26,26 +28,27 @@ sequenceDiagram
     note over ef_classe: ajout de champs<br>propriétés de navigation<br>type de champs<br>contraintes...
     prog->>ef_context: modifier le context
     note over ef_context: nom de table<br>contraintes<br>clé primaire composée<br>ON DELETE ON UPDATE,...
-    prog->>cgp: Add-Migration
-    prog->>cgp: Update-Database
     prog->>ef_context: ajout des seeders dans le context<br>private void Seed()
-    prog->>cgp: Add-Migration
-    prog->>cgp: Update-Database
+    prog->>cgp: Add-Migration [nom migration] -StartupProject [Nom Projet Entity Framework]
+    prog->>cgp: Update-Database -StartupProject [Nom Projet Entity Framework] -Migration [Nom migration]
 
-    box  Projet.Core
+
+    note over prog: _______Core________
+    box  Projet.Core<br>Bibliothèque de classes
     participant core_model as Models
     participant core_repo as Repositories
     participant core_serv as Services
     end
     note over prog: ajouter dépendances<br>de EF dans Core
-    prog->>core_repo:création de IBaseRepo/BaseRepo
+    prog->>core_repo:création de Repositories/IBaseRepo et BaseRepo
     note over core_repo: ObtenirListe<br>Ajouter<br>Supprimer<br>Enregistrer
     prog->>core_repo:création de IBasePKUniqueRepo/BasePKUniqueRepo
     note over core_repo: Méthodes spécifiques pour<br>clé primaire unique
     prog->>core_repo: création des repo pour chaque classe
     note over core_repo: hérite de BaseRepo ou de BasePKUniqueRepo
 
-    box Projet.WPF
+    note over prog:________WPF________
+    box Projet.WPF<br>Application WPF<br>projet de démarrage
     participant wpf_app as App.xaml.cs 
     participant wpf_serv as Extensions\<br>Services
     end
@@ -58,11 +61,12 @@ sequenceDiagram
     prog->>wpf_app:création de App.xaml.cs
     note over wpf_app:enregistrement de MainWindow<br>du DbContext<br>des services
     note over wpf_app:OnStartup<br>affichage fenêtre initiale
-    
+
+
 
 ```
 
-Ce diagramme sur [Kroki!](https://kroki.io/mermaid/svg/eNqlVduO2jAQfe9X-LGVSqq-omolCtkt7XLRAtqXSsgkk6y3ie16HJZ-Ev2N_FjHDoEQiLTV8oLjHHvOnJk5QfhdgIxgJHhqeP6O0Y9HVhmmjUoZRzanf3qTQ2H8243aMbf5DDYIb_2W5saKSGguLYNkHSlpYWfd4cPyKirjiOBBfoUeBDKuwBS1d3NzxPVZZMo9t0JJFsP5GaksMLUFwxpw_qwKS1uFhAP4y8bcaFUYFj1xSppCWWHLfTtcxfgsXnGWx3m4Gv6ZjTYLsC5LZvkm8-FmcqhkItLCCJm6jcn47mGwHM-m6-FsOg2HfrlYPoyndxcaRal26tANqKrr7gAdIcmFqbLh0S-eQodguYpFIohm9mq9SFqnTq7RX2-UNqLck0jo3ki-FamXxL21fzSc450WhgsSBIMg6NK1QesVskqVuyBHRRsx_GNW7imIyJ0kdF2uFZb7SvspG4X34TJktFrNR4Nl-LFFixTus0Ec9yaCWtwldvF2pWNuoTfixIAjdCVVq4cMAWIwpBeX2Eix0lNs6TK2VSJmC8K9__BGNhcDOVQGLhuJNtckO2SunyZugddBBrRymAf6R0EuIKADiWC2DrmgfxG1hvdUSkf-NItxudeE4eQ3vnpU2PC2UupE_JBuTaffnHs2_kppO3af6kUr4Okcm20sSGHuBVrfEIOKhVsuCu2apnoIpYGUQAbMaxnMf6ykIA85MmludDOa0Cw9Kd8lutxHNAZ0BJkzpctmLvyF1xm1zNCXrWlt1VB3E3kq90ZYP761jkwV9eNZMscWO3TY4_zS8190subau9VA62DH8yyIkF3F1Y0T7qg6SBngT1-Rt_cRma_roqqfappdV6yQHBmJZXvGxhItz7LevPJWNhGRUagS-tgdGQe1q_sSBN_xMKpdwUgbBGt9xGes7NOXK-OuYkJWRkrODrvW2NeS9eHUpd7QTWNEa7Nx7tOQ8X-z-qbQcWyHJ_bnI9CocSvtGn4im9NX1p2ZUJaPQsbqxResoK_l8OSMcZv65ZUzubDUSoV2eJ4kgoSjRBKQ5V-Kw4QUVvCsavp3_wCUhBno)
+Ce diagramme sur [Kroki!](https://kroki.io/mermaid/svg/eNqlVtty2jAQfecr9NjOFDJ9ZTqZSYJJacNlQjJ5SDMZYQvYxJZUSSb0j0p_wz_WXQmDzSVNpjxgXdZnzx7trmzFz1zIWHSAzwzPGgx_PHbKMG3UjHHLRvjEnUzkxu_6v4laMtp5Eq4Vdb9MzOk5TFJQbl78RkCWCBan3FphvbnmxkEMmkvHxPQxVtKJpSP0Dnf85CLMCSZgrhda8eHXPTK9XfUhZOKfUjnB1EKECNrssfxF3c0woOJ28_R0A9hmsSlW3IGSyL8OvgWtmPMnlTtcymUZLUWgVW5YPOckg5AOXLHadReiq_nL2Xr1gLvS_DPrTMbCkRzM8Unq3Q0lijWFWW5Azmih37u8PrvpDQePF8PBILrww_HNdW9wuSdmPNMkIyJYFeAuhSVCkoMJ0fD4mc_EEcEylcAUkGb6Zr18asx5pq2HN0obKFYokqUdyRcw85LQrvulRd2etDAcUBDbarWO6Vqh9QZZpcrIyUbRig8_TYsVOoGMJEG4TCtbrIL2A9aJrqKbiOHodtQ5u4k-vUKrjN8yK0QiDEbMpa2QDIrAgiPNhYKEjdHuw8cqHp5Ym50lSbMPWJU-d-4pgKycPrDm2OER59qXUuzY_QD3Q12xiBLyF-tiQYsXZZ4f9rBvdYLum1SXE45V9i40VqU1qNFqNF6rzgtlRK04qw2GNt_VYmJCwyQQKWV3nwZHjIzQimyu8WkB2x4cg7PCLMhyjE-I_9Fzys6QFCuNNhwbrM8l5Bx1w6lTUDXxSzrtaheqETvpneOJ0ApD8cvxDoEtDhtOnJBgrsA6r99ZYEXDca4ppcMkkkbM0MgI8wZGnsTo-60EPAUicLK7cJxRHyt9rnwF6GIVY5HiK5ZRy9wvtdwDHma006r9MVYbb8iM40TmxcqA80m00VTl5bQWzKEDLlP1btTdy9p10uKW11zrFOLAdL2kQ_GgL0yPjBuz6a-VnHvR00eufXdGiNaSZynehuygXZma0RLP26In-8Of8f9nKtKkPA0Zi_Rfhbi1eAPZzZ297Sk9aR1P0-Yo3CWsD7FRVk3x02HDuFXeYl6q1jer5KvOUBsrnPMen2y4LnwCpJxyAGRoEHiTiSWssdaUSsnaYpv3_gIzlVorWzP16oqM743qq7LEcdc9sq8XVeWMd8IuzbdkM_yqoHf6GOUdyES9-APL8eug8iGV7FLfhxzKdW8nez6dAgqHgUyFLP6gHwYSHPBUNBp_AQeTlqA)
 
 ### Base de données (EF)
 

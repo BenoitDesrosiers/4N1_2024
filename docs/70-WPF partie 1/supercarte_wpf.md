@@ -124,7 +124,7 @@ public partial class App : Application
 
 Une classe partielle en **.NET** consiste à créer une classe dans plusieurs fichiers. Le fichier **App.xaml** est aussi une classe, sauf que le langage est **XAML**.
 
-```xaml showLineNumbers
+```xaml showLineNumbers title="NE PAS COPIER"
 <Application x:Class="SuperCarte.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

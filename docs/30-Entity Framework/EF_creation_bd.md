@@ -92,7 +92,7 @@ En premier lieu, il faut créer toutes les classes vides, car les propriétés d
 Créez le dossier **Data**.
 
 Créez toutes les classes ci-dessous dans le dossier **Data**.
-
+<!-- changer Univers par Franchise, sinon ca cause un problème plus tard car le namespace Univers et la classe entre en conflit. Refaire tout ce code avec Franchise dès le départ afin de sauver du temps et un paquet de trouble plus tard. -->
 - Personnage.cs
 - Univers.cs
 - Distribution.cs

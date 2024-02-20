@@ -79,7 +79,7 @@ Constructeur de MainWindow.xaml
   
   
 - Dans MainWindow.xaml: 
-  - la première ligne indique c'est une Window, et que le code behing sera dans Supercarte.WPF.Mainwindow. C'est x:class qui indique ca. 
+  - la première ligne indique c'est une Window, et que le code behing sera dans SuperCarte.WPF.Mainwindow. C'est x:class qui indique ca. 
   - Le titre de la fenetre est set par Title=
   - Les caractérististique height, width, windowstate sont set
   - Dans la section DataTemplate

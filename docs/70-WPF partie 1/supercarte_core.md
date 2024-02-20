@@ -502,9 +502,9 @@ utilisateurCarteRepo.ObtenirParCleAsync(1); //Il y aura une exception "System.Ar
     but 1 values were passed to the 'Find' method.'"
 ```
 
-Cette approche va contre un des principes **SOLID**. Il s'agit du **L ([Liskov substitution](https://fr.wikipedia.org/wiki/Principe_de_substitution_de_Liskov))**. Il ne s'applique pas nécessairement au type générique dans sa définition pure, mais l'idée est tout de même respectée. Ce principe consiste au fait qu'une classe de base doit fonctionner pour tous les types de données. Il ne doit pas avoir de méthode disponible dans une classe pour laquelle le programmeur sait qu'un cas particulier va générer une exception si elle est utilisée. Donc par conception, le programmeur concepteur sait que la méthode **ObtenirParCleAsync()** va générer une exception pour le modèle de données **UtilisateurCarte**. Le programmeur qui n'est pas concepteur et qui voit cette méthode disponible, ne saura pas nécessairement qu'il ne peut pas l'utiliser, d'où l'importance de respecter le **L** de **SOLID**.
+Cette approche va contre un des principes **SOLID**. Il s'agit du **L ([Liskov substitution](https://fr.wikipedia.org/wiki/Principe_de_substitution_de_Liskov))**. Il ne s'applique pas nécessairement au type générique dans sa définition pure, mais l'idée est tout de même respectée. Ce principe consiste au fait qu'une classe de base doit fonctionner pour tous les types de données. Il ne doit pas avoir de méthode disponible dans une classe pour laquelle le programmeur sait qu'un cas particulier va générer une exception si elle est mal utilisée. Donc par conception, le programmeur concepteur sait que la méthode **ObtenirParCleAsync()** va générer une exception pour le modèle de données **UtilisateurCarte**. Le programmeur qui n'est pas concepteur et qui voit cette méthode disponible, ne saura pas nécessairement qu'il ne peut pas l'utiliser, d'où l'importance de respecter le **L** de **SOLID**.
 
-La solution a ce problème est de créer une classe de base intermédiaire qui servira pour les classes ayant une clé unique. Les classes ayant des clés composées hériteront directement de **BaseRepo**, mais devront redéfinir les méthodes pour obtenir un enregistrement par sa clé. 
+La solution à ce problème est de créer une classe de base intermédiaire qui servira pour les classes ayant une clé unique. Les classes ayant des clés composées hériteront directement de **BaseRepo**, mais devront redéfinir elles même les méthodes pour obtenir un enregistrement par sa clé. 
 
 
 Créez l'interface **IBasePKUniqueRepo** dans le dossier **Repositories\Bases**.
@@ -623,7 +623,7 @@ public abstract class BasePKUniqueRepo<TData, TClePrimaire> : BaseRepo<TData>, I
 La classe a 2 méthodes spécifiques aux tables avec une clé primaire unique. Il est possible d'obtenir un item à partir de sa clé primaire et de le supprimer. Il y a la version **synchrone** et **asynchrone**.
 
 ## Repository non standard - Théorie
-<!-- questions -->
+<!-- Est-ce nécessaire dans le cours ? C'est mélangeant plus qu'autre chose et ca demande de bien maitriser tous les aspects. J'enlèverai toute cette section -->
 Pour utiliser un **Repository** générique tel que **IBasePKUniqueRepo**, il faut l'injecter comme ceci. Voici l'exemple pour **Carte**.
 
 ```csharp title="Ne pas copier"

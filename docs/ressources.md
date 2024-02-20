@@ -4,7 +4,9 @@ draft: true
 
 # Ressources
 
-## Liens 
+## Liens {#ressources_liens}
+
+
 
 Voici tous les liens vers des ressoures utilisées dans le cours
 
@@ -57,3 +59,10 @@ Voici tous les liens vers des ressoures utilisées dans le cours
 - View
 - xaml
 
+## Commandes
+
+Add-Migration [nom migration] -StartupProject [Nom Projet Entity Framework]
+
+Update-Database -StartupProject [Nom Projet Entity Framework] -Migration [Nom migration]
+
+Remove-Migration -StartupProject [Nom Projet Entity Framework]

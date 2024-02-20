@@ -60,7 +60,7 @@ Pour avoir une connexion à la base de données, il faut créer une instance du 
 
 ```csharp
 UniversContext db = new UniversContext();
-Univers univers = db.Univers.FirstOrDefault(); //Retourne le premier univers de la base de données
+Univers univers = db.UniversTb.FirstOrDefault(); //Retourne le premier univers de la base de données
 Console.WriteLine($"Id : {univers.UniversId}");
 Console.WriteLine($"Nom : {univers.Nom}");
 db.Dispose();
@@ -75,6 +75,8 @@ Il y a 2 solutions:
 
 Nous allons utiliser la solution 2 avec ce qu'elle a comme complications. Mais ca sera fait une fois pour toute. 
 
+<!-- enlever tout ce refactoring, ca ne fait que causer des problèmes Si lors de la création, le nom Franchise a été utilisé, ca va simplifier le processus. J'ai perdu 1h a régler les problèmes causés pas une mauvaise séquence lors de cette modif. 
+-->
 ### Refactor de Univers
 
 Ouvrez **Univers.cs** et renommez la classe **Univers** en **Franchise**. 
@@ -123,6 +125,8 @@ Comme vous pouvez le voir, il arrive qu'on ait des erreurs de design qui n'appar
 
 Il est aussi intéressant de noter que dans la migration RenommerClasseUnivers.cs, les données qui avaient déjà été seedées ont été traitées. 
 
+Voici le code tel qu'il devrait l'être à la fin de cette étape: [Univers.Zip](Univers1.zip)
+
 
 Revenons à notre premier test de requête sur la bd utilisant Linq. Notre code devrait fonctionner maintenant en changeant la classe Univers par Franchise:
 
@@ -131,6 +135,7 @@ UniversContext db = new UniversContext();
 Franchise franchise = db.FranchiseTb.FirstOrDefault(); //Retourne la premiere franchise de la base de données
 Console.WriteLine($"Id : {franchise.FranchiseId}");
 Console.WriteLine($"Nom : {franchise.Nom}");
+//highlight-next-line
 db.Dispose();
 ```
 

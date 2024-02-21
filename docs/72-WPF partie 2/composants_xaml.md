@@ -5,7 +5,7 @@ draft: true
 
 # Composants XAML
 
-Avant de continuer avec des amélioration du code de sSuperCarte, nous allons expérimenter avec quelques composants XAML dans le HelloWorld.
+Avant de continuer avec des amélioration du code de SuperCarte, nous allons expérimenter avec les composants visuels XAML dans le HelloWorld.
 
 ## Formater des données
 
@@ -13,9 +13,9 @@ Il est possible de formater la valeur des propriétés dans un format spécifiqu
 
 Lors du **Binding**, il est possible d'indiquer la transformation avec la propriété **StringFormat**, Le choix de l'affichage appartient à la **Vue**, donc il faut faire les transformations d'affichage dans la **Vue** et non dans le **ViewModel**.
 
-Pour la date, il faut afficher en mode **dd MMM yyyy HH:mm:ss**. Donc pour **2023-03-03 15:23:03.452121** se sera **3 Mars 2023 15:23:03**.
+Pour la date, elle sera affichée selon le format **dd MMM yyyy HH:mm:ss**. Donc pour **2023-03-03 15:23:03.452121** se sera **3 Mars 2023 15:23:03**.
 
-Pour le nombre décimal, il faut avoir un séparateur de milliers et avoir une précision au millième (3 décimaux). Le format sera **N3**.
+Pour le nombre décimal, il sera affiché avec un séparateur de milliers et une précision au millième (3 décimaux). Le format sera **N3**.
 
 ```csharp
 <UserControl x:Class="SuperCarte.WPF.Views.UcHelloWorld"

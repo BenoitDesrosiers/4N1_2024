@@ -3,7 +3,7 @@ sidebar_position: 227
 draft: true
 ---
 
-# Champ texte numérique
+# Date et Champ texte numérique
 
 Il n'existe pas de contrôle qui accepte seulement les nombres avec **WPF**. Les développeurs peuvent acheter des librairies de composants comme **DevExpress** et **Telerik** pour avoir des composants avancés. Il est possible de faire une version simple soi-même, mais elle est limitée.
 

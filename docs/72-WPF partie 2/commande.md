@@ -17,7 +17,7 @@ La librairie **MVVM ToolKit** fournit l'objet **RelayCommand** qui permet de cr�
 Dans l'exemple ci-dessous, il faut créer un bouton pour mettre à jour l'heure.
 
 :::tip
-Il est recommandé d'utiliser un verbe d'action pour nommer la commande, mais ce n'est pas toujours possible.
+Il est recommandé d'utiliser un verbe d'action pour nommer la commande.
 :::
 
 Modifiez la classe **HelloWorldVM.cs**.

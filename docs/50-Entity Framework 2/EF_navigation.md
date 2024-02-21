@@ -291,15 +291,14 @@ Il est possible d'utiliser la navigation pour le tri et les conditions.
 
 ```sql
 SELECT 
-	Film.Titre,
-	Franchise.Nom AS FranchiseNom,	
-	Personnage.Nom AS PersonnageNom,
-	[Distribution].Acteur
-FROM [Distribution]
-INNER JOIN Personnage ON [Distribution].PersonnageId = Personnage.PersonnageId
-INNER JOIN Franchise ON Personnage.FranchiseId = Franchise.FranchiseId
-INNER JOIN Film ON [Distribution].FilmId = Film.FilmId
-WHERE [Distribution].FilmId = 2;
+	Personnage.PersonageId,
+	Personnage.Nom,
+	Personnage.FranchiseId,
+	Franchise.Nom
+FROM [Personnage]
+INNER JOIN Franchise ON [Personnage].FranchiseId = Franchise.FranchiseId
+WHERE [Franchise].Proprietaire <> 'Disney' AND [Personnage].EstVilain = true
+ORDER BY [Franchise].Nom, [Personnage].Nom DESC;
 ```
 
 Voici son équivalent en **LINQ**
@@ -405,7 +404,7 @@ var infoDistribution = (from lqFilm in db.FilmTb
 Il n'est pas possible de faire la requête suivante en navigation car la relation entre Distribution et Film est **plusieurs à 1**.
 Il y a plusieurs acteurs dans un film, c'est donc une liste.
 
-```csharp
+```csharp title="NE FONCTIONNE PAS"
 var infoDistribution = (from lqFilm in db.FilmTb                           
         where
             lqFilm.FilmId == 2

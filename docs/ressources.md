@@ -22,6 +22,8 @@ Voici tous les liens vers des ressoures utilisées dans le cours
 
 [FluentAPI](https://www.entityframeworktutorial.net/efcore/fluent-api-in-entity-framework-core.aspx)
 
+[Format des composants XAML](https://learn.microsoft.com/fr-ca/dotnet/api/system.string.format?view=net-7.0) (formatage des dates, des champs numériques...)
+
 [hosting](https://learn.microsoft.com/fr-fr/dotnet/core/extensions/generic-host?tabs=appbuilder)
 
 [Injection de dépendance (vidéo)](https://youtu.be/Hhpq7oYcpGE?si=uyluJ3V_JQtpRzX8)
@@ -40,7 +42,9 @@ Voici tous les liens vers des ressoures utilisées dans le cours
 
 [SQL type vs C# type](https://learn.microsoft.com/en-us/sql/relational-databases/clr-integration-database-objects-types-net-framework/mapping-clr-parameter-data?view=sql-server-ver16&viewFallbackFrom=sql-server-2014&redirectedfrom=MSDN)
 
+[StackPanel ](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.controls.stackpanel?view=winrt-22621) (composant XAML)
 
+[TextBlock](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.controls.textblock?view=winrt-22621) (composant XAML)
 ## Termes
 
 

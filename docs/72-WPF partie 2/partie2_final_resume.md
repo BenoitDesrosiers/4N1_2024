@@ -5,6 +5,54 @@ draft: true
 
 # Résumé de la partie 2
 
+```mermaid
+sequenceDiagram
+    actor prog as Programmeur
+
+    note over prog:________WPF________
+    box Projet.WPF<br>Application WPF<br>projet de démarrage
+    participant wpf_vm as ViewModels
+    participant wpf_mw as MainWindow.xaml
+    participant wpf_serv as Extensions\<br>ServiceCollections
+    end
+    participant cgp as Console<br>Gestionnaire<br>package
+
+    prog->>cgp:Install-Package CommunityToolkit.Mvvm
+    prog->>wpf_vm:création Bases/BaseVM.cs
+    note over wpf_vm:hérite de ObservableObject
+    prog->>wpf_vm:création de MainWindowVM.cs
+    note over wpf_vm:gère VMActif
+    prog->>wpf_serv:SCViewModelExtensions<br>enregistrer MainWindowVM
+    prog->>wpf_mw:ajouter le DataContext
+    note over wpf_mw:Binding VMActif
+    note over wpf_mw:dans MainWindow.xaml.cs<br>ajouter MainwindowVM dans le constructeur<br>et l'associer au DataContext<br>ajouter la langue
+     
+    
+
+
+
+
+
+
+
+
+
+    box  Projet.EF<br>Bibliothèque de classes
+    participant ef_context as Data/Context<br>ProjetContext.cs
+    participant ef_classe as classes
+    end
+    note over prog: _________EF_________
+
+
+     note over prog: _______Core________
+    box  Projet.Core<br>Bibliothèque de classes
+    participant core_model as Models
+    participant core_repo as Repositories
+    participant core_serv as Services
+    end
+```
+
+
 
 ```mermaid
 sequenceDiagram

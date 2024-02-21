@@ -171,14 +171,12 @@ Modifiez le code de la fenêtre **MainWindows.xaml**.
     </Grid>
 </Window>
 ```
-<!--- explication ? la ligne DataContext est en erreur, MainWindowVM n'est pas connue dans le namespace viewModels -->
 
 Aux lignes 7 et 8, ce sont les déclarations des **namespaces** qui seront utiles dans cette vue.
 
-<!--- explications ? -->
 À la ligne 10, le préfixe **v:** sera utilisé pour les **Vues** et le préfixe **vm:** pour les **ViewModels**.
 
-Le **DataContext** consiste au **ViewModel**. La ligne 10 sert à indiquer quel est le type du **DataContext**. Ce n'est pas une assignation réelle, mais un indicateur pour permettre les suggestions du code. Il sera donc possible de voir les propriétés du **ViewModel** lors du **Binding**. Cette étape n'est pas obligatoire, mais elle est recommandée pour faciliter la programmation.
+ La ligne 10 sert à indiquer quel est le type du **DataContext**. Ce n'est pas une assignation réelle, mais un indicateur pour permettre les suggestions du code. Il sera donc possible de voir les propriétés du **ViewModel** lors du **Binding**. Cette étape n'est pas obligatoire, mais elle est recommandée pour faciliter la programmation. 
 
 À la ligne 12, la propriété **WindowState="Maximized"** permet de maximiser la fenêtre au maximum.
 
@@ -214,8 +212,9 @@ Le constructeur reçoit le **MainWindowVM** en dépendance.
 
 Le **ViewModel** est assigné au **DataContext** de la fenêtre à la ligne 15. 
 
+Le **DataContext** est la source pour le binding dans **MainWindow.xaml**
 :::note
-bien que le DataContext ait été indiqué dans le fichier xaml, ce n'était que pour aider intellisense. L'assignation à la ligne 15 est la "vrai". 
+bien que le DataContext ait été indiqué dans le fichier xaml, ce n'était que pour aider intellisence. L'assignation à la ligne 15 est la "vrai". 
 :::
 
 Il faut également assigner la langue de la vue. Généralement, lors de l'affichage d'une donnée, elle utilise le format correspondant dans les paramètres régionaux du système d'exploitation. Cette valeur provient de **CultureInfo.CurrentUICulture**. Par contre, avec WPF, il faut le spécifier dans la structure de la vue.

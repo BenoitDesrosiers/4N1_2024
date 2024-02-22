@@ -44,7 +44,7 @@ public static void Copie(this Categorie itemDestination, CategorieModel categori
     itemDestination.Description = categorieModelSource.Description;
 }
 ```
-
+			
 ### Méthode Obtenir et Modifier dans le service - CategorieService
 
 Il faut ajouter dans le service la méthode pour obtenir et pour modifier une catégorie. La méthode est très simple pour le moment. Elle sera un peu plus complexe lors de la validation.
@@ -107,9 +107,9 @@ public async Task<CategorieModel?> ObtenirAsync(int categorieId)
 
 Modifiez la classe **GestionCategorieVM.cs** par le code ci-dessous.
 
-Premièrement, il faut créer une commande pour obtenir la catégorie. (ligne 81)
+Premièrement, il faut créer une commande pour obtenir la catégorie. (ligne 86)
 
-Ensuite, il faut créer la méthode qui sera utilisée par la commande. (ligne 63)
+Ensuite, il faut créer la méthode qui sera utilisée par la commande. (ligne 71)
 
 Dans le constructeur, la commande est créée pour la lier à la méthode **ObtenirAsync()**. (ligne 28)
 
@@ -145,6 +145,7 @@ public class GestionCategorieVM : BaseVM
         _categorieService = categorieService;
 
         EnregistrerCommande = new AsyncRelayCommand(EnregistrerAsync);
+		//highlight-next-line
         ObtenirCommande = new AsyncRelayCommand(ObtenirAsync);
         
         CategorieId = 2;//Pour test
@@ -160,7 +161,8 @@ public class GestionCategorieVM : BaseVM
         bool estEnregistre;
 
         CategorieModel categorieModel = VersModele();
-
+		
+//highlight-start	
         if (categorieModel.CategorieId == 0)
         {
             //La clé primaire est zéro, donc c'est une nouvelle catégorie
@@ -183,7 +185,9 @@ public class GestionCategorieVM : BaseVM
 
         EstEnTravail = false;
     }
+//highlight-end
 
+//highlight-start
     /// <summary>
     /// Obtenir la catégorie
     /// </summary>
@@ -199,6 +203,7 @@ public class GestionCategorieVM : BaseVM
         EstEnTravail = false;
     }
     #endregion
+//highlight-end
 
     #region Commandes
     public IAsyncRelayCommand EnregistrerCommande { get; private set; }
@@ -305,7 +310,7 @@ Modifiez le fichier **UcGestionCategorie.xaml** pour le code ci-dessous.
 
 À la ligne 37, le bouton rafraichir est lié à la commande **ObtenirCommande**.
 
-```xaml
+```xaml  showLineNumbers 
 <UserControl x:Class="SuperCarte.WPF.Views.UcGestionCategorie"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -342,6 +347,7 @@ Modifiez le fichier **UcGestionCategorie.xaml** pour le code ci-dessous.
                     Command="{Binding EnregistrerCommande}"/>
             <Button Content="R" ToolTip="Rafraichir"
                     Margin="5" Width="32" Height="32"
+					//highlight-next-line
                     Command="{Binding ObtenirCommande}"/>
         </WrapPanel>
 
@@ -388,7 +394,7 @@ Modifiez le fichier **UcGestionCategorie.xaml** pour le code ci-dessous.
 
 #### Test 1 - Rafraichissement
 
-Appuyez sur le bouton rafraichir. La catégorie **Orcs** devrait être affichée. 
+Appuyez sur le bouton rafraichir. La catégorie **Orcs** devrait être affichée (hardcodé ligne 30 de GestionCategorieVM.cs). 
 
 Modifiez un champ sans enregistrer et appuyez sur le bouton rafraichir.
 
@@ -404,11 +410,13 @@ Vérifiez dans la base de données. Les valeurs seront modifiées.
 
 Dans le **ViewModel**, retirez la ligne **CategorieId = 2; //Pour tester uniquement** du constructeur.
 
+Redémarrez.
+
 Le **ViewModel** sera en mode **ajouter**.
 
 Modifiez un champ sans enregistrer et appuyez sur le bouton rafraichir.
 
-Le champ aura de nouveau sa valeur par défaut.
+Le champ aura de nouveau sa valeur par défaut (vide).
 
 #### Test 4 - Nouveau et modifier
 
@@ -420,7 +428,7 @@ Ensuite, modifiez un des champs et enregistrez de nouveau.
 
 Vérifiez dans la base de données et l'enregistrement aura la nouvelle valeur.
 
-Le **ViewModel** passe en mode **modifier** après un ajout, car il a une clé primaire.
+Le **ViewModel** passe en mode **modifier** après un ajout, car il a une clé primaire (ligne 43 à 52).
 
 ## Verrouiller le formulaire et les boutons
 
@@ -434,8 +442,10 @@ Dans la classe **GestionCategorieVM.cs**, modifiez temporairement la méthode **
 private async Task EnregistrerAsync()
 {
     EstEnTravail = true;
+    bool estEnregistre;
 
     //Délai artificiel
+    //highlight-next-line
     await Task.Delay(5000);
 
     CategorieModel categorieModel = VersModele();
@@ -443,15 +453,22 @@ private async Task EnregistrerAsync()
     if (categorieModel.CategorieId == 0)
     {
         //La clé primaire est zéro, donc c'est une nouvelle catégorie
-        await _categorieService.AjouterAsync(categorieModel);
+        estEnregistre = await _categorieService.AjouterAsync(categorieModel);
     }
     else
     {
         //La clé primaire n'est pas zéro, donc c'est une catégorie existante
-        await _categorieService.ModifierAsync(categorieModel);
+        estEnregistre = await _categorieService.ModifierAsync(categorieModel);
     }
 
-    VersVM(categorieModel);
+    if (estEnregistre == true)
+    {
+        VersVM(categorieModel);
+    }
+    else
+    {
+        throw new Exception("Erreur. Impossible d'enregistrer");
+    }
 
     EstEnTravail = false;
 }
@@ -490,6 +507,7 @@ public class GestionCategorieVM : BaseVM
     private string _nom;
     private string? _description;
     private bool _estEnTravail = false;
+    //highlight-next-line
     private bool _champsModifiables = true;
     #endregion
 
@@ -509,6 +527,7 @@ public class GestionCategorieVM : BaseVM
     /// </summary>    
     private async Task EnregistrerAsync()
     {
+        //highlight-next-line
         ChampsModifiables = false;
         EstEnTravail = true;
         bool estEnregistre;
@@ -539,6 +558,7 @@ public class GestionCategorieVM : BaseVM
         }
 
         EstEnTravail = false;
+        //highlight-next-line
         ChampsModifiables = true;
     }
 
@@ -613,6 +633,7 @@ public class GestionCategorieVM : BaseVM
         }
     }
 
+//highlight-start
     public bool ChampsModifiables
     {
         get
@@ -624,7 +645,7 @@ public class GestionCategorieVM : BaseVM
             SetProperty(ref _champsModifiables, value);
         }
     }
-
+//highlight-end
     public int CategorieId
     {
         get 
@@ -665,9 +686,9 @@ public class GestionCategorieVM : BaseVM
 }
 ```
 
-Dans le fichier **UcGestionCategorie.xaml**, il faut lier la propriété **IsEnabled** à la propriété **ChampsModifiables** du **ViewModel **(ligne 42).
+Dans le fichier **UcGestionCategorie.xaml**, il faut lier la propriété **IsEnabled** à la propriété **ChampsModifiables** du **ViewModel** (ligne 42).
 
-```xaml
+```xaml showLineNumbers
 <UserControl x:Class="SuperCarte.WPF.Views.UcGestionCategorie"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -709,6 +730,7 @@ Dans le fichier **UcGestionCategorie.xaml**, il faut lier la propriété **IsEna
 
         <!--Rangée 2-->
         <!-- Formulaire -->
+        //highlight-next-line
         <Grid Grid.Row="2" IsEnabled="{Binding ChampsModifiables}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"></RowDefinition>
@@ -755,8 +777,9 @@ Il reste à régler la disponibilité des boutons.
 
 Dans la classe **GestionCategorieVM**, il faut ajouter une méthode pour le **CanExecute** pour la commande.
 
-Pour ce cas, ce sera la propriété **EstEnTravail** qui déterminera si les commandes sont disponibles ou non.Il est possible de le faire directement sans créer de sous-méthode.
+Pour ce cas, ce sera la propriété **EstEnTravail** qui déterminera si les commandes sont disponibles ou non. Il est possible de le faire directement sans créer de sous-méthode.
 
+Changer les lignes 28 et 29 de **GestionCategorieVM** pour celle-ci (notez la fin de la ligne)
 ```csharp showLineNumbers
 EnregistrerCommande = new AsyncRelayCommand(EnregistrerAsync, () => !EstEnTravail);
 ObtenirCommande = new AsyncRelayCommand(ObtenirAsync, () => !EstEnTravail);
@@ -773,16 +796,23 @@ public bool EstEnTravail
     }
     set
     {
+        //highlight-start
         if (SetProperty(ref _estEnTravail, value))
         {
             ObtenirCommande.NotifyCanExecuteChanged();
             EnregistrerCommande.NotifyCanExecuteChanged();
         }
+        //highlight-end
     }
 }
 ```
+:::tip
+Rappelons-nous que si SetProperty change la valeur, il retourne true. Si la nouvelle valeur est la même que l'ancienne, il retourne false. [reference](https://learn.microsoft.com/en-us/dotnet/api/microsoft.visualstudio.platformui.observableobject.setproperty?view=visualstudiosdk-2022)
+:::
 
-Voici la classe **GestionCategorieVM.cs** au complet.
+Si vous êtes un peu perdu, voici la classe **GestionCategorieVM.cs** au complet.
+<details>
+<summary> GestionCategorieVM.cs</summary>
 
 ```csharp showLineNumbers
 using CommunityToolkit.Mvvm.Input;
@@ -815,7 +845,6 @@ public class GestionCategorieVM : BaseVM
         EnregistrerCommande = new AsyncRelayCommand(EnregistrerAsync, () => !EstEnTravail);
         ObtenirCommande = new AsyncRelayCommand(ObtenirAsync, () => !EstEnTravail);
                 
-        CategorieId = 3; //Pour tester uniquement
     }
 
     #region Méthodes des commandes
@@ -827,9 +856,6 @@ public class GestionCategorieVM : BaseVM
         ChampsModifiables = false;
         EstEnTravail = true;
         bool estEnregistre;
-
-        //Délai artificiel
-        await Task.Delay(5000);
 
         CategorieModel categorieModel = VersModele();
 
@@ -983,26 +1009,28 @@ public class GestionCategorieVM : BaseVM
     #endregion
 }
 ```
+</details>
+
 
 Démarrez l'application et effectuez un enregistrement. Pendant l'enregistrement, les boutons ne sont pas accessibles.
 
-## Bouton nouveau
+## Bouton Nouveau
 
-Dans une fenêtre de gestion, il peut être intéressant d'ajouter plusieurs éléments sans toujours revenir à la liste.
+Dans une fenêtre de gestion, il pourrait être intéressant d'ajouter plusieurs éléments sans toujours avoir à revenir à la liste.
 
-Le bouton nouveau de la fenêtre de gestion permet d'indiquer au **ViewModel** de se mettre en état **Ajouter**.
+Le bouton **Nouveau** de la fenêtre de gestion permet d'indiquer au **ViewModel** de se mettre en état **Ajouter**.
 
 Il faut créer une nouvelle commande **NouveauCommande** dans le **ViewModel**.
 
 Voici la classe **GestionCategorieVM.cs**.
 
-À la ligne 92, la commande est déclarée. Elle est en **synchrone**, car elle n'appelle aucune méthode **asynchrone**. Elle effectue seulement la réinitialisation des propriétés du **ViewModel**.
+À la ligne 98, la commande est déclarée. Elle est en **synchrone**, car elle n'appelle aucune méthode **asynchrone**. Elle effectue seulement la réinitialisation des propriétés du **ViewModel**.
 
-À la ligne 79, la méthode **Nouveau()** met le champ **CategorieId** à zéro et les autres champs avec leur valeur initiale.
+À la ligne 87, la méthode **Nouveau()** met le champ **CategorieId** à zéro et les autres champs avec leur valeur initiale.
 
 À la ligne 30, la commande est assignée à la méthode dans le constructeur. La commande à la même logique de **CanExecute** que les autres. 
 
-À la ligne 144, il faut notifier la commande **Nouveau** que son état de **CanExecute** est modifié.
+À la ligne 150, il faut notifier la commande **Nouveau** que son état de **CanExecute** est modifié.
 
 ```csharp showLineNumbers
 using CommunityToolkit.Mvvm.Input;
@@ -1034,6 +1062,7 @@ public class GestionCategorieVM : BaseVM
 
         EnregistrerCommande = new AsyncRelayCommand(EnregistrerAsync, () => !EstEnTravail);
         ObtenirCommande = new AsyncRelayCommand(ObtenirAsync, () => !EstEnTravail);
+        //highlight-next-line
         NouveauCommande = new RelayCommand(Nouveau, () => !EstEnTravail);
     }
 
@@ -1088,6 +1117,7 @@ public class GestionCategorieVM : BaseVM
         EstEnTravail = false;
     }
 
+//highlight-start
     /// <summary>
     /// Mettre le ViewModel en mode ajouter
     /// </summary>
@@ -1098,12 +1128,12 @@ public class GestionCategorieVM : BaseVM
         Description = null;
     }
     #endregion
+//highlight-end
 
     #region Commandes
     public IAsyncRelayCommand EnregistrerCommande { get; private set; }
-
     public IAsyncRelayCommand ObtenirCommande { get; private set; }
-
+//highlight-next-line
     public IRelayCommand NouveauCommande { get; private set; }
     #endregion   
 
@@ -1156,6 +1186,7 @@ public class GestionCategorieVM : BaseVM
             {
                 ObtenirCommande.NotifyCanExecuteChanged();
                 EnregistrerCommande.NotifyCanExecuteChanged();
+                //highlight-next-line
                 NouveauCommande.NotifyCanExecuteChanged();
             }
         }
@@ -1212,6 +1243,10 @@ public class GestionCategorieVM : BaseVM
     #endregion
 }
 ```
+
+:::danger
+nouveau fonctionne pas ????
+::::
 
 # Navigation entre la liste et la gestion
 

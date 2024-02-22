@@ -5,24 +5,22 @@ draft: true
 
 # Ajout d'une catégorie
 
-Pour être en mesure d'ajouter une catégorie, il faut créer une vue de gestion. Cette vue s'occupera de la visualisation, de la création et de la modification.
+Pour être en mesure d'ajouter une catégorie, il faut créer une vue de gestion qui permettra d'entrer les valeurs pour les champs de la catégorie. Cette vue s'occupera de la visualisation, de la création et de la modification.
 
 ## SuperCarte.Core
 
 ### Méthode d'extension - CategorieMapExtension
 
-Cette méthode sera utile pour mettre à jour l'objet du domaine à partir de l'objet de données. Lors d'un ajout dans la base de données, **Entity Framework** va récupérer les nouvelles valeurs dans l'objet de donnée, dont la clé primaire. Il faut également mettre à jour les valeurs dans l'objet du domaine.
+Lors d'un ajout, l'objet du domaine associé à la vue n'a pas de clé primaire car celle-ci sera générée lors de l'insertion dans la bd. La méthode **Copie**, ci-dessous, permet  de transférer les valeurs de l'objet de données vers l'objet du domaine, incluant la clé primaire si nécessaire. Cette méthode sera utilisée lors de l'ajout d'une nouvelle catégorie, ou lors de son chargement à partir de la bd. 
 
 Dans la classe **Extensions/CategorieMapExtension**, ajoutez la méthode ci-dessous.
-
-Cette méthode d'extension a 3 paramètres, mais seulement 2 seront visibles lorsqu'elle sera utilisée car le premier est this (l'objet sur lequel est appelée cette fonction). Le premier est l'objet du domaine de référence qui sera utilisée pour faire la copie dans l'objet de données que possède l'extension. Le 2e paramètre est pour copier ou non la valeur de la clé primaire.
 
 ```csharp showLineNumbers
 /// <summary>
 /// Méthode qui copie les valeurs des propriétés de l'objet de donnée Categorie dans l'objet du modèle CategorieModel
 /// </summary>
-/// <param name="itemDestination">CategorieModel à recevoir la copie (destination)</param>
-/// <param name="categorieSource">L'objet Categorie de référence pour la copie (source)</param>
+/// <param name="itemDestination">l'objet CategorieModel initialisée avec l'objet de données (la destination)</param>
+/// <param name="categorieSource">L'objet Categorie qui vient d'être chargé de la bd (la source)</param>
 /// <param name="copierClePrimaire">Copier ou non la clé primaire</param>
 public static void Copie(this CategorieModel itemDestination, Categorie categorieSource, bool copierClePrimaire)
 {
@@ -36,9 +34,11 @@ public static void Copie(this CategorieModel itemDestination, Categorie categori
 }
 ```
 
-### Méthode Ajouter dans le service - CategorieService
+Cette méthode d'extension a 3 paramètres, mais seulement 2 seront visibles lorsqu'elle sera utilisée car le premier est this (l'objet sur lequel est appelée cette fonction). Le premier est l'objet du domaine de référence qui sera utilisée pour faire la copie dans l'objet de données que possède l'extension. Le 2e paramètre est pour copier ou non la valeur de la clé primaire.
 
-Il faut ajouter dans le service la méthode d'ajout. La méthode est très simple pour le moment. Elle sera un peu plus complexe lors de la validation.
+### Méthode de service: Ajouter  - CategorieService
+
+Il faut ajouter dans le service la méthode permettant d'inscrire une nouvelle catégorie dans la bd (via le repo). La méthode est très simple pour le moment. Elle sera un peu plus complexe lors de l'ajout des de la validation des champs.
 
 Dans l'interface **Services/ICategorieService.cs**, ajoutez la signature de la méthode ci-dessous.
 
@@ -46,7 +46,7 @@ Dans l'interface **Services/ICategorieService.cs**, ajoutez la signature de la m
 /// <summary>
 /// Ajouter une catégorie en asynchrone.
 /// </summary>
-/// <param name="categorieModel">Catégorie à ajouter</param>
+/// <param name="categorieModel">Categorie à ajouter</param>
 /// <returns>Vrai si ajoutée, faux si non ajoutée</returns>
 Task<bool> AjouterAsync(CategorieModel categorieModel);
 ```
@@ -103,11 +103,13 @@ public class GestionCategorieVM : BaseVM
 
 Ensuite, il faut penser aux propriétés de la vue.
 
+### Théorie 
+
 Il y a 2 options pour les propriétés. 
 
-La première est de créer une propriété dans le **ViewModel** pour chacune des propriétés du **modèle du domaine**. 
+La première est de créer une propriété dans le **ViewModel** pour chacune des **propriétés** du modèle du domaine. 
 
-```csharp showLineNumbers
+```csharp showLineNumbers title="NE PAS COPIER"
 public string Nom
 {
 	get
@@ -121,9 +123,9 @@ public string Nom
 }
 ```
 
-La 2e option est de créer une propriété dans le **ViewModel** pour l'objet du modèle comme ci-dessous.
+La 2e option est de créer une propriété dans le **ViewModel** pour **l'objet** du modèle, et de faire le **binding** sur les **propriétés** de cet objet dans la vue. 
 
-```csharp showLineNumbers
+```csharp showLineNumbers title="NE PAS COPIER"
 //ViewModel
 public CategorieModel Categorie { get; set;}
 
@@ -138,7 +140,7 @@ Il faudrait donc modifier la classe du modèle pour hériter de **ObservableObje
 
 Par exemple.
 
-```csharp showLineNumbers
+```csharp showLineNumbers title="NE PAS COPIER"
 public class CategorieModel : ObservableObject
 {
 	public string _nom;
@@ -161,155 +163,34 @@ L'avantage de la première approche est que le modèle du domaine est indépenda
 
 L'avantage de la 2e approche est qu'il n'est pas nécessaire de faire la transformation entre le **ViewModel** et le **modèle de données**. Par contre, le modèle a une mécanique de notification qui n'est pas toujours nécessaire selon le type d'architecture.
 
+:::warning Avertissement
 Pour ce projet et le **TP 3**, la première approche sera utilisée.
+:::
+ 
+### GestionCategorieVM
+Il faut créer les propriétés liées. Pour s'aider à faire l'assignation entre le **ViewModel** et le **modèle de données**, les méthodes **VersModele()** et **VersVM()** sont ajoutées.
 
-Il faut créer les propriétés liées. Pour s'aider à faire l'assignation entre le **ViewModel** et le **modèle**, les méthodes **VersModele()** et **VersVM()** sont ajoutées. Il serait possible d'utiliser une librairie **Mapper** pour ceci. Si le **CategorieModel** est **null**, les valeurs par défaut du **ViewModel** seront assignées.
+<!--  Il serait possible d'utiliser une librairie **Mapper** pour ceci. Si le **CategorieModel** est **null**, les valeurs par défaut du **ViewModel** seront assignées. -->
 
-Également, la propriété **CategorieId** qui représente la clé primaire peut seulement être assignée par le **ViewModel**. Il ne faut pas que la **Vue** soit en mesure de la modifier.
+Également, la propriété **CategorieId** qui représente la clé primaire peut seulement être assignée par le **ViewModel**. Il ne faut pas que la **Vue** soit en mesure de la modifier (private set à la ligne 116).
 
-À la ligne 90, l'assignation de la propriété a une vérification de chaine vide. Dans le cas que la chaine est vide ou avec uniquement des espaces, il faut retourner **null**, car c'est un champ non obligatoire. Il sera important de faire ceci pour tous les champs non obligatoires du **TP 3**.
+À la ligne 141, l'assignation de la propriété Description a une vérification de chaine vide. Dans le cas que la chaine est vide ou avec uniquement des espaces, il faut retourner **null**, car c'est un champ non obligatoire. 
 
-```csharp showLineNumbers
-#region Attributs des propriétés
-private int _categorieId;
-private string _nom;
-private string? _description;
-private bool _estEnTravail = false; 
-#endregion
+:::tip
+Il sera important de faire ceci pour tous les champs non obligatoires du **TP 3**.
+:::
 
-#region Méthodes d'assignation
-/// <summary>
-/// Assigner les propriétés liées du ViewModel vers les propriétés du modèle
-/// </summary>
-/// <returns>Objet du modèle</returns>
-private CategorieModel VersModele()
-{
-    return new CategorieModel
-    {
-        CategorieId = this.CategorieId,
-        Nom = this.Nom,
-        Description = this.Description
-    };
-}
 
-/// <summary>
-/// Assigner les propriétés du modèle vers les propriétés liées du ViewModel
-/// </summary>
-/// <param name="categorieModel">Modèle</param>
-private void VersVM(CategorieModel? categorieModel)
-{
-    if (categorieModel != null)
-    { 
-        CategorieId = categorieModel.CategorieId;
-        Nom = categorieModel.Nom;
-        Description = categorieModel.Description;
-    }
-    else
-    {
-        CategorieId = 0;
-        Nom = string.Empty;
-        Description = null;
-    }
-}
-#endregion
+:::note
+La propriété EstEnTravail (ligne 96) servira plus tard afin de controller la barre de progression lors du chargement
+:::
 
-#region Propriétés liées
-public bool EstEnTravail
-{
-    get
-    {
-        return _estEnTravail;
-    }
-    set
-    {
-        SetProperty(ref _estEnTravail, value);
-    }
-}
-
-public int CategorieId
-{
-    get 
-    { 
-        return _categorieId;
-    }
-    private set
-    {
-        SetProperty(ref _categorieId, value);
-    }
-}
-
-public string Nom
-{
-    get
-    {
-        return _nom;
-    }
-    set
-    {
-        SetProperty(ref _nom, value);
-    }
-}
-
-public string? Description
-{
-    get
-    {
-        return _description;
-    }
-    set
-    {
-        //Permet de remplacer une chaine vide par null
-        SetProperty(ref _description, string.IsNullOrWhiteSpace(value) ? null : value );
-    }
-}
-#endregion
-```
 
 Ensuite, il faut créer la commande **Enregistrer**. L'ajout et la modification utiliseront la même commande. Selon l'état du **ViewModel**, le **ViewModel** déterminera si c'est un ajout ou une modification. Pour l'instant, la logique est uniquement pour l'ajout.
 
 Dans la méthode **EnregistrerAsync()**, l'utilisation des méthodes d'assignation est nécessaire pour récupérer les valeurs de la vue et de les mettre à jour.
 
-```csharp showLineNumbers
-public GestionCategorieVM(ICategorieService categorieService)
-{
-    _categorieService = categorieService;
-
-    EnregistrerCommande = new AsyncRelayCommand(EnregistrerAsync);
-}
-
-#region Méthodes des commandes
-/// <summary>
-/// Enregistrer la catégorie
-/// </summary>    
-private async Task EnregistrerAsync()
-{
-    EstEnTravail = true;
-    bool estEnregistre;
-
-    CategorieModel categorieModel = VersModele();
-
-    estEnregistre = await _categorieService.AjouterAsync(categorieModel);
-
-    if (estEnregistre == true)
-    {
-        VersVM(categorieModel);
-    }
-    else
-    {
-        //Envoyer un message d'erreur à la vue
-        throw new Exception("Erreur. Impossible d'enregistrer");
-    }
-
-    EstEnTravail = false;
-}
-#endregion
-
-#region Commandes
-public IAsyncRelayCommand EnregistrerCommande { get; private set; }
-#endregion   
-```
-
-Voici la classe finale.
+Remplacez le code de **GestionCategorieVM** par celui-ci
 
 ```csharp showLineNumbers
 using CommunityToolkit.Mvvm.Input;
@@ -326,20 +207,25 @@ public class GestionCategorieVM : BaseVM
     private readonly ICategorieService _categorieService;
     #endregion
 
+//highlight-start
     #region Attributs des propriétés
     private int _categorieId;
     private string _nom;
     private string? _description;
     private bool _estEnTravail = false;
     #endregion
+//highlight-end
 
     public GestionCategorieVM(ICategorieService categorieService)
 	{
         _categorieService = categorieService;
 
+//highlight-start
         EnregistrerCommande = new AsyncRelayCommand(EnregistrerAsync);
+//highlight-end
     }
 
+//highlight-start
     #region Méthodes des commandes
 	/// <summary>
     /// Enregistrer la catégorie
@@ -456,6 +342,8 @@ public class GestionCategorieVM : BaseVM
         }
     }
     #endregion
+//highlight-end
+
 }
 ```
 

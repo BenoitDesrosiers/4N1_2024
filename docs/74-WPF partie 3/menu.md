@@ -95,7 +95,7 @@ Modifiez le code du  **MainWindow.xaml** par celui-ci.
             </MenuItem>
             <MenuItem Header="_Administration">
                 <MenuItem Header="Liste des _cartes" Command="{Binding NaviguerListeCartesVMCommande}"/>
-                <MenuItem Header="Liste des c_atégories" Command="{Binding NaviguerListeCategoriesVMCommande}"/>
+                <MenuItem Header="Liste des ca_tégories" Command="{Binding NaviguerListeCategoriesVMCommande}"/>
             </MenuItem>            
         </Menu>
 
@@ -117,7 +117,7 @@ Les propriétés **HorizontalContentAlignment** et **VerticalAlignment** ont la 
 
 Le **\<MenuItem>** est assigné à une commande (ligne 36).
 
-La navigation d'une barre de menu classique peut se faire par le clavier en appuyant sur la touche **ALT**. Le menu indique la lettre qu'il faut appuyer pour sélectionner le menu. Cette lettre est soulignée. Pour être en mesure d'assigner cette lettre, il faut mettre la barre en bas **(underscore)** avant la lettre. Pour le menu fichier, le nom est **_Fichier** , donc c'est le **F**. Pour le menu **Liste des c_atégories**, c'est le **a**, car le **c**  est déjà utilisé dans ce sous-menu.
+La navigation d'une barre de menu classique peut se faire par le clavier en appuyant sur la touche **ALT**. Le menu indique la lettre qu'il faut appuyer pour sélectionner le menu. Cette lettre est soulignée. Pour être en mesure d'assigner cette lettre, il faut mettre la barre en bas **(underscore)** avant la lettre. Pour le menu fichier, le nom est **_Fichier** , donc c'est le **F**. Pour le menu **Liste des ca_tégories**, c'est le **t**, car le **c**  est déjà utilisé dans ce sous-menu, et le **a** est pour **A**dministration.
 
 Par convention, on prend la première lettre si elle est disponible.
 

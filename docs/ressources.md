@@ -20,7 +20,11 @@ Voici tous les liens vers des ressoures utilisées dans le cours
 
 [Entity Framework](https://www.entityframeworktutorial.net/efcore/entity-framework-core.aspx)
 
+https://en.wikipedia.org/wiki/Facade_pattern
+
 [FluentAPI](https://www.entityframeworktutorial.net/efcore/fluent-api-in-entity-framework-core.aspx)
+
+[FluentValidation](https://docs.fluentvalidation.net/en/latest/)
 
 [Format des composants XAML](https://learn.microsoft.com/fr-ca/dotnet/api/system.string.format?view=net-7.0) (formatage des dates, des champs numériques...)
 
@@ -45,12 +49,14 @@ Voici tous les liens vers des ressoures utilisées dans le cours
 [StackPanel ](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.controls.stackpanel?view=winrt-22621) (composant XAML)
 
 [TextBlock](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.controls.textblock?view=winrt-22621) (composant XAML)
-## Termes
 
+
+## Termes
 
 - Attribut
 - Commande: fonction (AsyncRelayCommand) qui fait le pont entre une action (d'un bouton) et une fonction du VM.
 - eager loading
+- facade
 - Migration
 - Property
 	- \{get; set }

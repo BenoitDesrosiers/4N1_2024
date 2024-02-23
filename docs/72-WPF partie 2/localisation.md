@@ -3,7 +3,7 @@ sidebar_position: 250
 draft: true
 ---
 
-# Localisation
+# Localisation de .xaml
 
 Pour rendre l'application multilingue, il faut utiliser des fichiers ressources. Les fichiers ressources sont en fonction de la localisation.
 

@@ -19,11 +19,11 @@ L’injection de dépendances consiste, pour une classe, à déléguer la créat
 
 ## Qu'est-ce qu'une dépendance ?
 
-Lorsqu'une fonction dans la clsse A fait un new() d'un objet d'une clases B, la classe A devient *dépendante* de la classe B. Si, par exemple, on veut utiliser la classe A dans un autre projet, on doit obligatoirement introduire la classe B dans ce projet aussi. 
+Lorsqu'une fonction dans la classe A fait un new() d'un objet d'une clases B, la classe A devient *dépendante* de la classe B. Si, par exemple, on veut utiliser la classe A dans un autre projet, on doit obligatoirement introduire la classe B dans ce projet aussi. 
 
 Une dépendance est donc toute classe externe utilisée pour créer une instance à l'intérieur de la classe active.
 
-Le mécanisme d'injection de dépendances permet de briser cette relation directe de A vers B. Au lieu d'avoir une relation directe, on aura une relation indirecte permettant d'utiliser n'importe quelle classe qui répondra à la définition (l'interface) de B. Il serat donc possible d'utiliser autre chose que B avec A. 
+Le mécanisme d'injection de dépendances permet de briser cette relation directe de A vers B. Au lieu d'avoir une relation directe, on aura une relation indirecte permettant d'utiliser n'importe quelle classe qui répondra à la définition (l'interface) de B. Il sera donc possible d'utiliser autre chose que B avec A. 
 
 ## Pourquoi opter pour l’injection de dépendances ?
 
@@ -32,7 +32,7 @@ Il y a deux raisons principales : l’utilisation d’abstractions et les tests 
 ### Les abstractions
 L’abstraction est un des principes fondamentaux de la programmation orientée objet. En suivant ce processus d’abstraction, le développeur masque toutes les informations non pertinentes d’un objet à des fins de simplification et d’efficacité.
 
-Les abstractions sont généralement implémentées en tant que classes ou interfaces abstraites et permettent d’introduire la notion de contrat, dans la syntaxe C# ce sont les interfaces. Ce sont elles qui vont permettre la mise en œuvre du principe d’inversion de dépendances.
+Les abstractions sont généralement implémentées en tant que classes ou interfaces abstraites et permettent d’introduire la notion de contrat, dans la syntaxe C# ce sont les interfaces. Ce sont elles qui vont permettre la mise en œuvre du principe d'injection de dépendances.
 
 Lorsque les modules de bas niveau implémentent des interfaces et que ce sont ces interfaces qui sont injectées dans les modules de haut niveau, on ne dépend plus des implémentations (des « détails ») et on peut dès lors « remplacer » une implémentation par une autre tant que la nouvelle implémentation respecte l’abstraction (c’est-à-dire qu’elle implémente l’interface).
 

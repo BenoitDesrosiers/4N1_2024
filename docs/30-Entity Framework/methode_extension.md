@@ -114,6 +114,8 @@ Il est possible d'ajouter des paramètres dans la méthode.
 Remplacez le code de la classe **FranchiseConsoleExtensions** par celui-ci.
 
 ```csharp
+namespace LinqCRUD.Extensions;
+
 /// <summary>
 /// Classe statique qui regroupe les méthodes d'extension pour la console du modèle Franchise
 /// </summary>

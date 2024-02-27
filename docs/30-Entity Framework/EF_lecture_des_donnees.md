@@ -125,8 +125,11 @@ Comme vous pouvez le voir, il arrive qu'on ait des erreurs de design qui n'appar
 
 Il est aussi intéressant de noter que dans la migration RenommerClasseUnivers.cs, les données qui avaient déjà été seedées ont été traitées. 
 
+:::tip
 Voici le code tel qu'il devrait l'être à la fin de cette étape: [Univers.Zip](Univers1.zip)
 
+Vous pouvez utiliser ce code. En ouvrant la solution, changez le projet de démarrage pour LinqCRUD, et je vous recommande d'effacer votre bd et de re-exécuter les migrations. 
+:::
 
 Revenons à notre premier test de requête sur la bd utilisant Linq. Notre code devrait fonctionner maintenant en changeant la classe Univers par Franchise:
 
@@ -479,7 +482,7 @@ Et tant qu'à se pratiquer, utilisez une **List\<Distribution\>** afin de créer
 
 Voici le début du code
 
-```csharp
+```csharp title="UTILISER LE CODE COMPLET DE LA FIN"
 global using Univers.EF.Data; //Les classes du modèle du contexte
 global using Univers.EF.Data.Context; // La classe du contexte
 global using System;
@@ -500,7 +503,7 @@ Ajoutez le code pour lire les 2 franchises (Marvels et DC Comics) et les mettre 
 
 <details>
   <summary>Solution</summary>
-```csharp
+```csharp title="UTILISER LE CODE COMPLET DE LA FIN"
     Franchise marvel = db.FranchiseTb.Where(f => f.Nom == "Marvel").First();
     Franchise dc = db.FranchiseTb.Where(f => f.Nom == "DC Comics").First();
 ```
@@ -514,7 +517,7 @@ Ajoutez le code pour créer le premier personnage, de l'ajouter dans la bd, et d
 <details>
   <summary>Solution</summary>
 
-```csharp
+```csharp title="UTILISER LE CODE COMPLET DE LA FIN"
 //highlight-start
     Personnage joker = new Personnage()
     {
@@ -564,7 +567,7 @@ Ajoutez le film The Dark Night (la solution ajoute tous les films )
 <details>
   <summary>Solution</summary>
 
-```csharp
+```csharp title="UTILISER LE CODE COMPLET DE LA FIN"
 //highlight-start
    Film darkknight = new Film()
     {
@@ -613,7 +616,7 @@ Allez chercher les 3 personnages et les 5 films qui ont été "seedés" durant l
 <details>
   <summary>Solution</summary>
 
-```csharp
+```csharp title="UTILISER LE CODE COMPLET DE LA FIN"
 //highlight-start
   //Pour compléter l'inventaire des personnages et films qui sont déjà dans la bd
     Personnage spidey = db.PersonnageTb.Where(p => p.Nom == "Spiderman").First();
@@ -637,7 +640,7 @@ Vous devez utiliser une **List\<Distribution>**
 
 <details>
   <summary>Solution</summary>
-```csharp
+```csharp title="UTILISER LE CODE COMPLET DE LA FIN"
 
    List<Distribution> distributions = new List<Distribution>()
     {
@@ -692,7 +695,7 @@ Vous devez utiliser une **List\<Distribution>**
 
 <details>
   <summary>Solution</summary>
-```csharp
+```csharp title="UTILISER CE CODE"
 global using Univers.EF.Data; //Les classes du modèle du contexte
 global using Univers.EF.Data.Context; // La classe du contexte
 global using System;

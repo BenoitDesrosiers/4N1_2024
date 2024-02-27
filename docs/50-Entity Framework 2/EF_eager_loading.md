@@ -85,7 +85,7 @@ Par souci d'économie de mémoire, les propriétés de navigations n'ont aucune 
 
 Le **Eager Loading** (chargement *hâtif*) permet d'indiquer à **Entity Framework** de mettre les valeurs dans les propriétés de navigation pour qu'elles soient disponibles en dehors de la requête et de la durée de vie du contexte.
 
-Il faut utiliser la méthode **Include()** dans la requête. Il est important d'utiliser d'utiliser un **Include()** pour chacune des propriétés.
+Il faut utiliser la méthode **Include()** dans la requête. Il est important d'utiliser un **Include()** pour chacune des propriétés.
 
 ```csharp
 List<Personnage> lstPersonnage;

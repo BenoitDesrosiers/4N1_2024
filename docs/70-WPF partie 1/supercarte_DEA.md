@@ -7,5 +7,5 @@ draft: true
 
 ## Diagramme entité-association
 
-Voici le DEA initial de l'application. Le DEA évoluera afin de pratiquer les migrations en cours de projet.
+Voici le DEA initial de l'application.
 <img src="/4N1_2024/img/13_dea_supercarte.png"  />

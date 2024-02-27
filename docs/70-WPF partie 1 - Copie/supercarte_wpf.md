@@ -103,81 +103,6 @@ Utilisez cette version avec le paramètre **Trust Server Certificate=true;** si 
   }
 }
 ```
-## Théorie: comment utiliser l'injection de dépendances
-
-Nous allons voir 3 façons d'insérer un repository dans **SuperCarte.WPF**
-
-Afin de les démontrer, nous allons utiliser une classe qui n'est pas introduite encore, mais que nous utiliserons plus tard: la classe **CategorieService**. Cette classe devra utiliser le repository pour la classe **Categorie**. 
-
-### 1) Création directe (à ne pas faire)
-
-La bonne vieille technique de faire un new() lorsqu'on a besoin d'un objet. 
-
-Il serait donc possible de créer notre repository directement dans le **constructeur** de la classe **CategorieService**:
-
-```csharp title="NE PAS UTILISER"
-public class CategorieService : ICategorieService
-{
-    private readonly CategorieRepo _categorieRepo;
-    ...
-    public CategorieService()
-    {
-        _categorieRepo = new CategorieRepo();
-        ...
-```
-
-Une création directe rend la classe **CategorieService** entièrement dépendante de la classe **CategorieRepo**. Si nous voulions utiliser un autre type de repo, il faudrait modifier tous les emplacements appelant new. 
-
-### 2) Injection de la classe (à ne pas faire)
-
-La 2e technique serait de l'injecter par le constructeur, en utilisant la classe.
-
-Premièrement, il faudrait enregistrer la classe **CategorieRepo**. 
-à l'aide de ce code:
-
-```csharp title="NE PAS UTILISER"
-    services.AddTransient<CategorieRepo>();
-```
-
-Il serait maintenant possible d'injecter le repo dans le constructeur de la classe **CategorieService**:
-```csharp title="NE PAS UTILISER"
-public class CategorieService : ICategorieService
-{
-    private readonly CategorieRepo _categorieRepo;
-    ...
-    public CategorieService(CategorieRepo categorieRepo)
-    {
-        _categorieRepo = categorieRepo;
-        ...
-```
-
-Cette approche utilise l'injection de dépendances, mais utilise la classe implémentée dans le constructeur. Si on désire changer de classe pour CategorieRepo (par exemple CategoriRepo2), il faudra changer tous les constructeurs qui l'utilise. 
-
-### 3) Injection par interface (la bonne solution)
-
-La meilleure approche est d'injecter l'interface par le constructeur. **CategorieService** n'est plus dépendant de la classe **CategorieRepo**, mais d'une interface. Il sera maintenant plus facile d'utiliser une 2e version du repo.
-
-Premièrement, il faut enregistrer l'interface **ICategorieRepo**:
-
-```csharp title="solution recommandée"
-    services.AddTransient<ICategorieRepo, CategorieRepo>();
-```
-
-Et ensuite l'injecter dans le constructeur :
-
-```csharp title="solution recommandée"
-public class CategorieService : ICategorieService
-{
-    private readonly ICategorieRepo _categorieRepo;
-    ...
-    public CategorieService(ICategorieRepo categorieRepo)
-    {
-        _categorieRepo = categorieRepo;
-        ...
-```
-
-Avec cette approche, il suffit de changer la classe sur la ligne d'enregistrement de l'interface et toutes les classes recevront maintenant ce nouveau type. 
-
 
 ## Ajout de la structure pour injection des dépendances
 
@@ -225,13 +150,13 @@ L'application aura une seule fenêtre, le classe **MainWindow.xaml**. À l'inté
 
 ### Enregistrement des services
 
-Des classes d'extensions seront utilisées pour gérer l'enregistrement des dépendances.
+Comme pour le projet de **GestionPersonnage**, des extensions seront utilisées pour gérer l'enregistrement des dépendances.
 
 Créez le dossier **Extensions\ServiceCollections** à la racine du projet **SuperCarte.WPF**.
 
 Créez la classe **SCRepositories.cs** dans le dossier.
 
-Les Repositories ont déjà créés dans la section Core. Il faut maintenant les ajouter dans l'enregistrement. Remarquez que l'ajout est en **Scoped**. L'instance du dépot sera partagée entre les différents services qui l'utilisent.
+Les Repositories sont déjà créés, alors il faut les ajouter dans l'enregistrement. Remarquez que la création est maintenant en **Scoped**. L'instance du dépot sera partagée entre les différents services qui l'utilisent.
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
@@ -346,8 +271,75 @@ Install-Package Microsoft.Extensions.Hosting
 
 Avec cette librairie, il sera possible de configurer l'application **WPF** avec le **hosting** d'application de **.NET Core**.
 
+Copiez ce code dans le fichier **App.xaml.cs**.
 
-Voici le détail de la classe **App.xaml.cs**.
+```csharp showLineNumbers
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SuperCarte.WPF.Extensions.ServiceCollections;
+using System.Windows;
+
+namespace SuperCarte.WPF;
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
+{
+    private IHost? _host;
+
+	public App()
+	{
+        var builder = Host.CreateDefaultBuilder();
+
+        //Enregistrement des services
+        builder.ConfigureServices((context, services) =>
+        {            
+            services.AddSingleton<MainWindow>(); //Fenêtre principale
+
+            //Enregistrement du contexte    
+            services.AddDbContext<SuperCarteContext>(options => options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
+
+            //Appel des méthodes d'extension                        
+            services.EnregistrerRepositories();
+            services.EnregistrerServices();            
+            services.EnregistrerValidateurs();
+            services.EnregistrerViewModels();
+        });
+
+        _host = builder.Build();
+    }
+
+    /// <summary>
+    /// Démarrage de l'application
+    /// </summary>
+    /// <param name="e"></param>
+    protected override async void OnStartup(StartupEventArgs e)
+    {
+        await _host!.StartAsync();
+
+        var fenetreInitiale = _host.Services.GetRequiredService<MainWindow>();
+        fenetreInitiale.Show(); //Affiche la fenêtre initiale
+        base.OnStartup(e);
+    }
+
+    /// <summary>
+    /// Fermeture de l'application
+    /// </summary>
+    /// <param name="e"></param>
+    protected override async void OnExit(ExitEventArgs e)
+    {
+        await _host!.StopAsync();
+        base.OnExit(e);
+    }
+}
+```
+:::info
+Notez que ce code est similaire à celui qui avait été mis dans Program.cs dans l'exemple [d'injection de dépendance](../60-Injection%20de%20d%C3%A9pendance/preparation_projet.md#fichier-programcs)
+
+:::
+Voici le détail de la classe.
 
 
 À la ligne 14 du bloc de code ci-dessous, il y a un attribut pour le **host** de l'application. Le **host**  doit être en attribut, car il sera utilisé dans plusieurs méthodes de la classe. 
@@ -367,79 +359,6 @@ Aux lignes 29 à 32, le service utilise les méthodes d'extension pour enregistr
 
 
 La méthode **OnStartup()** est appelé au démarrage de l'application, après le constructeur. Elle démarre le **host** et ensuite indique au programme d'afficher la fenêtre principale de l'application.
-
-
-Copiez ce code dans le fichier **App.xaml.cs**.
-
-```csharp showLineNumbers
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using SuperCarte.WPF.Extensions.ServiceCollections;
-using System.Windows;
-
-namespace SuperCarte.WPF;
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
-public partial class App : Application
-{
-    //highlight-next-line
-    private IHost? _host;
-
-	public App()
-	{
-        //highlight-next-line
-        var builder = Host.CreateDefaultBuilder();
-
-        //Enregistrement des services
-        builder.ConfigureServices((context, services) =>
-        {      
-            //highlight-next-line      
-            services.AddSingleton<MainWindow>(); //Fenêtre principale
-
-            //Enregistrement du contexte    
-            //highlight-next-line
-            services.AddDbContext<SuperCarteContext>(options => options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
-
-            //Appel des méthodes d'extension    
-            //highlight-start                    
-            services.EnregistrerRepositories();
-            services.EnregistrerServices();            
-            services.EnregistrerValidateurs();
-            services.EnregistrerViewModels();
-            //highlight-end
-        });
-//highlight-next-line
-        _host = builder.Build();
-    }
-
-    /// <summary>
-    /// Démarrage de l'application
-    /// </summary>
-    /// <param name="e"></param>
-    protected override async void OnStartup(StartupEventArgs e)
-    {
-        await _host!.StartAsync();
-
-        var fenetreInitiale = _host.Services.GetRequiredService<MainWindow>();
-        fenetreInitiale.Show(); //Affiche la fenêtre initiale
-        //highlight-next-line
-        base.OnStartup(e);
-    }
-
-    /// <summary>
-    /// Fermeture de l'application
-    /// </summary>
-    /// <param name="e"></param>
-    protected override async void OnExit(ExitEventArgs e)
-    {
-        await _host!.StopAsync();
-        base.OnExit(e);
-    }
-}
-```
 
 
 
@@ -462,7 +381,16 @@ Ouvrez le fichier **App.xaml**.
 
 À la ligne 5, il y a la propriété **StartupUri**. Cette propriété indique également la fenêtre de démarrage. Il faut retirer cette propriété pour ne pas interférer avec l'injection de dépendances.
 
-Enlevez la ligne 5. 
+```xaml showLineNumbers
+<Application x:Class="SuperCarte.WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:SuperCarte.WPF">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
+```
 
 Démarrez de nouveau l'application et il aura une seule fenêtre.
 
@@ -478,10 +406,8 @@ Pour avoir un premier contenu visuel, il faut modifier le fichier **MainWindow.x
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SuperCarte.WPF"
         mc:Ignorable="d"
-        //highlight-next-line
         Title="Super Carte App" Height="450" Width="800">
     <Grid>
-    //highlight-next-line
         <Label Content="Hello World!!!"></Label>
     </Grid>
 </Window>

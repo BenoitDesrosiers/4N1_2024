@@ -19,6 +19,8 @@ Il faut différencier les classes du modèle de données et du modèle du domain
 
 Ce projet introduira les classes de type **Service**, de type **Repository**, de type **Validateur** et les modèles du domaine.
 
+Ces 
+
 
 ## Création du projet dans une solution existante
 
@@ -70,15 +72,6 @@ Sélectionnez le dossier **Dépendances** du projet **SuperCarte.Core** et chois
 
 Dans la fenêtre, il faut cocher **SuperCarte.EF**. Vous venez d'intégrer une librairie interne au projet.
 
-## Théorie: repository
-
-Jusqu'à maintenant, nous avons toujours utilisé une bd relationnelle afin d'entreposer nos données. Mais rien n'empêche de mettre ces données dans une structure de liste, dans une bd sqlite, un API, ou encore une bd NoSQL. Il est courant dans un projet de ne pas connaitre la technologie exacte d'entreposage des données. Afin de s'isoler de celle-ci, il est courant d'utiliser une classe qui fera le lien entre l'entrepot de données et le reste du programme: un Repository. Il suffira alors de simplement changer cette classe afin de changer l'entrepot de donnés.
-
-Mais comment isoler le reste du code afin de rendre cette classe intermédiaire, le repository,  échangeable? C'est ici que l'injection de dépendance entre en jeu.
-
-Le repository nous fournira quelques fonctionnalités que nous désirons avoir. La connexion entre notre programme et la source des données (bd ou autre) se fera selon la solution utilisée. L'injection de dépendances nous permettra de choisir le mode de connexion au moment de l'exécution.
-
-
 
 ## Généralisation du contexte
 
@@ -101,8 +94,6 @@ Et une requête qui devra être traité séparément:
 Créez le dossier **Bases** dans le dossier **Repositories**. Ce dossier contiendra les classes génériques de base.
 
 L'injection de dépendances du **Repository** se fera par les interfaces. Il faut donc que les classes de base possèdent une interface.
-
-
 
 ### IBaseRepo
 

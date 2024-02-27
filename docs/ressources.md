@@ -57,6 +57,7 @@ https://en.wikipedia.org/wiki/Facade_pattern
 - Commande: fonction (AsyncRelayCommand) qui fait le pont entre une action (d'un bouton) et une fonction du VM.
 - eager loading
 - facade
+- interface
 - Migration
 - Property
 	- \{get; set }

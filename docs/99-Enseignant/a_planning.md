@@ -49,17 +49,13 @@ Cette planification peut être modifiée en cours de session dans le but de s’
   
 _________ MI-Session __________
 
-* Semaine 7
-  * (3) Injection de dépendance
-    * Manager - Service - Repository
 
-* Semaine 8 
+* Semaine 7
   * Démarrer le projet WPF avec injection de dépendance et base de xaml. 
-  * Expliquer MVVM  et crud de base (repo)
-  * Validation et test unitaire du crud
+  
+* Semaine 8
   * remise TP2 (35%)
   * énoncé TP3 app WPF
-  
   <!-- -->
     * projet au choix 
     * en équipe de 2 (1 équipe de 3 si nécessaire) (correction individuelle basée sur le formulaire de suivi)

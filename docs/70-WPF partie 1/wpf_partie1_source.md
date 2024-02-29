@@ -15,10 +15,12 @@ Dans cette partie, nous allons modifier la BD à l'aide de migration. Veuillez l
 
 Il est possible que le code intermédiaire ne corresponde pas directement au code final. 
 
-:::tip
-Pour exécuter le code, vous devez mettre SuperCarte.WPF en tant que projet de départ
-:::
+:::warning Important
+Vous pouvez exécuter les migrations afin d'optenir la bd finale, ou les exécuter en suivant les notes de cours. 
 
-:::tip
+Pour exécuter le code, vous devez mettre **SuperCarte.WPF** en tant que projet de départ
+
 Vous devez changer la chaine de connexion dans le fichier **SuperCarte.EF/Data/Context/SuperCarteContexte.cs** 
+
+
 :::

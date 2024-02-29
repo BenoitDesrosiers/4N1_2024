@@ -65,8 +65,10 @@ Le site **Entity Framework Tutorial** (anglais seulement) explique plusieurs él
 
 Voici le site officiel de Microsoft pour la migration de **Entity Framework Core**. **https://learn.microsoft.com/fr-ca/ef/core/managing-schemas/migrations/?tabs=vs** 
 
+<!-- 
 L'approche utilisée dans ce document pour gérer la migration est d'utiliser directement la librairie de classe. La migration sera indépendante du projet **exécutable** (WPF, WinForm, Console, ASP.NET MVC, Blazor...). Cette approche doit ajouter des configurations dans le contexte, mais permet d'être indépendant de l'exécutable. Il est possible pour un programmeur de gérer la base de données sans avoir accès à la solution complète. L'approche présentée dans ce document nécessite de spécifier **une chaine de connexion en mémoire**, mais elle ne nécessite pas un projet de démarrage.
 
 Il est possible de gérer la migration à partir du projet **exécutable**. L'avantage d'avoir un projet exécutable lors de la mise en place de la migration est qu'il est possible d'utiliser le fichier de configuration du projet pour se synchroniser avec la base de données. **Par contre**, la mise en place d'un projet démarrable peut demander du temps. Si le projet démarrable est mal configuré, la migration ne fonctionnera pas. Il est possible que la solution possède plusieurs projets de démarrage (WPF et API). Il faut donc que chacun des projets soit en mesure de gérer la migration. 
+-->
 
 

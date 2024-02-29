@@ -3,7 +3,7 @@ sidebar_position: 190
 draft: true
 ---
 
-# Résumé du processus
+# Résumé du code
 
 Cette section vous donne un résumé des étapes à faire pour créer un projet WPF tel que démontré dans le cours. 
 Veuillez vous référer aux notes de cours pour les détails. 

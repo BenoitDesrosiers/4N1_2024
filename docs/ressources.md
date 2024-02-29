@@ -42,6 +42,8 @@ https://en.wikipedia.org/wiki/Facade_pattern
 
 [Prédicats (lambda)](https://learn.microsoft.com/en-us/dotnet/api/system.predicate-1?view=net-8.0)
 
+[Propriétés](https://learn.microsoft.com/en-us/dotnet/csharp/properties)
+
 [Repository pattern](https://www.umlboard.com/design-patterns/repository.html)
 
 [SQL type vs C# type](https://learn.microsoft.com/en-us/sql/relational-databases/clr-integration-database-objects-types-net-framework/mapping-clr-parameter-data?view=sql-server-ver16&viewFallbackFrom=sql-server-2014&redirectedfrom=MSDN)
@@ -59,10 +61,6 @@ https://en.wikipedia.org/wiki/Facade_pattern
 - facade
 - interface
 - Migration
-- Property
-	- \{get; set }
-	- \{get; private set }
-	- \{get; init } Le mot clé init sert à indiquer qu'il n'est pas possible de modifier la valeur après la construction de l'objet. [voir plus](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/init)
 - Repository
 - Seed
 - Service
@@ -77,3 +75,23 @@ Add-Migration [nom migration] -StartupProject [Nom Projet Entity Framework]
 Update-Database -StartupProject [Nom Projet Entity Framework] -Migration [Nom migration]
 
 Remove-Migration -StartupProject [Nom Projet Entity Framework]
+
+## Propriétés
+
+[Pour en savoir plus sur les propriétés](https://learn.microsoft.com/en-us/dotnet/csharp/properties)
+
+Propriété ayant un getter et un setter public
+
+* public type Nom \{get; set;} 
+
+Propriété ayant un getter public, mais dont le setter ne peut être appelé après la construction de l'objet
+
+* public type Nom \{get; init} // [voir init](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/init)
+
+Propriété ne pouvant être modifié que par sa classe. 
+
+* public type Nom \{get; private set}
+
+Propriété en lecture seulement
+
+* public type Nom \{get; }

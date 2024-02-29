@@ -1,5 +1,5 @@
 ---
-sidebar_position: 229
+sidebar_position: 211
 draft: true
 ---
 
@@ -13,10 +13,8 @@ Vous pouvez suivre les exemples en exécutant les étapes une par une, ou voir l
 
 Il est possible que le code intermédiaire ne corresponde pas directement au code final. 
 
-:::tip
-Pour exécuter le code, vous devez mettre SuperCarte.WPF en tant que projet de départ
-:::
+:::warning Important
+Pour exécuter le code, vous devez mettre **SuperCarte.WPF** en tant que projet de départ
 
-:::tip
-Vous devez changer la chaine de connexion dans le fichier **SuperCarte.EF/Data/Context/SuperCarteContexte.cs** 
+Vous devez aussi changer la chaine de connexion dans le fichier **SuperCarte.WPF/appsettings.json** 
 :::

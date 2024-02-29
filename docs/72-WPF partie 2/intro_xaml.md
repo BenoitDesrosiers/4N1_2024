@@ -3,7 +3,7 @@ sidebar_position: 210
 draft: true
 ---
 
-# Intro à XAML et MVVM
+# XAML et MVVM Introduction
 
 Dans ce document,  l'application aura ses premières interfaces visuelles. Les interfaces seront des listes d'éléments.
 

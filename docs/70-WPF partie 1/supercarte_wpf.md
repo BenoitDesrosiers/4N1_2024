@@ -103,6 +103,11 @@ Utilisez cette version avec le paramètre **Trust Server Certificate=true;** si 
   }
 }
 ```
+
+:::info
+Dans le fichier **SuperCarteContext.cs**, la variable **chaineConnexion** ne sert plus à rien car une validation est faite à la ligne 34 afin de savoir si le fichier de configuration est utilisé. Nous verrons plus tard ce qui remplacera la connexion à la bd. 
+:::
+
 ## Théorie: comment utiliser l'injection de dépendances
 
 Nous allons voir 3 façons d'insérer un repository dans **SuperCarte.WPF**
@@ -358,7 +363,7 @@ Ensuite, le constructeur de la classe s'occupe de configurer le **host** comme i
 
 À la ligne 23, il faut enregistrer la fenêtre principale dans les dépendances de l'application.
 
-À la ligne 26, le contexte est enregistré avec le fichier de configuration. 
+À la ligne 26, le contexte est enregistré avec le fichier de configuration. C'est ici que la connexion à la bd est créée, remplacant celle qui était faite dans SuperCarteContext.cs. 
 
 Aux lignes 29 à 32, le service utilise les méthodes d'extension pour enregistrer les différents concepts.
 

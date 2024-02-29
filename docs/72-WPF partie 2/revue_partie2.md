@@ -3,7 +3,7 @@ sidebar_position: 236
 draft: true
 ---
 
-# Revue 
+# Résumé du code
 
 Ce diagramme synthétise le processus de développement vue jusqu'à maintenant. 
 

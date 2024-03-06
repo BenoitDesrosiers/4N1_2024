@@ -27,6 +27,7 @@ VALUES ('DC', 1935);
 
 La clé primaire n'est pas spécifiée dans le **INSERT**. La migration considère que la clé primaire d'une table est **auto incrémentée** par défaut. 
 
+<!-- ajouter une section sur les contraintes check. voir https://learn.microsoft.com/fr-fr/ef/core/modeling/indexes?tabs=data-annotations#check-constraints   et  https://github.com/efcore/EFCore.CheckConstraints -->
 
 ## Configuration du contexte
 

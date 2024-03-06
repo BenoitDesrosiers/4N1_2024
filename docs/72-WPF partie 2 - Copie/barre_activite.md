@@ -30,7 +30,6 @@ public class ListeCategoriesVM : BaseVM
 
     //Attributs des propriétés
     private List<CategorieModel> _lstCategories;
-    //highlight-next-line
     private bool _estEnTravail = false;
 
     /// <summary>
@@ -49,14 +48,11 @@ public class ListeCategoriesVM : BaseVM
     /// </summary>    
     private async Task ObtenirListeAsync()
     {
-        //highlight-next-line
         EstEnTravail = true;
 
         ListeCategories = await _categorieService.ObtenirListeAsync();
-        //highlight-next-line
         await Task.Delay(5000);
 
-        //highlight-next-line
         EstEnTravail = false;
     }
 
@@ -64,7 +60,6 @@ public class ListeCategoriesVM : BaseVM
     public IAsyncRelayCommand ObtenirListeCommande { get; set; }
 
     //Propriétés liées
-    //highlight-start
     public bool EstEnTravail
     {
         get
@@ -76,7 +71,7 @@ public class ListeCategoriesVM : BaseVM
             SetProperty(ref _estEnTravail, value);
         }
     }
-//highlight-end
+
     public List<CategorieModel> ListeCategories
     {
         get
@@ -95,7 +90,7 @@ Dans le fichier **UcListeCategories.xaml**, ajoutez le composant **\<ProgressBar
 
 La propriété **IsIndeterminate** du composant **\<ProgressBar\>**  est liée à la propriété **EstEnTravail** du **ViewModel**.
 
-```xaml  showLineNumbers 
+```xaml
 <UserControl x:Class="SuperCarte.WPF.Views.UcListeCategories"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

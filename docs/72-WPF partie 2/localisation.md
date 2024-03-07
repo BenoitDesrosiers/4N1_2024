@@ -229,6 +229,7 @@ public App()
 {
 	//highlight-start
     //Modification de la langue dans l'extension et du thread principale
+    //highlight-next-line
     CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-CA");
     WPFLocalizeExtension.Engine.LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
     WPFLocalizeExtension.Engine.LocalizeDictionary.Instance.Culture = CultureInfo.DefaultThreadCurrentCulture;
@@ -267,7 +268,8 @@ Remettez l'application en français par défaut.
 public App()
 {
     //Modification de la langue dans l'extension et du thread principal
-		CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("fr-CA");
+    //highlight-next-line
+        CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("fr-CA");
         WPFLocalizeExtension.Engine.LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
         WPFLocalizeExtension.Engine.LocalizeDictionary.Instance.Culture = CultureInfo.DefaultThreadCurrentCulture;
 

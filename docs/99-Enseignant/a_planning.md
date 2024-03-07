@@ -54,9 +54,12 @@ _________ MI-Session __________
   * Démarrer le projet WPF avec injection de dépendance et base de xaml. 
   
 * Semaine 8
+  * WPF partie 1 
+    * lecture durant le cours
+    * revue à l'aide du diagramme de résumé du code
   * remise TP2 (35%)
   * énoncé TP3 app WPF
-  <!-- -->
+  <!-- 
     * projet au choix 
     * en équipe de 2 (1 équipe de 3 si nécessaire) (correction individuelle basée sur le formulaire de suivi)
     * code first, migration et seed, et bogus
@@ -73,19 +76,40 @@ _________ MI-Session __________
       * étudiant A fait la bd du crud 1-1 #1 et crud 1-n #1 (migration + seed + bogus) et la viewmodel pour crud 1-1 #2 et crud 1-n #2 et vice-versa (démontré dans git)
     * formulaire de suivi des modifications dans le code et/ou sur git pour chacun des critères de correction ( servivra pour compétence 8.2 documentation )
     * 
+  -->
+
+* Semaine 9
+  * WPF partie 2
+  * lecture du Helloworld
+  * revue à l'aide du diagramme Exécution du Helloworld
+  * composants
+  * commande
+  * Date et champ texte numérique
+
+* Semaine 10
+  * WPF partie 2
+  * Liste des catégories
+  * Barre d'activité
+  * revue à l'aide du diagramme de résumé du code
+  * supprimer une catégorie
+  * Localisation
+  * Liste des cartes
   
-  
-  <!-- -->
 
-* Semaine 9, 
+* Semaine 11
+  * Revue de l'éxcution de la partie 2
+  * WPF partie 3
+  * Navigateur
+  * Menu
+  * Ajout d'une catégorie
+  * Modifier une catégorie
+  * Navigation et paramètres
+  * Chargement automatique
+  * Validation
 
-* Semaine 10, Vue de type liste et navigation
+* Semaine 12,
 
-* Semaine 11, Sécurité et internationalisation (login)
-
-* Semaine 12 - Crud avec une dépendance 1 à N (liste déroulante)
-
-* Semaine 13 - Crud N:M
+* Semaine 13, 
 
 * Semaine 14 - Test intégration
 

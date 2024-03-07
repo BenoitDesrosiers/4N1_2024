@@ -5,7 +5,7 @@ draft: true
 
 # Localisation du code .cs
 
-Pour faire la localisation dans le code, il faut utiliser la librairie de localisation de **.NET**.
+Précédemment, nous avons fait la localisation du code de la partie **xaml** des vues. Nous allons maintenant faire la localisation du code dans les fichiers **.cs** des vues. Pour faire la localisation dans le code, il faut utiliser la librairie de localisation de **.NET**.
 
 Cette librairie donne accès à la classe **IStringLocalizer\<T>** qu'il est possible d'injecter dans une classe.
 
@@ -25,7 +25,7 @@ Install-Package Microsoft.Extensions.Localization
 
 ## Enregistrement du service - App.xaml.cs
 
-Dans le fichier **App.xaml.cs**, il faut enregistrer le service de pour la localisation.
+Dans le fichier **App.xaml.cs**, il faut enregistrer le service pour la localisation.
 
 Modifiez le constructeur par le code ci-dessous.
 
@@ -44,6 +44,7 @@ public App()
     //Enregistrement des services
     builder.ConfigureServices((context, services) =>
     {
+        //highlight-next-line
         services.AddLocalization();
         services.AddSingleton<MainWindow>(); //Fenêtre principale
 
@@ -68,9 +69,13 @@ public App()
 
 Dans le projet **SuperCarte.Core**, créez un dossier **Resx**.
 
-Créez le fichier ressource **ResCategorieValidateur.resx** dans le dossier **Resx**. 
+:::tip
+Le type **fichier de ressources** se trouve dans Éléments C#/Général
+:::
 
-Il est important que le **Modificateur d'accès** du fichier ressource soit **Public**. Si le fichier ressource n'est pas **Public**, il ne sera pas utilisable par le **IStringLocalizer**.
+Créez le fichier de ressources **ResCategorieValidateur.resx** dans le dossier **Resx**. 
+
+Lors de l'ouverture de l'éditeur de ressource, il faut changer le **Modificateur d'accès** en haut de l'éditeur afin de mettre le fichier **Public**. Si le fichier ressource n'est pas **Public**, il ne sera pas utilisable par le **IStringLocalizer**.
 
 | Nom                     | Valeur                                              |
 | ----------------------- | --------------------------------------------------- |
@@ -78,7 +83,9 @@ Il est important que le **Modificateur d'accès** du fichier ressource soit **Pu
 | Nom_LongueurMax         | Le nom doit avoir 35 caractères au maximum.          |
 | Description_LongueurMax | La description doit avoir 50 caractères au maximum. |
 
-Créez le fichier ressource anglais **ResCategorieValidateur.en.resx**. Pour les fichiers des autres langues, **il ne faut pas changer le Modificateur d'accès**. Il faut le laisser à **Pas de génération de code**.
+Créez le fichier ressource anglais **ResCategorieValidateur.en.resx**. 
+
+Pour les fichiers des autres langues, **il ne faut pas changer le Modificateur d'accès**. Il faut le laisser à **Pas de génération de code**.
 
 | Nom                     | Valeur                                                   |
 | ----------------------- | -------------------------------------------------------- |
@@ -98,13 +105,20 @@ Il faut mettre le **IStringLocalizer** dans les paramètres du constructeur pour
 
 Modifiez la classe **CategorieValidateur** par le code ci-dessous.
 
+Notez que le texte des validateurs (ex: Le nom est obligatoire) est remplacé par les valeurs du fichier de ressources. Pour être en mesure de récupérer une valeur du fichier ressource, il faut spécifier le nom de la clé dans l'index.
+
+Par exemple, **_resCategorieValidateur["Nom_Obligatoire"]** permet d'obtenir la valeur de la clé **Nom_Obligatoire**.
+
 ```csharp showLineNumbers
 using FluentValidation;
 using FluentValidation.Results;
+//highlight-next-line
 using Microsoft.Extensions.Localization;
 using SuperCarte.Core.Extensions;
 using SuperCarte.Core.Models;
+//highlight-next-line
 using SuperCarte.Core.Repositories;
+//highlight-next-line
 using SuperCarte.Core.Resx;
 
 namespace SuperCarte.Core.Validateurs;
@@ -114,8 +128,10 @@ namespace SuperCarte.Core.Validateurs;
 /// </summary>
 public class CategorieValidateur : AbstractValidator<CategorieModel>, IValidateur<CategorieModel>
 {    
+    //highlight-next-line
     private readonly IStringLocalizer<ResCategorieValidateur> _resCategorieValidateur;
 
+//highlight-start
     /// <summary>
     /// Constructeur
     /// </summary>    
@@ -123,12 +139,16 @@ public class CategorieValidateur : AbstractValidator<CategorieModel>, IValidateu
     public CategorieValidateur(IStringLocalizer<ResCategorieValidateur> resCategorieValidateur)
     {        
         _resCategorieValidateur = resCategorieValidateur;
+//highlight-end
 
         RuleFor(i => i.Nom).Cascade(CascadeMode.Stop)
+        //highlight-next-line
             .Must(ValiderStringObligatoire).WithMessage(_resCategorieValidateur["Nom_Obligatoire"])
+        //highlight-next-line
             .MaximumLength(35).WithMessage(_resCategorieValidateur["Nom_LongueurMax"]);
 
         RuleFor(i => i.Description).Cascade(CascadeMode.Stop)
+        //highlight-next-line
             .MaximumLength(50).WithMessage(_resCategorieValidateur["Description_LongueurMax"]);
     }
 
@@ -151,9 +171,18 @@ public class CategorieValidateur : AbstractValidator<CategorieModel>, IValidateu
 }
 ```
 
-Pour être en mesure de récupérer une valeur du fichier ressource, il faut spécifier le nom de la clé dans l'index.
+:::info
+Étant donné que l'interface fait aussi une validation de la longueur du champ (rappelez-vous que nous avons ajouté MaxLenght dans le fichier UcGestionCategorie.xaml ), il est présentement impossible de voir le message d'erreur. Si vous voulez le voir en action, changez **.MaximumLength** pour une valeur plus petite.
 
-Par exemple, **_resCategorieValidateur["Nom_Obligatoire"]** permet d'obtenir la valeur de la clé **Nom_Obligatoire**.
+Il est toujours bon de valider les données à l'aide d'un validateur même si l'interface fait aussi une validation. De cette facon, si le responsable de l'interface oublie une validation, l'information erronée ne se rendra pas à la bd. 
+::: 
 
 Démarrez le programme et testez en français et en anglais la validation.
+
+:::tip
+Pour passer de l'anglais au francais, changez la valeur de **CultureInfo** dans **App.xaml.cs**
+
+en-CA pour l'anglais
+
+fr-CA pour le francais.
 

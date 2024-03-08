@@ -17,7 +17,11 @@ L'exemple ci-dessous est pour la validation du **CategorieModel**.
 
 ## Installation de la librairie
 
-Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. Il est important que le **Projet par défaut** **.Core** soit sélectionné dans la console. Pour ce projet, ce doit être **SuperCarte.Core**.
+Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. 
+
+:::warning Important
+Il est important que le **Projet par défaut** soit **SuperCarte.Core**.
+:::
 
 ```csharp showLineNumbers
 Install-Package Microsoft.Extensions.Localization
@@ -103,11 +107,12 @@ Ce service permet d'avoir accès au fichier ressource demandé en fonction de la
 
 Il faut mettre le **IStringLocalizer** dans les paramètres du constructeur pour toutes classes qui a besoin d'un accès à des fichiers ressources. Il faut un **IStringLocalizer** par fichier ressource.
 
-Modifiez la classe **CategorieValidateur** par le code ci-dessous.
-
 Notez que le texte des validateurs (ex: Le nom est obligatoire) est remplacé par les valeurs du fichier de ressources. Pour être en mesure de récupérer une valeur du fichier ressource, il faut spécifier le nom de la clé dans l'index.
 
 Par exemple, **_resCategorieValidateur["Nom_Obligatoire"]** permet d'obtenir la valeur de la clé **Nom_Obligatoire**.
+
+Modifiez la classe **SuperCarte.Core/Validateurs/CategorieValidateur** par le code ci-dessous.
+
 
 ```csharp showLineNumbers
 using FluentValidation;
@@ -172,7 +177,7 @@ public class CategorieValidateur : AbstractValidator<CategorieModel>, IValidateu
 ```
 
 :::info
-Étant donné que l'interface fait aussi une validation de la longueur du champ (rappelez-vous que nous avons ajouté MaxLenght dans le fichier UcGestionCategorie.xaml ), il est présentement impossible de voir le message d'erreur. Si vous voulez le voir en action, changez **.MaximumLength** pour une valeur plus petite.
+Étant donné que l'interface fait aussi une validation de la longueur du champ (rappelez-vous que nous avons ajouté MaxLenght dans le fichier UcGestionCategorie.xaml ), il est présentement impossible de voir le message d'erreur autre que celui pour le nom obligatoire. Si vous voulez le voir en action, changez **.MaximumLength** pour une valeur plus petite.
 
 Il est toujours bon de valider les données à l'aide d'un validateur même si l'interface fait aussi une validation. De cette facon, si le responsable de l'interface oublie une validation, l'information erronée ne se rendra pas à la bd. 
 ::: 

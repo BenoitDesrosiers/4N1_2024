@@ -21,7 +21,7 @@ Cette section explique comment avoir les éléments nécessaires dans la logique
 
 Le modèle **ListeItem** permet de créer un item simple avec une valeur et un texte. La valeur est généralement la clé et le texte est libellé qui représente bien la valeur. Le **Combobox** utilisera cette classe.
 
-Créez la classe **ListeItem.cs** dans le dossier **Model** du projet **SuperCarte.Core**.
+Créez la classe **ListeItem.cs** dans le dossier **Models** du projet **SuperCarte.Core**.
 
 ```csharp showLineNumbers
 namespace SuperCarte.Core.Models;
@@ -44,7 +44,7 @@ La classe utilise un type générique pour la valeur.
 
 Le **Repository** s'occupera de créer une liste de **ListeItem**.
 
-Modifiez l'interface **IRoleRepo.cs** pour le code ci-dessous.
+Modifiez l'interface **SuperCarte.Core/Repositories/IRoleRepo.cs** pour le code ci-dessous.
 
 ```csharp showLineNumbers
 using SuperCarte.Core.Models;
@@ -68,7 +68,12 @@ public interface IRoleRepo : IBasePKUniqueRepo<Role,int>
 
 Modifiez la classe **RoleRepo.cs** pour le code ci-dessous.
 
+:::info
+Notez qu'en ouvrant ce fichier, il y a maintenant une erreur sur le constructeur car la classe RoleRepo n'implémente pas la nouvelle méthode ObtenirListeItem
+:::
+
 ```csharp showLineNumbers
+//highlight-next-line
 using SuperCarte.Core.Models;
 using SuperCarte.Core.Repositories.Bases;
 using SuperCarte.EF.Data;
@@ -90,6 +95,7 @@ public class RoleRepo : BasePKUniqueRepo<Role,int>, IRoleRepo
         //Vide, il sert uniquement a recevoir le contexte et à l'envoyer à la classe parent.
     }
 
+//highlight-start
     public List<ListeItem<int>> ObtenirListeItem()
     {
         return (from lqRole in _bd.RoleTb
@@ -100,6 +106,7 @@ public class RoleRepo : BasePKUniqueRepo<Role,int>, IRoleRepo
                         Texte = lqRole.Nom
                     }).ToList();
     }
+    //highlight-end
 }
 ```
 
@@ -377,12 +384,14 @@ public class UtilisateurService : IUtilisateurService
         _utilisateurRepo = utilisateurRepo;
     }
 
+//highlight-next-line
     public async Task<bool> AjouterAsync(UtilisateurModel utilisateurModel, string motPasse)
     {
         //Transformation de l'objet du modèle du domaine en objet du modèle de données
         Utilisateur utilisateur = utilisateurModel.VersUtilisateur();
 
         //Le mot de passe n'est pas copié, il faut le convertir avec BCrypt
+        //highlight-next-line
         utilisateur.MotPasseHash = BC.HashPassword(motPasse);
 
         //Ajout dans repository avec enregistrement immédiat
@@ -401,7 +410,7 @@ public class UtilisateurService : IUtilisateurService
 
         if (utilisateur != null)
         {
-            //Assigner les valeurs dans la catégorie
+            //Assigner les valeurs dans l'utilisateur
             utilisateur.Copie(utilisateurModel);
 
             await _utilisateurRepo.EnregistrerAsync();
@@ -433,61 +442,18 @@ public class UtilisateurService : IUtilisateurService
 }
 ```
 
-Premièrement, la méthode **AjouterAsync()**  a 2 paramètres. Le premier est le modèle et le 2e est le mot de passe en texte. Le mot de passe ne fait pas partie du modèle du domaine, il doit être envoyé comme un 2e paramètre.
+Premièrement, la méthode **AjouterAsync()**  (ligne 25) a 2 paramètres. Le premier est le modèle et le 2e est le mot de passe en texte. Le mot de passe ne fait pas partie du modèle du domaine, il doit être envoyé comme un 2e paramètre.
 
-Le mot de passe en texte est **haché** avec **BCrypt** et le **hash** est assigné dans le modèle de données.
+Le mot de passe en texte est **haché** avec **BCrypt** et le **hash** est assigné dans le modèle de données (ligne 31).
 
-```csharp showLineNumbers
-public async Task<bool> AjouterAsync(UtilisateurModel utilisateurModel, string motPasse)
-{
-    //Transformation de l'objet du modèle du domaine en objet du modèle de données
-    Utilisateur utilisateur = utilisateurModel.VersUtilisateur();
+Pour la modification, la mécanique est la même, sauf que l'extension **.Copie** (ligne 50) ne s'occupe pas du mot de passe.
 
-    //Le mot de passe n'est pas copié, il faut le convertir avec BCrypt
-    utilisateur.MotPasseHash = BC.HashPassword(motPasse);
-
-    //Ajout dans repository avec enregistrement immédiat
-    await _utilisateurRepo.AjouterAsync(utilisateur, true);
-
-    //Assigne les valeurs de la base de données dans l'objet du modèle
-    utilisateurModel.Copie(utilisateur, true);
-
-    return true;
-}
-```
-
-Pour la modification, la mécanique est la même, sauf que l'extension **.Copie** ne s'occupe pas du mot de passe.
-
-```csharp showLineNumbers
-public async Task<bool> ModifierAsync(UtilisateurModel utilisateurModel)
-{
-    //Il n'y a aucune référence au mot de passe.
-    Utilisateur? utilisateur = await _utilisateurRepo.ObtenirParCleAsync(utilisateurModel.UtilisateurId);
-
-    if (utilisateur != null)
-    {
-        //Assigner les valeurs dans l'utilisateur, sauf pour le mot de passe.
-        utilisateur.Copie(utilisateurModel);
-
-        await _utilisateurRepo.EnregistrerAsync();
-
-        //Assigne les valeurs de la base de données dans l'objet du modèle
-        utilisateurModel.Copie(utilisateur, false);
-
-        return true;
-    }
-    else
-    {
-        throw new Exception("Impossible de modifier l'utilisateur. Aucun utilisateur trouvé avec la clé primaire.");
-    }
-}
-```
 
 ## SuperCarte.WPF
 
 ### Enregistrer les services - SCServiceExtensions
 
-Dans la classe **SCServiceExtensions**, il faut enregistrer les 2 nouveaux services.
+Dans la classe **SuperCarte.WPF/Extension/ServiceCollections/SCServiceExtensions**, il faut enregistrer les 2 nouveaux services.
 
 ```csharp showLineNumbers
 using Microsoft.Extensions.DependencyInjection;
@@ -508,8 +474,10 @@ public static class SCServiceExtensions
     {
         services.AddScoped<ICategorieService, CategorieService>();
         services.AddScoped<ICarteService, CarteService>();
+        //highlight-start
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUtilisateurService, UtilisateurService>();
+        //highlight-end
     }
 }
 ```
@@ -529,8 +497,10 @@ namespace SuperCarte.WPF.ViewModels;
 public class GestionUtilisateurVM : BaseParametreVM<int>
 {
     #region Dépendances
+    //highlight-start
     private readonly IUtilisateurService _utilisateurService;
     private readonly IRoleService _roleService;
+    //highlight-end
     #endregion
 
     #region Attributs des propriétés
@@ -550,7 +520,9 @@ public class GestionUtilisateurVM : BaseParametreVM<int>
         _utilisateurService = utilisateurService;
         _roleService = roleService;
 
+//highlight-next-line
         ListeRoles = _roleService.ObtenirListeItem();
+    //highlight-next-line
         ListeRoles.Insert(0, new ListeItem<int>() { Valeur = 0, Texte = "Veuillez sélectionner un rôle..."});
 
         EnregistrerCommande = new AsyncRelayCommand(EnregistrerAsync, () => !EstEnTravail);
@@ -706,6 +678,7 @@ public class GestionUtilisateurVM : BaseParametreVM<int>
         }
     }
 
+//highlight-start
     public bool MotPasseModifiable
     {
         get
@@ -713,6 +686,7 @@ public class GestionUtilisateurVM : BaseParametreVM<int>
             return UtilisateurId == 0;
         }
     }
+//highlight-end
 
     public int UtilisateurId 
     { 
@@ -724,6 +698,7 @@ public class GestionUtilisateurVM : BaseParametreVM<int>
         {
             if(SetProperty(ref _utilisateurId, value))
             {
+                //highlight-next-line
                 OnPropertyChanged(nameof(MotPasseModifiable));
             }
         }
@@ -805,76 +780,21 @@ public class GestionUtilisateurVM : BaseParametreVM<int>
 }
 ```
 
-Pour débuter, le **ViewModel** a besoin de 2 services. Il doit avoir accès aux méthodes de gestion de l'utilisateur et également au service du **Role** pour obtenir la liste de **ListeItem**.
+Pour débuter, le **ViewModel** a besoin de 2 services (ligne 9-10). Il doit avoir accès aux méthodes de gestion de l'utilisateur et également au service du **Role** pour obtenir la liste de **ListeItem**.
 
-À la ligne 10 du code ci-dessous, la propriété **ListeRoles** contient la liste des rôles disponibles pour la vue. L'assignation se fait dans le constructeur, car il s'agit d'une dépendance de la vue. La liste doit exister avant d'afficher l'utilisateur.
+À la ligne 30 , la propriété **ListeRoles** contient la liste des rôles disponibles pour la vue. L'assignation se fait dans le constructeur, car il s'agit d'une dépendance de la vue. La liste doit exister avant d'afficher l'utilisateur.
 
-À la ligne 11, il faut ajouter l'élément par défaut. Il est plus intéressant de mettre du texte pour indiquer qu'il faut choisir un élément dans la liste.
+À la ligne 31, il faut ajouter l'élément par défaut. Il est plus intéressant de mettre du texte pour indiquer qu'il faut choisir un élément dans la liste.
 
-```csharp showLineNumbers
-/***/
-private List<ListeItem<int>> _lstRole;
-/***/
+Il faut également indiquer à la **Vue** si le champ **MotPasse** est modifiable ou non. Le champ peut être modifié uniquement lorsque c'est un nouvel utilisateur. Cette propriété n'utilise pas un attribut et elle a une logique en fonction de la propriété **MotPasseModifiable** (ligne 186). Si **UtilisateurId** est 0, c'est que c'est un nouvel utilisateur. 
 
-public GestionUtilisateurVM(IUtilisateurService utilisateurService, IRoleService roleService)
-{
-    _utilisateurService = utilisateurService;
-    _roleService = roleService;
+Si la propriété **UtilisateurId** est modifiée, il faut également indiquer que la propriété **MotPasseModifiable** est modifiée. À la ligne 204,  la méthode **OnPropertyChanged()** indique aux composants qui sont liés à la propriété **MotPasseModifiable** de se mettre à jour. La méthode **OnPropertyChanged** provient de la classe **ObservableObject** du **MVVM Toolkit**.
 
-    ListeRoles = _roleService.ObtenirListeItem();
-    ListeRoles.Insert(0, new ListeItem<int>() { Valeur = 0, Texte = "Veuillez sélectionner un rôle..."});
 
-    /***/
-}
-
-/***/
-public List<ListeItem<int>> ListeRoles
-{
-    get
-    {
-        return _lstRole;
-    }
-
-    private set
-    {
-        SetProperty(ref _lstRole, value);
-    }
-}
-/***/
-```
-
-Il faut également indiquer à la **Vue** si le champ **MotPasse** est modifiable ou non. Le champ peut être modifié uniquement lorsque c'est un nouvel utilisateur. Cette propriété n'utilise pas un attribut et elle a une logique en fonction d'une autre propriété.
-
-Il est important que lorsque la propriété **UtilisateurId** est modifiée, il faut également indiquer que la propriété **MotPasseModifiable** est modifiée. À la ligne 19 de la méthode ci-dessous, la méthode **OnPropertyChanged()** indique aux composants qui sont liés à la propriété **MotPasseModifiable** de se mettre à jour. La méthode **OnPropertyChanged** provient de la classe **ObservableObject** du **MVVM Toolkit**.
-
-```csharp showLineNumbers
-public bool MotPasseModifiable
-{
-    get
-    {
-        return UtilisateurId == 0;
-    }
-}
-
-public int UtilisateurId 
-{ 
-    get
-    {
-        return _utilisateurId;
-    }
-    set
-    {
-        if(SetProperty(ref _utilisateurId, value))
-        {
-            OnPropertyChanged(nameof(MotPasseModifiable));
-        }
-    }
-}
-```
 
 ### Enregistrement du ViewModel - SCViewModelExtensions
 
-Dans la classe **SCServiceVideModels**, il faut enregistrer le nouveau **ViewModel**.
+Dans la classe **Supercarte.WPF/Extensions/ServiceCollections/SCServiceViewModelExtensions**, il faut enregistrer le nouveau **ViewModel**.
 
 ```csharp showLineNumbers
 using Microsoft.Extensions.DependencyInjection;
@@ -893,10 +813,10 @@ public static class SCViewModelExtensions
     public static void EnregistrerViewModels(this IServiceCollection services)
     {
         services.AddSingleton<MainWindowVM>();
-        services.AddTransient<HelloWorldVM>(); //À retirer
         services.AddTransient<ListeCategoriesVM>();
         services.AddTransient<ListeCartesVM>();
         services.AddTransient<GestionCategorieVM>();
+        //highlight-next-line
         services.AddTransient<GestionUtilisateurVM>();
     }
 }
@@ -904,11 +824,11 @@ public static class SCViewModelExtensions
 
 ### Création de la vue - UcGestionUtilisateur.xaml
 
-Créez le fichier **UcGestionUtilisateur.xaml** dans le dossier **Views**.
+Créez le fichier **UcGestionUtilisateur.xaml** de type **Contrôle Utilisateur (WPF)** dans le dossier **Views**.
 
 Aux lignes 7 et 8, il y a l'indicateur du **ViewModel** pour faciliter la liaison.
 
-```xaml
+```xaml  showLineNumbers 
 <UserControl x:Class="SuperCarte.WPF.Views.UcGestionUtilisateur"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -1003,9 +923,11 @@ Aux lignes 7 et 8, il y a l'indicateur du **ViewModel** pour faciliter la liaiso
                    Content="Mot de passe : "
                    Margin="5 10 5 10" 
                    FontWeight="Bold"/>
+                   //highlight-next-line
             <TextBox Grid.Row="3" Grid.Column="1" 
                      Validation.ErrorTemplate="{StaticResource erreurTemplate}"
                      Text="{Binding MotPasse}"
+                     //highlight-next-line
                      IsEnabled="{Binding MotPasseModifiable}"
                      Padding="2 4 0 0"
                      Margin="0 10 5 10"/>
@@ -1017,10 +939,12 @@ Aux lignes 7 et 8, il y a l'indicateur du **ViewModel** pour faciliter la liaiso
                    FontWeight="Bold"/>
             <ComboBox Grid.Row="4" Grid.Column="1" 
                       Validation.ErrorTemplate="{StaticResource erreurTemplate}"
+                      //highlight-start
                       ItemsSource="{Binding ListeRoles}"
                       SelectedValue="{Binding RoleId}"
                       DisplayMemberPath="Texte"
-                      SelectedValuePath="Valeur"                      
+                      SelectedValuePath="Valeur"  
+                      //highlight-end                    
                       Padding="2 4 0 0"
                       Margin="0 10 5 10"/>
 
@@ -1033,56 +957,29 @@ Aux lignes 7 et 8, il y a l'indicateur du **ViewModel** pour faciliter la liaiso
 </UserControl>
 ```
 
-Pour le mot de passe, idéalement, il faut utiliser le composant **\<PasswordBox>**. Ce composant ne peut pas être lié à une propriété du **ViewModel** pour des raisons de sécurité par sa conception. Ce composant n'est pas très **MVVM**. Pour l'instant, ce sera un **\<TextBox>**. Dans le cours sur l'intégration, il faudra modifier le **\<PasswordBox>** pour qu'il soit **liable**. Il faudra penser de le corriger ici.
+Pour le mot de passe (ligne 90), idéalement, il faut utiliser le composant **\<PasswordBox>**. Ce composant ne peut pas être lié à une propriété du **ViewModel** pour des raisons de sécurité par sa conception. Ce composant n'est pas très **MVVM**. Pour l'instant, ce sera un **\<TextBox>**. Dans le cours sur l'intégration, il faudra modifier le **\<PasswordBox>** pour qu'il soit **liable**. Il faudra penser de le corriger ici.
 
-Également, la propriété **IsEnabled** est liée à la propriété **MotPasseModifiable** du **ViewModel**. Le composant sera disponible uniquement lors de l'ajout.
+Également, la propriété **IsEnabled** (ligne 98) est liée à la propriété **MotPasseModifiable** du **ViewModel**. Le composant sera disponible uniquement lors de l'ajout d'un utilisateur.
 
-```xaml
-<!-- Mot de passe -->
-<Label Grid.Row="3" Grid.Column="0" 
-       Content="Mot de passe : "
-       Margin="5 10 5 10" 
-       FontWeight="Bold"/>            
 
-<TextBox Grid.Row="3" Grid.Column="1" 
-         Validation.ErrorTemplate="{StaticResource erreurTemplate}"
-         Text="{Binding MotPasse}"
-         IsEnabled="{Binding MotPasseModifiable}"
-         Padding="2 4 0 0"
-         Margin="0 10 5 10"/>
-```
-
-Ensuite, le composant **\<ComboBox>** doit avoir les propriétés **ItemsSource** et **SelectedValue** associées au **ViewModel**. 
+Ensuite, le composant **\<ComboBox>** (ligne 109-110) doit avoir les propriétés **ItemsSource** et **SelectedValue**. 
 
 **ItemsSource** correspond à la liste des éléments et la propriété **SelectedValue** à l'item sélectionné dans la liste.
 
-La propriété **SelectedValuePath** permet d'indiquer la propriété du **ListeItem\<int>** qui sera utilisée pour la valeur. C'est la valeur de cette propriété qui sera envoyée dans la propriété **SelectedValue**. Il est important que leur type soit le même.
+La propriété **SelectedValuePath** (ligne 112) permet d'indiquer la propriété du **ListeItem\<int>** qui sera utilisée pour la valeur. C'est la valeur de cette propriété qui sera envoyée dans la propriété **SelectedValue**. Il est important que leur type soit le même.
 
-La propriété **DisplayMemberPath** permet d'indiquer la propriété du **ListeItem\<int>** qui sera utilisée pour l'affichage.
+La propriété **DisplayMemberPath** (ligne 111) permet d'indiquer la propriété du **ListeItem\<int>** qui sera utilisée pour l'affichage.
 
-```xaml
- <!-- Rôle -->
-<Label Grid.Row="4" Grid.Column="0" 
-       Content="Role : "
-       Margin="5 10 5 10" 
-       FontWeight="Bold"/>
-<ComboBox Grid.Row="4" Grid.Column="1" 
-          Validation.ErrorTemplate="{StaticResource erreurTemplate}"
-          ItemsSource="{Binding ListeRoles}"
-          SelectedValue="{Binding RoleId}"
-          DisplayMemberPath="Texte"
-          SelectedValuePath="Valeur"                      
-          Padding="2 4 0 0"
-          Margin="0 10 5 10"/>
-```
 
 ### Ajout de la ressource pour créer le lien entre ViewModel et Vue - MainWindow.xaml
 
 Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue**.
 
-Les lignes 28 à 30 contiennent le lien entre **UcGestionUtilisateur** et **GestionUtilisateurVM**.
+Les lignes 24 à 26 contiennent le lien entre **UcGestionUtilisateur** et **GestionUtilisateurVM**.
 
-```xaml
+Modifier **MainWindow.xaml**
+
+```xaml  showLineNumbers 
 <Window x:Class="SuperCarte.WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -1097,10 +994,6 @@ Les lignes 28 à 30 contiennent le lien entre **UcGestionUtilisateur** et **Gest
         Height="450" Width="800" WindowState="Maximized">
     <Window.Resources>
         <!--Assignation du ViewModel à Vue-->
-        <DataTemplate DataType="{x:Type TypeName=vm:HelloWorldVM}">
-            <!--À retirer éventuellement-->
-            <v:UcHelloWorld />
-        </DataTemplate>
         <DataTemplate DataType="{x:Type TypeName=vm:ListeCategoriesVM}">
             <v:UcListeCategories />
         </DataTemplate>
@@ -1110,9 +1003,11 @@ Les lignes 28 à 30 contiennent le lien entre **UcGestionUtilisateur** et **Gest
         <DataTemplate DataType="{x:Type TypeName=vm:GestionCategorieVM}">
             <v:UcGestionCategorie />
         </DataTemplate>
+        //highlight-start
         <DataTemplate DataType="{x:Type TypeName=vm:GestionUtilisateurVM}">
             <v:UcGestionUtilisateur />
         </DataTemplate>
+        //highlight-end
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -1136,7 +1031,7 @@ Les lignes 28 à 30 contiennent le lien entre **UcGestionUtilisateur** et **Gest
 
 ## Test - MainWindowVM
 
-Pour tester directement, il faut modifier le **VMActif** pour celui de **GestionUtilisateurVM**.
+Pour tester directement, il faut modifier le **VMActif** pour celui de **GestionUtilisateurVM** (ligne 11).
 
 Il faut envoyer le paramètre 0 pour un nouveau, sinon la clé de l'utilisateur pour le modifier.
 
@@ -1151,6 +1046,7 @@ public MainWindowVM(INavigateur navigateur)
     NaviguerListeCategoriesVMCommande = new RelayCommand(_navigateur.Naviguer<ListeCategoriesVM>);
 
     //Vue initiale
+    //highlight-next-line
     _navigateur.Naviguer<GestionUtilisateurVM, int>(0); //Pour un nouveau
     //_navigateur.Naviguer<GestionUtilisateurVM, int>(1);//Pour modifier François St-Hilaire
     
@@ -1159,6 +1055,7 @@ public MainWindowVM(INavigateur navigateur)
 
 Créez un nouvel utilisateur. Le champ **Mot de passe** sera disponible. Une fois enregistré, il ne sera plus modifiable.
 
+<!-- à revoir, pas implémenter dans la solution finale 
 ## Validation de l'utilisateur - Avec Repository
 
 Il manque la validation pour la gestion de l'utilisateur.
@@ -1168,7 +1065,7 @@ L'utilisateur doit valider des éléments dans la base de données pour 2 champs
 - RoleId -> Doit être un RoleId qui existe dans la table **Role**.
 - NomUtilisateur -> Ne doit pas avoir d'utilisateur qui a déjà le même nom d'utilisateur. Le validateur doit exclure l'utilisateur en cours.
 
-Il est possible d'injecter un **Repository** dans le **Validateur**.
+La validation aura donc besoin d'accéder à la base de données pour faire les vérifications. Pour ce faire, un  **Repository** sera injecté dans le **Validateur**.
 
 Il faut créer une règle avec la fonction **Must**.
 
@@ -1183,7 +1080,6 @@ La variable **p** représente la valeur de la propriété en cours de validation
 La méthode de validation doit avoir la signature **bool Methode(string p, UtilisateurModel i)** pour répondre à la fonction attendue par la méthode **Must()**.
 
 ```csharp showLineNumbers
-/****/
 
 public UtilisateurValidateur(IRoleService roleRepo, IUtilisateurRepo utilisateurRepo)
 {
@@ -1195,7 +1091,8 @@ public UtilisateurValidateur(IRoleService roleRepo, IUtilisateurRepo utilisateur
         
     RuleFor(i => i.NomUtilisateur).Cascade(CascadeMode.Stop)
         .NotEmpty().WithMessage("Le nom d'utilisateur est obligatoire.")
-      	.Must((i, p) => ValiderDoublonNomUtilisateur(p, i.UtilisateurId)).WithMessage("Le nom d'utilisateur est déjà utilisé.");
+      	//highlight-next-line
+        .Must((i, p) => ValiderDoublonNomUtilisateur(p, i.UtilisateurId)).WithMessage("Le nom d'utilisateur est déjà utilisé.");
 }
 
 private bool ValiderRoleId(int roldeId)
@@ -1249,5 +1146,5 @@ bool chiffre = Regex.Match(motPasse,"\\d") //Contient un chiffre
 bool special = Regex.Match(motPasse,"\\W") //Contient une caractère qui n'est pas une lettre ou chiffre
 ```
 
-
+-->
 

@@ -3,6 +3,8 @@ sidebar_position: 360
 draft: true
 ---
 
+
+<!-- ****** est-ce pertinent???  ***** -->
 # Modèle de données pour Gestion d'une carte - Explication
 
 Le modèle **CarteDetailModel** a été utilisé pour la liste des cartes.

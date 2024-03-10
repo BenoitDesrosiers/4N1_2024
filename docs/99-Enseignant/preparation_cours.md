@@ -39,4 +39,14 @@ Exécuter le script 3-CreationComptesEtudiantsEtBDs.sql.
 Ce script crée un compte pour chaque étudiant se trouvant dans la table Etudiant, ainsi qu'une copie de AdventureWorks2019. 
 
 
+
+
+
+## À revoir
+
+-enlever la partie purement linq (le deuxieme tp.). La remplacer par un tp de construction d'interface sans BD. Faire afficher des structures avec Linq
+    -ca permettra d'aller plus a fond dans l'interface
+    -la partie bd sera couverte dans le tp3 anyway
+    - faire faire un crud en console, ca se fait plus. Donc les notions apprises ne servent pas vraiment. 
+    - 
 -->

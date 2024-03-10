@@ -5,15 +5,15 @@ draft: true
 
 # Autorisation
 
-L'autorisation consiste à vérifier si un utilisateur est en mesure de faire une action de visualiser de l'information.
+L'autorisation consiste à vérifier si un utilisateur est en mesure de faire une action et/ou de visualiser une certaine information.
 
 Une vue qui est accessible par tous les utilisateurs authentifiés doit s'assurer qu'il y a un utilisateur qui est connecté.
 
-L'application utilise des **rôles** également pour la sécurité. Il peut avoir des vues et des actions du programme ne sont pas accessibles par tous. Il faut s'assurer que l'utilisateur a le rôle.
+L'application utilise des **rôles** également pour la sécurité. Il peut y avoir des vues et des actions du programme qui ne sont pas accessibles par tous. Il faut s'assurer que l'utilisateur a le rôle approprié.
 
 Il faut injecter dans tous les **ViewModels** la classe d'assistance **Authentificateur** pour que le **ViewModel** soit en mesure de faire les vérifications.
 
-Également, la vérification du rôle se fait toujours dans la base de données. La classe **UtilisateurAuthentifieModel** ne contient pas l'information du rôle. Il serait possible de l'inclure dans la classe, mais si le rôle de l'utilisateur est modifié en cours d'utilisateur, son ancien rôle sera toujours accessible tant qu'il sera connecté. La validation du rôle directement dans la base de données permet de s'assurer que l'utilisateur a toujours le rôle nécessaire.
+Également, la vérification du rôle se fait toujours dans la base de données. La classe **UtilisateurAuthentifieModel** ne contient pas l'information du rôle. Il serait possible de l'inclure dans la classe, mais si le rôle de l'utilisateur est modifié en cours d'utilisation, son ancien rôle sera toujours accessible tant qu'il sera connecté. La validation du rôle directement dans la base de données permet de s'assurer que l'utilisateur a toujours le rôle nécessaire.
 
 ## SuperCarte.Core
 
@@ -149,7 +149,7 @@ bool EstAutorise(params string[] nomRoles);
 
 Dans la classe **Authentificateur**, ajoutez les 2 méthodes ci-dessous.
 
-La méthode reçoit un paramètre de type **`params string[]`**. Le mot-clé **`params`** permet de spécifier les différents éléments du tableau sans déclarer de tableau et en séparant un élément du tableau comme un paramètre unique. Par exemple, **`EstAutoriseAsync("Role1", "Role2", "Role3")`** est permis.
+La méthode reçoit un paramètre de type **params string[]**. Le mot-clé **params** permet de spécifier les différents éléments du tableau sans déclarer de tableau et en séparant un élément du tableau comme un paramètre unique. Par exemple, **EstAutoriseAsync("Role1", "Role2", "Role3")** est permis.
 
 ```csharp showLineNumbers
 public async Task<bool> EstAutoriseAsync(params string[] nomRoles)
@@ -160,6 +160,7 @@ public async Task<bool> EstAutoriseAsync(params string[] nomRoles)
     }
     else
     {
+        //highlight-next-line
         return await Task.FromResult(false);
     }
 }
@@ -177,6 +178,9 @@ public bool EstAutorise(params string[] nomRoles)
 }
 ```
 
+:::info
+Remarquez que la version async de la fonction doit retourner une Task. C'est pour ca qu'à la ligne 9, la fonction **Task.FromResult()** est utilisée
+::: 
 ### Sécuriser les dépendances du ViewModel
 
 Il faut faire ceci pour les **ViewModels** qui nécessitent une autorisation.
@@ -185,16 +189,24 @@ L'exemple sera fait uniquement pour **ListeCategoriesVM**.
 
 Il faut ajouter l'interface d'assistance **IAuthentificateur** dans les dépendances du **ViewModel**.
 
-```csharp showLineNumbers
+```csharp showLineNumbers 
 //Attributs
 private readonly string[] _rolesAutorises = { "Administrateur" };
 
+.
+.
+.
+
+//highlight-next-line
 public ListeCategoriesVM(IAuthentificateur authentificateur, ICategorieService categorieService, INavigateur navigateur)
 {
+    //highlight-next-line
     _authentificateur = authentificateur;
 
+//highlight-start
     if (_authentificateur.EstAutorise(_rolesAutorises))
     {
+        //highlight-end
         _categorieService = categorieService;
         _navigateur = navigateur;
         ObtenirListeCommande = new AsyncRelayCommand(ObtenirListeAsync);
@@ -202,13 +214,14 @@ public ListeCategoriesVM(IAuthentificateur authentificateur, ICategorieService c
         NouveauCommande = new RelayCommand(() => _navigateur.Naviguer<GestionCategorieVM, int>(0));
         EditerCommande = new RelayCommand(() => _navigateur.Naviguer<GestionCategorieVM, int>(CategorieSelection.CategorieId),
                                           () => CategorieSelection != null);
+    //highlight-next-line
     }
 }
 ```
 
-Les rôles globaux autorisés par ce **ViewModel** sont dans l'attribut **`_rolesAutorises`**. Si une vérification de rôle doit se faire à partir des rôles globaux, il est plus pratique d'utiliser un attribut. Il est **`readonly`**, car il ne faut pas que les rôles soient modifiables en exécution.
+Les rôles globaux autorisés par ce **ViewModel** sont dans l'attribut **_rolesAutorises**. Si une vérification de rôle doit se faire à partir des rôles globaux, il est plus pratique d'utiliser un attribut. Il est **readonly**, car il ne faut pas que les rôles soient modifiables en exécution.
 
-La seule dépendance à être assigné avant la sécurité est la classe **Authentificateur**. Les autres dépendances et la création des commandes se font uniquement si l'utilisateur est autorisé. Il ne sera pas possible d'utiliser les commandes et les services dans le cas que l'utilisateur n'est pas autorisé.
+La seule dépendance à être assigné avant la sécurité est la classe **Authentificateur**. Les autres dépendances et la création des commandes se font uniquement si l'utilisateur est autorisé. Il ne sera pas possible d'utiliser les commandes et les services dans le cas ou l'utilisateur n'est pas autorisé.
 
 Démarrez le programme avec le compte "Administrateur" ci-dessous.
 
@@ -226,9 +239,9 @@ La vue va générer une exception dans la méthode **UserControl_Loaded** pour l
 
 Voici l'événement du fichier **UcListeCategories.xaml.cs**.
 
-Le programme **plante**, car la commande **ObtenirListeCommande** doit être exécutée, mais elle est **`null`**, car l'utilisateur n'a pas accès. Le **ViewModel** n'a pas créé la commande.
+Le programme **plante**, car la commande **ObtenirListeCommande** doit être exécutée, mais elle est **null**, car l'utilisateur n'a pas accès. Le **ViewModel** n'a pas créé la commande.
 
-```csharp showLineNumbers
+```csharp showLineNumbers title="NE PAS COPIER"
 private async void UserControl_Loaded(object sender, RoutedEventArgs e)
 {
     if(this.DataContext != null)
@@ -250,6 +263,7 @@ private async void UserControl_Loaded(object sender, RoutedEventArgs e)
     {
         if(this.DataContext is ListeCategoriesVM)
         {
+            //highlight-next-line
             if (((ListeCategoriesVM)this.DataContext).ObtenirListeCommande != null)
             {
                 await ((ListeCategoriesVM)this.DataContext).ObtenirListeCommande.ExecuteAsync(null);
@@ -270,13 +284,14 @@ La vue s'affiche, mais la liste est vide et aucun bouton ne fonctionne.
 
 Le rôle d'un utilisateur peut être modifié pendant qu'il est connecté. Il faut s'assurer que les commandes effectuent la vérification de l'autorisation avant son exécution. Il serait possible de mettre cette vérification dans le **CanExecute** de la commande, mais il ne serait pas possible de détecter le changement d'un rôle en cours d'exécution. Il faut donc mettre la vérification dans la méthode **Execute**.
 
-Voici par exemple la méthode **`SupprimerAsync`**.
+Voici par exemple la méthode **SupprimerAsync** de **ListeCategoriesVM**.
 
 ```csharp showLineNumbers
 private async Task SupprimerAsync()
 {
     EstEnTravail = true;
 
+//highlight-next-line
     if (_authentificateur.EstAutorise(_rolesAutorises))
     {
         await _categorieService.SupprimerAsync(CategorieSelection!.CategorieId);
@@ -290,12 +305,11 @@ private async Task SupprimerAsync()
 
 Il serait possible de permettre la visualisation à **Utilisateur**, mais permettre la suppression uniquement à **Administrateur**.
 
-Il faudrait ajouter dans l'attribut  **`_rolesAutorises`** le rôle **Utilisateur**, mais spécifier uniquement le rôle **Administrateur** dans la commande **Supprimer**.
+Il faudrait ajouter dans l'attribut  **_rolesAutorises** le rôle **Utilisateur**, mais spécifier uniquement le rôle **Administrateur** dans la commande **Supprimer**.
 
-```
+```csharp showLineNumbers title="NE PAS COPIER"
 private readonly string[] _rolesAutorises = { "Administrateur", "Utilisateur" };
 
-/***/
 private async Task SupprimerAsync()
 {
     EstEnTravail = true;
@@ -312,7 +326,13 @@ private async Task SupprimerAsync()
 
 ```
 
-Voici la classe **ListeCategoriesVM** au complet. Pour le **TP 3**, toutes les fonctionnalités du de la vue seront accessible par un seul rôle.
+### ListeCategoriesVM au complet
+
+Voici la classe **ListeCategoriesVM** au complet. 
+
+:::info
+Pour le **TP 3**, toutes les fonctionnalités  de la vue seront accessible par un seul rôle.
+:::
 
 ```csharp showLineNumbers
 using CommunityToolkit.Mvvm.Input;
@@ -326,11 +346,13 @@ namespace SuperCarte.WPF.ViewModels;
 public class ListeCategoriesVM : BaseVM
 {
     //Attributs
+//highlight-next-line
     private readonly string[] _rolesAutorises = { "Administrateur" };
 
     //Dépendances
     private readonly ICategorieService _categorieService;
     private readonly INavigateur _navigateur;
+//highlight-next-line
     private readonly IAuthentificateur _authentificateur;
 
     //Attributs des propriétés
@@ -341,15 +363,20 @@ public class ListeCategoriesVM : BaseVM
     /// <summary>
     /// Constructeur
     /// </summary>
+//highlight-next-line
     /// <param name="authentificateur">La classe d'assistance d'authentification</param>
     /// <param name="categorieService">Service du modèle Categorie</param>
-    /// <param name="navigateur">La classe d'assistance Navigateur</param>    
+    /// <param name="navigateur">La classe d'assistance Navigateur</param>   
+    //highlight-next-line 
 	public ListeCategoriesVM(IAuthentificateur authentificateur, ICategorieService categorieService, INavigateur navigateur)
     {
+//highlight-next-line
         _authentificateur = authentificateur;
 
+//highlight-start
         if (_authentificateur.EstAutorise(_rolesAutorises))
         {
+//highlight-end
             _categorieService = categorieService;
             _navigateur = navigateur;
             ObtenirListeCommande = new AsyncRelayCommand(ObtenirListeAsync);
@@ -357,6 +384,7 @@ public class ListeCategoriesVM : BaseVM
             NouveauCommande = new RelayCommand(() => _navigateur.Naviguer<GestionCategorieVM, int>(0));
             EditerCommande = new RelayCommand(() => _navigateur.Naviguer<GestionCategorieVM, int>(CategorieSelection.CategorieId),
                                               () => CategorieSelection != null);
+//highlight-next-line
         }
     }
 
@@ -366,7 +394,8 @@ public class ListeCategoriesVM : BaseVM
     private async Task ObtenirListeAsync()
     {
         EstEnTravail = true;
-
+        
+//highlight-next-line
         if (_authentificateur.EstAutorise(_rolesAutorises))
         {
             ListeCategories = await _categorieService.ObtenirListeAsync();
@@ -382,6 +411,7 @@ public class ListeCategoriesVM : BaseVM
     {
         EstEnTravail = true;
 
+//highlight-next-line
         if (_authentificateur.EstAutorise(_rolesAutorises))
         {
             await _categorieService.SupprimerAsync(CategorieSelection!.CategorieId);

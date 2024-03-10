@@ -7,11 +7,15 @@ draft: true
 
 Il existe 2 visions pour la gestion d'un menu dans une application native pour la sécurité.
 
-Il serait possible pour la de masquer les menus que l'utilisateur n'a pas accès. Il faudrait lier une propriété à chacun des items du menu pour gérer la visibilité ou non. Cette approche évite d'exposer des menus non nécessaires à l'utilisateur. Cependant, cette approche peut occasionner de l'incompréhension, car l'utilisateur peut chercher un menu qu'il ne voit pas. Il ne lui viendra peut-être pas d'instinct que la raison est qu'il n'y a pas accès.
+Il serait possible pour la sécurité de masquer les menus que l'utilisateur n'a pas accès. Il faudrait lier une propriété à chacun des items du menu pour gérer la visibilité ou non. Cette approche évite d'exposer des menus non nécessaires à l'utilisateur. Cependant, cette approche peut occasionner de l'incompréhension, car l'utilisateur peut chercher un menu qu'il ne voit pas. Il ne lui viendra peut-être pas d'instinct que la raison est qu'il n'y a pas accès.
 
-L'autre option est de laisser le menu visible et accessible et de notifier l'utilisateur qu'il n'a pas accès. Cette approche permet d'avoir un menu uniforme et l'utilisateur sait exactement pourquoi il n'est pas en mesure d'accéder à une section. Pour ce projet et le **TP 3**, les menus seront toujours accessibles et visibles. Ce sera lors de l'initialisation du **ViewModel** que le message sera envoyé à l'utilisateur en cas de non-accès.
+L'autre option est de laisser le menu visible et accessible et de notifier l'utilisateur qu'il n'a pas accès. Cette approche permet d'avoir un menu uniforme et l'utilisateur sait exactement pourquoi il n'est pas en mesure d'accéder à une section. 
 
-Il faut ajouter l'item **Mes cartes** dans le menu.
+:::info
+Pour ce projet et le **TP 3**, les menus seront toujours accessibles et visibles. Ce sera lors de l'initialisation du **ViewModel** que le message sera envoyé à l'utilisateur en cas de non-accès.
+:::
+
+Nous allons ajouter l'item **Mes cartes** dans le menu.
 
 ## Ajout de la commande - MainWindowVM
 
@@ -75,7 +79,7 @@ Modifiez le fichier **MainWindow.xaml** pour le code ci-dessous.
 
 À la ligne 54, il y a le nouvel item dans le menu. Le menu **Mes cartes** est directement dans la barre.
 
-```xaml
+```xaml  showLineNumbers 
 <Window x:Class="SuperCarte.WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -137,12 +141,3 @@ Modifiez le fichier **MainWindow.xaml** pour le code ci-dessous.
 </Window>
 ```
 
-# Suppression d'une carte d'un utilisateur - Explication
-
-Il n'est pas nécessaire de valider les dépendances pour cet enregistrement, car cette table n'est pas utilisée par une table enfant.
-
-Au niveau du **ViewModel**, il faut appeler le service directement lorsque l'utilisateur accepte la suppression. La disponibilité de la commande dépend uniquement si une carte est sélectionnée dans la liste. Il faut envoyer **UtilisateurId** à partir de la classe **Authentificateur** et **CarteId** à partir de la carte sélectionnée.
-
-Au niveau du **Service**, il faut récupérer l'enregistrement **UtilisateurCarte** à partir de ses clés. Si l'enregistrement existe, il faut le supprimer avec le **Repository**. S'il n'existe pas, il faut générer une exception. Il n'est pas nécessaire de créer la classe **UtilisateurCarteDependance**, car il n'y en a aucune.
-
-Au niveau du **Repository**, il faut ajouter la méthode **`ObtenirParCle`**. Cette méthode ne provient pas de la classe parent, car c'est une clé primaire composée. Cette méthode sera créée dans le prochain document, car elle sera nécessaire pour la gestion.

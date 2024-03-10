@@ -3,7 +3,7 @@ sidebar_position: 450
 draft: true
 ---
 
-# Liste des cartes de l'utilisateur
+# Liste des cartes de l'utilisateur (lecture optionnelle)
 
 La vue sera associée à la table pivot **UtilisateurCarte**. Cette table est la relation **plusieurs à plusieurs** des tables **Carte** et **Utilisateur**.
 
@@ -23,7 +23,7 @@ Il faut ajouter des cartes pour l'utilisateur **fsthilaire** et l'utilisateur **
 
 Il y a seulement 3 cartes, il faut en ajouter quelques-unes.
 
-Voici les enregistrements **Carte** à ajouter dans la méthode **`Seed()`** de la classe **SuperCarteContext**.
+Voici les enregistrements **Carte** à ajouter dans la méthode **Seed()** de la classe **SuperCarteContext**.
 
 ```csharp showLineNumbers
 //Nouvelles cartes
@@ -72,7 +72,7 @@ Carte[] cartes =
 
 ```
 
-Voici les enregistrements **UtilisateurCarte** à ajouter dans la méthode **`Seed()`** de la classe **SuperCarteContext**.
+Voici les enregistrements **UtilisateurCarte** à ajouter dans la méthode **Seed()** de la classe **SuperCarteContext**.
 
 ```csharp showLineNumbers
 UtilisateurCarte[] utilisateurCartes = new UtilisateurCarte[]
@@ -122,7 +122,7 @@ UtilisateurCarte[] utilisateurCartes = new UtilisateurCarte[]
 };
 ```
 
-Voici la méthode **`Seed()`** au complet.
+Voici la méthode **Seed()** au complet.
 
 ```csharp showLineNumbers
 private void Seed(ModelBuilder modelBuilder)
@@ -345,19 +345,19 @@ Pour ce projet, utilisez cette chaine de connexion. Le nom de la base de donnée
 $env:MIGRATION_CONNECTION_STRING = "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;"
 ```
 
-Voici la commande avec le **`Trusted_Connection=True;`** , si vous avez l'erreur **SSL**.
+Voici la commande avec le **Trusted_Connection=True;** , si vous avez l'erreur **SSL**.
 
 ```powershell
 $env:MIGRATION_CONNECTION_STRING = "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;Trust Server Certificate=True;"
 ```
 
-Ensuite, il faut créer la migration **`Seed_CartesEtUtilisateurCartes`** avec **`Add-Migration`**.
+Ensuite, il faut créer la migration **Seed_CartesEtUtilisateurCartes** avec **Add-Migration**.
 
 ```
 Add-Migration Seed_CartesEtUtilisateurCartes -StartupProject SuperCarte.EF
 ```
 
-Appliquez les modifications à la base de données. Spécifiez la migration **`Seed_CartesEtUtilisateurCartes`**.
+Appliquez les modifications à la base de données. Spécifiez la migration **Seed_CartesEtUtilisateurCartes**.
 
 ```powershell
 Update-Database -StartupProject SuperCarte.EF -Migration Seed_CartesEtUtilisateurCartes
@@ -848,9 +848,9 @@ La localisation n'est pas faite pour les colonnes de la grille. Dans une applica
 </UserControl>
 ```
 
-Il faut faire le chargement automatique. Il faut s'assurer que la commande n'est pas **`null`** avant de l'exécuter.
+Il faut faire le chargement automatique. Il faut s'assurer que la commande n'est pas **null** avant de l'exécuter.
 
-Dans le fichier **UcListeMesCartes.xaml.cs**, il faut implémenter l'événement **`UserControl_Loaded`**.
+Dans le fichier **UcListeMesCartes.xaml.cs**, il faut implémenter l'événement **UserControl_Loaded**.
 
 ```csharp showLineNumbers
 private async void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -942,7 +942,7 @@ Les lignes 36 à 38 contiennent le lien entre **UcListeMesCartes** et **ListeMes
 
 Dans la classe **ConnexionVM**, il faut indiquer que le **ViewModel** initial est **ListeMesCartesVM**. Il faut avoir une vue qui est accessible par tous. N'oubliez pas de le faire pour le **TP 3**.
 
-Modifiez la méthode **`AuthentifierAsync()`** pour mettre **ListeMesCartesVM** (ligne 11) dans la classe **ConnexionVM**.
+Modifiez la méthode **AuthentifierAsync()** pour mettre **ListeMesCartesVM** (ligne 11) dans la classe **ConnexionVM**.
 
 ```csharp showLineNumbers
 private async Task AuthentifierAsync()

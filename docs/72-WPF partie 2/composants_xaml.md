@@ -1,6 +1,6 @@
 ---
 sidebar_position: 220
-draft: true
+draft: false
 ---
 
 # Composants XAML

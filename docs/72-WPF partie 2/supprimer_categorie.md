@@ -1,6 +1,6 @@
 ---
 sidebar_position: 240
-draft: true
+draft: false
 ---
 
 # Supprimer une catégorie

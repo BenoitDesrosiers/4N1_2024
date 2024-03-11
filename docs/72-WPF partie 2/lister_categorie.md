@@ -1,6 +1,6 @@
 ---
 sidebar_position: 230
-draft: true
+draft: false
 ---
 
 # Liste des catégories

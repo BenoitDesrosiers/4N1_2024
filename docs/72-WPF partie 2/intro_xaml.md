@@ -1,6 +1,6 @@
 ---
 sidebar_position: 210
-draft: true
+draft: false
 ---
 
 # XAML et MVVM Introduction

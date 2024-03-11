@@ -1,6 +1,6 @@
 ---
 sidebar_position: 140
-draft: true
+draft: false
 ---
 # SuperCarte.Core
 
@@ -206,13 +206,14 @@ Pour plus d'information pour le **where** https://learn.microsoft.com/fr-ca/dotn
 
 Pour chacune des méthodes, il y a le **TData** pour le type d'un paramètre ou pour le retour.
 
-Également, l'application doit pouvoir fonctionner en **asynchrone**. Par convention en **C#**, une méthode **asynchrone** doit avoir le suffixe **Async**, mais ce n'est pas obligatoire. De plus, les méthodes doivent retourner un type **Task** ou **Task\<T\>**. L'explication du fonctionnement de l'asynchrone sera expliquée plus tard. Il faut également le méthode **synchrone**, car selon le cas d'utilisation, l'appel peut être obligatoirement synchrone.
+Également, l'application doit pouvoir fonctionner en **asynchrone**. Par convention en **C#**, une méthode **asynchrone** doit avoir le suffixe **Async**, mais ce n'est pas obligatoire. De plus, les méthodes doivent retourner un type **Task** ou **Task\<T\>**. L'explication du fonctionnement de l'asynchrone sera donné plus tard. Il faut également le méthode **synchrone**, car selon le cas d'utilisation, l'appel peut être obligatoirement synchrone.
 
 ### BaseRepo
 
 Créez la classe **BaseRepo** dans le dossier **Repositories\Bases**.
 
-```csharp
+```csharp  showLineNumbers 
+//highlight-next-line
 using Microsoft.EntityFrameworkCore;
 using SuperCarte.EF.Data.Context;
 
@@ -222,6 +223,7 @@ namespace SuperCarte.Core.Repositories.Bases;
 /// Classe abstraite générique qui contient les opérations de base des tables de la base de données
 /// </summary>
 /// <typeparam name="TData">Type du modèle de données / table</typeparam>
+//highlight-next-line
 public class BaseRepo<TData> : IBaseRepo<TData> where TData : class
 {
     protected readonly SuperCarteContext _bd;
@@ -394,12 +396,9 @@ public class BaseRepo<TData> : IBaseRepo<TData> where TData : class
 
 Les méthodes ressemblent à ce que vous avez déjà fait, mais elles sont génériques. 
 
-Également, le contexte utilise des méthodes **asynchrones**. Pour y avoir accès, il faut inclure **using Microsoft.EntityFrameworkCore;**.
+Également, le contexte utilise des méthodes **asynchrones**. Pour y avoir accès, il faut inclure **using Microsoft.EntityFrameworkCore;** (ligne 1).
 
-- **ToListAsync()**
-- **SaveChangesAsync()**
-
-La déclaration de la classe **public class BaseRepo\<TData\> : IBaseRepo\<TData\> where TData : class** doit également inclure le **\<TData\>**. Elle doit répliquer l'implémentation de l'interface avec la même contrainte **where**. Retirez le **where** et le compilateur indiquera que la classe est en erreur.
+La déclaration de la classe **public class BaseRepo\<TData\> : IBaseRepo\<TData\> where TData : class** (ligne 10) doit également inclure le **\<TData\>**. Elle doit répliquer l'implémentation de l'interface avec la même contrainte **where**. Retirez le **where** et le compilateur indiquera que la classe est en erreur.
 
 ### Obtenir un enregistrement spécifique par sa clé
 
@@ -431,9 +430,6 @@ Etudiant etudiant = _bd.EtudiantTb.Where(e => e.DA == da).FirstOrDefault();
 UtilisateurCarte utilisateurCarte = _bd.UtilisateurCarteTb.Where(uc => uc.CarteId == carteId && uc.utilisateurId == UtilisateurId).FirstOrDefault();
 ```
 
-:::info
-Remarquez ici que le nom des tables se termine par **Tb**. C'est donc le nom du **DbSet** dans **SuperCarteContext.cs**
-:::
 
 
 Est-ce possible de généraliser ceci ? Oui et non.

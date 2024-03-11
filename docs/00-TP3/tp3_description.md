@@ -167,7 +167,7 @@ Si c'est l'administrateur qui est connecté, alors lister toutes les Musiques
 ### Tests automatisés (individuel)
 
 Vous devez effectuer un test unitaire pour une fonctionnalité pour chacun des types de classes ci-dessous pour la table pour laquelle vous avez fait le CRUD.
-- Repository
+- ~~Repository~~
 - Service
 - Validation
 - ViewModel

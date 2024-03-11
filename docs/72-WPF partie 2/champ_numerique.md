@@ -1,6 +1,6 @@
 ---
 sidebar_position: 227
-draft: true
+draft: false
 ---
 
 # Date et Champ texte numérique

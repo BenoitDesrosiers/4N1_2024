@@ -1,6 +1,6 @@
 ---
 sidebar_position: 235
-draft: true
+draft: false
 ---
 
 # Lien entre les couches

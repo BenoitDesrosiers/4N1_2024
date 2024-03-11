@@ -15,7 +15,7 @@ Il faut modifier la cible du projet. Le projet **UTest** utilisera le projet **.
 
 Effectuez un double-clic sur l'entête du projet **SuperCarte.UTest** pour voir le **XML** de configuration.
 
-Vous devez modifier la balise **` <TargetFramework>net7.0</TargetFramework>`** par **` <TargetFramework>net7.0-windows</TargetFramework>`**. Enregistrez le fichier.
+Vous devez modifier la balise **\<TargetFramework>net7.0\</TargetFramework>** par **\<TargetFramework>net7.0-windows\</TargetFramework>**. Enregistrez le fichier.
 
 Dans l'exemple ci-dessous, la balise est à la ligne 4.
 
@@ -41,7 +41,7 @@ Effectuez un clic-droit sur le dossier **Dépendances** du projet **SuperCarte.U
 
 Cochez **SuperCarte.WPF**, **SuperCarte.Core** et **SuperCarte.EF**.
 
-Compilez le projet. Si vous avez les erreurs ci-dessous, l'étape 9.1 n'a pas été faite correctement.
+Compilez le projet. Si vous avez les erreurs ci-dessous, l'étape précédente n'a pas été faite correctement.
 
 ```
 Gravité	Code	Description	Projet	Fichier	Ligne	État de la suppression
@@ -92,7 +92,7 @@ WPF
 
 Il faudrait également créer un dossier **Core\Repositories** pour les tests unitaires des **repositories**. 
 
-Par exemple, les tests unitaires de la classe **RoleService** dans être dans la classe **RoleServiceTest** et être dans le dossier **Unitaires\Core\Services**.
+Par exemple, les tests unitaires de la classe **RoleService** sera dans la classe **RoleServiceTest**  dans le dossier **Unitaires\Core\Services**.
 
 # Exemple de tests unitaires
 
@@ -106,7 +106,7 @@ Il n'est pas demandé de tester une extension dans le **TP 3**. Cette exemple es
 
 Créez la classe **UtilisateurMapExtensionTest.cs** dans le dossier **Core\Extensions**.
 
-```c#
+```csharp showLineNumbers
 namespace SuperCarte.UTest.Unitaires.Core.Extensions;
 
 /// <summary>
@@ -128,7 +128,7 @@ Le nom du test est **VersUtilisateurModel_CreerObjet_ValeursIdentiques**.
 - Le cas : CreerObjet
 - Le résultat : ValeursIdentiques
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
 {
@@ -142,7 +142,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
 
 Premièrement, il faut créer l'objet **Utilisateur** à convertir et les constantes pour les valeurs. Il est préférable d'utiliser des constantes au lieu de recopier les valeurs pour éviter les erreurs de copie.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
 {
@@ -172,7 +172,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
 
 Ensuite, il faut appeler la méthode à tester. Le nom de la variable qui est retourné par le test possède le suffixe **Actuel** **(Actual)**.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
 {
@@ -203,7 +203,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
 
 Finalement, il faut mettre les assertions. Il faut comparer toutes les propriétés.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
 {
@@ -241,7 +241,7 @@ Exécutez le test. Il sera réussi.
 
 Pour s'assurer qu'il fonctionne bien, modifiez temporairement la méthode de **VersUtilisateurModel** la classe **UtilisateurMapExtension** pour le code ci-dessous. Il faut retirer la copie du champ **Prenom**.
 
-```c#
+```csharp showLineNumbers
 public static UtilisateurModel VersUtilisateurModel(this Utilisateur item)
 {
     return new UtilisateurModel()
@@ -266,7 +266,7 @@ Actual:   (null)
 
 Remettez la méthode **VersUtilisateurModel** à son état original.
 
-```c#
+```csharp showLineNumbers
 public static UtilisateurModel VersUtilisateurModel(this Utilisateur item)
 {
     return new UtilisateurModel()
@@ -288,7 +288,7 @@ Le problème avec la version précédente est si un nouveau champ est ajouté da
 
 Ajoutez la propriété ci-dessous dans la classe **Utilisateur** et **UtilisateurModel**.
 
-```c#
+```csharp showLineNumbers
 public string PropTest { get; set; } = null!;
 ```
 
@@ -296,7 +296,7 @@ Exécutez de nouveau le test 1. Il sera un succès. La première raison qu'il es
 
 Modifiez la méthode par celle-ci. La nouvelle propriété a été ajoutée (lignes 11 et 21). Le test est maintenant en encore un succès lors de son exécution. La raison est qu'il manque une assertion sur ce champ.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
 {
@@ -334,7 +334,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
 
 Modifiez la méthode par celle-ci. Il y a maintenant l'assertion à la ligne 33.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
 {
@@ -377,9 +377,9 @@ Créez la méthode version 2. Cette version du test sera automatiquement évolut
 
 En premier lieu, la librairie **FluentAssertions** permet de comparer les propriétés de 2 objets pour vérifier qu'ils sont identiques. Il n'est pas nécessaire que les objets soient du même type, mais les propriétés doivent avoir le même nom.
 
-À la ligne 26, la méthode **`utilisateurModelActuel.Should().BeEquivalentTo(utilisateur);`** permet de comparer un **UtilisateurModel** avec un **Utilisateur** comme référence. Par contre, la classe **Utilisateur** a des propriétés supplémentaires (Navigations et MotPasseHash). Il faut ajouter l'option **`options => options.ExcludingMissingMembers()`** pour faire la comparaison uniquement avec les propriétés identiques. Maintenant, l'assertion est évolutive. En ajoutant une propriété dans le modèle de données et du domaine, il ne sera pas nécessaire de l'ajouter.
+À la ligne 26, la méthode **utilisateurModelActuel.Should().BeEquivalentTo(utilisateur);** permet de comparer un **UtilisateurModel** avec un **Utilisateur** comme référence. Par contre, la classe **Utilisateur** a des propriétés supplémentaires (Navigations et MotPasseHash). Il faut ajouter l'option **options => options.ExcludingMissingMembers()** pour faire la comparaison uniquement avec les propriétés identiques. Maintenant, l'assertion est évolutive. En ajoutant une propriété dans le modèle de données et du domaine, il ne sera pas nécessaire de l'ajouter.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
 {
@@ -409,13 +409,13 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
 }
 ```
 
-Exécutez le test et c'est un succès. Il devrait échouer, car le correctif n'a pas été fait dans la méthode **`VersUtilisateurModel()`**.
+Exécutez le test et c'est un succès. Il devrait échouer, car le correctif n'a pas été fait dans la méthode **VersUtilisateurModel()**.
 
 La raison est que la propriété **PropTest** n'a pas été assignée dans l'arrangement. Donc, la propriété à la valeur par défaut. Et la comparaison est identique, car dans la méthode à tester, il n'y a pas d'assignation également. C'est donc une vérification de valeur par défaut à valeur par défaut, donc la comparaison est valide.
 
 Modifiez la méthode par celle-ci. Les lignes 11 et 21 sont pour l'assignation de la propriété **PropTest**. 
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
 {
@@ -455,9 +455,9 @@ Modifiez la méthode par celle-ci.
 
 À la ligne 5, il y a un objet **Fixture** qui permet de créer des objets.
 
-À la ligne 6 à 10, c'est la mécanique de création. Il est possible d'exclure des propriétés avec la méthode **`Without()`**. Il est important d'exclure les propriétés de navigation ou du moins minimalement la propriété de navigation **1 à plusieurs (UtilisateurCarteListe)** . Il est important de faire ceci, car il y a une référence circulaire entre les classes du modèle de données avec **EntityFramework**. Si l'exclusion n'est pas faite, il y aura une exception, car l'objet sera toujours en création circulaire.
+À la ligne 6 à 10, c'est la mécanique de création. Il est possible d'exclure des propriétés avec la méthode **Without()**. Il est important d'exclure les propriétés de navigation ou du moins minimalement la propriété de navigation **1 à plusieurs (UtilisateurCarteListe)** . Il est important de faire ceci, car il y a une référence circulaire entre les classes du modèle de données avec **EntityFramework**. Si l'exclusion n'est pas faite, il y aura une exception, car l'objet sera toujours en création circulaire.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
 {
@@ -479,11 +479,11 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
 
 Exécutez de nouveau le test et il sera en échec.
 
-Retirez la propriété **PropTest** de la classe **UtilisateurModel** uniquement. Exécutez le test et il sera positif. Il devrait toujours échouer. La raison est que la propriété **PropTest** n'est plus dans l'assertion, car elle est exclue par l'option **`ExcludingMissingMembers()`**.
+Retirez la propriété **PropTest** de la classe **UtilisateurModel** uniquement. Exécutez le test et il sera positif. Il devrait toujours échouer. La raison est que la propriété **PropTest** n'est plus dans l'assertion, car elle est exclue par l'option **ExcludingMissingMembers()**.
 
-Il serait idéal d'indiquer manuellement les propriétés à exclure. La méthode **`.Exlcluding()`** permet de spécifier une propriété à ignorer.
+Il serait idéal d'indiquer manuellement les propriétés à exclure. La méthode **.Excluding()** permet de spécifier une propriété à ignorer.
 
-```
+```csharp  showLineNumbers 
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
 {
@@ -508,9 +508,9 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
 
 Exécutez de nouveau le test. Le test sera un échec comme voulu.
 
-Ajoutez de nouveau la propriété ** **PropTest** de la classe **UtilisateurModel** et testez de nouveau. Le test est toujours en échec comme voulu.
+Ajoutez de nouveau la propriété **PropTest** de la classe **UtilisateurModel** et testez de nouveau. Le test est toujours en échec comme voulu.
 
-Retirez la propriété ** **PropTest** des classes **UtilisateurModel** et **Utilisateur**.
+Retirez la propriété **PropTest** des classes **UtilisateurModel** et **Utilisateur**.
 
 Testez de nouveau et le test sera un succès comme voulu.
 
@@ -520,13 +520,13 @@ Il n'est pas toujours possible de réaliser des tests évolutifs. Il est importa
 
 ## Tester un validateur
 
-Le validateur a seulement une seule méthode à tester, mais il faut s'assurer que tous les champs soient testés correctement.
+Le validateur a une seule méthode à tester, mais il faut s'assurer que tous les champs soient testés correctement.
 
-Pour un validateur, il faut s'assure que la validation fonctionne bien lorsque les valeurs sont valides et que lorsque les valeurs sont invalides. Il faut tester les 2 possibilités. Il faut également tester tous les cas de validation pour une propriété.
+Pour un validateur, il faut s'assure que la validation fonctionne bien lorsque les valeurs sont valides et lorsque les valeurs sont invalides. Il faut tester les 2 possibilités. Il faut également tester tous les cas de validation pour une propriété.
 
 Créez la classe **UtilisateurCarteValidateurTest.cs** dans le dossier **Core\Validateurs**.
 
-```c#
+```csharp showLineNumbers
 namespace SuperCarte.UTest.Core.Validateurs;
 
 /// <summary>
@@ -537,7 +537,7 @@ public class UtilisateurCarteValidateurTest
 }
 ```
 
-Le validateur classique a seulement une méthode **`ValiderAsync()`**. 
+Le validateur classique a seulement une méthode **ValiderAsync()**. 
 
 Ce validateur possède 2 paramètres. Il n'y aura pas d'exemple pour l'utilisation du 2e paramètre.
 
@@ -551,7 +551,6 @@ Par exemple, pour une chaine de caractères, il faut tester toutes les variation
 
 - Uniquement espace. 
 
-  Ce cas peut être considéré comme une valeur valide ou non selon la façon que vous
 
 Pour une propriété qui a une valeur minimale ou maximale, il faut tester les cas limites.
 
@@ -559,12 +558,12 @@ Il faut également tester le cas valide et non valide.
 
 ### Propriété Quantite
 
-La propriété **Quantite** peut accepter une valeur entre 1 et 32 767 (valeur maximale du **`short`**).
+La propriété **Quantite** peut accepter une valeur entre 1 et 32 767 (valeur maximale du **short**).
 
 Pour le test qui s'assure que le champ est valide, il faut tester les valeurs limites.
 
 - 1
-- 32 767 (**`short.MaxValue`**)
+- 32 767 (**short.MaxValue**)
 - Et une entre les 2
 
 Pour le test qui s'assure que le champ est invalide, il faut tester les valeurs en dehors.
@@ -574,15 +573,15 @@ Pour le test qui s'assure que le champ est invalide, il faut tester les valeurs 
 
 Si la propriété acceptait entre 1 et 250, il faudrait également tester 251. Mais pour ce validateur, il n'est pas possible de spécifier une valeur au-delà du maximum du type.
 
-Afin d'éviter d'écrire plusieurs tests pour chacune des valeurs, il est possible d'utiliser l'annotation **`[Theory]`** au lieu de **`[Fact]`**. Cette nouvelle annotation permet de spécifier les paramètres pour le même test avec l'annotation **`[InlineData]`**.
+Afin d'éviter d'écrire plusieurs tests pour chacune des valeurs, il est possible d'utiliser l'annotation **[Theory]** au lieu de **[Fact]**. Cette nouvelle annotation permet de spécifier les paramètres pour le même test avec l'annotation **[InlineData]**.
 
-Créez la méthode **`ValiderAsync_Quantite_Valide`**. Remarquez que la méthode possède un paramètre **`quantite`**.
+Créez la méthode **ValiderAsync_Quantite_Valide**. Remarquez que la méthode possède un paramètre **quantite**.
 
-La méthode a plusieurs annotations. Ce test sera exécuté 3 fois. La première fois, le paramètre **`quantite`** aura la valeur 1. La deuxième fois, la valeur sera 32 767 et la troisième fois, la valeur sera 15657.
+La méthode a plusieurs annotations. Ce test sera exécuté 3 fois. La première fois, le paramètre **quantite** aura la valeur 1. La deuxième fois, la valeur sera 32 767 et la troisième fois, la valeur sera 15657.
 
 La propriété **Quantite** de l'objet **utilisateurCarteModel** utilise la valeur du paramètre (ligne 10). 
 
-```c#
+```csharp showLineNumbers
 [Theory]
 [InlineData(1)] //Min
 [InlineData(short.MaxValue)] //Max
@@ -605,7 +604,7 @@ Il faut ensuite créer les simulacres pour les dépendances. Il n'est pas néces
 
 À la ligne 17, il y a la création du service et à la ligne 23 il y a l'exécution.
 
-```c#
+```csharp showLineNumbers
 [Theory]
 [InlineData(1)] //Min
 [InlineData(short.MaxValue)] //Max
@@ -634,9 +633,9 @@ public async Task ValiderAsync_Quantite_Valide(short quantite)
 }
 ```
 
-Finalement, l'assertion doit se faire sur la propriété des messages d'erreur. Il n'est pas possible d'utiliser la propriété **`EstValide`**, car cette propriété considère toutes les erreurs. Les autres propriétés sont ignorées dans le test, donc elles ne sont pas contrôlées. Il n'est pas possible de prédire leur comportement. Donc, si le **dictionnaire** d'erreur ne contient pas la propriété **Quantite**, la propriété est valide.
+Finalement, l'assertion doit se faire sur la propriété des messages d'erreur. Il n'est pas possible d'utiliser la propriété **EstValide**, car cette propriété considère toutes les erreurs. Les autres propriétés sont ignorées dans le test, donc elles ne sont pas contrôlées. Il n'est pas possible de prédire leur comportement. Donc, si le **dictionnaire** d'erreur ne contient pas la propriété **Quantite**, la propriété est valide.
 
-```c#
+```csharp showLineNumbers
 [Theory]
 [InlineData(1)] //Min
 [InlineData(short.MaxValue)] //Max
@@ -670,7 +669,7 @@ Voici le test pour le cas invalide.
 
 Le tout est identique, à l'exception des valeurs pour la quantité et l'assertion. Maintenant, pour que le test soit réussi, il faut que l'erreur soit présente.
 
-```c#
+```csharp showLineNumbers
 [Theory]
 [InlineData(0)] //Limite
 [InlineData(-10)] //Négatif    
@@ -711,11 +710,11 @@ Ajoutez la valeur ci-dessous.
 | ---------------------- | ---------------------------------------------------- |
 | Quantite_PlageInvalide | La valeur doit être entre 1 et 32 767 inclusivement. |
 
-Modifiez la classe **UtilisateurCarteValidateur** pour recevoir la dépendance **`IStringLocalizer<ResUtilisateurCarteValidateur>`**(lignes 19, 30 et 35).
+Modifiez la classe **UtilisateurCarteValidateur** pour recevoir la dépendance **IStringLocalizer\<ResUtilisateurCarteValidateur>**(lignes 19, 30 et 35).
 
 La règle pour la quantité utilise le texte du fichier ressource (ligne 38).
 
-```c#
+```csharp showLineNumbers
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Localization;
@@ -820,7 +819,7 @@ Il faut maintenant créer un simulacre dans les tests pour le fichier ressource.
 
 Pour le test **valide**, il faut configurer le simulacre pour retourner un message d'erreur, peu importe la ressource demandée (ligne 17). Il n'est pas nécessaire de créer tous les messages, car ils ne servent pas à l'assertion.
 
-```c#
+```csharp showLineNumbers
 [Theory]
 [InlineData(1)] //Min
 [InlineData(short.MaxValue)] //Max
@@ -859,7 +858,7 @@ Pour le test **non valide**, il faut configurer le message d'erreur et de vérif
 
 À la ligne 31, il y a une nouvelle assertion qui vérifie que le message d'erreur attendu est celui qui a été obtenu.
 
-```c#
+```csharp showLineNumbers
 [Theory]
 [InlineData(0)] //Limite
 [InlineData(-10)] //Négatif    
@@ -898,7 +897,7 @@ public async Task ValiderAsync_Quantite_NonValide(short quantite)
 
 Créez la classe **UtilisateurCarteServiceTest** dans le dossier **Core\Services**.
 
-```c#
+```csharp showLineNumbers
 namespace SuperCarte.UTest.Core.Services;
 
 /// <summary>
@@ -913,7 +912,7 @@ public class UtilisateurCarteServiceTest
 
 Est-ce qu'il y a quelque chose à tester dans cette méthode ?
 
-```c#
+```csharp showLineNumbers
 public async Task<List<QuantiteCarteDetailModel>> ObtenirCartesUtilisateurAsync(int utilisateurId)
 {
     return await _utilisateurCarteRepo.ObtenirCartesUtilisateurAsync(utilisateurId);
@@ -926,9 +925,9 @@ Le seul test possible serait de s'assurer que la méthode retourne exactement la
 
 ### Test ObtenirDetail
 
-Voici la méthode **`ObtenirAsync`**. 
+Voici la méthode **ObtenirAsync**. 
 
-```c#
+```csharp showLineNumbers
 public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId)
 {
     UtilisateurCarte? utilisateurCarte = await _utilisateurCarteRepo.ObtenirParCleAsync(utilisateurId, carteId);
@@ -943,9 +942,9 @@ Est-ce qu'il faut la tester ? Celle-ci à 2 cas de test.
 
 Le premier test est de s'assurer que les paramètres ne sont pas inversés en appelant le **repository**.
 
-Créez la méthode **`ObtenirAsync_ParametreRepo_BonOrdre()`**. Remarquez que la méthode est asynchrone, car celle à tester est asynchrone.
+Créez la méthode **ObtenirAsync_ParametreRepo_BonOrdre()**. Remarquez que la méthode est asynchrone, car celle à tester est asynchrone.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public async Task ObtenirAsync_ParametreRepo_BonOrdre()
 {
@@ -964,7 +963,7 @@ Il faut créer les constantes pour les clés (lignes 5 et 6).
 
 Le service a 2 dépendances. Il faut créer les simulacres. Il n'est pas nécessaire de les configurer (lignes 8 et 9).
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public async Task ObtenirAsync_ParametreRepo_BonOrdre()
 {
@@ -987,9 +986,9 @@ public async Task ObtenirAsync_ParametreRepo_BonOrdre()
 }
 ```
 
-Ensuite, il faut exécuter la méthode (ligne 16). La méthode est asynchrone, il ne faut pas oublier le **`await`**. Il n'est pas nécessaire de récupérer l'objet de retour, car il n'est pas nécessaire à l'assertion.
+Ensuite, il faut exécuter la méthode (ligne 16). La méthode est asynchrone, il ne faut pas oublier le **await**. Il n'est pas nécessaire de récupérer l'objet de retour, car il n'est pas nécessaire à l'assertion.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public async Task ObtenirAsync_ParametreRepo_BonOrdre()
 {
@@ -1018,7 +1017,7 @@ Il est possible de vérifier si un appel a été fait sur une méthode d'un simu
 
 À la ligne 19, il est vérifié que la méthode est appelée seulement une fois avec les paramètres de l'arrangement. Il est important que les valeurs des clés soient différentes pour détecter leur inversion. À la ligne 20, l'assertion est que la méthode n'est jamais appelée avec une inversion.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public async Task ObtenirAsync_ParametreRepo_BonOrdre()
 {
@@ -1042,9 +1041,9 @@ public async Task ObtenirAsync_ParametreRepo_BonOrdre()
 }
 ```
 
-Modifiez temporairement la méthode **`ObtenirAsync()`** du service par celle-ci. Le programmeur a utilisé 2 fois la clé **utilisateurId**. Testez de nouveau et le test sera en échec.
+Modifiez temporairement la méthode **ObtenirAsync()** du service par celle-ci. Le programmeur a utilisé 2 fois la clé **utilisateurId**. Testez de nouveau et le test sera en échec.
 
-```c#
+```csharp showLineNumbers
 public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId)
 {
     UtilisateurCarte? utilisateurCarte = await _utilisateurCarteRepo.ObtenirParCleAsync(utilisateurId, utilisateurId);
@@ -1057,13 +1056,13 @@ public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int ca
 
 Le 2e test est de s'assurer que la conversion de **UtilisateurCarte** vers **UtilisateurCarteModel** est correcte.
 
-Est-ce nécessaire de tester ce cas si le test unitaire de **`utilisateurCarte?.VersUtilisateurCarteModel()`** a déjà été fait ?
+Est-ce nécessaire de tester ce cas si le test unitaire de **utilisateurCarte?.VersUtilisateurCarteModel()** a déjà été fait ?
 
 Dans ce cas-ci, il est important de le tester, car la conversion se fait directement à l'interne. Le service n'utilise pas une dépendance pour la conversion.
 
 Imaginez que le programmeur oublie d'utiliser la méthode d'extension et il le fait directement dans la classe comme dans l'exemple ci-dessous. Le test de l'extension est inutile dans ce cas-ci. Un test ne doit pas dépendre d'un autre test pour le considérer valide.
 
-```c#
+```csharp showLineNumbers
 public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId)
 {
     UtilisateurCarte? utilisateurCarte = await _utilisateurCarteRepo.ObtenirParCleAsync(utilisateurId, carteId);
@@ -1088,7 +1087,7 @@ Si c'était une dépendance comme auto-mapper, la méthode ressemblerait à ceci
 
 Il faudrait seulement tester que le **mapper** est appelé correctement sans se soucier du résultat de l'assignation. Le **mapper** serait simulé dans le test. 
 
-```c#
+```csharp showLineNumbers
 public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId)
 {
     UtilisateurCarte? utilisateurCarte = await _utilisateurCarteRepo.ObtenirParCleAsync(utilisateurId, utilisateurId);
@@ -1103,11 +1102,11 @@ Voici la méthode pour le test. Il est très similaire à l'extension.
 
 Aux lignes 5 à 10, l'objet est créé à l'aide de la librairie **AutoFixture** pour assigner tous les champs.
 
-À la ligne 13, il faut configurer le simulacre pour le **repository** pour retourner l'utilisateur généré à la ligne 6. Également, ce sont les vraies valeurs qui sont spécifiées dans la configuration. Mais il aurait été aussi valide de mettre **`It.IsAny<int>()`**, car le test s'occupe uniquement de la conversion. Il y a un test qui s'occupe de l'ordre des paramètres.
+À la ligne 13, il faut configurer le simulacre pour le **repository** pour retourner l'utilisateur généré à la ligne 6. Également, ce sont les vraies valeurs qui sont spécifiées dans la configuration. Mais il aurait été aussi valide de mettre **It.IsAny\<int>()**, car le test s'occupe uniquement de la conversion. Il y a un test qui s'occupe de l'ordre des paramètres.
 
 À la ligne 27, la librairie **FluentValidation** fait la comparaison entre l'objet du modèle du domaine obtenu avec celui créé.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public async Task ObtenirAsync_DataVersModeleNonNull_ValeursIdentiques()
 {
@@ -1142,7 +1141,7 @@ public async Task ObtenirAsync_DataVersModeleNonNull_ValeursIdentiques()
 
 Modifiez la méthode du service avec la version ci-dessous. Le test sera encore un succès.
 
-```c#
+```csharp showLineNumbers
 public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId)
 {
     UtilisateurCarte? utilisateurCarte = await _utilisateurCarteRepo.ObtenirParCleAsync(utilisateurId, carteId);
@@ -1180,7 +1179,7 @@ Les 2 derniers sont plus complexes, car il faut intercepter l'objet envoyer en p
 
 Le premier test est de s'assurer que le **repository** n'ajoute pas l'objet dans le cas que le modèle du domaine n'est pas valide. Ce test est un test comportemental, car il ne valide pas un résultat, mais si un comportement est bien exécuté.
 
-Créez la méthode **`AjouterAsync_ModeleInvalide_RepoNonAjout()`**. Remarquez que la méthode est asynchrone, car celle à tester est asynchrone.
+Créez la méthode **AjouterAsync_ModeleInvalide_RepoNonAjout()**. Remarquez que la méthode est asynchrone, car celle à tester est asynchrone.
 
 Il faut créer l'objet du modèle à ajouter (ligne 5). Cet objet peut être vide, car il ne sera pas réellement validé ou ajouté.
 
@@ -1194,11 +1193,11 @@ Le service est créé à la ligne 15.
 
 À la ligne 20, la méthode est exécutée en envoyant l'objet du modèle de la ligne 5.
 
-À la ligne 23, la première assertion est qu'il faut s'assurer que la méthode **`ValiderAsync()`** du validateur a été appelée seulement une fois avec le modèle du domaine qui a été envoyé.
+À la ligne 23, la première assertion est qu'il faut s'assurer que la méthode **ValiderAsync()** du validateur a été appelée seulement une fois avec le modèle du domaine qui a été envoyé.
 
-À la ligne 24, la 2e assertion est qu'il faut s'assurer que la méthode **`AjouterAsync()`** du **repository** n'est jamais appelée, peu importe les paramètres.
+À la ligne 24, la 2e assertion est qu'il faut s'assurer que la méthode **AjouterAsync()** du **repository** n'est jamais appelée, peu importe les paramètres.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public async Task AjouterAsync_ModeleInvalide_RepoNonAjout()
 {
@@ -1241,12 +1240,12 @@ Il faut tester les 4 cas ci-dessous :
 
 - Aucune catégorie sélectionnée
 - La catégorie a des dépendances
-- La catégorie retourne un objet **`null`** pour la dépendance
+- La catégorie retourne un objet **null** pour la dépendance
 - La catégorie n'a pas de dépendance
 
 Créez la classe **ListeCategoriesVMTest** dans le dossier **WPF\ViewModels**.
 
-```c#
+```csharp showLineNumbers
 /// <summary>
 /// Tests unitaires pour la classe ListeCategoriesVM
 /// </summary>
@@ -1259,7 +1258,7 @@ public class ListeCategoriesVMTest
 
 Ce test permet de déterminer qu'il n'est pas possible d'exécuter la commande si aucune catégorie n'est sélectionnée.
 
-Créez la méthode **`SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()`**.
+Créez la méthode **SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()**.
 
 La classe **ListeCategoriesVM** a 4 dépendances.
 
@@ -1270,7 +1269,7 @@ La classe **ListeCategoriesVM** a 4 dépendances.
 
 Il faut créer un simulacre pour chacun des services avec la librairie **Moq**.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
 {
@@ -1289,9 +1288,9 @@ public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
 }
 ```
 
-Pour ce test, il faut considérer que l'utilisateur est autorisé à utiliser la commande. Il faut donc configurer le simulacre (lignes 12 et 13). Donc peu importe le rôle demandé, l'authentificateur retourne toujours **`true`** pour ce test.
+Pour ce test, il faut considérer que l'utilisateur est autorisé à utiliser la commande. Il faut donc configurer le simulacre (lignes 12 et 13). Donc peu importe le rôle demandé, l'authentificateur retourne toujours **true** pour ce test.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
 {
@@ -1315,7 +1314,7 @@ public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
 
 Ensuite, il faut créer le **ViewModel** en injectant les simulacres.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
 {
@@ -1346,11 +1345,11 @@ Ensuite, il faut faire les actions. Il y en a 2.
 
 La première action est d'indiquer qu'aucune catégorie n'est sélectionnée (ligne 21).
 
-Ensuite, il faut récupérer la valeur de la méthode **`CanExecute()`** de la commande **SupprimerCommande **(ligne 23).
+Ensuite, il faut récupérer la valeur de la méthode **CanExecute()** de la commande **SupprimerCommande **(ligne 23).
 
-Finalement, l'assertion est que la valeur de **canExecuteActuel** doit être à **`false`**.
+Finalement, l'assertion est que la valeur de **canExecuteActuel** doit être à **false**.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
 {
@@ -1384,13 +1383,13 @@ public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
 
 Ce test permet de déterminer qu'il n'est pas possible d'exécuter la commande si la catégorie sélectionnée a une dépendance.
 
-Créez la méthode **`SupprimerCommande_CategorieAvecDependance_NePeutSupprimer()`**.
+Créez la méthode **SupprimerCommande_CategorieAvecDependance_NePeutSupprimer()**.
 
-Le test est assez similaire au précédent. Il faut maintenant configurer la méthode **`ObtenirDependance()`** de **CategorieService** pour indiquer qu'il y a une dépendance (ligne 9).
+Le test est assez similaire au précédent. Il faut maintenant configurer la méthode **ObtenirDependance()** de **CategorieService** pour indiquer qu'il y a une dépendance (ligne 9).
 
 À la ligne 22, il faut créer un objet de type  **CategorieModel** pour indiquer qu'une catégorie est sélectionnée.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void SupprimerCommande_CategorieAvecDependance_NePeutSupprimer()
 {
@@ -1427,7 +1426,7 @@ Avez-vous une solution pour ceci ?
 
 Il faudrait modifier le concept des classes de type **Dépendance**. Est-ce nécessaire d'avoir le nombre d'éléments par dépendance ? Si ce n'est pas nécessaire, il suffirait de retourner un booléen pour indiquer s'il y a une dépendance ou non. Si le nombre de dépendances est nécessaire, il faudrait modifier la classe comme ci-dessous.
 
-```c#
+```csharp showLineNumbers
 public class CategorieDependance
 {
     public int CategorieId { get; init; }
@@ -1449,11 +1448,11 @@ La création d'un test peut remettre en question la conception de l'application.
 
 ### Test SupprimerCommande_CategorieDepandenceNull_NePeutSupprimer
 
-Ce test permet de déterminer qu'il est possible d'exécuter la commande si la catégorie sélectionnée retourne une dépendance **`null`**.
+Ce test permet de déterminer qu'il est possible d'exécuter la commande si la catégorie sélectionnée retourne une dépendance **null**.
 
-À la ligne 9, le simulacre retourne un objet **`null`**.
+À la ligne 9, le simulacre retourne un objet **null**.
 
-```c#
+```csharp showLineNumbers
  [Fact]
 public void SupprimerCommande_CategorieDepandenceNull_NePeutSupprimer()
 {
@@ -1489,9 +1488,9 @@ Ce test permet de déterminer qu'il est possible d'exécuter la commande si la c
 
 À la ligne 9, le simulacre ne retourne un objet **CategorieDependance** avec aucune carte.
 
-Créez la méthode **`SupprimerCommande_CategorieSansDependance_PeutSupprimer()`**.
+Créez la méthode **SupprimerCommande_CategorieSansDependance_PeutSupprimer()**.
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void SupprimerCommande_CategorieSansDependance_PeutSupprimer()
 {
@@ -1527,11 +1526,11 @@ Il faudrait également s'assurer que lorsque la catégorie sélectionnée est mo
 
 Il faut notifier uniquement lorsque la nouvelle catégorie est différente de l'ancienne.
 
-Pour être en mesure de le faire, il faut ajouter une méthode à l'événement **`CanExecuteChanged`** de la commande (ligne 25). Cette méthode incrémente un compteur à chaque appel.
+Pour être en mesure de le faire, il faut ajouter une méthode à l'événement **CanExecuteChanged** de la commande (ligne 25). Cette méthode incrémente un compteur à chaque appel.
 
 L'assertion détermine si le compteur correspond à la valeur attendue (ligne 38).
 
-```c#
+```csharp showLineNumbers
 [Fact]
 public void CategorieSelection_ModificationValeur_NotifierCommande()
 {

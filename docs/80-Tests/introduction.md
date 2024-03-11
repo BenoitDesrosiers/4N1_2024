@@ -11,18 +11,12 @@ Il existe plusieurs catégories types de tests.
 
 Les tests unitaires servent à vérifier une méthode précise d'une classe et de s'assurer que le résultat ou le comportement attendu est valide.
 
-Les tests d'intégration servent à vérifier l'interfaction entre plusieurs modules et fonctions et de s'assurer que le résultat final est valide.
+Les tests d'intégration servent à vérifier l'interaction entre plusieurs modules et fonctions et de s'assurer que le résultat final est valide.
 
-Les tests bout en bout (e2e) servent à vérifier que le logiciel fonctionne de l'interface utilisateur à la base de données ou aux autres systèmes.
+Les tests bout en bout (end to end : e2e) servent à vérifier que le logiciel fonctionne de l'interface utilisateur à la base de données ou aux autres systèmes.
 
 Les tests d'acceptation servent à vérifier que le logiciel répond aux spécifications logicielles énoncées par le client.
 
-Pour le **TP 3**, il est demandé de faire 1 test unitaire pour les éléments ci-dessous :
-
-- ~~Repo~~ **À ne plus faire pour le TP 3**
-- Service
-- Validateur
-- ViewModel
 
 Voici un bon article de **Microsoft** pour les bonnes pratiques des tests : https://learn.microsoft.com/fr-ca/dotnet/core/testing/unit-testing-best-practices
 
@@ -54,7 +48,7 @@ Pour plus d'information sur **xUnit** : https://xunit.net/
 
 Avant de débuter la conception des tests, il faut faire l'inventaire de ce qu'il faut tester.
 
-Beaucoup d'éléments de la liste proviendront de l'analyse, car pour les tests d'intégration et **e22**, c'est généralement des cas d'utilisation.
+Beaucoup d'éléments de la liste proviendront de l'analyse, car pour les tests d'intégration et e2e, c'est généralement des cas d'utilisation.
 
 À cette étape, il ne faut pas penser comment le test sera effectué, mais de penser ce qu'il faut tester.
 
@@ -132,6 +126,8 @@ Chaque test indique un résultat. S'il est en **rouge**, il est possible de voir
 
 ## Simulacres Mock, Stub et Fake
 
+<!-- à revoir, pas très claire comme explication -->
+
 Le simulacre est une partie essentielle dans les tests. Il permet de créer un faux objet et d'indiquer ce que ses fonctionnalités retourneront comme valeur. Il existe les **Mock** et **Stub**.
 
 Les simulacres sont très pratiques pour les tests unitaires, car il faut prédire le résultat des dépendances de la fonctionnalité à tester.
@@ -202,7 +198,7 @@ Pour faciliter la comparaison des objets, la librairie **FluentAssertions** sera
 
 ## Structure du fichier de test
 
-La librairie **xUnit** n'a pas besoin de mettre une **Annontation** sur la classe pour indiquer que c'est une classe de test.
+La librairie **xUnit** n'a pas besoin de mettre une **Annotation** sur la classe pour indiquer que c'est une classe de test.
 
 Il faut nommer la classe avec le nom de la classe à tester et en ajoutant le suffixe **Test**.
 

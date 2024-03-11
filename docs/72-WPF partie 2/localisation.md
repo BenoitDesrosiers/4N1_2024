@@ -1,6 +1,6 @@
 ---
 sidebar_position: 250
-draft: true
+draft: false
 ---
 
 # Localisation de .xaml

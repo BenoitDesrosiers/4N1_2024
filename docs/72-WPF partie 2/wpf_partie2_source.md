@@ -1,6 +1,6 @@
 ---
 sidebar_position: 211
-draft: true
+draft: false
 ---
 
 # Code Partie 2

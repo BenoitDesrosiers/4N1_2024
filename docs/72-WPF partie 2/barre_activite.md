@@ -1,6 +1,6 @@
 ---
 sidebar_position: 232
-draft: true
+draft: false
 ---
 
 # Barre d'activité

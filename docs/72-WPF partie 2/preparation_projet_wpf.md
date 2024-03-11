@@ -1,6 +1,6 @@
 ---
 sidebar_position: 212
-draft: true
+draft: false
 ---
 # Préparation du projet WPF
 

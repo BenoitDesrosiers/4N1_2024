@@ -1,6 +1,6 @@
 ---
 sidebar_position: 260
-draft: true
+draft: false
 ---
 
 # Exécution de la partie 2

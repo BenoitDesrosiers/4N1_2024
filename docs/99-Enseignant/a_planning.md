@@ -51,12 +51,12 @@ _________ MI-Session __________
 
 
 * Semaine 7
-  * Démarrer le projet WPF avec injection de dépendance et base de xaml. 
+  * WPF partie 1 
+  * lecture durant le cours
+  * revue à l'aide du diagramme de résumé du code
   
 * Semaine 8
-  * WPF partie 1 
-    * lecture durant le cours
-    * revue à l'aide du diagramme de résumé du code
+ 
   * remise TP2 (35%)
   * énoncé TP3 app WPF
   <!-- 
@@ -77,16 +77,13 @@ _________ MI-Session __________
     * formulaire de suivi des modifications dans le code et/ou sur git pour chacun des critères de correction ( servivra pour compétence 8.2 documentation )
     * 
   -->
-
-* Semaine 9
   * WPF partie 2
   * lecture du Helloworld
   * revue à l'aide du diagramme Exécution du Helloworld
   * composants
   * commande
   * Date et champ texte numérique
-
-* Semaine 10
+* Semaine 9
   * WPF partie 2
   * Liste des catégories
   * Barre d'activité
@@ -94,10 +91,9 @@ _________ MI-Session __________
   * supprimer une catégorie
   * Localisation
   * Liste des cartes
-  
 
-* Semaine 11
-  * Revue de l'éxcution de la partie 2
+* Semaine 10
+  * Revue de l'éxecution de la partie 2
   * WPF partie 3
   * Navigateur
   * Menu
@@ -107,15 +103,30 @@ _________ MI-Session __________
   * Chargement automatique
   * Validation
 
-* Semaine 12,
+* Semaine 11
+  * localisation .cs
+  * gestion utilisateur
+  * WPF Parti 4
+  * authentification
+  * autorisation
+  * liste des cartes par utilisateur
+  * suppression d'une carte d'un utilisateur
+ 
+* Semaine 12
+  * WPF partie 5
+  * 
 
 * Semaine 13, 
+  * Tests
 
-* Semaine 14 - Test intégration
+* Semaine 14
+  * tp3
 
-* Semaine 15 - Temps libre pour TP. 
+* Semaine 15 
+  * présentation du tp3
+  * temps pour tp3
 
 
 
-Une liste et un CRUD en WPF avec les tests unitaires. Dernier TP, ajoutet le changement de vues, l'internationalisation, la sécurité , un crud plus complexe.
+
 

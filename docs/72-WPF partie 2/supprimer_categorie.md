@@ -32,6 +32,8 @@ public class CategorieDependance
 }
 ```
 
+La propriété NbCartes conservera le nombre de cartes associées à cette catégorie afin de savoir si celle-ci peut être effacée.
+
 S'il avait d'autres tables qui utiliseraient **Categorie** comme clé étrangère, il faudrait ajouter les autres **Nb[Table]**.
 
 La classe a également la clé primaire correspondant.
@@ -48,7 +50,10 @@ Dans l'interface **ICategorieRepo**, il faut ajouter la méthode **ObtenirDepend
 
 Les deux versions (asynchrone et synchrone) sont ajoutées, car les 2 seront nécessaires. Si seulement une version était nécessaire, il ne serait pas nécessaire d'ajouter les 2.
 
+Une référence aux Models est nécéssaire (ligne 1)
+
 ```csharp
+//highlight-next-line
 using SuperCarte.Core.Models;
 using SuperCarte.Core.Repositories.Bases;
 using SuperCarte.EF.Data;
@@ -79,7 +84,9 @@ public interface ICategorieRepo : IBasePKUniqueRepo<Categorie, int>
 Ajoutez l'implémentation de la méthode dans la classe **CategorieRepo**.
 
 ```csharp
+//highlight-next-line
 using Microsoft.EntityFrameworkCore;
+//highlight-next-line
 using SuperCarte.Core.Models;
 using SuperCarte.Core.Repositories.Bases;
 using SuperCarte.EF.Data;

@@ -120,6 +120,9 @@ Pour la partie entrée de données du CRUD, vous devez faire la validation des d
  Si nécessaire, développez les validateurs sur une branche séparée que vous pourrez introduire dans vos branches de développement personnelles.
 :::
 
+:::tip
+Pour la traduction, si vous ne savez pas quoi mettre, vous n'avez qu'à mettre le mot *English* après le mot en francais. 
+:::
 
 
 ### Modules pour le membre #1
@@ -153,7 +156,7 @@ Si c'est l'administrateur qui est connecté, alors lister toutes les Musiques
 * Création des données initiales des Artistes à l'aide de **BOGUS**
   * insertion dans le menu principal
 * **Affichage** des Artistes 
-  * incluant les Musiques et leur Artiste et MaisonEdition associée 
+  * incluant les Musiques et leur Genre et MaisonEdition associée 
   * l'affichage doit s'afficher dans 2 langues (localisation)
 
 * **CRUD** des Artistes

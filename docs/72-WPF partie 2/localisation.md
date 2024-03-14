@@ -66,6 +66,8 @@ Vous pouvez télécharger ce fichier zip et le décompresser dans le répertoire
 
 ## Création du fichier ressource - ResGlobalListeBouton
 
+
+
 Ce fichier ressource contiendra l'information des boutons. Les boutons d'une liste seront toujours les mêmes. Imaginez qu'il faut modifier le bouton **Rafraichissement** par **Chargement**. Si le logiciel à 150 listes, il faut le modifier dans 150 fichiers.
 
 Créez le fichier **ResGlobalListeBouton.resx** avec le modèle **Fichier de ressources**. Il est important que le nom du fichier ressource ne soit pas réutilisé pour d'autres ressources.
@@ -140,10 +142,12 @@ Voici le fichier au complet.
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SuperCarte.WPF.Views"
              xmlns:vm="clr-namespace:SuperCarte.WPF.ViewModels"
+             //highlight-start
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
              lex:LocalizeDictionary.DesignCulture="fr"
              lex:ResxLocalizationProvider.DefaultAssembly="SuperCarte.WPF"
-             lex:ResxLocalizationProvider.DefaultDictionary="ResListeCategories"             
+             lex:ResxLocalizationProvider.DefaultDictionary="ResListeCategories"    
+             //highlight-end         
              d:DataContext="{d:DesignInstance vm:ListeCategoriesVM}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
@@ -165,12 +169,14 @@ Voici le fichier au complet.
             Grid.Row="0" 
             VerticalAlignment="Center" HorizontalAlignment="Center"
             FontSize="16" FontWeight="Bold"
+            //highlight-next-line
             Text="{lex:Loc Titre}"/>
 
         <!--Rangée 1-->
         <WrapPanel Grid.Row="1" 
                     Orientation="Horizontal" VerticalAlignment="Center">
 
+//highlight-next-line
             <Button Content="{lex:Loc ResGlobalListeBouton:Bouton_Nouveau_Content}" ToolTip="{lex:Loc ResGlobalListeBouton:Bouton_Nouveau_Tooltip}"
                     Margin="5" Width="32" Height="32" />
             <Button Content="{lex:Loc ResGlobalListeBouton:Bouton_Editer_Content}" ToolTip="{lex:Loc ResGlobalListeBouton:Bouton_Editer_Tooltip}"

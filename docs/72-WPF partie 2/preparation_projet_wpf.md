@@ -132,19 +132,36 @@ La classe a une propriété **VMACtif** pour indiquer le **ViewModel** qui doit 
 Dans la classe **Extensions/ServiceCollections/SCViewModelExtensions**, il faut enregistrer le **ViewModel**.
 
 ```csharp
-public static void EnregistrerViewModels(this IServiceCollection services)
+using Microsoft.Extensions.DependencyInjection;
+
+namespace SuperCarte.WPF.Extensions.ServiceCollections;
+
+/// <summary>
+/// Classe d'extension qui permet d'enregistrer les classes de la catégorie Service
+/// </summary>
+public static class SCViewModelExtensions
 {
-	//highlight-next-line
-    services.AddSingleton<MainWindowVM>();
+    /// <summary>
+    /// Méthode qui permet d'enregistrer les ViewModels de l'application
+    /// </summary>
+    /// <param name="services">La collection de services</param>
+    public static void EnregistrerViewModels(this IServiceCollection services)
+    {
+        //highlight-next-line
+        services.AddSingleton<MainWindowVM>();
+    }
 }
 ```
 
 Remarquez ici qu'il n'y a pas d'interface lors de l'enregistrement du **ViewModel MainWindowVM**. Il n'est pas nécessaire pour cette classe d'utiliser une interface, car l'assignation entre **ViewModel** et la **Vue** associée ne peut pas se faire par l'interface (nous verrons comment le faire plus tard). De plus, il n'y a pas de bénéfice au niveau des tests d'utiliser une interface pour le **ViewModel**.
 
-:::warning Important
+:::info
 Notez que MainWindowVM a été enregistré en **Singleton**. Il faut avoir seulement une fenêtre active dans le programme. Les autres **ViewModels** seront enregistrés en **Transient**.
 :::
 
+:::warning Important
+Si ce n'est pas déjà fait, ajoutez l'appel à **EnregistrerViewModels** dans **App.xaml.cs/App**
+:::
 
 ## Modification du design de la vue - MainWindows.xaml
 
@@ -158,7 +175,6 @@ Modifiez le code de la fenêtre **MainWindows.xaml**.
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SuperCarte.WPF"  
         xmlns:vm="clr-namespace:SuperCarte.WPF.ViewModels"
-        xmlns:v="clr-namespace:SuperCarte.WPF.Views"        
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=vm:MainWindowVM}"
         Title="Super Carte App" 
@@ -197,13 +213,16 @@ namespace SuperCarte.WPF;
 /// </summary>
 public partial class MainWindow : Window
 {
+    //highlight-next-line
     public MainWindow(MainWindowVM mainWindowVM)
     {
         InitializeComponent();
+        //highlight-start
         //Si non spécifié, le format des données utilisera le format en-US
         FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), 
             new FrameworkPropertyMetadata(System.Windows.Markup.XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.Name)));
         DataContext = mainWindowVM;
+        //highlight-end
     }
 }
 ```

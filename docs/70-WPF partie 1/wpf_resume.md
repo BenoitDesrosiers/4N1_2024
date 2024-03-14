@@ -17,14 +17,16 @@ sequenceDiagram
     
     box  Projet.EF<br>Bibliothèque de classes
     participant ef_context as Data/Context<br>ProjetContext.cs
-    participant ef_classe as classes
+    participant ef_classe as Data/<br>classes
     end
+    participant cgp as Console<br>Gestionnaire<br>package
     note over prog: _________EF_________
     prog->>ef_classe: création des classes
     note over ef_classe: ajouter une classe<br>pour chaque entité
+    prog->>cgp: Install-Package Microsoft.EntityFrameworkCore.SqlServer
+    prog->>cgp: Install-Package Microsoft.EntityFrameworkCore.Tools
     prog->>ef_context: création du context
     note over ef_context: 1 DbSet par table<br>OnConfiguring<br>MIGRATION_CONNECTION_STRING
-    participant cgp as Console<br>Gestionnaire<br>package
     prog->>ef_classe: modifier les classes
     note over ef_classe: ajout de champs<br>propriétés de navigation<br>type de champs<br>contraintes...
     prog->>ef_context: modifier le context
@@ -49,6 +51,7 @@ sequenceDiagram
     note over core_repo: hérite de BaseRepo ou de BasePKUniqueRepo
 
     note over prog:________WPF________
+    note over prog:Mettre WPF <br>comme projet de démarrage
     box Projet.WPF<br>Application WPF<br>projet de démarrage
     participant wpf_app as App.xaml.cs 
     participant wpf_serv as Extensions\<br>Services
@@ -67,7 +70,7 @@ sequenceDiagram
 
 ```
 
-Ce diagramme sur [Kroki!](https://kroki.io/mermaid/svg/eNqlVttu4zYQffdXzGML1A721SgCZGM563Z9QZxgH7aLgJbGNrMSyZKU4_2jur-hH-sMadnyLZugfrAocnjmzOHMUA7_LlGl2JNiYUXRAvp56XOE-2rjyqLawJdJHybCeonwoRUMROq1BWP1AoSDCT1pa4GlDavhb6bXwCvP6DtJ__eZvf4oZ7nUfln9Qx4hQ0hz4Ry6YG4YP5VGKA84f0q18rj2jN4TXlzdxneGiZjbiU56fntA5t1NH6iy8FTaI-gVxgi68FT_kv5uGFFpuX19vQPsQmqrjfBSK-J_CL4HbZiLZ116mipVHS1HYHRpIV0KlgEViV1tjt3F6A78lbCdPeOuNv8AvdkUPcsBXszy4G6sSKy5XJRWqgVPDAd39zcPg_Ho6XY8GiW3YTh9uB-M7k7ETBeGZSQEpyPcHTompIS0MRqRfhcLvCBYoTM5l0Qzf7NeITWWojAuwFttrKw2JJLjFSVWchEk4VX_w-ChPWthhSRBXKfTuaRrg9YbZFW6YCc7RRs-wmtORUIkC5aE4AqjXbWJ2o-gl3xOHhKg0eOkd_OQ_PYKrTp-Bw4xQ0sRC-UaJKMiciWI5krLDKZk98uvTTw6sS7cZFl7KKkqQ-585QCK-vUbtKeejrg0oZRSD19HtB7rChJOyB_Qp4LGF22_fzvBfjQZuW9zXc4EVdm70KBJa3RAq9V6rTpvtcWD4mw2GF58V4tJGY2SAHPO7iEPLhhZNJpt7unpJLU9eQnOoV2x5ZSeMv1Jz6k7Q1ZtDNkI6sAhl4hz0o-nzkEdiF_T6Ta70AGxq8FHOhGeARK_Hh8R2OPAeOZRSftZOh_0u4mseDgtDad0fEmUxQUZWbRvYBRITP58VJJOgQlcHU9cZjSkSl_qUAGm2qRUpLTFAbfM01IrA-B5RketOhxjs_HGzLhMZFltrPQhiXaa6rJ-PQjm3AHXqUp350nWbpOWloLmxuQyjUy3UyYWD_mi9CiEtbv-2si5FzN_EiZ0Z4LorEWR020IZ-3q1EzWdN6OPLm_whn__0wlmpynMWOJ_qsQj45uILe7s_c9ZaCcF3nensS7BIYytdrpOX067Bh36lssSNX5w2n1qjPSxqH3weOzi9dFSIBccA5IFRsE3WS4llusLaVasi7u8z5cYLZRa3Vr5l7dkPG9UX3Sjjkeuyf2h0XVOOOjsGvzPdmCvip4z5Ci_CJVpl_CgZX0ddD4kMqOqZ9CjtW2t7O9mM8lCUeBzFFV_5IfkEp6KXJstf4Dw8-h2A)
+Ce diagramme sur [Kroki!](https://kroki.io/mermaid/svg/eNqlVstu2zoQ3fsruOwFrh10a1wESGM51239QOygi7YIaGlsM5VIlqQS94-q_oZ-rDOkZUvyAw3qRSKR8zgzc2ZGFr7nIGMYCL42POsw_DnhUmD3ZWHzrCzYp9mQzbhxAthbf89jpwzTRq0Zt2yG_1Ezg9z4W_9nqbaMbp7A9aLhf0tz_U4sU6HcpvyJDlkCLE65tWC9uCbzsdBcOgarx1hJB1tH1gfc8avb8E5mgs3dQS8-re4t77VJre4MZHKkFa81yaNdq1IgjTuwTigpuTD-XfP4G1-D15TKAVPPEJLQZ4_VLxruH4MLvO5eX-8x9VlsyoKTYUyBbeTgYLQmzp9U7vAol1XCPBaVGxZvOGUSJJarLOruMJg-G0nreJp2ZwE3G4vYKKtWWA_S-DHEmsGLMt9ulYHe_Hs6B4PO_9LOQqnUtkMPxWrEnrPd6YnQK_G3bLCcg6M6MceXoSxTiTVaiXVuhFzTwXh0d3-zGE0nj7fTySS69Y_zxf1ocnemBJlKxEqgs_SPK-D5uuGZtj79RmkjygLTbulG8mex9oHRrfuhoSlPERkuMCzb6_XOZacG6w-SI1VGTvZ5qfkIfMfGRZAZ0RfNZVrZsggZnLBB9DFaRAyfHmaDm0X07wVYVfyWWYAEDEbMpa2BDBkRzxxhPiuRsDnKvfnniEg3SdIdCxwVngGfKYCsev3KunOH7Zhr39-xY58neB-anQWisT3Tvh7ZftAJuu9Suy85tv6rrLE6rEkDVqdzqd-J8Y12r089unzV3IvJGpIAUppEY3o4I2RAK5K5x_9W4CwW58xZ7GmSpN4WcWv-taOqZk1SFhplOG4FzyXEHA1D1SmoRvIrOP36XGsAuxq9w4rQCcPkV88tAAc7bLp0IIX5KKzz-bsJqOhxnmuidHiJpIE1CpnWzDqNyIOYfXiQAqtAAK7aB-cRjbHTN8p3gC6LGJsUVSyjIXzcark3eBpRa_j7MtZHeWDGeSCbsjDCeRLtc6ry6rURzKkCV1TFfd5gbUtsDA6T6rd-GCy42umGegddITsybky1ConyO8ajhi-Y1qmIQ5i7o7PadcK-6NUj134No4nelmcp7nd2Uq7idbRFslj0ZL94gvw9zREmkTzQHeFfNPFgcQnZ_VfIYSBdWJp7xL1qkflU9d5bJS86w9xYLI33-GTDrvHsSTkRSMgwXfCTBbZiZ2sHqUpZHw5N47efqTVqNddp0NfS-Nqo_leWMLbdI_pmR9Zq3Aq7Ej-AzfAjh3TGGOUnIRP14guW4wdC7dMwaUM_NjmVu8VA8ny1Epg4DGQFsvxFpBdSOMFT6HR-A9D67D4)
 
 ### Base de données (EF)
 

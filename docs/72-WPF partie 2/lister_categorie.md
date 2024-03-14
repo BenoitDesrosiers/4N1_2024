@@ -14,188 +14,14 @@ La première interface utilisateur à effectuer sera de lister les enregistremen
 
 La liste sera un **DataGrid**. Il faut afficher à l'utilisateur la clé, le nom et la description dans la grille.
 
-## SuperCarte.EF
-
-### Seed
-
-Les tables **Categorie**, **Ensemble** et **Cartes** ne contiennent pas de données. Il faut donc créer une nouvelle migration qui contient ce nouveau **Seed**.
-
-Dans la méthode **Seed()** de la classe **SuperCarteContext**, il faut ajouter les données. Il est important de ne pas supprimer les données existantes, car la migration va croire qu'ils ne sont plus là, et donc qu'il faudrait les supprimer. 
-
-Pour ajouter des données, il faut créer un tableau qui contient les objets et l'ajouter à l'entité avec la méthode **HasData**.
-
-:::note
-Les autres tables sont aussi remplies à cause des dépendances des clés étrangères.
-:::
-
-Voici la méthode au complet.
-
-```csharp
-private void Seed(ModelBuilder modelBuilder)
-{
-    //Les données à ajouter
-    Role[] roles = 
-    {
-        new Role() 
-        { 
-            RoleId = 1,
-            Nom = "Administrateur"                
-        },
-        new Role()
-        {
-            RoleId = 2,
-            Nom = "Utilisateur"
-        },
-    };
-
-    Utilisateur[] utilisateurs =
-    {
-        new Utilisateur()
-        {
-            UtilisateurId = 1,
-            Prenom = "François",
-            Nom = "St-Hilaire",
-            NomUtilisateur = "fsthilaire",
-            MotPasseHash = "$2y$11$IY6NG9FkTSI1dnjLfSbuOuNkuyI7IZHxHSOD5Td6AlwvroUz/vzLK", //Native3! avec Bcrypt
-            RoleId = 1 //Admin
-        },
-        new Utilisateur()
-        {
-            UtilisateurId = 2,
-            Prenom = "Benoit",
-            Nom = "Tremblay",
-            NomUtilisateur = "btremblay",
-            MotPasseHash = "$2y$11$ewK3YsMGQ1IMKEzJUAjyVe0P19I0gEbTO998mwfVbSSA8nZ6MG/ha", //Web4MVC! avec Bcrypt
-            RoleId = 2 //Utilisateur
-        },
-        new Utilisateur() 
-        {
-            UtilisateurId = 3,
-            Prenom = "Tony",
-            Nom = "Stark",
-            NomUtilisateur = "tstark",
-            MotPasseHash = "$2y$11$VfcNowkWResPQKl0AA3MJ.w1LXBqmMM77YKlyf32Glr9TWG4xxyD2", //#NotAdmin! avec Bcrypt
-            RoleId = 2 //Utilisateur
-        }
-    };
-
-//highlight-start
-    Categorie[] categories =
-    {
-        new Categorie()
-        {
-            CategorieId = 1,
-            Nom = "Animaux magiques",
-            Description = null
-        },
-        new Categorie()
-        {
-            CategorieId = 2,
-            Nom = "Orcs",
-            Description = "Les orcs sont une race de guerrier."
-        },
-        new Categorie()
-        {
-            CategorieId = 3,
-            Nom = "Mages",
-            Description = "Les mages ont des pouvoirs magiques."
-        }
-    };
-
-    Ensemble[] ensembles =
-    {
-        new Ensemble()
-        {
-            EnsembleId = 1,
-            Nom = "Ensemble de départ",
-            Disponibilite = new DateTime(2020,5,12)
-        }
-    };
-
-    Carte[] cartes =
-    {
-        new Carte()
-        {
-            CarteId = 1,
-            Nom = "Lion des marais",
-            Armure = 0,
-            Vie = 12,
-            Attaque = 2,
-            EstRare = false,
-            PrixRevente = 0.02m,
-            CategorieId = 1,
-            EnsembleId = 1
-        },
-        new Carte()
-        {
-            CarteId = 2,
-            Nom = "Corbeau vampire",
-            Armure = 0,
-            Vie = 2,
-            Attaque = 12,
-            EstRare = true,
-            PrixRevente = 1.20m,
-            CategorieId = 1,
-            EnsembleId = 1
-        },
-        new Carte()
-        {
-            CarteId = 3,
-            Nom = "Grunty",
-            Armure = 5,
-            Vie = 25,
-            Attaque = 5,
-            EstRare = false,
-            PrixRevente = 0.20m,
-            CategorieId = 2,
-            EnsembleId = 1
-        }
-    };
-//highlight-end
-
-    //Ajout dans les tables
-    modelBuilder.Entity<Role>().HasData(roles);
-    modelBuilder.Entity<Utilisateur>().HasData(utilisateurs);
-	//highlight-start
-    modelBuilder.Entity<Categorie>().HasData(categories);
-    modelBuilder.Entity<Ensemble>().HasData(ensembles);
-    modelBuilder.Entity<Carte>().HasData(cartes);
-	//highlight-end
-}
-```
-
-Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. Il est important que le **Projet par défaut** de **Entity Framework** soit sélectionné dans la console. Pour ce projet, ce doit être **SuperCarte.EF**. À ce stade, il y a **plusieurs projets** et celui sélectionné par défaut sera **WPF**. Il est important de le modifier dans la liste.
-
-Pour ce projet, utilisez cette chaine de connexion. Le nom de la base de données est **eDA_4N1_SuperCarte**. Modifiez le **DA** par votre numéro d'admission.
-
-```powershell
-$env:MIGRATION_CONNECTION_STRING = "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;"
-```
-
-Voici la commande avec le **Trusted_Connection=True;** , si vous avez l'erreur **SSL**.
-
-```powershell
-$env:MIGRATION_CONNECTION_STRING = "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;Trust Server Certificate=True;"
-```
-
-Ensuite, il faut créer la migration **Seed_Carte** avec **Add-Migration**.
-
-```
-Add-Migration Seed_Carte -StartupProject SuperCarte.EF
-```
-
-Appliquez les modifications à la base de données. Spécifiez la migration **Seed_Carte**.
-
-```powershell
-Update-Database -StartupProject SuperCarte.EF -Migration Seed_Carte
-```
-
 ## SuperCarte.Core
 
 ### Modèle du domaine
 
 
 Dans le projet **SuperCarte.Core**, il faut créer la classe **CategorieModel.cs** dans le dossier **Models**.
+
+Commencez par créer le dossier **Models** s'il n'est pas déjà là.
 
 La classe contient les 3 propriétés nécessaires pour effectuer des actions dans le logiciel.
 
@@ -465,13 +291,34 @@ return lstCategorie.VersCategorieModel(); //Équivalent à (await _categorieRepo
 Il faut enregistrer le service dans la classe **SCServiceExtensions** du  répertoire **Extensions/ServiceCollections**.
 
 ```csharp
-public static void EnregistrerServices(this IServiceCollection services)
+using Microsoft.Extensions.DependencyInjection;
+
+namespace SuperCarte.WPF.Extensions.ServiceCollections;
+
+/// <summary>
+/// Classe d'extension qui permet d'enregistrer les classes de la catégorie Service
+/// </summary>
+public static class SCServiceExtensions
 {
-    services.AddScoped<ICategorieService, CategorieService>();
+    /// <summary>
+    /// Méthode qui permet d'enregistrer les services de l'application
+    /// </summary>
+    /// <param name="services">La collection de services</param>
+    public static void EnregistrerServices(this IServiceCollection services)
+    {
+        //highlight-next-line
+              services.AddScoped<ICategorieService, CategorieService>();
+      
+    }
 }
 ```
 
 Le service est également enregistré en **Scoped** pour permettre d'utiliser la même instance dans le programme dans le même **scope**.
+
+:::warning Important
+Si ce n'est pas déjà fait, ajoutez l'appel à **EnregistrerServices** dans **App.xaml.cs/App**
+:::
+
 
 ### Ajout de références dans Usings.cs
 
@@ -494,9 +341,7 @@ Premièrement, il faut définir les éléments que la **Vue** a besoin de connai
 
 Pour la liste des catégories, il faut une **List\<CategorieModel\>** à la ligne 14. Cette liste sera affichée à l'utilisateur. Le choix de comment l'afficher sera dans la vue.
 
-Il faut également la propriété pour connaitre la catégorie qui est sélectionnée dans la liste (ligne 52).
-
-En **MVVM**, il n'est pas possible d'utiliser une propriété auto-implémentée si elle est liée à la vue, car il faut de notifier le changement de valeur. Il faut donc de la logique dans le **set**. Lorsqu'il y a de la logique, il faut utiliser un attribut pour contenir la valeur de la propriété.
+Il faut également la propriété **CategorieSelection** pour connaitre la catégorie qui est sélectionnée dans la liste (ligne 52). En **MVVM**, il n'est pas possible d'utiliser une propriété auto-implémentée si elle est liée à la vue, car il faut de notifier le changement de valeur (ligne 60). Il faut donc de la logique dans le **set**. Lorsqu'il y a de la logique, il faut utiliser un attribut pour contenir la valeur de la propriété (ligne 15).
 
 Ensuite, il faut injecter les dépendances à la ligne 11, car les catégories seront obtenues par le service.
 
@@ -519,10 +364,13 @@ namespace SuperCarte.WPF.ViewModels;
 public class ListeCategoriesVM : BaseVM
 {
     //Dépendances
+    //highlight-next-line
     private readonly ICategorieService _categorieService;
 
     //Attributs des propriétés
+    //highlight-next-line
     private List<CategorieModel>? _lstCategories;
+    //highlight-next-line
     private CategorieModel? _categorieSelection;
 
     /// <summary>
@@ -533,18 +381,21 @@ public class ListeCategoriesVM : BaseVM
     {
         _categorieService = categorieService;
 
+//highlight-next-line
         ObtenirListeCommande = new AsyncRelayCommand(ObtenirListeAsync);
     }
 
     /// <summary>
     /// Obtenir la liste de catégories du service
     /// </summary>    
+    //highlight-next-line
     private async Task ObtenirListeAsync()
     {
         ListeCategories = await _categorieService.ObtenirListeAsync();
     }
 
     //Commandes
+    //highlight-next-line
     public IAsyncRelayCommand ObtenirListeCommande { get; set; }
 
     //Propriétés liées
@@ -560,6 +411,7 @@ public class ListeCategoriesVM : BaseVM
         }
     }
 
+//highlight-next-line
     public CategorieModel? CategorieSelection
     {
         get
@@ -568,6 +420,7 @@ public class ListeCategoriesVM : BaseVM
         }
         set
         {
+            //highlight-next-line
             SetProperty(ref _categorieSelection, value);
         }
     }
@@ -589,6 +442,8 @@ public static void EnregistrerViewModels(this IServiceCollection services)
 
 ### Création de la vue - UcListeCategories.xaml
 
+Créez le dossier **SuperCarte.WPF/Views** si nécessaire. 
+
 Créez un **Contrôle utilisateur (WPF)** nommé **UcListeCategories.xaml** dans le dossier **Views**. Le modèle se retrouve dans la section **WPF** à gauche.
 
 Toutes les **Vues** seront du type  **Contrôle utilisateur (WPF)**.
@@ -605,6 +460,7 @@ Toutes les **Vues** seront du type  **Contrôle utilisateur (WPF)**.
              mc:Ignorable="d"              
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+    //highlight-next-line
         <Grid.RowDefinitions>
              <!--Rangée 0 -->
             <RowDefinition Height="auto" /> 
@@ -617,12 +473,14 @@ Toutes les **Vues** seront du type  **Contrôle utilisateur (WPF)**.
         </Grid.RowDefinitions>           
         
          <!--Rangée 0-->
+         //highlight-next-line
         <TextBlock 
             Grid.Row="0" 
             VerticalAlignment="Center" HorizontalAlignment="Center"
             FontSize="16" FontWeight="Bold"
             Text="Liste des catégories"/>
         
+        //highlight-next-line
         <!--Rangée 1-->
         <WrapPanel Grid.Row="1" 
                     Orientation="Horizontal" VerticalAlignment="Center">
@@ -635,20 +493,25 @@ Toutes les **Vues** seront du type  **Contrôle utilisateur (WPF)**.
                     Margin="5" Width="32" Height="32" />
             <Button Content="R" ToolTip="Rafraichir"
                     Margin="5" Width="32" Height="32"
+                    //highlight-next-line
                     Command="{Binding ObtenirListeCommande}" />
         </WrapPanel>
 
         <!--Rangée 2-->
+        //highlight-start
         <DataGrid Grid.Row="2" 
                   AutoGenerateColumns="False"
                   SelectionMode="Single" 
                   IsReadOnly="True"
                   ItemsSource="{Binding ListeCategories}"
                   SelectedItem="{Binding CategorieSelection}">
+                  //highlight-end
             <DataGrid.Columns>
+            //highlight-start
                 <DataGridTextColumn Header="Id"
                                     MinWidth="50"
                                     Binding="{Binding CategorieId}"/>
+                                    //highlight-end
                 
                 <DataGridTextColumn Header="Nom"
                                     MinWidth="300"
@@ -657,6 +520,7 @@ Toutes les **Vues** seront du type  **Contrôle utilisateur (WPF)**.
                 <DataGridTextColumn Header="Description"                                    
                                     Binding="{Binding Description}"
                                     MinWidth="300"
+                                    //highlight-next-line
                                     Width="*"/>
 
             </DataGrid.Columns>
@@ -707,7 +571,9 @@ La propriété **Header** est pour le nom de la colonne. La propriété **Bindin
 
 À la ligne 61, la largeur de la colonne est **Width="*"**, ce qui indique qu'elle prendra l'espace restant. Si l'espace restant est plus petit que 300, la colonne restera à 300, car la propriété **MinWidth="300"** (ligne 58).
 
-
+:::tip
+Pour le tp3, pourquoi ne pas faire un détour à la section **Localisation de .xaml** immédiatement... 
+:::
 
 ### Ajout de la ressource pour créer le lien entre ViewModel et Vue - MainWindow.xaml
 
@@ -721,6 +587,7 @@ Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue**
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SuperCarte.WPF"  
         xmlns:vm="clr-namespace:SuperCarte.WPF.ViewModels"
+        //highlight-next-line
         xmlns:v="clr-namespace:SuperCarte.WPF.Views"        
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=vm:MainWindowVM}"
@@ -743,6 +610,7 @@ Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue**
     </Grid>
 </Window>
 ```
+La ligne 8 ajoute les Views dans l'espace de nom. 
 
 La ligne 19 à 21 indique que lorsque le **DataContext** est de type **ListeCategoriesVM** (ligne 19), il faut utiliser le contrôle utilisateur **UcListeCategories** (ligne 20).
 

@@ -13,7 +13,9 @@ Dans cette section, nous allons diverger un peu du projet SuperCarte afin d'intr
 Ca ne doit pas être reproduit dans votre **TP 3**. Nous allons utiliser ces concepts un peu différemment dans le projet SuperCarte. 
 :::
 
-
+:::info
+Toutes les notions utilisées dans cette section seront reprises dans le projet principale. Lors de la construction du TP3, vous pouvez sauter la lecture jusqu'à la section **Liste des Catégories**
+:::
 
 ## Création du ViewModel - HelloWorldVM
 

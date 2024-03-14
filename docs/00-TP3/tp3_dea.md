@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-draft: true
+draft: false
 ---
 
 # TP3 DEA
@@ -31,7 +31,7 @@ erDiagram
     um[UtilisateurMusique] {
         int UtilisateurId PK,FK
         int MusiqueId PK,FK
-        float Prix "contrainte >= 0. Le prix payé si acheté, voir commentaire"
+        decimal  Prix "decimal(8,2), contrainte >= 0. Le prix payé si acheté, voir commentaire"
         int Etoile "contrainte: 1 à 5"
         bool Achete "contrainte default: false. Vrai si achetée, Faux si simplement téléchargée"
 
@@ -41,10 +41,11 @@ erDiagram
         int MusiqueId PK "auto"
         nvarchar(100) Titre
         nvarchar(100) Album
-        date DateSortie "contrainte > 1970 et < année courante"
+        dateonly DateSortie "contrainte >= 1970 et <= année courante"
         int Duree "contrainte > 0"
         int ArtisteId FK
         int GenreId FK
+        int MaisonEditionId FK
     }
 
     ge[Genre] {
@@ -59,18 +60,22 @@ erDiagram
         nvarchar(60) Nom
         nvarchar(500) Biographie "nullable"
         nvarchar(256) SiteWeb "nullable, voir commentaire"
-        date DateNaissance "contrainte > 1900 et < date courante"
+        dateonly DateNaissance "contrainte >= 1900 et <= date courante"
     }
 
     me[MaisonEdition] {
         int MaisonEditionId PK "auto"
         nvarchar(60) Nom "voir commentaire"
-        nvarchar(200) Adresse
+        nvarchar(200) Adresse "nullable"
         nvarchar(256) SiteWeb "nullable, voir commentaire"
     }
 ```
 
-Ce diagramme sur [mermaid.ink](https://mermaid.ink/img/pako:eNq1Vdtu2zAM_RVCTyvgBrYzJ42xFciQdhu6FMW6C7BkD4qtJgIsyZOlrl2af9lrvyM_NsqNW-fibA-dAwSxziFFHjLknCQqZSQmTA84nWoqxhLw0Qru7g4P1RysgRjGBD8lgK8VINYAYRuAKasApNQBqhsAscuiimv0UWXsO8wf3t3DpQF3-D6Fi7OnY3lNdTKj-kUYHcC5EugnUdJoinwGVvIflnlwTTNmdQw0FVx6YAs6ZboKZFHlPPpseMYLapC7dXcNK0PAi6g1qnKyFkvkH8CFZlKJBvB8JxI8ILWbGrJRXEOihGDSUK5ZPYbSUQcdDZW5oEXB3tFihm5s6ZRpyPHwp9Jp3aim7enZoygrWURdlqEtXAx_Vcc7PVsnrAy3watMUYNq8Zv1ZI9fg9-CDwxyB-X0dnkPBQeazJhZ3u8XwV14YhTP2JrPGAJY_oaoTp0olUHfOV3nQsquqM1MDFc0K1gLvuB5LQAswym1N-6k4CLPmIsDEMiW964GU6Q8NfQCql_Cjpo0rEu0r7sCH8v7iRvMuQHsZxNba7AU6wID_LpU2vCNPI8h6HV9YAZeAZUSw0ZVraaIbUo6sJptWfubrD7eUZh6L1XIWyb1zh6bslGJbUlSWewXpONXf_19TfE0KZxEA1YkmueGK4l20mYZnWQN_KhzAJfcsK9sUuM2t-BjXlSPVmpsZfak0j_ltnOOIPSGKxzn-ays6vNmsdY555QXBZXJjubxV81Tcjdb51EKwUZD9KHkScqd6NvdX0f_S8n7qWY4EJ-lwsQjgmlBeYpbtcxkTMwMh8CYuFW2Gh6O7qgujctbmZDYaBzgxOZOrNUqJnE5YTzCMHelhw-bulzYHsmpJPGc3JD48GXrZdv3g3bQ7XW7PT9qe-SWxGEUtEL_6KgXHoVh2Ik64cIjv5RCt0HLb7c7UeQMgrAbdsLS37cSdIEs_gBUU4Qc?type=png)
+Ce diagramme sur [mermaid.ink](https://mermaid.ink/img/pako:eNqtVdtu2kAQ_ZXRPhXJQTZgLlZTiYqkrVKiqOlFKvRhsTewkneXrnfTUMK_9DXfwY911sGJuZj2IebF3jMze-bMMLMksUoYiQjTA06nmoqxBHy0gvv7kxO1BGsggjHBXw7gZwGILUDYCmDKCgBNygDVFYA45FHwGn1SKfsBy8dv93BpwB1-SODq4vlY3lIdz6h-1QhrcKkExomVNJqiPQMr-U_LPLilKbM6ApoILj2wGZ0yXRBZFTmPvhie8owatN27u4TlFPAiao0qgmxxCf0aXGkmlagALw8iwSNSuqkiG8U1xEoIJg3lmpU55IHaGGiozBXNMvaeZjMMY_OgTMMcD38pnZSdStqeXzyJspFFlGUZ2sxx-Kc63vnFtsHGcR9MWMwFTQEF43dIdPP9qus1ah6Usn9zCn4dPjKYO8M5XawfIONA4xkz64fjqjgGZ0bxlG0pGkEA6z8Qlk0nSqXQd0G3bZHoDbWpieCGphmrw1c8LxHAupxTe-dOMi7mKXM8AIF0_eCKMkWT5w5fQfEm7KhK1LJmx9ot8LHen7nBnCvAfjqxpY5LsFBKpgsY4Mu10obv5IpaB72OD8zA61OgUiJ51NZqiuiusAOr2a4_-LtWfbwlM-UWK5B3TOpD50PKMyXPEm64kodac8pGue-ecEXE47K1_WJiHGud5wHjhBywLNZ87hihn7RpSidphX3YrsE1N-wbm5Rsqxv1KS-qRxu19jJ7VvG_cjs4fhB6yxVugfksr_vLZrHXX5dYxozK-FCL-UWLOY-9BnsSRLDRVjPs_1N2WuXlC99PNMNp-vJFJx4RTAvKE9zPeVpjYmY4PcYkysdhPnWcuTN1OV0vZEwio3EVEDt3ym2WOony0eQRhkIoPXzc-fnq98icShItyR2JgqBZb_lBs9totdqNbs9ve2RBoqbfqfuBH_Qa3U7g95qdcOWR30ph2KAe-j2_0wp7nUbYbHTzaN9zyNFY_QXReps7?type=png)
+
+:::warning Avertissement
+En cas de différence entre le diagramme sur cette page et celui sur mermaid.ink, c'est celui sur cette page qui est la bonne version
+:::
 
 
 ## Commentaires

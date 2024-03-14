@@ -151,6 +151,7 @@ La méthode **Dispose** ferme la connexion.
 
 Il est préférable d'utiliser un bloc de code **using**. La méthode **Dispose** est appelée automatiquement lorsque le bloc de code est terminé.
 
+<!-- ajouter que le context doit avoir une vie la plus courte possible https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/ il ne faut donc pas créer un context dans le main et le passer en paramètre. Dans WPF, le context sera injecté -->
 ```csharp
 using (UniversContext db = new UniversContext())
 {

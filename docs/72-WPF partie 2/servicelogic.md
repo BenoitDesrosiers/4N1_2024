@@ -5,6 +5,9 @@ draft: false
 
 # Lien entre les couches
 
+Voici un bref résumé de ce que fait chaque éléments dans chaque couche
+
+
 * EF 
     * dbset : lien entre les classes de données et les tables
     * classes de données: entité représentant les tables de la bd
@@ -16,5 +19,5 @@ draft: false
     * classes modèle du domaine : représente ce que le domaine a besoin
 
 * WPF
-  * VM : logique de l'application, converti les propriétés liées à la vue en objet du domaine (et vice-versa) et appel les services pour les enregistrer (ou charger)
+  * VM : logique de la vue (interaction, changement de comportement), converti les propriétés liées à la vue en objet du domaine (et vice-versa) et appel les services pour les enregistrer (ou charger)
   * vue : affichage, liée aux propriétés du VMs 

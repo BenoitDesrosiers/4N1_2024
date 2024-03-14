@@ -32,6 +32,7 @@ public class ListeCategoriesVM : BaseVM
     private List<CategorieModel> _lstCategories;
     //highlight-next-line
     private bool _estEnTravail = false;
+    private CategorieModel? _categorieSelection;
 
     /// <summary>
     /// Constructeur
@@ -88,6 +89,18 @@ public class ListeCategoriesVM : BaseVM
             SetProperty(ref _lstCategories, value);
         }
     }
+
+    public CategorieModel? CategorieSelection
+{
+    get
+    {
+        return _categorieSelection;
+    }
+    set
+    {
+        SetProperty(ref _categorieSelection, value);
+    }
+}
 }
 ```
 

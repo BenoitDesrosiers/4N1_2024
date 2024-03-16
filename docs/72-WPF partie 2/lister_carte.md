@@ -60,6 +60,7 @@ La 2e option est de créer l'objet directement dans la requête du **Repository*
 Dans l'interface **ICarteRepo.cs**.
 
 ```csharp
+//highlight-next-line
 using SuperCarte.Core.Models;
 using SuperCarte.Core.Repositories.Bases;
 using SuperCarte.EF.Data;
@@ -84,7 +85,9 @@ public interface ICarteRepo : IBasePKUniqueRepo<Carte, int>
 Dans la classe **CarteRepo.cs**.
 
 ```csharp showLineNumbers
+//highlight-next-line
 using Microsoft.EntityFrameworkCore;
+//highlight-next-line
 using SuperCarte.Core.Models;
 using SuperCarte.Core.Repositories.Bases;
 using SuperCarte.EF.Data;
@@ -138,6 +141,7 @@ Les jointures sont effectuées aux lignes 37 et 39 par la propriété de navigat
 Créez l'interface **ICarteService.cs** dans le dossier **Services**.
 
 ```csharp
+//highlight-next-line
 using SuperCarte.Core.Models;
 
 namespace SuperCarte.Core.Services;

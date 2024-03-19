@@ -168,6 +168,7 @@ Si ce n'est pas déjà fait, ajoutez l'appel à **EnregistrerViewModels** dans *
 Modifiez le code de la fenêtre **MainWindows.xaml**.
 
 ```xaml showLineNumbers
+
 <Window x:Class="SuperCarte.WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

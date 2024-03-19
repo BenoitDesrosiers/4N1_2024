@@ -216,7 +216,7 @@ La propriété de liaison est maintenant le **Navigateur** et non directement **
 
 Il n'est pas possible de le faire comme ci-dessous. Car la **Vue** est liée à la propriété parent et elle ne considèrera pas la notification de changement de la propriété enfant **_navigateur.ActiveVM** comme lui appartenant. La notification doit se faire directement sur la propriété qui est liée. Il n'est pas possible de recevoir la notification par des intermédiaires.
 
-```csharp showLineNumbers
+```csharp showLineNumbers title="NE PAS COPIER"
 public BaseVM ActiveVM
 {
     get

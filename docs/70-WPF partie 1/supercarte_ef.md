@@ -279,7 +279,7 @@ Il faut faire cette étape à chaque démarrage de **Visual Studio** s'il est n�
 
 Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. 
 
-:::danger Important
+:::warning Important
 Il est important que le **Projet par défaut** de **Entity Framework** soit sélectionné dans la console. Pour ce projet, ce doit être **SuperCarte.EF**. 
 :::
 
@@ -287,10 +287,16 @@ Il est important que le **Projet par défaut** de **Entity Framework** soit sél
 
 Pour ce projet, utilisez cette chaine de connexion. Le nom de la base de données est **eDA_4N1_SuperCarte**. 
 
-:::danger Attention
+Si vous oubliez cette étape, vous allez avoir ce message lors de l'utilisation des commandes de migration. C'est l'exception de la ligne 46 de la classe du contexte.
+
+```
+La variable SQL_CONNECTION_STRING n'est pas spécifiée. Effectuez la commande suivante dans la Console du Gestionnaire de package : $env:MIGRATION_CONNECTION_STRING="{ma chaine de connexion}" 
+```
+
+:::warning Attention
 Modifiez le **DA** par votre numéro d'admission.
 :::
-
+### pour se connecter sur localhost
 ```powershell
 $env:MIGRATION_CONNECTION_STRING = "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;"
 ```
@@ -301,11 +307,21 @@ Voici la commande avec le **Trusted_Connection=True;** , si vous avez l'erreur *
 $env:MIGRATION_CONNECTION_STRING = "Server=localhost\SQLExpress;Database=eDA_4N1_SuperCarte;Trusted_Connection=True;Trust Server Certificate=True;"
 ```
 
-Si vous oubliez cette étape, vous allez avoir ce message lors de l'utilisation des commandes de migration. C'est l'exception de la ligne 46 de la classe du contexte.
+### pour se connecter sur le serveur du département
 
+```powershell
+$env:MIGRATION_CONNECTION_STRING = "Server=info420.cegepdrummond.ca;Database=eDA_4N1_SuperCarte;User Id=eDA;password=votre_mot_de_passe; Trust Server Certificate=true;";
 ```
-La variable SQL_CONNECTION_STRING n'est pas spécifiée. Effectuez la commande suivante dans la Console du Gestionnaire de package : $env:MIGRATION_CONNECTION_STRING="{ma chaine de connexion}" 
-```
+
+Notez que **User Id** est en 2 mots séparé par un **espace**; et que votre id est **e** suivit de votre **DA**.
+
+:::danger  IMPORTANT
+Bien entendu, ce mot de passe est en clair dans la chaine de connexion... veuillez donc utiliser un mot de passe que vous n'utilisez pas ailleurs.
+
+Si vous avez utilisez un mot de passe que vous utilisez ailleurs, veuillez le changer. 
+:::
+
+
 
 ### Création du fichier de migration
 

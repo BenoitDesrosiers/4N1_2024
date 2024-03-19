@@ -69,6 +69,8 @@ public async Task<bool> AjouterAsync(CategorieModel categorieModel)
 }
 ```
 
+Ajoutez aussi le **using de SuperCarte.EF.Data** si nécessaire. 
+
 Il faut convertir l'objet **CategorieModel** en **Categorie** (ligne 4), car le **Repository** utilise le modèle de données.
 
 Il faut mettre à jour les valeurs dans l'objet du domaine, principalement pour connaitre la clé primaire (ligne 10). Il n'est pas nécessaire au **Respository** de retourner l'objet, car il met à jour la même instance (paramètre par référence... comme la majorité du temps en OO). Le même principe sera utilisé pour le service.

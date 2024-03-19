@@ -65,7 +65,11 @@ Vous devez créer un fichier **Readme** contenant les commandes pour la migratio
 ## Insertion de données à l'aide de Bogus (en équipe)
 
 
-Vous devez insérer de l'information dans les tables Musique, Utilisateur et UtilisateurMusique (et Artiste pour les équipes de 2) à l'aide de Bogus. Un appel au générateur ajoutera de 5 à 10 entrées par table. 
+Vous devez insérer de l'information dans les tables Musique, Utilisateur et UtilisateurMusique (et Artiste pour les équipes de 2) à l'aide de Bogus.
+
+Les générateurs de Bogus doivent être dans le module WPF. Vous devez ajouter une option dans le menu de navigation permettant de générer de nouvelles entrées à la demande. Un appel au générateur ajoutera de 5 à 10 entrées par table. Aucun "feedback" est nécessaire. Pour vérifier si ca fonctionne, il faudra aller voir avec SSMS.  
+
+Bogus peut se connecter directement sur la BD. Vous n'avez pas à passer par les Services de Core. 
 
 Pour la table Utilisateur, le mot de passe est toujours **password**.
 
@@ -74,10 +78,10 @@ voir les modules ci-bas pour l'assignation des tables pour chacun des membres de
 :::
 
 :::tip
-Étant donné que l'insertion originale à l'aide de BOGUS pour les tables Genre, MaisonEdition, et potentiellement Artiste se fera individuellement, vous pouvez insérer UNE entrée par table à l'aide du contexte. 
+Étant donné que l'insertion originale à l'aide de BOGUS pour les tables Genre, MaisonEdition, et potentiellement Artiste se fera individuellement, vous pouvez insérer quelques entrées par table à l'aide du contexte. 
 :::
 
-Les générateurs de Bogus doivent être dans le module WPF. Vous devez ajouter une option dans le menu de navigation permettant de générer de nouvelles entrées à la demande. 
+
 
 
 ## Authentification et autorisation (en équipe)

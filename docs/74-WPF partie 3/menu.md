@@ -31,18 +31,20 @@ public class MainWindowVM : BaseVM
         //Sélectionner le ViewModel de démarrage        
         _navigateur = navigateur;
 
+//highlight-start
         //Création des commandes
         NaviguerListeCartesVMCommande = new RelayCommand(_navigateur.Naviguer<ListeCartesVM>);
         NaviguerListeCategoriesVMCommande = new RelayCommand(_navigateur.Naviguer<ListeCategoriesVM>);
-
+//highlight-end
         //Vue initiale
         _navigateur.Naviguer<ListeCartesVM>();
     }
 
+//highlight-start
     public IRelayCommand NaviguerListeCartesVMCommande {  get; private set; }
 
     public IRelayCommand NaviguerListeCategoriesVMCommande { get; private set; }
-
+//highlight-end
     public INavigateur Navigateur
     { 
         get

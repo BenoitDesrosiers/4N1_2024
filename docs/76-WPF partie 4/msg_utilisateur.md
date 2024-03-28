@@ -87,6 +87,7 @@ public App()
         //Enregistrement des classes d'assistance
         services.AddSingleton<INavigateur, Navigateur>();
         services.AddSingleton<IAuthentificateur, Authentificateur>();
+        //highlight-next-line
         services.AddSingleton<INotification, Notification>();
 
         //Appel des méthodes d'extension                        
@@ -138,12 +139,12 @@ public class ListeCategoriesVM : BaseVM
     /// Constructeur
     /// </summary>
     /// <param name="authentificateur">La classe d'assistance d'authentification</param>
+    //highlight-next-line
     /// <param name="notification">La classe d'assistance pour la notification</param>
     /// <param name="categorieService">Service du modèle Categorie</param>
     /// <param name="navigateur">La classe d'assistance Navigateur</param>
 //highlight-next-line
-	public ListeCategoriesVM(IAuthentificateur authentificateur, INotification notification,
-        ICategorieService categorieService, INavigateur navigateur)
+    public ListeCategoriesVM(IAuthentificateur authentificateur, INotification notification, ICategorieService categorieService, INavigateur navigateur)
     {
         _authentificateur = authentificateur;
         //highlight-next-line
@@ -159,11 +160,12 @@ public class ListeCategoriesVM : BaseVM
             EditerCommande = new RelayCommand(() => _navigateur.Naviguer<GestionCategorieVM, int>(CategorieSelection.CategorieId),
                                               () => CategorieSelection != null);
         }
+        //highlight-start
         else
         {
-            //highlight-next-line
             _notification.MessageErreur("Accès non autorisé.", "Vous n'avez pas accès à cette vue.");
         }
+        //highlight-end
     }
 
     /// <summary>
@@ -177,11 +179,12 @@ public class ListeCategoriesVM : BaseVM
         {
             ListeCategories = await _categorieService.ObtenirListeAsync();
         }
+        //highlight-start
         else
         {
-            //highlight-next-line
             _notification.MessageErreur("Accès non autorisé.", "Vous n'avez pas accès à cette fonctionnalité.");
         }
+//highlight-end
 
         EstEnTravail = false;
     }
@@ -199,11 +202,12 @@ public class ListeCategoriesVM : BaseVM
 
             await ObtenirListeAsync();
         }
+        //highlight-start
         else
         {
-            //highlight-next-line
             _notification.MessageErreur("Accès non autorisé.", "Vous n'avez pas accès à cette fonctionnalité.");
         }
+//highlight-end
 
         EstEnTravail = false;
     }
@@ -298,7 +302,7 @@ public class ListeCategoriesVM : BaseVM
 
 Testez l'application avec les 2 utilisateurs. Avec **fsthilaire**, la vue sera accessible et fonctionnelle. Avec **tstark**, il y aura le message d'erreur.
 
-Connectez-vous avec l'utilisateur **fsthilaire**. Modifiez le rôle de l'utilisateur pendant que l'utilisateur est connecté. Appuyez sur le bouton **R**. Vous allez recevoir un message.
+Connectez-vous avec l'utilisateur **fsthilaire**. Modifiez le rôle de l'utilisateur directement dans la bd pendant que l'utilisateur est connecté. Appuyez sur le bouton **R**. Vous allez recevoir un message.
 
 ```sql
 UPDATE utilisateur SET RoleId = 2 WHERE UtilisateurId = 1;
@@ -309,34 +313,4 @@ Remettez l'utilisateur **fsthilaire** en tant qu'administrateur.
 ```sql
 UPDATE utilisateur SET RoleId = 1 WHERE UtilisateurId = 1;
 ```
-
-## Confirmation de la sauvegarde - Explication TP 3
-
-À la fin d'une sauvegarde, il faut un indicateur visuel pour l'utilisateur. Il existe plusieurs façons d'indiquer à l'utilisateur que le formulaire est sauvegardé comme verrouiller le formulaire, écrire un message d'état ou une notification.
-
-Pour le **TP 3**, vous devez afficher un **MessageBox** à l'utilisateur pour indiquer que l'item est bien sauvegardé.
-
-Il faut mettre une icône d'information pour **MessageBoxImage**.
-
-Pour plus d'information sur le **MessageBox** : https://wpf-tutorial.com/fr/45/dialogs/la-messagebox/
-
-## Question pour la suppression - Explication TP 3
-
-Avant de supprimer, il faut également demander à l'utilisateur s'il accepte de faire la suppression. Pour le **TP 3**, vous devez faire cette mécanique à partir de la liste et également à partir de la vue de gestion.
-
-Dans la classe d'assistance **Notification**, vous devez ajouter une nouvelle méthode qui demande une acceptation à l'utilisateur. Si la méthode doit retourner un booléen. Si la méthode retourne **true**, c'est accepté, si c'est **false**, ce n'est pas accepté.
-
-Dans l'implémentation de la méthode, il faut utiliser un **MessageBox**.
-
-La méthode **MessageBox.Show** retourne une **enum** de type **MessageBoxResult**. 
-
-Le résultat est en fonction du bouton qui a été appuyé par l'utilisateur. 
-
-Pour afficher les boutons, il faut spécifier le bon **MessageBoxButton**.
-
-Il faut également mettre une icône pour une question ou un avertissement avec le **MessageBoxImage**.
-
-Il faut convertir le choix du bouton en booléen. 
-
-Pour plus d'information sur le **MessageBox** : https://wpf-tutorial.com/fr/45/dialogs/la-messagebox/
 

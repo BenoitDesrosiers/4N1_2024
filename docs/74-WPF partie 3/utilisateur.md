@@ -1,9 +1,12 @@
 ---
 sidebar_position: 350
-draft: true
+draft: false
 ---
 
 # Gestion d'un utilisateur
+
+Dans cette section, nous allons construire l'interface permettant la gestion d'un utilisateur. 
+
 
 Pour l'utilisateur, le validateur devra s'assurer que le nom d'utilisateur n'est pas déjà utilisé.
 
@@ -11,15 +14,17 @@ Pour l'utilisateur, le validateur devra s'assurer que le nom d'utilisateur n'est
 
 Dans une fenêtre de gestion utilisateur, généralement, il est seulement possible de mettre un mot de passe lors de la création. S'il l'administrateur doit réinitialiser le mot de passe, il s'agit d'une action distincte. Donc pour cette gestion, il ne sera pas possible de modifier le mot de passe en mode **modification**. 
 
-Pour la sélection du rôle, il est préférable d'utiliser un **combobox** pour faire la sélection dans une liste. Il faut obtenir les éléments disponibles de la liste.
+Étant donné qu'un utilisateur à un rôle, il faut aller chercher les rôles disponibles et permettre à l'usager d'en choisir un. Un ComboBox sera utilisé pour faire cet affichage. 
 
 ## SuperCarte.Core - Combobox
 
 Cette section explique comment avoir les éléments nécessaires dans la logique d'affaires pour faire fonctionner une **ComboBox**.
 
+Pour faire fonctionner un ComboBox ca prend 2 items: un texte qui sera affiché à l'écran, et une valeur qui sera la clé de l'enregistrement représenté par ce texte. 
+
 ### Création du modèle - ListeItem
 
-Le modèle **ListeItem** permet de créer un item simple avec une valeur et un texte. La valeur est généralement la clé et le texte est libellé qui représente bien la valeur. Le **Combobox** utilisera cette classe.
+Le modèle **ListeItem** permet de créer un item simple avec une valeur et un texte. La valeur est généralement la clé et le texte est libellé qui représente la valeur. Le **Combobox** utilisera cette classe.
 
 Créez la classe **ListeItem.cs** dans le dossier **Models** du projet **SuperCarte.Core**.
 
@@ -68,9 +73,6 @@ public interface IRoleRepo : IBasePKUniqueRepo<Role,int>
 
 Modifiez la classe **RoleRepo.cs** pour le code ci-dessous.
 
-:::info
-Notez qu'en ouvrant ce fichier, il y a maintenant une erreur sur le constructeur car la classe RoleRepo n'implémente pas la nouvelle méthode ObtenirListeItem
-:::
 
 ```csharp showLineNumbers
 //highlight-next-line
@@ -114,7 +116,7 @@ public class RoleRepo : BasePKUniqueRepo<Role,int>, IRoleRepo
 
 Le service doit avoir une méthode qui obtient la liste de **ListeItem** pour les rôles.
 
-Il est également possible de considérer ceci comme une logique d'affaires, car le comportement doit être le même, peu importe la vue. Pour ce projet et le **TP 3**, ce sera cette approche.
+<!-- Il est également possible de considérer ceci comme une logique d'affaires, car le comportement doit être le même, peu importe la vue. Pour ce projet et le **TP 3**, ce sera cette approche. -->
 
 Créez l'interface **IRoleService.cs** dans le dossier **Services**.
 

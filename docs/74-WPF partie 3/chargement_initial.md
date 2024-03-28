@@ -1,6 +1,6 @@
 ---
 sidebar_position: 330
-draft: true
+draft: false
 ---
 
 # Chargement automatique

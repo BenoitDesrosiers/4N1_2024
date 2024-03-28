@@ -1,6 +1,6 @@
 ---
 sidebar_position: 320
-draft: true
+draft: false
 ---
 
 
@@ -141,11 +141,11 @@ public class GestionCategorieVM : BaseVM
     #endregion
 
     public GestionCategorieVM(ICategorieService categorieService)
-	{
+    {
         _categorieService = categorieService;
 
         EnregistrerCommande = new AsyncRelayCommand(EnregistrerAsync);
-		//highlight-next-line
+//highlight-next-line
         ObtenirCommande = new AsyncRelayCommand(ObtenirAsync);
         
         CategorieId = 2;//Pour test
@@ -161,7 +161,7 @@ public class GestionCategorieVM : BaseVM
         bool estEnregistre;
 
         CategorieModel categorieModel = VersModele();
-		
+
 //highlight-start	
         if (categorieModel.CategorieId == 0)
         {
@@ -180,7 +180,7 @@ public class GestionCategorieVM : BaseVM
         }
         else
         {
-			throw new Exception("Erreur. Impossible d'enregistrer");
+            throw new Exception("Erreur. Impossible d'enregistrer");
         }
 
         EstEnTravail = false;

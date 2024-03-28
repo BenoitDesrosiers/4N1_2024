@@ -61,10 +61,12 @@ private async Task AuthentifierAsync()
     {
         _navigateur.Naviguer<ListeCategoriesVM>();
     }
+    //highlight-start
     else
     {
         AjouterErreur(nameof(MotPasse), "La combinaison du nom d'utilisateur et du mot de passe n'est pas valide.");
     }
+//highlight-end
 
     EstEnTravail = false;
     ChampsModifiables = true;

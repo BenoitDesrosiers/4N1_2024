@@ -73,6 +73,8 @@ Le service doit avoir une méthode pour vérifier si l'utilisateur possède l'un
 
 Plusieurs rôles peuvent avoir accès à une fonctionnalité ou à une vue. Si l'utilisateur possède l'un de ses rôles, il sera autorisé.
 
+Ajoutez ce code dans **IUtilisateurService**
+
 ```csharp showLineNumbers
 /// <summary>
 /// Vérifier l'autorisation d'un utilisateur à partir de rôles autorisés en asynchrone.
@@ -91,7 +93,7 @@ Task<bool> AutoriserUtilisateurParRolesAsync(int utilisateurId, List<string> lst
 bool AutoriserUtilisateurParRoles(int utilisateurId, List<string> lstNomRole);
 ```
 
-Dans la classe **UtilisateurService**, ajoutez les 2 méthodes ci-dessous.
+Dans la classe **UtilisateurService**, ajoutez ces 3 méthodes 
 
 Il faut obtenir le rôle de l'utilisateur. Si le rôle est dans la liste des rôles autorisée, l'utilisateur reçoit l'autorisation. Si le rôle n'est pas dans la liste ou si l'utilisateur n'existe pas, il n'y a pas d'autorisation.
 
@@ -100,20 +102,20 @@ public async Task<bool> AutoriserUtilisateurParRolesAsync(int utilisateurId, Lis
 {
     Role? role = await _utilisateurRepo.ObtenirRoleUtilisateurAsync(utilisateurId);
 
-    if (role != null)
-    {
-        return lstNomRole.Contains(role.Nom);
-    }
-    else
-    {
-        return false;
-    }
+    return RoleAutorise(role, lstNomRole);
+
 }
 
 public bool AutoriserUtilisateurParRoles(int utilisateurId, List<string> lstNomRole)
 {
     Role? role = _utilisateurRepo.ObtenirRoleUtilisateur(utilisateurId);
 
+    return RoleAutorise(role, lstNomRole);
+
+}
+
+private bool RoleAutorise(Role? role, List<string> lstNomRole)
+{
     if (role != null)
     {
         return lstNomRole.Contains(role.Nom);
@@ -129,7 +131,7 @@ public bool AutoriserUtilisateurParRoles(int utilisateurId, List<string> lstNomR
 
 ### Ajout de la méthode EstAutorise - Authentificateur
 
-Dans l'interface **IAuthentificateur**, ajoutez les 2 méthodes ci-dessous.
+Dans l'interface **Aides/IAuthentificateur**, ajoutez les 2 méthodes ci-dessous.
 
 ```csharp showLineNumbers
 /// <summary>
@@ -187,23 +189,48 @@ Il faut faire ceci pour les **ViewModels** qui nécessitent une autorisation.
 
 L'exemple sera fait uniquement pour **ListeCategoriesVM**.
 
+:::warning Important
+Pour le TP3, vous devez le faire pour toutes les interfaces
+:::
+
+:::info
+Le code de la classe au complet se trouve à la fin de cette section
+:::
+
 Il faut ajouter l'interface d'assistance **IAuthentificateur** dans les dépendances du **ViewModel**.
 
 ```csharp showLineNumbers 
-//Attributs
-private readonly string[] _rolesAutorises = { "Administrateur" };
+
+public class ListeCategoriesVM : BaseVM
+{
+    //highlight-start
+    //Attributs
+    private readonly string[] _rolesAutorises = { "Administrateur" };
+//highlight-end
+
+    //Dépendances
+    private readonly ICategorieService _categorieService;
+    private readonly INavigateur _navigateur;
+    //highlight-next-line
+    private readonly IAuthentificateur _authentificateur;
 
 .
 .
 .
 
+/// <summary>
+/// Constructeur
+/// </summary>
+/// <param name="authentificateur">La classe d'assistance d'authentification</param>
+//highlight-next-line
+/// <param name="categorieService">Service du modèle Categorie</param>
+/// <param name="navigateur">La classe d'assistance Navigateur</param>    
 //highlight-next-line
 public ListeCategoriesVM(IAuthentificateur authentificateur, ICategorieService categorieService, INavigateur navigateur)
 {
-    //highlight-next-line
+    //highlight-start
     _authentificateur = authentificateur;
 
-//highlight-start
     if (_authentificateur.EstAutorise(_rolesAutorises))
     {
         //highlight-end
@@ -216,12 +243,13 @@ public ListeCategoriesVM(IAuthentificateur authentificateur, ICategorieService c
                                           () => CategorieSelection != null);
     //highlight-next-line
     }
+    
 }
 ```
 
 Les rôles globaux autorisés par ce **ViewModel** sont dans l'attribut **_rolesAutorises**. Si une vérification de rôle doit se faire à partir des rôles globaux, il est plus pratique d'utiliser un attribut. Il est **readonly**, car il ne faut pas que les rôles soient modifiables en exécution.
 
-La seule dépendance à être assigné avant la sécurité est la classe **Authentificateur**. Les autres dépendances et la création des commandes se font uniquement si l'utilisateur est autorisé. Il ne sera pas possible d'utiliser les commandes et les services dans le cas ou l'utilisateur n'est pas autorisé.
+La seule dépendance à être assignée avant la sécurité est la classe **Authentificateur**. Les autres dépendances et la création des commandes se font uniquement si l'utilisateur est autorisé. Il ne sera pas possible d'utiliser les commandes et les services dans le cas ou l'utilisateur n'est pas autorisé.
 
 Démarrez le programme avec le compte "Administrateur" ci-dessous.
 
@@ -293,27 +321,33 @@ private async Task SupprimerAsync()
 
 //highlight-next-line
     if (_authentificateur.EstAutorise(_rolesAutorises))
+    //highlight-next-line
     {
         await _categorieService.SupprimerAsync(CategorieSelection!.CategorieId);
 
         await ObtenirListeAsync();
+        //highlight-next-line
     }
 
     EstEnTravail = false;
 }
 ```
 
-Il serait possible de permettre la visualisation à **Utilisateur**, mais permettre la suppression uniquement à **Administrateur**.
+Il serait possible, par exemple, de permettre la visualisation à **Utilisateur**, mais permettre la suppression uniquement à **Administrateur**.
 
 Il faudrait ajouter dans l'attribut  **_rolesAutorises** le rôle **Utilisateur**, mais spécifier uniquement le rôle **Administrateur** dans la commande **Supprimer**.
 
 ```csharp showLineNumbers title="NE PAS COPIER"
 private readonly string[] _rolesAutorises = { "Administrateur", "Utilisateur" };
+.
+.
+.
 
 private async Task SupprimerAsync()
 {
     EstEnTravail = true;
 
+//highlight-next-line
     if (_authentificateur.EstAutorise("Administrateur"))
     {
         await _categorieService.SupprimerAsync(CategorieSelection!.CategorieId);
@@ -431,7 +465,7 @@ public class ListeCategoriesVM : BaseVM
         //Vérifie si une catégorie peut être supprimée
         if (CategorieSelection != null)
         {
-            //Il y a une catégorie est sélectionnée
+            //Il y a une catégorie sélectionnée
 
             //Il faut empêcher la vérification si l'opération est en cours d'exécution
             //L'appel se fait en parallèle avec l'exécution et il y a une vérification dans la BD

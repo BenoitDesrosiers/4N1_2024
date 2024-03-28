@@ -1,6 +1,6 @@
 ---
 sidebar_position: 315
-draft: true
+draft: false
 ---
 
 # Ajout d'une catégorie
@@ -165,7 +165,7 @@ L'avantage de la première approche est que le modèle du domaine est indépenda
 
 L'avantage de la 2e approche est qu'il n'est pas nécessaire de faire la transformation entre le **ViewModel** et le **modèle de données**. Par contre, le modèle a une mécanique de notification qui n'est pas toujours nécessaire selon le type d'architecture.
 
-:::warning Avertissement
+:::info
 Pour ce projet et le **TP 3**, la première approche sera utilisée.
 :::
  

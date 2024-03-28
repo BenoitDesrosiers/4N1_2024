@@ -1,6 +1,6 @@
 ---
 sidebar_position: 325
-draft: true
+draft: false
 ---
 
 # Navigation et paramètres

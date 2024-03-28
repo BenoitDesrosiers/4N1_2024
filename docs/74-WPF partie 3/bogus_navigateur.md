@@ -1,9 +1,9 @@
 ---
 sidebar_position: 312
-draft: true
+draft: false
 ---
 
-# Bogus avec Navigation
+# Bogus pour le tp3
 
 Afin d'intégrer Bogus dans la navigation pour le TP3, voici quelques pointeurs qui vous aideront.
 

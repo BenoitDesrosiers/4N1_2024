@@ -76,7 +76,7 @@ Le mot-clé **init** indique que le **set** est seulement disponible lors de sa 
 
 La seule façon d'assigner des valeurs est par cette notation.
 
-```csharp showLineNumbers
+```csharp showLineNumbers title="NE PAS COPIER"
 var u = new UtilisateurAuthentifieModel()
 {
 	UtilisateurId = 1,
@@ -89,6 +89,10 @@ var u = new UtilisateurAuthentifieModel()
 ### Méthode d'autorisation - UtilisateurService
 
 Il faut faire la mécanique d'authentification. Le mot de passe est enregistré dans la base de données par une mécanique de **hash**. L'algorithme utilisé est **BCrypt**.
+
+:::info
+Pour en savoir plus sur BCrypt: https://en.wikipedia.org/wiki/Bcrypt
+:::
 
 Dans l'interface **IUtilisateurService**, ajoutez la définition de la méthode ci-dessous.
 
@@ -135,9 +139,11 @@ public async Task<UtilisateurAuthentifieModel?> AuthentifierUtilisateurAsync(str
 
 En premier lieu, il faut récupérer l'utilisateur. 
 
-La librairie **BCrypt** a une méthode de vérification du mot de passe à partir du **hash** de la base de données. Selon l'algorithme de **hash**, il serait possible d'envoyer le **hash** dans le **Repository** et de le mettre dans le **where**. Avec **Bcrypt** ce n'est pas recommandé, car il existe plusieurs versions pour le hashage. Donc le hash généré peut varier en fonction des options. La méthode **Verify()** permet d'analyser le **hash** et ensuite appliquer les bonnes règles sur le mot de passe à tester.
+La librairie **BCrypt** a une méthode de vérification du mot de passe à partir du **hash** de la base de données. Selon l'algorithme de **hash**, il serait possible d'envoyer le **hash** dans le **Repository** et de le mettre dans le **where**. Avec **Bcrypt** ce n'est pas possible, car il faut connaitre les détails du hashage du mot de passe encrypté afin d'encrypter le mot de passe en clair. Par exemple, le mot de passe stocké dans la bd contient un salt, et une version d'encryptage. Sans ces information, il est impossible d'encrypté le mot de passe fournie en clair et d'obtenir le même résultat. La méthode **Verify()** permet d'analyser le **hash** et ensuite appliquer les bonnes règles sur le mot de passe à tester.
 
-Remarquez que le mot de passe n'est pas conservé dans la classe **UtilisateurAuthentifieModel**. Il ne faut conserver aucune trace de mot de passe en mémoire pour la sécurité de l'application.
+:::warning Important
+Remarquez que le mot de passe n'est pas conservé dans la classe **UtilisateurAuthentifieModel**. Il ne faut conserver aucune trace de mot de passe en mémoire pour la sécurité de l'application. 
+:::
 
 ## SuperCarte.WPF
 
@@ -244,6 +250,7 @@ public App()
 
         //Enregistrement des classes d'assistance
         services.AddSingleton<INavigateur, Navigateur>();
+        //highlight-next-line
         services.AddSingleton<IAuthentificateur, Authentificateur>();
 
         //Appel des méthodes d'extension                        
@@ -517,7 +524,7 @@ public static class PasswordBoxExt
 ```
 
 :::info
-Pour le **TP 3**, la vue **UcGestionUtilisateur**, il faudra utiliser cette extension pour le mot de passe. 
+Pour le **TP 3** il faudra utiliser cette extension pour le mot de passe. 
 :::
 
 ### Enregistrer le ViewModel - SCViewModelExtensions
@@ -533,17 +540,22 @@ public static void EnregistrerViewModels(this IServiceCollection services)
     services.AddTransient<ListeCartesVM>();
     services.AddTransient<GestionCategorieVM>();
     services.AddTransient<GestionUtilisateurVM>();
+    //highlight-next-line
     services.AddTransient<ConnexionVM>();
 }
 ```
 
 ### Création de la vue - UcConnexion.xaml
 
-Créez le fichier **UcConnexion.xaml** dans le dossier **Views**.
+Créez le fichier **UcConnexion.xaml** de type **Contrôle utilisateur WPF** dans le dossier **Views**.
 
 À la ligne 8, le **namespace** pour les composants est ajouté. Ce **namespace** permet d'utiliser la classe **PasswordBoxExt**.
 
-Les champs **Nom d'utilisateur** et **Mot de passe** ont le **Validation.ErrorTemplate="\{StaticResource erreurTemplate}"** pour afficher les erreurs.
+Les champs **Nom d'utilisateur** et **Mot de passe** (ligne 45 et 61) ont le **Validation.ErrorTemplate="\{StaticResource erreurTemplate}"** pour afficher les erreurs.
+
+Pour faire la liaison du **PasswordBox**, il faut ajouter les lignes 62 et 63. 
+
+Également, il est intéressant de permettre la touche **Entrée** pour exécuter la commande d'authentification. Les lignes 67 à 69 permettent de lier une commande à une touche.
 
 ```xaml  showLineNumbers 
 <UserControl x:Class="SuperCarte.WPF.Views.UcConnexion"
@@ -553,6 +565,7 @@ Les champs **Nom d'utilisateur** et **Mot de passe** ont le **Validation.ErrorTe
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:SuperCarte.WPF.ViewModels"
              xmlns:local="clr-namespace:SuperCarte.WPF.Views"
+             //highlight-next-line
              xmlns:composants="clr-namespace:SuperCarte.WPF.Composants"    
              d:DataContext="{d:DesignInstance vm:ConnexionVM}"
              mc:Ignorable="d" 
@@ -590,6 +603,7 @@ Les champs **Nom d'utilisateur** et **Mot de passe** ont le **Validation.ErrorTe
                    Margin="5 10 5 10" 
                    FontWeight="Bold"/>
             <TextBox Grid.Row="0" Grid.Column="1" 
+            //highlight-next-line
                      Validation.ErrorTemplate="{StaticResource erreurTemplate}"
                      Text="{Binding NomUtilisateur}"
                      Padding="2 4 0 0"
@@ -606,12 +620,12 @@ Les champs **Nom d'utilisateur** et **Mot de passe** ont le **Validation.ErrorTe
                    FontWeight="Bold"/>
 
             <PasswordBox Grid.Row="1" Grid.Column="1"
+            //highlight-next-line
                          Validation.ErrorTemplate="{StaticResource erreurTemplate}"
                          //highlight-start
                          composants:PasswordBoxExt.Attach="True"
-                         composants:PasswordBoxExt.Password="{Binding MotPasse}
-                         //highlight-end
-                         "                                                  
+                         composants:PasswordBoxExt.Password="{Binding MotPasse}"
+                         //highlight-end                                                
                          Padding="2 4 0 0"
                          Margin="0 10 5 10">
                          //highlight-start
@@ -636,9 +650,7 @@ Les champs **Nom d'utilisateur** et **Mot de passe** ont le **Validation.ErrorTe
 </UserControl>
 ```
 
-Pour faire la liaison du **PasswordBox**, il faut ajouter les lignes 62 et 63. 
 
-Également, il est intéressant de permettre la touche **Entrée** pour exécuter la commande d'authentification. Les lignes 67 à 69 permettent de lier une commande à une touche.
 
 ### Ajout de la ressource pour créer le lien entre ViewModel et Vue - MainWindow.xaml
 

@@ -1,6 +1,6 @@
 ---
 sidebar_position: 350
-draft: true
+draft: false
 ---
 
 # Localisation du code .cs
@@ -79,7 +79,9 @@ Le type **fichier de ressources** se trouve dans Éléments C#/Général
 
 Créez le fichier de ressources **ResCategorieValidateur.resx** dans le dossier **Resx**. 
 
+:::warning Important
 Lors de l'ouverture de l'éditeur de ressource, il faut changer le **Modificateur d'accès** en haut de l'éditeur afin de mettre le fichier **Public**. Si le fichier ressource n'est pas **Public**, il ne sera pas utilisable par le **IStringLocalizer**.
+:::
 
 | Nom                     | Valeur                                              |
 | ----------------------- | --------------------------------------------------- |

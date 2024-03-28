@@ -534,7 +534,7 @@ La ligne 22  à 24 indique que lorsque le **DataContext** est de type **ListeCar
 
 ### Test - MainWindowVM
 
-Dans la classe **MainWindowVM.cs**, il faut assigner **ListeCategoriesVM** à la propriété **VMActif**.
+Dans la classe **MainWindowVM.cs**, il faut assigner **ListeCartesVM** à la propriété **VMActif**.
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;

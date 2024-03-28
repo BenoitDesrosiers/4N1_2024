@@ -1,6 +1,6 @@
 ---
 sidebar_position: 360
-draft: true
+draft: false
 ---
 
 
@@ -9,7 +9,7 @@ draft: true
 
 Le modèle **CarteDetailModel** a été utilisé pour la liste des cartes.
 
-```csharp showLineNumbers
+```csharp showLineNumbers title="NE PAS COPIER"
 public class CarteDetailModel
 {
     public int CarteId { get; set; }

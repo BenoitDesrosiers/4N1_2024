@@ -11,11 +11,13 @@ Pour faire ceci, il faut lier la propriété de visibilité du menu à la propri
 
 ## Activer la OnPropertyChanged - Authentificateur
 
-Modifiez la classe **Authentificateur** par celle-ci.
+Modifiez la classe **Aides/Authentificateur** par celle-ci.
 
 Il faut activer la notification du changement de valeur d'une propriété dans la classe d'assistance **Authentificateur**. Il faut hériter de la classe **ObservableObject** qui provient de la librairie **MVVM Toolkit** (ligne 9).
 
-Ensuite, il faut modifier la propriété **EstAuthentifie** pour activer la notification sur le **set** (ligne 66).
+Il faut ensuite ajouter l'attribut **_estAuthentifie** (ligne 12). 
+Ensuite, il faut modifier la propriété **EstAuthentifie** pour activer la notification sur le **set** (lignes 58-68).
+Étant donné que la propriété n'avait pas d'attribut, elle contenait le get,set par défaut. Il faut les remplacer par la version permettant de changer la propriété. 
 
 ```csharp showLineNumbers
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -30,6 +32,7 @@ namespace SuperCarte.WPF.Aides;
 public class Authentificateur : ObservableObject, IAuthentificateur
 {
     private readonly IUtilisateurService _utilisateurService;
+    //highlight-next-line
     private bool _estAuthentifie = false;
 
     /// <summary>
@@ -76,6 +79,7 @@ public class Authentificateur : ObservableObject, IAuthentificateur
 
     public UtilisateurAuthentifieModel? UtilisateurAuthentifie { get; private set; }
 
+//highlight-start
     public bool EstAuthentifie 
     { 
         get
@@ -84,10 +88,10 @@ public class Authentificateur : ObservableObject, IAuthentificateur
         }
         private set
         {
-            //highlight-next-line
             SetProperty(ref _estAuthentifie, value);
         }
     }
+//highlight-end
 }
 ```
 
@@ -95,9 +99,9 @@ public class Authentificateur : ObservableObject, IAuthentificateur
 
 Il faut modifier la classe **MainWindowVM** pour rendre accessible la classe d'assistance **Authentificateur** par une propriété.
 
-Il faut injecter la dépendance **IAuthentificateur** dans le constructeur (lignes 8, 10 et 14). 
+Il faut injecter la dépendance **IAuthentificateur** dans le constructeur (lignes 8, 10 et 13, 35-40). 
 
-Cette propriété permettra à un composant de se lier à la propriété **Authentificateur.EstAuthentifie** (ligne 36).
+Cette propriété permettra à un composant de se lier à la propriété **Authentificateur.EstAuthentifie** .
 
 ```csharp showLineNumbers
 using CommunityToolkit.Mvvm.Input;
@@ -107,11 +111,14 @@ namespace SuperCarte.WPF.ViewModels;
 public class MainWindowVM : BaseVM
 {
     private readonly INavigateur _navigateur;
+    //highlight-next-line
     private readonly IAuthentificateur _authentificateur;
 
+//highlight-next-line
     public MainWindowVM(INavigateur navigateur, IAuthentificateur authentificateur)
 	{   
         _navigateur = navigateur;
+        //highlight-next-line
         _authentificateur = authentificateur;
 
         //Création des commandes
@@ -134,6 +141,7 @@ public class MainWindowVM : BaseVM
         }
     }
     
+    //highlight-start
     public IAuthentificateur Authentificateur
     {
         get 
@@ -141,6 +149,7 @@ public class MainWindowVM : BaseVM
             return _authentificateur;
         }
     }
+    //highlight-end
 }
 ```
 
@@ -174,6 +183,7 @@ Modifiez le fichier **MainWindow.xaml** par celui-ci.
         Title="Super Carte App" 
         Height="450" Width="800" WindowState="Maximized">
     <Window.Resources>
+    //highlight-next-line
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         
         <!--Assignation du ViewModel à Vue-->
@@ -202,7 +212,9 @@ Modifiez le fichier **MainWindow.xaml** par celui-ci.
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        //highlight-next-line
         <Menu Grid.Row="0" HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch"
+        //highlight-next-line
               Visibility="{Binding Authentificateur.EstAuthentifie, Converter={StaticResource BooleanToVisibilityConverter}}">
             <MenuItem Header="_Fichier">
                 <MenuItem Header="_Quitter" />
@@ -218,3 +230,6 @@ Modifiez le fichier **MainWindow.xaml** par celui-ci.
 </Window>
 ```
 
+## Test
+
+Redémarrez le projet. Tant que vous ne serez pas connecté, le menu ne s'affichera pas. 

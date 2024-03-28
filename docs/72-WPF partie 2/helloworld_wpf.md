@@ -109,6 +109,7 @@ Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue**
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SuperCarte.WPF"  
         xmlns:vm="clr-namespace:SuperCarte.WPF.ViewModels"
+        //highlight-next-line
         xmlns:v="clr-namespace:SuperCarte.WPF.Views"        
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=vm:MainWindowVM}"

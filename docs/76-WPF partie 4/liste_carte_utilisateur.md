@@ -1,6 +1,6 @@
 ---
 sidebar_position: 450
-draft: true
+draft: false
 ---
 
 # Liste des cartes de l'utilisateur

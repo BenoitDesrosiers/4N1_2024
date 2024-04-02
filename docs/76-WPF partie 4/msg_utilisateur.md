@@ -1,6 +1,6 @@
 ---
 sidebar_position: 440
-draft: true
+draft: false
 ---
 
 # Message à l'utilisateur - MessageBox

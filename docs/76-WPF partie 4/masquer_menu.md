@@ -1,6 +1,6 @@
 ---
 sidebar_position: 445
-draft: true
+draft: false
 ---
 
 # Masquer le menu

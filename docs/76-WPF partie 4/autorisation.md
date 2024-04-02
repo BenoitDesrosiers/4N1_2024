@@ -1,6 +1,6 @@
 ---
 sidebar_position: 430
-draft: true
+draft: false
 ---
 
 # Autorisation

@@ -1,6 +1,6 @@
 ---
 sidebar_position: 470
-draft: true
+draft: false
 ---
 
 # Suppression d'une carte d'un utilisateur - Explication

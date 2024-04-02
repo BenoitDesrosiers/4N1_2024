@@ -1,6 +1,6 @@
 ---
 sidebar_position: 460
-draft: true
+draft: false
 ---
 
 # Menu et sécurité

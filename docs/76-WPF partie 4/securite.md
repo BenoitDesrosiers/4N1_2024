@@ -7,7 +7,7 @@ draft: true
 
 Il existe 2 visions pour la gestion d'un menu dans une application native pour la sécurité.
 
-Il serait possible pour la sécurité de masquer les menus que l'utilisateur n'a pas accès. Il faudrait lier une propriété à chacun des items du menu pour gérer la visibilité ou non. Cette approche évite d'exposer des menus non nécessaires à l'utilisateur. Cependant, cette approche peut occasionner de l'incompréhension, car l'utilisateur peut chercher un menu qu'il ne voit pas. Il ne lui viendra peut-être pas d'instinct que la raison est qu'il n'y a pas accès.
+Il serait possible pour la sécurité de masquer les menus auxquels l'utilisateur n'a pas accès. Il faudrait lier une propriété à chacun des items du menu pour gérer la visibilité ou non. Cette approche évite d'exposer des menus non nécessaires à l'utilisateur. Cependant, cette approche peut occasionner de l'incompréhension, car l'utilisateur peut chercher un menu qu'il ne voit pas. Il ne lui viendra peut-être pas d'instinct que la raison est qu'il n'y a pas accès.
 
 L'autre option est de laisser le menu visible et accessible et de notifier l'utilisateur qu'il n'a pas accès. Cette approche permet d'avoir un menu uniforme et l'utilisateur sait exactement pourquoi il n'est pas en mesure d'accéder à une section. 
 
@@ -43,6 +43,7 @@ public class MainWindowVM : BaseVM
         //Création des commandes
         NaviguerListeCartesVMCommande = new RelayCommand(_navigateur.Naviguer<ListeCartesVM>);
         NaviguerListeCategoriesVMCommande = new RelayCommand(_navigateur.Naviguer<ListeCategoriesVM>);
+        //highlight-next-line
         NaviguerListeMesCartesVMCommande = new RelayCommand(_navigateur.Naviguer<ListeMesCartesVM>);
 
         //Vue initiale
@@ -53,6 +54,7 @@ public class MainWindowVM : BaseVM
 
     public IRelayCommand NaviguerListeCategoriesVMCommande { get; private set; }
 
+//highlight-next-line
     public IRelayCommand NaviguerListeMesCartesVMCommande { get; private set; }
 
     public INavigateur Navigateur
@@ -133,6 +135,7 @@ Modifiez le fichier **MainWindow.xaml** pour le code ci-dessous.
                 <MenuItem Header="Liste des _cartes" Command="{Binding NaviguerListeCartesVMCommande}"/>
                 <MenuItem Header="Liste des c_atégories" Command="{Binding NaviguerListeCategoriesVMCommande}"/>
             </MenuItem>
+            //highlight-next-line
             <MenuItem Header="_Mes cartes" Command="{Binding NaviguerListeMesCartesVMCommande}"/>
         </Menu>
 

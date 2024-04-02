@@ -3,7 +3,7 @@ sidebar_position: 450
 draft: true
 ---
 
-# Liste des cartes de l'utilisateur (lecture optionnelle)
+# Liste des cartes de l'utilisateur
 
 La vue sera associée à la table pivot **UtilisateurCarte**. Cette table est la relation **plusieurs à plusieurs** des tables **Carte** et **Utilisateur**.
 
@@ -25,12 +25,9 @@ Il y a seulement 3 cartes, il faut en ajouter quelques-unes.
 
 Voici les enregistrements **Carte** à ajouter dans la méthode **Seed()** de la classe **SuperCarteContext**.
 
+Il faut ajouter ces cartes dans le tableau **Carte[]** qui est déjà dans le Seed
 ```csharp showLineNumbers
 //Nouvelles cartes
-
-Carte[] cartes =
-{
-	/***/
     new Carte()
     {
         CarteId = 4,
@@ -67,7 +64,6 @@ Carte[] cartes =
         CategorieId = 1,
         EnsembleId = 1
     }
-};
 
 
 ```
@@ -75,7 +71,7 @@ Carte[] cartes =
 Voici les enregistrements **UtilisateurCarte** à ajouter dans la méthode **Seed()** de la classe **SuperCarteContext**.
 
 ```csharp showLineNumbers
-UtilisateurCarte[] utilisateurCartes = new UtilisateurCarte[]
+UtilisateurCarte[] utilisateurCartes = 
 {
     new UtilisateurCarte()
     {
@@ -122,219 +118,9 @@ UtilisateurCarte[] utilisateurCartes = new UtilisateurCarte[]
 };
 ```
 
-Voici la méthode **Seed()** au complet.
-
+Et ajoutez la ligne pour associer le nouveau tableau **utilisateurCartes** à sa table
 ```csharp showLineNumbers
-private void Seed(ModelBuilder modelBuilder)
-{
-    //Les données à ajouter
-    Role[] roles = 
-    {
-        new Role() 
-        { 
-            RoleId = 1,
-            Nom = "Administrateur"                
-        },
-        new Role()
-        {
-            RoleId = 2,
-            Nom = "Utilisateur"
-        },
-    };
-
-    Utilisateur[] utilisateurs =
-    {
-        new Utilisateur()
-        {
-            UtilisateurId = 1,
-            Prenom = "François",
-            Nom = "St-Hilaire",
-            NomUtilisateur = "fsthilaire",
-            MotPasseHash = "$2y$11$IY6NG9FkTSI1dnjLfSbuOuNkuyI7IZHxHSOD5Td6AlwvroUz/vzLK", //Native3! avec Bcrypt
-            RoleId = 1 //Admin
-        },
-        new Utilisateur()
-        {
-            UtilisateurId = 2,
-            Prenom = "Benoit",
-            Nom = "Tremblay",
-            NomUtilisateur = "btremblay",
-            MotPasseHash = "$2y$11$ewK3YsMGQ1IMKEzJUAjyVe0P19I0gEbTO998mwfVbSSA8nZ6MG/ha", //Web4MVC! avec Bcrypt
-            RoleId = 2 //Utilisateur
-        },
-        new Utilisateur() 
-        {
-            UtilisateurId = 3,
-            Prenom = "Tony",
-            Nom = "Stark",
-            NomUtilisateur = "tstark",
-            MotPasseHash = "$2y$11$VfcNowkWResPQKl0AA3MJ.w1LXBqmMM77YKlyf32Glr9TWG4xxyD2", //#NotAdmin! avec Bcrypt
-            RoleId = 2 //Utilisateur
-        }
-    };
-
-    Categorie[] categories =
-    {
-        new Categorie()
-        {
-            CategorieId = 1,
-            Nom = "Animaux magiques",
-            Description = null
-        },
-        new Categorie()
-        {
-            CategorieId = 2,
-            Nom = "Orcs",
-            Description = "Les orcs sont une race de guerrier."
-        },
-        new Categorie()
-        {
-            CategorieId = 3,
-            Nom = "Mages",
-            Description = "Les mages ont des pouvoirs magiques."
-        }
-    };
-
-    Ensemble[] ensembles =
-    {
-        new Ensemble()
-        {
-            EnsembleId = 1,
-            Nom = "Ensemble de départ",
-            Disponibilite = new DateTime(2020,5,12)
-        }
-    };
-
-    Carte[] cartes =
-    {
-        new Carte()
-        {
-            CarteId = 1,
-            Nom = "Lion des marais",
-            Armure = 0,
-            Vie = 12,
-            Attaque = 2,
-            EstRare = false,
-            PrixRevente = 0.02m,
-            CategorieId = 1,
-            EnsembleId = 1
-        },
-        new Carte()
-        {
-            CarteId = 2,
-            Nom = "Corbeau vampire",
-            Armure = 0,
-            Vie = 2,
-            Attaque = 12,
-            EstRare = true,
-            PrixRevente = 1.20m,
-            CategorieId = 1,
-            EnsembleId = 1
-        },
-        new Carte()
-        {
-            CarteId = 3,
-            Nom = "Grunty",
-            Armure = 5,
-            Vie = 25,
-            Attaque = 5,
-            EstRare = false,
-            PrixRevente = 0.20m,
-            CategorieId = 2,
-            EnsembleId = 1
-        },
-        new Carte()
-        {
-            CarteId = 4,
-            Nom = "Rider",
-            Armure = 11,
-            Vie = 45,
-            Attaque = 35,
-            EstRare = true,
-            PrixRevente = 3.98m,
-            CategorieId = 2,
-            EnsembleId = 1
-        },
-        new Carte()
-        {
-            CarteId = 5,
-            Nom = "Troll",
-            Armure = 0,
-            Vie = 25,
-            Attaque = 15,
-            EstRare = false,
-            PrixRevente = 0.19m,
-            CategorieId = 2,
-            EnsembleId = 1
-        },
-        new Carte()
-        {
-            CarteId = 6,
-            Nom = "Dragon de glace",
-            Armure = 10,
-            Vie = 35,
-            Attaque = 10,
-            EstRare = false,
-            PrixRevente = 0.09m,
-            CategorieId = 1,
-            EnsembleId = 1
-        }
-    };
-
-    UtilisateurCarte[] utilisateurCartes = new UtilisateurCarte[]
-    {
-        new UtilisateurCarte()
-        {
-            UtilisateurId = 1, //fsthilaire
-            CarteId = 1, //Lion des marais
-            Quantite = 2
-        },
-        new UtilisateurCarte()
-        {
-            UtilisateurId = 1, //fsthilaire
-            CarteId = 3, //Grunty
-            Quantite = 3
-        },
-        new UtilisateurCarte()
-        {
-            UtilisateurId = 1, //fsthilaire
-            CarteId = 4, //Rider
-            Quantite = 1
-        },
-        new UtilisateurCarte()
-        {
-            UtilisateurId = 1, //fsthilaire
-            CarteId = 2, //Corbeau vampire
-            Quantite = 5
-        },
-        new UtilisateurCarte()
-        {
-            UtilisateurId = 3, //tstark
-            CarteId = 1, //Lion des marais
-            Quantite = 5
-        },
-        new UtilisateurCarte()
-        {
-            UtilisateurId = 3, //tstark
-            CarteId = 3, //Grunty
-            Quantite = 1
-        },
-        new UtilisateurCarte()
-        {
-            UtilisateurId = 3, //tstark
-            CarteId = 6, //Dragon de glace
-            Quantite = 2
-        },
-    };
-
-    //Ajout dans les tables
-    modelBuilder.Entity<Role>().HasData(roles);
-    modelBuilder.Entity<Utilisateur>().HasData(utilisateurs);
-    modelBuilder.Entity<Categorie>().HasData(categories);
-    modelBuilder.Entity<Ensemble>().HasData(ensembles);
-    modelBuilder.Entity<Carte>().HasData(cartes);
-    modelBuilder.Entity<UtilisateurCarte>().HasData(utilisateurCartes);
-}
+        modelBuilder.Entity<UtilisateurCarte>().HasData(utilisateurCartes);
 ```
 
 Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. Il est important que le **Projet par défaut** de **Entity Framework** soit sélectionné dans la console. Pour ce projet, ce doit être **SuperCarte.EF**. À ce stade, il y a **plusieurs projets** et celui sélectionné par défaut sera **WPF**. Il est important de le modifier dans la liste.
@@ -367,21 +153,21 @@ Update-Database -StartupProject SuperCarte.EF -Migration Seed_CartesEtUtilisateu
 
 Il faut ajouter la logique applicative pour le module **UtilisateurCarte**. 
 
-Il faut faire une requête qui retourne la liste complète des cartes pour un utilisateur. Il serait possible d'inclure cette requête dans le **Repository** et le **Service** **Carte**, car l'information retournée sera pour des cartes. Pour d'autres, ce serait le module **Utilisateur**, car c'est en fonction de l'utilisateur. Et finalement, la 3e option est d'utiliser le module **UtilisateurCarte**, car c'est l'entité centrale. Les 3 options sont bonnes. Pour ce projet et le **TP 3**, ce sera la 3e option.
+Il faut faire une requête qui retourne la liste complète des cartes pour un utilisateur. 
+
+Mais dans quelle classe mettre cette requête ?
+1) Il serait possible d'inclure cette requête dans le **Repository** et le **Service** de **Carte**, car l'information retournée sera pour des cartes. 
+2) Il serait aussi possible de la mettre dans le module **Utilisateur**, car c'est en fonction de l'utilisateur. 
+3) Et finalement, la 3e option est d'utiliser le module **UtilisateurCarte**, car c'est l'entité centrale. 
+
+Les 3 options sont bonnes. Pour ce projet et le **TP 3**, ce sera la 3e option qui sera utilisée.
 
 ### Création du modèle du domaine - QuantiteCarteDetailModel
 
-Dans le document **Application WPF - Partie 3, section 11**, il était mentionné qu'il était préférable d'utiliser une structure par héritage lorsqu'il faut ajouter des champs à une classe du modèle. Ceci permet d'éviter la répétition des propriétés dans plusieurs classes. Il faut utiliser cette approche pour le nouveau modèle.
+Le modèle **CarteDetailModel** a été utilisé pour la liste des cartes.
 
-En premier lieu, il faut créer la classe **CarteModel** dans le dossier **Models**.
-
-```csharp showLineNumbers
-namespace SuperCarte.Core.Models;
-
-/// <summary>
-/// Classe qui contient l'information d'une carte
-/// </summary>
-public class CarteModel
+```csharp showLineNumbers title="NE PAS COPIER"
+public class CarteDetailModel
 {
     public int CarteId { get; set; }
 
@@ -399,11 +185,49 @@ public class CarteModel
 
     public int CategorieId { get; set; }
 
+    public string CategorieNom { get; set; } = null!;
+
+    public int EnsembleId { get; set; }
+
+    public string EnsembleNom { get; set; } = null!;
+}
+```
+
+Par contre, pour la gestion d'une seule carte, l'information des clés étrangères n'est pas nécessaire. 
+
+Il y a des programmeurs qui utilisent la même classe. La propriété **public string EnsembleNom** n'accepte pas les **null** par sa définition. En laissant le champ vide, ça indique tout de même au programmeur qu'il devrait avoir une valeur. C'est le même principe que le modèle de données et les propriétés de navigation de **Entity Framework**. Ça évite de créer plusieurs classes dans un projet.
+
+Il y a des programmeurs qui préfèrent avoir des modèles de données qui ont seulement les données nécessaires pour diminuer la taille des objets en mémoire, le temps de transfert et d'éviter d'avoir une **méga-classe** avec une bonne proportion des champs inutilisés selon le cas d'utilisation. Il faut donc une 2e classe pour respecter cette vision.
+
+Les 2 visions ont leurs avantages et leurs inconvénients, mais pour ce projet et le **TP 3**, il faudra avoir 2 classes différentes.
+
+Créez la classe **CarteModel** qu'il faudra utiliser sans le détail de la clé étrangère.
+
+```csharp showLineNumbers
+namespace SuperCarte.Core.Models;
+
+/// <summary>
+/// Classe qui contient l'information d'une carte
+/// </summary>
+public class CarteModel
+{
+    public int CarteId { get; set; }
+    public string Nom { get; set; } = null!;
+    public short Vie { get; set; }
+    public short Armure { get; set; }
+    public short Attaque { get; set; }
+    public bool EstRare { get; set; }
+    public decimal PrixRevente { get; set; }
+    public int CategorieId { get; set; }
     public int EnsembleId { get; set; }
 }
 ```
 
-Ensuite, il faut modifier la classe **CarteDetailModel** pour hériter de la classe **CarteModel**.
+C'est pratiquement la même classe. Il y a beaucoup de répétition et ce n'est pas très **DRY**.
+
+Ce sont des classes, donc il est possible d'utiliser l'héritage pour éviter la répétition des propriétés. Si une nouvelle propriété de base est ajoutée, il ne sera pas nécessaire de l'ajouter dans les autres classes.
+
+Modifiez la classe **CarteDetailModel** pour utiliser l'héritage et ajouter les champs nécessaires.
 
 ```csharp showLineNumbers
 namespace SuperCarte.Core.Models;
@@ -418,6 +242,11 @@ public class CarteDetailModel : CarteModel
     public string EnsembleNom { get; set; } = null!;
 }
 ```
+
+:::info 
+Pour le **TP 3**, vous devez appliquer cette approche pour les modules qui utilisent des clés étrangères.
+:::
+
 
 Finalement, il faut créer la classe **QuantiteCarteDetailModel** dans le dossier **Models**.
 
@@ -484,6 +313,13 @@ public async Task<List<QuantiteCarteDetailModel>> ObtenirCartesUtilisateurAsync(
                       }).ToListAsync();
 }
 ```
+
+Étant donné que nous avons maintenant une méthode Async, il faut ajouter ce using au début
+
+```csharp showLineNumbers
+using Microsoft.EntityFrameworkCore;
+```
+
 
 ### Création du service - UtilisateurCarteService
 
@@ -555,6 +391,7 @@ public static void EnregistrerServices(this IServiceCollection services)
     services.AddScoped<ICarteService, CarteService>();
     services.AddScoped<IRoleService, RoleService>();
     services.AddScoped<IUtilisateurService, UtilisateurService>();
+    //highlight-next-line
     services.AddScoped<IUtilisateurCarteService, UtilisateurCarteService>();
 }
 ```
@@ -580,6 +417,7 @@ namespace SuperCarte.WPF.ViewModels;
 /// </summary>
 public class ListeMesCartesVM : BaseVM
 {
+    //highlight-next-line
     private readonly string[] _rolesAutorises = { "Administrateur", "Utilisateur" };
 
     #region Dépendances
@@ -631,6 +469,7 @@ public class ListeMesCartesVM : BaseVM
         if (_authentificateur.EstAutorise(_rolesAutorises))
         {
             ListeCartes = await _utilisateurCarteService
+            //highlight-next-line
                 .ObtenirCartesUtilisateurAsync(_authentificateur.UtilisateurAuthentifie!.UtilisateurId);
         }
         else
@@ -699,6 +538,7 @@ public static void EnregistrerViewModels(this IServiceCollection services)
         services.AddTransient<GestionCategorieVM>();
         services.AddTransient<GestionUtilisateurVM>();
         services.AddTransient<ConnexionVM>();
+        //highlight-next-line
         services.AddTransient<ListeMesCartesVM>();
     }
 ```
@@ -711,7 +551,7 @@ La liste est identique à la liste des cartes, mais il y a la colonne **Quantite
 
 La localisation n'est pas faite pour les colonnes de la grille. Dans une application complète, il faudrait créer un nouveau fichier ressource pour la vue. Dans ce cas-ci, il y a des répétitions de terme, car il y a beaucoup de colonnes identiques dans la vue **UcListeCartes.xaml**. Avec l'approche 1 fichier ressource par vue, il faudra recréer toutes les valeurs. Il pourrait être intéressant de faire un fichier ressource pour les éléments du modèle du domaine. Dans ce cas, il y aurait un fichier pour **CarteModel**, un autre pour **CarteDetailModel** et finalement un dernier pour **QuantiteCarteDetailModel**. Cette vue devra utiliser les 3 fichiers ressources. Il peut être difficile de maintenir ce genre de structure, car si le modèle change, il faut s'assurer de respecter la même structure. Il aurait d'autres options également pour éviter la répétition. Aucune des méthodes n'est parfaite malheureusement et il arrive souvent que le **DRY** ne soit pas parfaitement respecté pour les fichiers ressources.
 
-```xaml
+```xaml showLineNumbers
 <UserControl x:Class="SuperCarte.WPF.Views.UcListeMesCartes"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -874,7 +714,8 @@ Il faut ajouter dans les ressources le lien entre le **ViewModel** et la **Vue**
 
 Les lignes 36 à 38 contiennent le lien entre **UcListeMesCartes** et **ListeMesCartesVM**.
 
-```xaml
+
+```xaml showLineNumbers
 <Window x:Class="SuperCarte.WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -910,9 +751,11 @@ Les lignes 36 à 38 contiennent le lien entre **UcListeMesCartes** et **ListeMes
         <DataTemplate DataType="{x:Type TypeName=vm:ConnexionVM}">
             <v:UcConnexion />
         </DataTemplate>
+        //highlight-start
         <DataTemplate DataType="{x:Type TypeName=vm:ListeMesCartesVM}">
             <v:UcListeMesCartes />
         </DataTemplate>
+        //highlight-end
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -928,7 +771,7 @@ Les lignes 36 à 38 contiennent le lien entre **UcListeMesCartes** et **ListeMes
                 <MenuItem Header="Liste des _cartes" Command="{Binding NaviguerListeCartesVMCommande}"/>
                 <MenuItem Header="Liste des c_atégories" Command="{Binding NaviguerListeCategoriesVMCommande}"/>
             </MenuItem>
-            <MenuItem Header="_Mes cartes" Command="{Binding NaviguerListeMesCartesVMCommande}"/>
+            //highlight-next-line
         </Menu>
 
         <ContentControl Grid.Row="1"  Content="{Binding Navigateur.VMActif}" />                
@@ -955,6 +798,7 @@ private async Task AuthentifierAsync()
 
     if (authentifier == true)
     {
+        //highlight-next-line
         _navigateur.Naviguer<ListeMesCartesVM>();
     }
     else

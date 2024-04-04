@@ -133,13 +133,12 @@ Pour la traduction, si vous ne savez pas quoi mettre, vous n'avez qu'à mettre l
 
 * Création des données initiales des MaisonEdition à l'aide de **BOGUS**
   * insertion dans le menu principal
-* **Affichage** des Utilisateurs
-  * incluant l'information de UtilisateurMusique et Musique
+* **Affichage** des MaisonEdition
+  * incluant les Musiques et leur Artiste et Genre associée  
   * l'affichage doit s'afficher dans 2 langues (localisation)
-* **CRUD** des MaisonEdition
-* Seul l'administrateur peut voir cette liste. 
+  * Le module doit donc afficher la liste des MaisonEdition et lorsqu'on en sélectionne un, une autre view avec l'information des musiques associées ainsi que l'artiste et le genre associé à ces musiques sont affichés
 
-Le module doit donc afficher la liste des Utilisateurs et lorsqu'on en sélectionne un, un tableau secondaire s'ouvre avec l'information sur sa Musique. (Ne pas afficher les Genres, Artistes, et MaisonEdition)
+* **CRUD** des MaisonEdition
   
 ### Modules pour le membre #2
 
@@ -149,12 +148,8 @@ Le module doit donc afficher la liste des Utilisateurs et lorsqu'on en sélectio
 * **Affichage** des Genres
   * incluant les Musiques et leur Artiste et MaisonEdition associée  
   * l'affichage doit s'afficher dans 2 langues (localisation)
+  * Le module doit donc afficher la liste des Genres, et lorsqu'on en sélectionne un, une autre view avec l'information des musiques associées ainsi que l'artiste et la maisonEdition associé à ces musiques sont affichés 
 * **CRUD** des Genres
-* Seules les Musiques appartenant à l'utilisateur connecté sont affichées
-
-Le module doit donc afficher la liste des Genres, et lorsqu'on en sélectionne un, un tableau secondaire s'ouvre avec l'information sur les Musiques de ce genre appartenant à l'usager connecté. 
-
-Si c'est l'administrateur qui est connecté, alors lister toutes les Musiques 
 
 ### Modules pour le membre #3
 * Création des données initiales des Artistes à l'aide de **BOGUS**
@@ -162,14 +157,8 @@ Si c'est l'administrateur qui est connecté, alors lister toutes les Musiques
 * **Affichage** des Artistes 
   * incluant les Musiques et leur Genre et MaisonEdition associée 
   * l'affichage doit s'afficher dans 2 langues (localisation)
-
+  * Le module doit donc afficher la liste des Artistes, et lorsqu'on en sélectionne un, une autre view avec l'information des musiques associées ainsi que la maisonEdition et le genre associé à ces musiques sont affichés. 
 * **CRUD** des Artistes
-* Seules les Musiques appartenant à l'utilisateur connecté sont affichées
-
-Le module doit donc afficher la liste des Artistes, et lorsqu'on en sélectionne un, un tableau secondaire s'ouvre avec l'information sur les Musiques de cet Artite appartenant à l'usager connecté. 
-
-Si c'est l'administrateur qui est connecté, alors lister toutes les Musiques 
-
 
 ### Tests automatisés (individuel)
 

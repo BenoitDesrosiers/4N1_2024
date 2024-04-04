@@ -5,19 +5,20 @@ draft: true
 
 # Gestion des cartes de l'utilisateur
 
+<!-- La section 5 n'est pas présentée en 2024 -->
 Dans cette section, vous allez créer la fenêtre de gestion pour assigner des cartes à l'utilisateur connecté (table UtilisateurCarte).
 
 La gestion des cartes pour l'utilisateur doit utiliser la table pivot **UtilisateurCarte**. Cette table représente une relation plusieurs à plusieurs.
 
 Il existe plusieurs types de vue pour faire la fenêtre de gestion pour une table pivot. 
 
-Il serait possible que lorsqu'on crée ou modifie un utilisateur, il faut également sélectionner ses jeux. Ou à l'inverse, lorsqu'on crée ou modifie un jeu, il faut sélectionner les utilisateurs. Ce type de vue consiste à une gestion pure **plusieurs à plusieurs**. Ce type de vue et un peu plus complexe à créer et elles ne sont pas toujours pertinentes. 
+Il serait possible de sélectionner les cartes au moment de créer ou modifier un utilisateur. Ou à l'inverse, lorsqu'on crée ou modifie un carte on sélectionnerai les utilisateurs. Ce type de vue consiste en une gestion pure **plusieurs à plusieurs**. Ce type de vue et un peu plus complexe à créer et elles ne sont pas toujours pertinentes. 
 
-Dans cette application, la gestion de l'utilisateur est faite par l'administrateur et c'est l'utilisateur qui gère sa librairie de jeux. Il faut donc une autre approche.
+Dans cette application, la gestion de l'utilisateur est faite par l'administrateur et c'est l'utilisateur qui gère sa librairie de cartes. Il faut donc une autre approche.
 
 Une autre approche est de partir d'une clé fixe de référence et de faire la sélection des autres clés en même temps. Dans cette application, il s'agirait de prendre l'utilisateur connecté comme clé fixe. Lorsque la table pivot n'a pas de champ propre, l'utilisation d'une **CheckedListBox** peut faire le travail. Dans le cas de ce projet, il faut indiquer la quantité. Ce qui nécessite qu'il faut indiquer pour chacune des cartes sa quantité dans le **CheckedListBox**.
 
-Finalement la dernière approche est de transformer la relation **plusieurs à plusieurs **comme une relation **1 à plusieurs** au niveau de la vue. Il faut également partir d'une clé fixe de référence, mais la gestion se fera pour un seul élément à la fois. La vue utilisera un **ComboBox** pour sélectionner la 2e clé. Il est important d'avoir une mécanique qui s'assure que la 2e clé ne peut pas être modifiée lorsqu'il s'agit d'une modification. Lors d'un ajout, il faut s'assurer de ne pas sélectionner une clé existante. Ce type de fenêtre demande plus d'étapes à l'utilisateur, mais la fenêtre est généralement plus simple pour l'utilisateur et pour le programmeur.
+Finalement la dernière approche est de transformer la relation **plusieurs à plusieurs** en une relation **1 à plusieurs** au niveau de la vue. Il faut également partir d'une clé fixe de référence, mais la gestion se fera pour un seul élément à la fois. La vue utilisera un **ComboBox** pour sélectionner la 2e clé. Il est important d'avoir une mécanique qui s'assure que la 2e clé ne peut pas être modifiée lorsqu'il s'agit d'une modification. Lors d'un ajout, il faut s'assurer de ne pas sélectionner une clé existante. Ce type de fenêtre demande plus d'étapes à l'utilisateur, mais la fenêtre est généralement plus simple pour l'utilisateur et pour le programmeur.
 
 Pour ce projet et le **TP 3**, ce sera la 3e technique qui sera utilisée. Afin de rendre le **ComboBox** plus intéressant, il faudra proposer à l'utilisateur uniquement les cartes disponibles, c'est-à-dire celles qui ne se trouvent pas dans la table **UtilisateurCarte** pour l'utilisateur en question. Il faudra tout de même faire la validation que la carte utilisée n'a pas déjà été utilisée lors d'un ajout. Lorsque la vue est pour une modification, il faut que le **ComboBox** soit désactivé pour empêcher la modification.
 

@@ -19,10 +19,11 @@ Vous devez modifier la balise **\<TargetFramework>net7.0\</TargetFramework>** pa
 
 Dans l'exemple ci-dessous, la balise est à la ligne 4.
 
-```xml
+```xml title="Modifier uniquement cette ligne"
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+  //highlight-next-line
     <TargetFramework>net7.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -55,7 +56,7 @@ Erreur		Le projet « ..\SuperCarte.WPF\SuperCarte.WPF.csproj » cible « net7
 
 Il faut installer les librairies qui seront utiles pour les tests.
 
-Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. Il est important que le **Projet par défaut** **.UTest** soit sélectionné dans la console. Pour ce projet, ce doit être **SuperCarte.UTest**.
+Dans la **Console du Gestionnaire de package**, inscrivez la commande ci-dessous. Il est important que le **Projet par défaut** soit **SuperCarte.UTest** dans la console.
 
 La librairie pour créer des simulacres **Moq**.
 
@@ -90,13 +91,16 @@ WPF
 ├── ViewModels
 ```
 
-Il faudrait également créer un dossier **Core\Repositories** pour les tests unitaires des **repositories**. 
-
+:::info
+Il faudrait également créer un dossier **Core\Repositories** pour les tests unitaires des **repositories**. Mais ils ne seront pas testés. 
+:::
 Par exemple, les tests unitaires de la classe **RoleService** sera dans la classe **RoleServiceTest**  dans le dossier **Unitaires\Core\Services**.
 
 # Exemple de tests unitaires
 
+:::info
 **Vous ne pouvez pas reprendre la même méthode pour le TP 3**, à l'exception du validateur.
+:::
 
 Pour chacune des classes testées unitairement, il faut créer une classe avec le même nom et en ajoutant le suffixe **Test**.
 
@@ -128,7 +132,9 @@ Le nom du test est **VersUtilisateurModel_CreerObjet_ValeursIdentiques**.
 - Le cas : CreerObjet
 - Le résultat : ValeursIdentiques
 
-```csharp showLineNumbers
+Voici le squelette d'un test:
+
+```csharp showLineNumbers title="NE PAS COPIER"
 [Fact]
 public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
 {
@@ -140,72 +146,17 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
 }
 ```
 
-Premièrement, il faut créer l'objet **Utilisateur** à convertir et les constantes pour les valeurs. Il est préférable d'utiliser des constantes au lieu de recopier les valeurs pour éviter les erreurs de copie.
+Premièrement, il faut créer l'objet **Utilisateur** à convertir (ligne 12 à 20) et les constantes pour les valeurs (ligne 5 à 10). Il est préférable d'utiliser des constantes au lieu de recopier les valeurs pour éviter les erreurs de copie.
+
+Ensuite, il faut appeler la méthode à tester (ligne 23). Le nom de la variable qui est retournée par le test possède le suffixe **Actuel** **(ou Actual en anglais)**.
+
+
+
+Finalement, il faut mettre les assertions (lignes 26 à 30). Il faut comparer toutes les propriétés.
 
 ```csharp showLineNumbers
 [Fact]
-public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
-{
-    //Arrangement (Arrange)
-    const int utilisateurId = 9000;
-    const string prenom = "TestPrenom";
-    const string nom = "TestNom";
-    const string nomUtilisateur = "TestNomUtilisateur";
-    const string motPasseHash = "TestHash";
-    const int roleId = 71;
-    
-    Utilisateur utilisateur = new Utilisateur()
-    {
-        UtilisateurId = utilisateurId,
-        Prenom = prenom,
-        Nom = nom,
-        NomUtilisateur = nomUtilisateur,
-        MotPasseHash = motPasseHash,
-        RoleId = roleId
-    };
-
-    //Action (Act)
-
-    //Assertion (Assert)
-}
-```
-
-Ensuite, il faut appeler la méthode à tester. Le nom de la variable qui est retourné par le test possède le suffixe **Actuel** **(Actual)**.
-
-```csharp showLineNumbers
-[Fact]
-public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
-{
-    //Arrangement (Arrange)
-    const int utilisateurId = 9000;
-    const string prenom = "TestPrenom";
-    const string nom = "TestNom";
-    const string nomUtilisateur = "TestNomUtilisateur";
-    const string motPasseHash = "TestHash";
-    const int roleId = 71;
-    
-    Utilisateur utilisateur = new Utilisateur()
-    {
-        UtilisateurId = utilisateurId,
-        Prenom = prenom,
-        Nom = nom,
-        NomUtilisateur = nomUtilisateur,
-        MotPasseHash = motPasseHash,
-        RoleId = roleId
-    };
-
-    //Action (Act)
-    UtilisateurModel utilisateurModelActuel = utilisateur.VersUtilisateurModel();
-
-    //Assertion (Assert)
-}
-```
-
-Finalement, il faut mettre les assertions. Il faut comparer toutes les propriétés.
-
-```csharp showLineNumbers
-[Fact]
-public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
+public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
 {
    //Arrangement (Arrange)
    const int utilisateurId = 9000;
@@ -214,7 +165,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
    const string nomUtilisateur = "TestNomUtilisateur";
    const string motPasseHash = "TestHash";
    const int roleId = 71;
-   
+
    Utilisateur utilisateur = new Utilisateur()
    {
        UtilisateurId = utilisateurId,
@@ -237,7 +188,15 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques1()
 }
 ```
 
-Exécutez le test. Il sera réussi.
+Pour exécuter le test, ouvrez l'explorateur de tests (Affichage/Explorateur de tests) et appuyez sur le bouton vert. 
+
+Vous devriez obtenir une erreur indiquant que VersUtilisateurModel() n'existe pas. Pour régler cette erreur, ajoutez 
+
+```csharp
+using SuperCarte.Core.Extensions;
+```
+
+Rédémarrez le test, cette fois-ci, il sera réussi.
 
 Pour s'assurer qu'il fonctionne bien, modifiez temporairement la méthode de **VersUtilisateurModel** la classe **UtilisateurMapExtension** pour le code ci-dessous. Il faut retirer la copie du champ **Prenom**.
 
@@ -247,6 +206,7 @@ public static UtilisateurModel VersUtilisateurModel(this Utilisateur item)
     return new UtilisateurModel()
     {
         UtilisateurId = item.UtilisateurId,
+        //highlight-next-line
         //Prenom = item.Prenom,
         Nom = item.Nom,
         NomUtilisateur = item.NomUtilisateur,            
@@ -264,27 +224,16 @@ Expected: TestPrenom
 Actual:   (null)
 ```
 
+:::tip
+Il est toujours bon de faire *planter* un test afin de s'assurer qu'il teste vraiment quelquechose et ainsi s'éviter de faux positifs. N'hésitez pas à introduire une erreur dans votre code pour chaque test (et de l'enlever immédiatement)
+:::
+
 Remettez la méthode **VersUtilisateurModel** à son état original.
 
-```csharp showLineNumbers
-public static UtilisateurModel VersUtilisateurModel(this Utilisateur item)
-{
-    return new UtilisateurModel()
-    {
-        UtilisateurId = item.UtilisateurId,
-        Prenom = item.Prenom,
-        Nom = item.Nom,
-        NomUtilisateur = item.NomUtilisateur,            
-        RoleId = item.RoleId
-    };
-}
-```
-
-Mettez ce test en commantaire.
 
 ### Test VersUtilisateurModel - Version 2
 
-Le problème avec la version précédente est si un nouveau champ est ajouté dans les modèles, mais qu'il n'est pas copié, le test va tout de même fonctionner.
+Le problème avec la version précédente est que si un nouveau champ est ajouté dans les modèles, mais qu'il n'est pas copié, le test va tout de même fonctionner.
 
 Ajoutez la propriété ci-dessous dans la classe **Utilisateur** et **UtilisateurModel**.
 
@@ -292,9 +241,10 @@ Ajoutez la propriété ci-dessous dans la classe **Utilisateur** et **Utilisateu
 public string PropTest { get; set; } = null!;
 ```
 
-Exécutez de nouveau le test 1. Il sera un succès. La première raison qu'il est réussi est que la propriété n'a pas été assignée dans le test.
+Exécutez de nouveau le test 1. Il sera un succès. La première raison pour qu'il soit réussi est que la propriété n'a pas été assignée dans le test.
 
-Modifiez la méthode par celle-ci. La nouvelle propriété a été ajoutée (lignes 11 et 21). Le test est maintenant en encore un succès lors de son exécution. La raison est qu'il manque une assertion sur ce champ.
+
+Nous allons créer la version 2 du test. La nouvelle propriété est ajoutée (lignes 11 et 21). 
 
 ```csharp showLineNumbers
 [Fact]
@@ -307,6 +257,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
     const string nomUtilisateur = "TestNomUtilisateur";
     const string motPasseHash = "TestHash";        
     const int roleId = 71;
+    //highlight-next-line
     const string propTest = "TestPropTest"; //Ajout
        
     Utilisateur utilisateur = new Utilisateur()
@@ -317,6 +268,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
         NomUtilisateur = nomUtilisateur,
         MotPasseHash = motPasseHash,
         RoleId = roleId,
+        //highlight-next-line
         PropTest = propTest //Ajout
     };
 
@@ -331,6 +283,8 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
     Assert.Equal(roleId, utilisateurModelActuel.RoleId);
 }
 ```
+Le test est encore un succès lors de son exécution car la nouvelle propriété n'est pas testée. 
+
 
 Modifiez la méthode par celle-ci. Il y a maintenant l'assertion à la ligne 33.
 
@@ -367,13 +321,16 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
     Assert.Equal(nom, utilisateurModelActuel.Nom);
     Assert.Equal(nomUtilisateur, utilisateurModelActuel.NomUtilisateur);
     Assert.Equal(roleId, utilisateurModelActuel.RoleId);
+    //highlight-next-line
     Assert.Equal(propTest, utilisateurModelActuel.PropTest);
 }
 ```
 
+Le test ne fonctionne plus car la méthode **VersUtilisateurModel** ne transfert pas la valeur. 
+
 Est-ce un bon test ? Il faut s'assurer à chaque fois que le modèle est modifié de se souvenir de modifier ce test. En cas d'oubli, le test indique que tout est beau, car la propriété n'est pas dans l'assertion, mais dans la réalité, il y a une problématique. Si la méthode **VersUtilisateurModel** a un bug, il est possible que ce ne soit pas détecté.
 
-Créez la méthode version 2. Cette version du test sera automatiquement évolutive. En cas de modification du modèle, il sera toujours fonctionnel.
+Nous allons modifier la fonction afin que le test soit automatiquement évolutive. En cas de modification du modèle, il sera toujours fonctionnel.
 
 En premier lieu, la librairie **FluentAssertions** permet de comparer les propriétés de 2 objets pour vérifier qu'ils sont identiques. Il n'est pas nécessaire que les objets soient du même type, mais les propriétés doivent avoir le même nom.
 
@@ -381,7 +338,7 @@ En premier lieu, la librairie **FluentAssertions** permet de comparer les propri
 
 ```csharp showLineNumbers
 [Fact]
-public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
+public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
 {
     //Arrangement (Arrange)
     const int utilisateurId = 9000;
@@ -405,6 +362,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
     UtilisateurModel utilisateurModelActuel = utilisateur.VersUtilisateurModel();
 
     //Assertion (Assert)
+    //highlight-next-line
     utilisateurModelActuel.Should().BeEquivalentTo(utilisateur, options => options.ExcludingMissingMembers());
 }
 ```
@@ -417,7 +375,7 @@ Modifiez la méthode par celle-ci. Les lignes 11 et 21 sont pour l'assignation d
 
 ```csharp showLineNumbers
 [Fact]
-public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
+public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
 {
     //Arrangement (Arrange)
     const int utilisateurId = 9000;
@@ -426,6 +384,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
     const string nomUtilisateur = "TestNomUtilisateur";
     const string motPasseHash = "TestHash";
     const int roleId = 71;
+    //highlight-next-line
     const string propTest = "TestPropTest";
 
     Utilisateur utilisateur = new Utilisateur()
@@ -436,6 +395,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
         NomUtilisateur = nomUtilisateur,
         MotPasseHash = motPasseHash,
         RoleId = roleId,
+        //highlight-next-line
         PropTest = propTest
     };
 
@@ -449,7 +409,7 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
 
 Exécutez le test et il sera maintenant en échec. Est-ce que le test est bon ? Plus ou moins, car il faut penser de mettre à jour le test à chaque modification du modèle, sinon la valeur par défaut sera utilisé pour la comparaison.
 
-La librairie **AutoFixture** permet de créer des objets et que les propriétés ont des valeurs différentes de celles par défaut.
+La librairie **AutoFixture** permet de créer des objets et que les propriétés aient des valeurs différentes de celles par défaut.
 
 Modifiez la méthode par celle-ci.
 
@@ -459,7 +419,7 @@ Modifiez la méthode par celle-ci.
 
 ```csharp showLineNumbers
 [Fact]
-public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
+public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
 {
     //Arrangement (Arrange)
     var fixture = new Fixture();
@@ -485,7 +445,7 @@ Il serait idéal d'indiquer manuellement les propriétés à exclure. La méthod
 
 ```csharp  showLineNumbers 
 [Fact]
-public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
+public void VersUtilisateurModel_CreerObjet_ValeursIdentiques()
 {
     //Arrangement (Arrange)
     var fixture = new Fixture();
@@ -500,9 +460,11 @@ public void VersUtilisateurModel_CreerObjet_ValeursIdentiques2()
 
     //Assertion (Assert)
     utilisateurModelActuel.Should().BeEquivalentTo(utilisateur, 
+    //highlight-start
         options => options.Excluding(x => x.MotPasseHash)
                           .Excluding(x => x.Role)
                           .Excluding(x => x.UtilisateurCarteListe));
+    //highlight-end
 }
 ```
 
@@ -520,13 +482,123 @@ Il n'est pas toujours possible de réaliser des tests évolutifs. Il est importa
 
 ## Tester un validateur
 
-Le validateur a une seule méthode à tester, mais il faut s'assurer que tous les champs soient testés correctement.
 
-Pour un validateur, il faut s'assure que la validation fonctionne bien lorsque les valeurs sont valides et lorsque les valeurs sont invalides. Il faut tester les 2 possibilités. Il faut également tester tous les cas de validation pour une propriété.
+Pour un validateur, il faut s'assurer que la validation fonctionne bien lorsque les valeurs sont valides et lorsque les valeurs sont invalides. Il faut tester les 2 possibilités. Il faut également tester tous les cas de validation (limites) pour une propriété.
 
-Créez la classe **UtilisateurCarteValidateurTest.cs** dans le dossier **Core\Validateurs**.
+### Ajout des classes à tester
+Pour ce test, nous avons besoin d'ajouter un peu de code. Ce code était dans la section WPF partie 5 qui n'est plus enseignée. 
+
+:::warning Attention
+Ce code n'est pas complet. Il ne comprend que le code minimal nécessaire pour les tests. 
+:::
+
+Ajoutez l'interface **Core/Validateurs/IValidateurPropriete.cs**.
 
 ```csharp showLineNumbers
+using SuperCarte.Core.Models;
+
+namespace SuperCarte.Core.Validateurs;
+
+/// <summary>
+/// Interface qui valide un modèle du domaine avec la possibilité de spécifier des propriétés spécifiques
+/// </summary>
+/// <typeparam name="TModele">Type du modèle du domaine à valider</typeparam>
+public interface IValidateurPropriete<TModele> where TModele : class
+{
+    /// <summary>
+    /// Valider un objet du modèle du domaine pour des propriétés spécifiques
+    /// </summary>
+    /// <param name="modele">Modèle à valider</param>
+    /// <param name="proprietesAValider">Propriété</param>
+    /// <returns>Résultat de la validation</returns>
+    Task<ValidationModel> ValiderAsync(TModele modele, params string[] proprietesAValider);
+}
+```
+
+Ainsi que **Core/Validateurs/UtilisateurCarteValidateur.cs**.
+
+
+
+```csharp showLineNumbers
+using FluentValidation;
+using FluentValidation.Results;
+using SuperCarte.Core.Extensions;
+using SuperCarte.Core.Models;
+using SuperCarte.Core.Repositories;
+
+namespace SuperCarte.Core.Validateurs;
+
+/// <summary>
+/// Classe qui valide le modèle UtilisateurCarteModel
+/// </summary>
+public class UtilisateurCarteValidateur : AbstractValidator<UtilisateurCarteModel>, IValidateurPropriete<UtilisateurCarteModel>
+{
+    private readonly IUtilisateurCarteRepo _utilisateurCarteRepo;
+    private readonly IUtilisateurRepo _utilisateurRepo;
+    private readonly ICarteRepo _carteRepo;
+
+    /// <summary>
+    /// Constructeur
+    /// </summary>
+    /// <param name="utilisateurCarteRepo">Repository de UtilisateurCarte</param>
+    /// <param name="utilisateurRepo">Repository de Utilisateur</param>
+    /// <param name="carteRepo">Repository de Carte</param>
+    public UtilisateurCarteValidateur(IUtilisateurCarteRepo utilisateurCarteRepo,
+        IUtilisateurRepo utilisateurRepo, ICarteRepo carteRepo)
+    {
+        _utilisateurCarteRepo = utilisateurCarteRepo;
+        _utilisateurRepo = utilisateurRepo;
+        _carteRepo = carteRepo;
+
+        RuleFor(i => (int)i.Quantite).Cascade(CascadeMode.Stop)
+            .InclusiveBetween(1, short.MaxValue).WithMessage($"La quantité doit être entre 1 et {short.MaxValue:N0}");
+    }
+
+    public async Task<ValidationModel> ValiderAsync(UtilisateurCarteModel modele, params string[] proprietesAValider)
+    {
+        ValidationResult validationResult;
+
+        if (proprietesAValider?.Length > 0)
+        {
+            //Il y a des propriétés à valider
+            validationResult = await this.ValidateAsync(modele, o => o.IncludeProperties(proprietesAValider));
+        }
+        else
+        {
+            //Il n'y a aucune propriété à valider
+            validationResult = await base.ValidateAsync(modele);
+        }
+
+        return validationResult.VersValidationModel();
+    }
+}
+```
+
+Ainsi que **Core/Models/UtilisateurCarteModel.cs**
+
+```csharp showLineNumbers
+namespace SuperCarte.Core.Models;
+
+/// <summary>
+/// Classe qui contient l'information d'une carte d'un utilisateur
+/// </summary>
+public class UtilisateurCarteModel
+{
+    public int UtilisateurId { get; set; }
+    public int CarteId { get; set; }
+    public short Quantite { get; set; }
+}
+```
+
+
+
+
+### Retour aux tests
+Créez la classe **UtilisateurCarteValidateurTest.cs** dans le dossier **UTest/Core/Validateurs**.
+
+```csharp showLineNumbers
+using SuperCarte.Core.Models;
+
 namespace SuperCarte.UTest.Core.Validateurs;
 
 /// <summary>
@@ -552,7 +624,7 @@ Par exemple, pour une chaine de caractères, il faut tester toutes les variation
 - Uniquement espace. 
 
 
-Pour une propriété qui a une valeur minimale ou maximale, il faut tester les cas limites.
+Pour une propriété qui a une valeur minimale ou maximale, il faut tester les cas limites ( limite -1, limite, limite+1).
 
 Il faut également tester le cas valide et non valide. 
 
@@ -575,65 +647,19 @@ Si la propriété acceptait entre 1 et 250, il faudrait également tester 251. M
 
 Afin d'éviter d'écrire plusieurs tests pour chacune des valeurs, il est possible d'utiliser l'annotation **[Theory]** au lieu de **[Fact]**. Cette nouvelle annotation permet de spécifier les paramètres pour le même test avec l'annotation **[InlineData]**.
 
-Créez la méthode **ValiderAsync_Quantite_Valide**. Remarquez que la méthode possède un paramètre **quantite**.
+Créez la méthode **ValiderAsync_Quantite_Valide**. 
 
-La méthode a plusieurs annotations. Ce test sera exécuté 3 fois. La première fois, le paramètre **quantite** aura la valeur 1. La deuxième fois, la valeur sera 32 767 et la troisième fois, la valeur sera 15657.
+Remarquez que la méthode possède un paramètre **quantite** (ligne 5).
+
+La méthode a plusieurs annotations (ligne 2 à 4). Ce test sera exécuté 3 fois. La première fois, le paramètre **quantite** aura la valeur 1. La deuxième fois, la valeur sera 32 767 et la troisième fois, la valeur sera 15657.
 
 La propriété **Quantite** de l'objet **utilisateurCarteModel** utilise la valeur du paramètre (ligne 10). 
-
-```csharp showLineNumbers
-[Theory]
-[InlineData(1)] //Min
-[InlineData(short.MaxValue)] //Max
-[InlineData(15657)] //Entre les 2
-public async Task ValiderAsync_Quantite_Valide(short quantite)
-{
-    //Arrangement (Arrange)
-    UtilisateurCarteModel utilisateurCarteModel = new UtilisateurCarteModel()
-    {
-        Quantite = quantite
-    };
-
-    //Action (Act)
-
-    //Assertion (Assert)         
-}
-```
 
 Il faut ensuite créer les simulacres pour les dépendances. Il n'est pas nécessaire de les configurer, car pour ce test, elles ne seront pas utilisées (lignes 13 à 15).
 
 À la ligne 17, il y a la création du service et à la ligne 23 il y a l'exécution.
 
-```csharp showLineNumbers
-[Theory]
-[InlineData(1)] //Min
-[InlineData(short.MaxValue)] //Max
-[InlineData(15657)] //Entre les 2
-public async Task ValiderAsync_Quantite_Valide(short quantite)
-{
-    //Arrangement (Arrange)
-    UtilisateurCarteModel utilisateurCarteModel = new UtilisateurCarteModel()
-    {
-        Quantite = quantite
-    };
-
-    var utilisateurCarteRepo = new Mock<IUtilisateurCarteRepo>();
-    var carteRepo = new Mock<ICarteRepo>();
-    var utilisateurRepo = new Mock<IUtilisateurRepo>();
-            
-    UtilisateurCarteValidateur utilisateurCarteValidateur =
-        new UtilisateurCarteValidateur(utilisateurCarteRepo.Object,
-                                       utilisateurRepo.Object,
-                                       carteRepo.Object);
-
-    //Action (Act)
-    ValidationModel validationModel = await utilisateurCarteValidateur.ValiderAsync(utilisateurCarteModel);
-
-    //Assertion (Assert)            
-}
-```
-
-Finalement, l'assertion doit se faire sur la propriété des messages d'erreur. Il n'est pas possible d'utiliser la propriété **EstValide**, car cette propriété considère toutes les erreurs. Les autres propriétés sont ignorées dans le test, donc elles ne sont pas contrôlées. Il n'est pas possible de prédire leur comportement. Donc, si le **dictionnaire** d'erreur ne contient pas la propriété **Quantite**, la propriété est valide.
+Finalement, l'assertion doit se faire sur la propriété des messages d'erreur. Il n'est pas possible d'utiliser la propriété **EstValide**, car cette propriété considère toutes les erreurs. Les autres propriétés sont ignorées dans le test, donc elles ne sont pas contrôlées. Il n'est pas possible de prédire leur comportement. Donc, si le **dictionnaire** d'erreur ne contient pas la propriété **Quantite** (ligne 26), la propriété est valide.
 
 ```csharp showLineNumbers
 [Theory]
@@ -654,13 +680,14 @@ public async Task ValiderAsync_Quantite_Valide(short quantite)
             
     UtilisateurCarteValidateur utilisateurCarteValidateur =
         new UtilisateurCarteValidateur(utilisateurCarteRepo.Object,
-                                       utilisateurRepo.Object,
+                                        utilisateurRepo.Object,
                                        carteRepo.Object);
 
     //Action (Act)
     ValidationModel validationModel = await utilisateurCarteValidateur.ValiderAsync(utilisateurCarteModel);
 
-    //Assertion (Assert)        
+    //Assertion (Assert) 
+    //highlight-next-line
     Assert.False(validationModel.ErreurParPropriete.ContainsKey(nameof(utilisateurCarteModel.Quantite)));
 }
 ```
@@ -671,8 +698,10 @@ Le tout est identique, à l'exception des valeurs pour la quantité et l'asserti
 
 ```csharp showLineNumbers
 [Theory]
+//highlight-start
 [InlineData(0)] //Limite
 [InlineData(-10)] //Négatif    
+//highlight-end
 public async Task ValiderAsync_Quantite_NonValide(short quantite)
 {
     //Arrangement (Arrange)
@@ -693,7 +722,8 @@ public async Task ValiderAsync_Quantite_NonValide(short quantite)
     //Action (Act)
     ValidationModel validationModel = await utilisateurCarteValidateur.ValiderAsync(utilisateurCarteModel);
 
-    //Assertion (Assert)        
+    //Assertion (Assert)     
+    //highlight-next-line   
     Assert.True(validationModel.ErreurParPropriete.ContainsKey(nameof(utilisateurCarteModel.Quantite)));
 }
 ```
@@ -733,6 +763,7 @@ public class UtilisateurCarteValidateur : AbstractValidator<UtilisateurCarteMode
     private readonly IUtilisateurCarteRepo _utilisateurCarteRepo;
     private readonly IUtilisateurRepo _utilisateurRepo;
     private readonly ICarteRepo _carteRepo;
+    //highlight-next-line
     private readonly IStringLocalizer<ResUtilisateurCarteValidateur> _resUtilisateurCarteValidateur;
 
     /// <summary>
@@ -742,27 +773,21 @@ public class UtilisateurCarteValidateur : AbstractValidator<UtilisateurCarteMode
     /// <param name="utilisateurRepo">Repository de Utilisateur</param>
     /// <param name="carteRepo">Repository de Carte</param>
     /// <param name="resUtilisateurCarteValidateur">Fichier ressource ResUtilisateurCarteValidateur</param>
-    public UtilisateurCarteValidateur(IUtilisateurCarteRepo utilisateurCarteRepo, 
-        IUtilisateurRepo utilisateurRepo, ICarteRepo carteRepo, 
+    public UtilisateurCarteValidateur(IUtilisateurCarteRepo utilisateurCarteRepo,
+        IUtilisateurRepo utilisateurRepo, ICarteRepo carteRepo,
+        //highlight-next-line
         IStringLocalizer<ResUtilisateurCarteValidateur> resUtilisateurCarteValidateur)
     {
         _utilisateurCarteRepo = utilisateurCarteRepo;
         _utilisateurRepo = utilisateurRepo;
         _carteRepo = carteRepo;
+        //highlight-next-line
         _resUtilisateurCarteValidateur = resUtilisateurCarteValidateur;
-        
+
         RuleFor(i => (int)i.Quantite).Cascade(CascadeMode.Stop)
+        //highlight-next-line
             .InclusiveBetween(1, short.MaxValue).WithMessage(resUtilisateurCarteValidateur["Quantite_PlageInvalide"]);
-
-        RuleFor(i => i.UtilisateurId).Cascade(CascadeMode.Stop)
-            .Must(ValiderUtilisateurIdExiste).WithMessage("L'utilisateur sélectionné n'est pas valide.")
-            .Must((i, p) => ValiderDoublon(p, i.CarteId)).WithMessage("L'utilisateur existe déjà pour cette carte.");
-
-        RuleFor(i => i.CarteId).Cascade(CascadeMode.Stop)
-            .Must(ValiderCarteIdExiste).WithMessage("La carte sélectionnée n'est pas valide.")
-            .Must((i, p) => ValiderDoublon(i.UtilisateurId, p)).WithMessage("La carte existe déjà pour cet utilisateur.");
     }
-
 
     public async Task<ValidationModel> ValiderAsync(UtilisateurCarteModel modele, params string[] proprietesAValider)
     {
@@ -771,7 +796,7 @@ public class UtilisateurCarteValidateur : AbstractValidator<UtilisateurCarteMode
         if (proprietesAValider?.Length > 0)
         {
             //Il y a des propriétés à valider
-            validationResult = await this.ValidateAsync(modele, o => o.IncludeProperties(proprietesAValider));            
+            validationResult = await this.ValidateAsync(modele, o => o.IncludeProperties(proprietesAValider));
         }
         else
         {
@@ -781,43 +806,13 @@ public class UtilisateurCarteValidateur : AbstractValidator<UtilisateurCarteMode
 
         return validationResult.VersValidationModel();
     }
-
-    /// <summary>
-    /// Valider la clé primaire de l'utilisateur si elle existe
-    /// </summary>
-    /// <param name="utilisateurId">Clé primaire de l'utilisateur</param>
-    /// <returns>Vrai si valide, faux si non valide</returns>
-    private bool ValiderUtilisateurIdExiste(int utilisateurId)
-    {
-        return _utilisateurRepo.ObtenirParCle(utilisateurId) != null;
-    }
-
-    /// <summary>
-    /// Valider la clé primaire de la carte si elle existe
-    /// </summary>
-    /// <param name="utilisateurId">Clé primaire de la carte</param>
-    /// <returns>Vrai si valide, faux si non valide</returns>
-    private bool ValiderCarteIdExiste(int carteId)
-    {
-        return _carteRepo.ObtenirParCle(carteId) != null;
-    }
-
-    /// <summary>
-    /// Valider si la combinaison CarteId et UtilisateurId n'est pas déjà utilisée
-    /// </summary>    
-    /// <param name="utilisateurId">Clé primaire de l'utilisateur</param>
-    /// <param name="carteId">Clé primaire de la carte</param>
-    /// <returns>Vrai si valide, faux si non valide</returns>
-    private bool ValiderDoublon(int utilisateurId, int carteId)
-    {
-        return _utilisateurCarteRepo.ObtenirParCle(utilisateurId, carteId) == null;
-    }
 }
 ```
 
-Il faut maintenant créer un simulacre dans les tests pour le fichier ressource. 
+Il faudra maintenant créer, dans les tests, un simulacre pour le message d'erreur car il est nécessaire dans le constructeur du validateur. 
 
-Pour le test **valide**, il faut configurer le simulacre pour retourner un message d'erreur, peu importe la ressource demandée (ligne 17). Il n'est pas nécessaire de créer tous les messages, car ils ne servent pas à l'assertion.
+Pour le test **valide**, il faut configurer le simulacre pour retourner un message d'erreur, peu importe la ressource demandée (ligne 17). Ce message peut être n'importe quoi, car il ne sera pas testé dans l'assertion. 
+
 
 ```csharp showLineNumbers
 [Theory]
@@ -836,6 +831,7 @@ public async Task ValiderAsync_Quantite_Valide(short quantite)
     var carteRepo = new Mock<ICarteRepo>();
     var utilisateurRepo = new Mock<IUtilisateurRepo>();
     var ressource = new Mock<IStringLocalizer<ResUtilisateurCarteValidateur>>();
+    //highlight-next-line
     ressource.Setup(x => x[It.IsAny<string>()]).Returns(new LocalizedString("Test", "Message erreur Test"));
 
     UtilisateurCarteValidateur utilisateurCarteValidateur =
@@ -852,9 +848,11 @@ public async Task ValiderAsync_Quantite_Valide(short quantite)
 }
 ```
 
-Pour le test **non valide**, il faut configurer le message d'erreur et de vérifier dans l'assertion que c'est le bon message. Il y a un risque que le validateur n'utilise pas le bon message dans la ressource. Il faut donc le valider. Il est important de configurer le simulacre pour chacun des messages.
+Pour le test **non valide**, il faut configurer le message d'erreur et vérifier dans l'assertion que c'est ce même message qui est retourné. Il y a un risque que le validateur n'utilise pas la bonne clé de ressource. Il faut donc le valider que c'est bien la bonne ressource qui est utilisée. 
 
-À la ligne 7, il faut créer la constante pour le message d'erreur attendu. Il est configuré dans le simulacre de la ressource à la ligne 18.
+Le fonctionnement d'un Mock est le suivant: si la clé de message "Quantite_PlageInvalide" est demandée, alors retourne messageErreurAttendu (ligne 18). Ce qui est important, ce n'est pas le contenu du message retourné, c'est le fait que la bonne clé ait été demandée. 
+
+À la ligne 7, il faut créer la constante pour le message d'erreur attendu. Il est utilisé pour configurer le simulacre de la ressource à la ligne 18, et vérifier que c'est bien le bon message qui est retourné à la ligne 31.
 
 À la ligne 31, il y a une nouvelle assertion qui vérifie que le message d'erreur attendu est celui qui a été obtenu.
 
@@ -864,7 +862,8 @@ Pour le test **non valide**, il faut configurer le message d'erreur et de vérif
 [InlineData(-10)] //Négatif    
 public async Task ValiderAsync_Quantite_NonValide(short quantite)
 {
-    //Arrangement (Arrange)        
+    //Arrangement (Arrange)       
+    //highlight-next-line 
     const string messageErreurAttendu = "Quantite_PlageInvalide_Test";
 
     UtilisateurCarteModel utilisateurCarteModel = new UtilisateurCarteModel()
@@ -876,6 +875,7 @@ public async Task ValiderAsync_Quantite_NonValide(short quantite)
     var carteRepo = new Mock<ICarteRepo>();
     var utilisateurRepo = new Mock<IUtilisateurRepo>();
     var ressource = new Mock<IStringLocalizer<ResUtilisateurCarteValidateur>>();
+    //highlight-next-line
     ressource.Setup(x => x["Quantite_PlageInvalide"]).Returns(new LocalizedString("Quantite_PlageInvalide", messageErreurAttendu));       
 
     UtilisateurCarteValidateur utilisateurCarteValidateur =
@@ -889,9 +889,32 @@ public async Task ValiderAsync_Quantite_NonValide(short quantite)
 
     //Assertion (Assert)        
     Assert.True(validationModel.ErreurParPropriete.ContainsKey(nameof(utilisateurCarteModel.Quantite)));
+    //highlight-next-line
     Assert.Equal(messageErreurAttendu, validationModel.ErreurParPropriete[nameof(utilisateurCarteModel.Quantite)]);
 }
 ```
+
+Exécuter le test, il devrait passer. 
+
+### Validation des tests
+
+Il est toujours bon de vérifier si les tests sont valides. Pour ce faire, on veut provoquer une erreur.
+
+Vous pouvez changer les valeurs dans le test lui même, ou changer le code qui est testé. 
+
+Par exemple, pour le test de valide, on pourrait changer la valeur 1 pour -1 dans le test. Le test devrait alors donner une erreur. 
+
+Autre exemple, dans UtilisateurCarteValidateur, au lieu de 
+
+**WithMessage(resUtilisateurCarteValidateur["Quantite_PlageInvalide"])**
+
+ inscrivez 
+ 
+ **WithMessage("allo")**
+ 
+ Le test pour invalide devrait alors indiquer **Expected: "Quantite_PlageInvalide_Test" Actual allo**
+
+ Il est très important de faire *planter* un test au moins une fois afin de s'assurer qu'il teste quelquechose. 
 
 ## Tester un service - UtilisateurCarteService
 

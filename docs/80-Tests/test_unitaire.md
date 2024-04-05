@@ -1,10 +1,15 @@
 ---
 sidebar_position: 820
-draft: true
+draft: false
 ---
 
 # Tests unitaires
 
+<!-- pour la prochaine fois, il faudrait ajouter du blahblah sur comment on décide quoi tester, et le fait qu'un test unitaire est normalement associé à une specs provenant de l'analyse. Par exemple: le bouton Effacer de la liste des categories est allumé si une catégorie est sélectionnée et que cette catégorie n'a pas de dépendances. Ca donne le contexte pour le test.  
+
+Introduire les tests plus tot dans la session et ajouter un test de temps en temps lors de l'introduction de certaines fonctions. 
+
+-->
 Vous devez créer un nouveau projet de type **xUnit** dans votre solution.
 
 Nommez le projet **SuperCarte.UTest** et utilisez **.NET 7**. Le **U** est pour **Unitaire**.
@@ -918,7 +923,7 @@ Autre exemple, dans UtilisateurCarteValidateur, au lieu de
 
 ## Tester un service - UtilisateurCarteService
 
-Créez la classe **UtilisateurCarteServiceTest** dans le dossier **Core\Services**.
+Créez la classe **UtilisateurCarteServiceTest** dans le dossier **SupertCarte.UTest/Core/Services**.
 
 ```csharp showLineNumbers
 namespace SuperCarte.UTest.Core.Services;
@@ -930,10 +935,151 @@ public class UtilisateurCarteServiceTest
 {
 }
 ```
+### Ajout pour les tests
+
+Ici aussi les tests sont pour du code qui était prévu pour la partie 5 des notes de cours sur WPF. Nous allons donc ajouter un peu de code pour les faire. 
+
+:::warning Attention
+Ce code n'est pas complet. Il ne comprend que le code minimal nécessaire pour les tests. 
+:::
+
+Dans **SuperCarte.Core/Extensions** ajoutez la classe **UtilisateurCarteMapExtension.cs**
+
+```csharp showLineNumbers
+using SuperCarte.Core.Models;
+using SuperCarte.EF.Data;
+
+namespace SuperCarte.Core.Extensions;
+public static class UtilisateurCarteMapExtension
+{
+    public static UtilisateurCarteModel VersUtilisateurCarteModel(this UtilisateurCarte item)
+    {
+        return new UtilisateurCarteModel()
+        {
+            UtilisateurId = item.UtilisateurId,
+            CarteId = item.CarteId,
+            Quantite = item.Quantite
+        };
+    }
+
+     public static UtilisateurCarte VersUtilisateurCarte(this UtilisateurCarteModel item)
+    {
+        return new UtilisateurCarte()
+        {
+            UtilisateurId = item.UtilisateurId,
+            CarteId = item.CarteId,
+            Quantite = item.Quantite
+        };
+    }
+
+    public static void Copie(this UtilisateurCarteModel itemDestination, UtilisateurCarte utilisateurCarteSource, bool copierClePrimaire)
+    {
+        if (copierClePrimaire == true)
+        {
+            itemDestination.UtilisateurId = utilisateurCarteSource.UtilisateurId;
+            itemDestination.CarteId = utilisateurCarteSource.CarteId;
+        }
+
+        itemDestination.Quantite = utilisateurCarteSource.Quantite;
+    }
+}
+```
+
+Dans **SuperCarte.Core/Repositories/IUtilisateurCarteRepo.cs**, ajoutez cette déclaration:
+
+```csharp showLineNumbers
+    Task<UtilisateurCarte?> ObtenirParCleAsync(int utilisateurId, int carteId);
+```
+
+Dans **SuperCarte.Core/Repositories/UtilisateurCarteRepo.cs**, ajoutez cette fonction:
+
+```csharp showLineNumbers
+public async Task<UtilisateurCarte?> ObtenirParCleAsync(int utilisateurId, int carteId)
+{
+    return await (from lqUtilisateurCarte in _bd.UtilisateurCarteTb
+                  where
+                       lqUtilisateurCarte.UtilisateurId == utilisateurId &&
+                       lqUtilisateurCarte.CarteId == carteId
+                  select
+                    lqUtilisateurCarte).FirstOrDefaultAsync();
+}
+```
+Dans **SuperCarte.Core/Services/IUtilisateurCarteService.cs**, ajoutez ces déclarations:
+
+```csharp showLineNumbers
+    Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId);
+    Task<bool> AjouterAsync(UtilisateurCarteModel utilisateurCarteModel);
+    Task<ValidationModel> ValiderAsync(UtilisateurCarteModel utilisateurCarteModel, bool validerPourAjout);
+```
+
+Dans **SuperCarte.Core/Services/UtilisateurCarteService.cs**, ajoutez ce using:
+```csharp showLineNumbers
+using SuperCarte.Core.Extensions;
+```
+Dans **SuperCarte.Core/Services/UtilisateurCarteService.cs**, modifiez le constructeur et ajoutez _utilisateurCarteValidateur:
+```csharp showLineNumbers
+    private readonly IValidateurPropriete<UtilisateurCarteModel> _utilisateurCarteValidateur;
+
+```
+```csharp showLineNumbers
+ public UtilisateurCarteService(IUtilisateurCarteRepo utilisateurCarteRepo,
+     IValidateurPropriete<UtilisateurCarteModel> utilisateurCarteValidateur)
+ {
+     _utilisateurCarteRepo = utilisateurCarteRepo;
+     _utilisateurCarteValidateur = utilisateurCarteValidateur;
+ }
+
+```
+
+Dans **SuperCarte.Core/Services/UtilisateurCarteService.cs**, ajoutez ces fonctions:
+
+```csharp showLineNumbers
+//////
+public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId)
+{
+    UtilisateurCarte? utilisateurCarte = await _utilisateurCarteRepo.ObtenirParCleAsync(utilisateurId, carteId);
+
+    return utilisateurCarte?.VersUtilisateurCarteModel();
+}
+ 
+public async Task<bool> AjouterAsync(UtilisateurCarteModel utilisateurCarteModel)
+{
+    if ((await ValiderAsync(utilisateurCarteModel, true)).EstValide == true)
+    {
+        //Transformation de l'objet du modèle du domaine en objet du modèle de données
+        UtilisateurCarte utilisateurCarte = utilisateurCarteModel.VersUtilisateurCarte();
+
+        //Ajout dans repository avec enregistrement immédiat
+        await _utilisateurCarteRepo.AjouterAsync(utilisateurCarte, true);
+
+        utilisateurCarteModel.Copie(utilisateurCarte, false);
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+public async Task<ValidationModel> ValiderAsync(UtilisateurCarteModel utilisateurCarteModel, bool validerPourAjout)
+{
+    if (validerPourAjout == true)
+    {
+        return await _utilisateurCarteValidateur.ValiderAsync(utilisateurCarteModel);
+    }
+    else
+    {
+        return await _utilisateurCarteValidateur.ValiderAsync(utilisateurCarteModel,
+            nameof(utilisateurCarteModel.Quantite));
+    }
+}
+```
 
 ### Test ObtenirCartesUtilisateurAsync
 
-Est-ce qu'il y a quelque chose à tester dans cette méthode ?
+Est-ce qu'il y a quelque chose à tester dans la méthode **UtilisateurCarteServices.cs/ObtenirCartesUtilisateurAsync** ?
+
 
 ```csharp showLineNumbers
 public async Task<List<QuantiteCarteDetailModel>> ObtenirCartesUtilisateurAsync(int utilisateurId)
@@ -946,9 +1092,10 @@ Cette méthode effectue uniquement un appel au **repository** sans aucune logiqu
 
 Le seul test possible serait de s'assurer que la méthode retourne exactement la même chose de ce que le **repository** retourne. Les tests doivent avoir une valeur et celui-ci n’en donne pas réellement. Comment ce test s'appellerait-il ? S'il est difficile de nommer le test, c'est souvent un indicateur qu'il n'est pas utile.
 
-### Test ObtenirDetail
+### Test ObtenirAsync
 
 Voici la méthode **ObtenirAsync**. 
+
 
 ```csharp showLineNumbers
 public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId)
@@ -965,74 +1112,15 @@ Est-ce qu'il faut la tester ? Celle-ci à 2 cas de test.
 
 Le premier test est de s'assurer que les paramètres ne sont pas inversés en appelant le **repository**.
 
-Créez la méthode **ObtenirAsync_ParametreRepo_BonOrdre()**. Remarquez que la méthode est asynchrone, car celle à tester est asynchrone.
+Créez la méthode **ObtenirAsync_ParametreRepo_BonOrdre()** dans **UtilisateurCarteServiceTest**. Remarquez que la méthode est asynchrone, car celle à tester est asynchrone.
 
-```csharp showLineNumbers
-[Fact]
-public async Task ObtenirAsync_ParametreRepo_BonOrdre()
-{
-    //Arrangement (Arrange)
-    
-
-    //Action (Act)
-    
-
-    //Assertion (Assert)
-    
-}
-```
 
 Il faut créer les constantes pour les clés (lignes 5 et 6).
 
 Le service a 2 dépendances. Il faut créer les simulacres. Il n'est pas nécessaire de les configurer (lignes 8 et 9).
 
-```csharp showLineNumbers
-[Fact]
-public async Task ObtenirAsync_ParametreRepo_BonOrdre()
-{
-    //Arrangement (Arrange)
-    const int utilisateurId = 4;
-    const int carteId = 5;
-
-    var utilisateurCarteRepository = new Mock<IUtilisateurCarteRepo>();
-    var utilisateurCarteValidateur = new Mock<IValidateurPropriete<UtilisateurCarteModel>>();
-
-    UtilisateurCarteService utilisateurCarteService =
-        new UtilisateurCarteService(utilisateurCarteRepository.Object,
-                                    utilisateurCarteValidateur.Object);
-
-    //Action (Act)
-
-
-    //Assertion (Assert)
-
-}
-```
 
 Ensuite, il faut exécuter la méthode (ligne 16). La méthode est asynchrone, il ne faut pas oublier le **await**. Il n'est pas nécessaire de récupérer l'objet de retour, car il n'est pas nécessaire à l'assertion.
-
-```csharp showLineNumbers
-[Fact]
-public async Task ObtenirAsync_ParametreRepo_BonOrdre()
-{
-    //Arrangement (Arrange)
-    const int utilisateurId = 4;
-    const int carteId = 5;
-
-    var utilisateurCarteRepository = new Mock<IUtilisateurCarteRepo>();
-    var utilisateurCarteValidateur = new Mock<IValidateurPropriete<UtilisateurCarteModel>>();
-
-    UtilisateurCarteService utilisateurCarteService =
-        new UtilisateurCarteService(utilisateurCarteRepository.Object,
-                                    utilisateurCarteValidateur.Object);
-
-    //Action (Act)
-    await utilisateurCarteService.ObtenirAsync(utilisateurId, carteId);
-
-    //Assertion (Assert)
-
-}
-```
 
 Finalement, l'assertion est sur le comportement.
 
@@ -1064,28 +1152,46 @@ public async Task ObtenirAsync_ParametreRepo_BonOrdre()
 }
 ```
 
-Modifiez temporairement la méthode **ObtenirAsync()** du service par celle-ci. Le programmeur a utilisé 2 fois la clé **utilisateurId**. Testez de nouveau et le test sera en échec.
+Exécutez le test, il devrait passer.
+
+Mais comme recommendé, il faut que le test plante afin de s'assurer que l'on test la bonne chose. Modifiez temporairement la méthode **ObtenirAsync()** du service par celle-ci. Le programmeur a utilisé 2 fois la clé **utilisateurId**. Testez de nouveau et le test sera en échec.
 
 ```csharp showLineNumbers
 public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId)
 {
+    //highlight-next-line
     UtilisateurCarte? utilisateurCarte = await _utilisateurCarteRepo.ObtenirParCleAsync(utilisateurId, utilisateurId);
 
     return utilisateurCarte?.VersUtilisateurCarteModel();
 }
 ```
 
+Ré-exécutez le test. Cette fois-ci, il sera en erreur. 
+
+Remettez la fonction ObtenirAsync comme elle était. 
+
 #### Conversion de UtilisateurCarte vers UtilisateurCarteModel
 
 Le 2e test est de s'assurer que la conversion de **UtilisateurCarte** vers **UtilisateurCarteModel** est correcte.
 
+Cette conversion est effectuée par la ligne 
+
+```csharp showLineNumbers title="NE PAS COPIER"
+        return utilisateurCarte?.VersUtilisateurCarteModel();
+```
+
 Est-ce nécessaire de tester ce cas si le test unitaire de **utilisateurCarte?.VersUtilisateurCarteModel()** a déjà été fait ?
 
-Dans ce cas-ci, il est important de le tester, car la conversion se fait directement à l'interne. Le service n'utilise pas une dépendance pour la conversion.
 
-Imaginez que le programmeur oublie d'utiliser la méthode d'extension et il le fait directement dans la classe comme dans l'exemple ci-dessous. Le test de l'extension est inutile dans ce cas-ci. Un test ne doit pas dépendre d'un autre test pour le considérer valide.
+:::note
+Ici, on ne veut pas tester si le programmeur à utiliser ou non la bonne fonction, on veut savoir si, peut importe comment c'est fait, que c'est bien fait. 
 
-```csharp showLineNumbers
+Le but de la fonction ObtenirAsync est d'obtenir un objet de donnée à partir de la source (ici une bd) et de retourner un objet du domaine. Il faut donc vérifier que cette conversion est bien faite. 
+:::
+
+Imaginez que le programmeur oublie d'utiliser la méthode d'extension et il le fait directement dans la classe comme dans l'exemple ci-dessous. Tester VersUtilisateurCarteModel() serait inutile dans ce cas-ci. Un test ne doit pas dépendre d'un autre test pour le considérer valide. 
+
+```csharp showLineNumbers title="NE PAS COPIER"
 public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId)
 {
     UtilisateurCarte? utilisateurCarte = await _utilisateurCarteRepo.ObtenirParCleAsync(utilisateurId, carteId);
@@ -1106,6 +1212,7 @@ public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int ca
 }
 ```
 
+<!-- je connais pas auto-mapper
 Si c'était une dépendance comme auto-mapper, la méthode ressemblerait à ceci.
 
 Il faudrait seulement tester que le **mapper** est appelé correctement sans se soucier du résultat de l'assignation. Le **mapper** serait simulé dans le test. 
@@ -1120,12 +1227,15 @@ public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int ca
 ```
 
 Voici un exemple que le choix d'utiliser des extensions pour le **mappage** n'est peut-être pas le meilleur choix pour les tests. Il arrive souvent que la conception des tests mette en évidence les faiblesses du code.
+-->
 
-Voici la méthode pour le test. Il est très similaire à l'extension.
+Voici la méthode pour le test. Ajoutez la dans **UtilisateurCarteServiceTests**
 
 Aux lignes 5 à 10, l'objet est créé à l'aide de la librairie **AutoFixture** pour assigner tous les champs.
 
-À la ligne 13, il faut configurer le simulacre pour le **repository** pour retourner l'utilisateur généré à la ligne 6. Également, ce sont les vraies valeurs qui sont spécifiées dans la configuration. Mais il aurait été aussi valide de mettre **It.IsAny\<int>()**, car le test s'occupe uniquement de la conversion. Il y a un test qui s'occupe de l'ordre des paramètres.
+À la ligne 13, il faut configurer le simulacre pour le **repository** pour retourner l'utilisateur généré à la ligne 6. Également, ce sont les vraies valeurs qui sont spécifiées pour les clée dans la configuration. Mais il aurait été aussi valide de mettre **It.IsAny\<int>()**, car le test s'occupe uniquement de la conversion. Le test **ObtenirAsync_ParametreRepo_BonOrdre** s'occupe de l'ordre des paramètres.
+
+Le mock pour le repository (ligne 12) est configuré de la facon suivante (ligne 13): si un appel à ObtenirParCleAsync est fait, retourne utilisateurCarte. L'action du test va donc appeler la vrai fonction UtilisateurCarteService/ObtenirAsync() (ligne 22). Celle-ci va appeler **_utilisateurCarteRepo.ObtenirParCleAsync**, mais étant donné que _utilisateurCarteRepo est généré via une interface, ce n'est pas le vrai qui sera injecté, c'est le Mock. Ce Mock interceptera donc ObtenirParCleAsync et retournera utilisateurCarte. C'est donc notre utilisateurCarte qui sera converti en UtilisateurCarteModel. Donc c'est la convertion qui est testée. 
 
 À la ligne 27, la librairie **FluentValidation** fait la comparaison entre l'objet du modèle du domaine obtenu avec celui créé.
 
@@ -1144,7 +1254,6 @@ public async Task ObtenirAsync_DataVersModeleNonNull_ValeursIdentiques()
     var utilisateurCarteRepository = new Mock<IUtilisateurCarteRepo>();
     utilisateurCarteRepository.Setup(x => x.ObtenirParCleAsync(utilisateurCarte.UtilisateurId, utilisateurCarte.CarteId))
         .ReturnsAsync(utilisateurCarte);
-
     var utilisateurCarteValidateur = new Mock<IValidateurPropriete<UtilisateurCarteModel>>();
 
     UtilisateurCarteService utilisateurCarteService =
@@ -1162,7 +1271,7 @@ public async Task ObtenirAsync_DataVersModeleNonNull_ValeursIdentiques()
 }
 ```
 
-Modifiez la méthode du service avec la version ci-dessous. Le test sera encore un succès.
+Modifiez la méthode du service avec la version ci-dessous. 
 
 ```csharp showLineNumbers
 public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int carteId)
@@ -1184,8 +1293,15 @@ public async Task<UtilisateurCarteModel?> ObtenirAsync(int utilisateurId, int ca
     }
 }
 ```
+Réexécutez le test. Le test sera encore un succès.
 
+Maintenant remplacer utilisateurCarte.Quantite à la ligne 11 par un entier quelconque, et reexécutez le test. Il devrait planter. Je dis bien "devrait" car il la fixture génère un nombre alératoire pour cette quantité. Il y a donc une faible chance que la valeur aléatoire et votre valeur soit les mêmes. Si c'est le cas, réessayez une autre fois... s'il n'y a toujours pas d'erreur ... allez vous acheter un 6/49.
+
+Remettez la fonction à son état original. 
 ### Tester AjouterAsync
+
+CategorieService/AjouterAsync
+
 
 Pour cette méthode, il y a plusieurs cas.
 
@@ -1200,13 +1316,13 @@ Les 2 derniers sont plus complexes, car il faut intercepter l'objet envoyer en p
 
 #### AjouterAsync_ModeleInvalide_RepoNonAjout
 
-Le premier test est de s'assurer que le **repository** n'ajoute pas l'objet dans le cas que le modèle du domaine n'est pas valide. Ce test est un test comportemental, car il ne valide pas un résultat, mais si un comportement est bien exécuté.
+Le premier test est de s'assurer que le **repository** n'ajoute pas l'objet lorsque le modèle du domaine n'est pas valide. Ce test est un test comportemental, car il ne valide pas un résultat, mais si un comportement est bien exécuté.
 
 Créez la méthode **AjouterAsync_ModeleInvalide_RepoNonAjout()**. Remarquez que la méthode est asynchrone, car celle à tester est asynchrone.
 
 Il faut créer l'objet du modèle à ajouter (ligne 5). Cet objet peut être vide, car il ne sera pas réellement validé ou ajouté.
 
-Il faut créer l'objet **ValidationModel** avec une erreur(linges 7 et 8).
+Il faut créer l'objet **ValidationModel** avec une erreur(lignes 7 et 8).
 
 Le **validateur** (ligne 10) est créé. À la ligne 11, il faut le configurer pour retourner le **ValidationModel** en erreur lorsque l'objet du modèle lui est envoyé.
 
@@ -1248,6 +1364,14 @@ public async Task AjouterAsync_ModeleInvalide_RepoNonAjout()
     
 }
 ```
+Si vous exécutez le test, il va passer. 
+
+Pour vérifier si le test est fonctionnel, mettez en commentaire la ligne 8. Le validateur ne donnera donc pas d'erreur et la méthode AjouterAsync sera exécuté. 
+
+Mais si AjouterAsync est appelé, est-ce qu'un enregistrement sera ajouté dans la bd ?
+
+La réponse est non, car le repository est mocked aussi. Mais si on avait utilisé un vrai repository (par exemple, si celui-ci n'était pas injecté), alors oui, le test aurait ajouté une entrée. Il faut donc faire attention aux tests pour ne pas corrompre la bd si elle est en production. Mais si vous avez bien fait les choses, et que vous injecté un repository mock, alors pas de risque. 
+
 
 ## Tester un repository
 
@@ -1257,8 +1381,11 @@ public async Task AjouterAsync_ModeleInvalide_RepoNonAjout()
 
 Pour tester le **ViewModel**, il faut regarder le comportement des propriétés et des commandes en fonction d'un changement d'état d'une propriété ou d'un appel d'une commande.
 
-Il faut faire le test pour tester l'état du bouton supprimer.
+Nous allons faire le test pour l'état du bouton supprimer.
 
+:::info Rappel
+Si nous nous rappelons la logique de l'interface, le bouton supprimer pour les catégories est disponible seulement si une catégorie est sélectionnée dans la liste et si cette catégorie n'est associé à aucune carte (voir ListeCategorieVM/PeutSupprimer qui est utilisé dans le constructeur afin de bloquer SupprimerCommande  )
+:::
 Il faut tester les 4 cas ci-dessous :
 
 - Aucune catégorie sélectionnée
@@ -1266,7 +1393,7 @@ Il faut tester les 4 cas ci-dessous :
 - La catégorie retourne un objet **null** pour la dépendance
 - La catégorie n'a pas de dépendance
 
-Créez la classe **ListeCategoriesVMTest** dans le dossier **WPF\ViewModels**.
+Créez la classe **ListeCategoriesVMTest** dans le dossier **UTest\WPF\ViewModels**.
 
 ```csharp showLineNumbers
 /// <summary>
@@ -1292,83 +1419,15 @@ La classe **ListeCategoriesVM** a 4 dépendances.
 
 Il faut créer un simulacre pour chacun des services avec la librairie **Moq**.
 
-```csharp showLineNumbers
-[Fact]
-public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
-{
-    //Arrangement (Arrange)
-    var navigateur = new Mock<INavigateur>();
-    var notification = new Mock<INotification>();
-
-    var categorieService = new Mock<ICategorieService>();        
-
-    var authentificateur = new Mock<IAuthentificateur>();    
-    
-    //Action (Act)    
-
-    //Assertion (Assert)
-
-}
-```
-
 Pour ce test, il faut considérer que l'utilisateur est autorisé à utiliser la commande. Il faut donc configurer le simulacre (lignes 12 et 13). Donc peu importe le rôle demandé, l'authentificateur retourne toujours **true** pour ce test.
 
-```csharp showLineNumbers
-[Fact]
-public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
-{
-    //Arrangement (Arrange)
-    var navigateur = new Mock<INavigateur>();
-    var notification = new Mock<INotification>();
-
-    var categorieService = new Mock<ICategorieService>();        
-
-    var authentificateur = new Mock<IAuthentificateur>();  
-    //L'utilisateur est autorisé
-    authentificateur.Setup(x => x.EstAutorise(It.IsAny<string[]>())).Returns(true);
-    authentificateur.Setup(x => x.EstAutoriseAsync(It.IsAny<string[]>())).ReturnsAsync(true);
-    
-    //Action (Act)    
-
-    //Assertion (Assert)
-
-}
-```
-
-Ensuite, il faut créer le **ViewModel** en injectant les simulacres.
-
-```csharp showLineNumbers
-[Fact]
-public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
-{
-    //Arrangement (Arrange)
-    var navigateur = new Mock<INavigateur>();
-    var notification = new Mock<INotification>();
-
-    var categorieService = new Mock<ICategorieService>();        
-
-    var authentificateur = new Mock<IAuthentificateur>();  
-    //L'utilisateur est autorisé
-    authentificateur.Setup(x => x.EstAutorise(It.IsAny<string[]>())).Returns(true);
-    authentificateur.Setup(x => x.EstAutoriseAsync(It.IsAny<string[]>())).ReturnsAsync(true);
-    
-    ListeCategoriesVM listeCategoriesVM = new ListeCategoriesVM(authentificateur.Object,
-                                                                    notification.Object,
-                                                                    categorieService.Object,
-                                                                    navigateur.Object);
-    
-    //Action (Act)    
-
-    //Assertion (Assert)
-
-}
-```
+Ensuite, il faut créer le **ViewModel** en injectant les simulacres (ligne 15).
 
 Ensuite, il faut faire les actions. Il y en a 2.
 
 La première action est d'indiquer qu'aucune catégorie n'est sélectionnée (ligne 21).
 
-Ensuite, il faut récupérer la valeur de la méthode **CanExecute()** de la commande **SupprimerCommande **(ligne 23).
+Ensuite, il faut récupérer la valeur de la méthode **CanExecute()** de la commande **SupprimerCommande** (ligne 23).
 
 Finalement, l'assertion est que la valeur de **canExecuteActuel** doit être à **false**.
 
@@ -1393,7 +1452,7 @@ public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
                                                                     navigateur.Object);
     
     //Action (Act)    
-	listeCategoriesVM.CategorieSelection = null;
+    listeCategoriesVM.CategorieSelection = null;
 
     bool canExecuteActuel = listeCategoriesVM.SupprimerCommande.CanExecute(It.IsAny<object>());
 
@@ -1401,6 +1460,7 @@ public void SupprimerCommande_CategorieNonSelectionnee_NePeutSupprimer()
     Assert.False(canExecuteActuel);
 }
 ```
+Ici pour faire planter le test, il suffit d'ajouter un **return true** au début de **PeutSupprimer()** afin de simuler une erreur de logique dans cette fonction car c'est celle-ci qui controle si SupprimerCommande peut s'exécuter ou non. Dans ce test, on vérifiait si le fait de n'avoir rien de sélectionné (ligne 21) empêchait d'effacer.
 
 ### Test SupprimerCommande_CategorieAvecDependance_NePeutSupprimer
 
@@ -1442,6 +1502,7 @@ public void SupprimerCommande_CategorieAvecDependance_NePeutSupprimer()
     Assert.False(canExecuteActuel);
 }
 ```
+Ici aussi, la fonction qu'on test ultimement est PeutSupprimer(). Donc en ajoutant return true au début de cette fonction, on vérifie que le test est ok. 
 
 Est-ce que vous voyez une faille dans le test qui pourrait indiquer un mauvais résultat en cas d'une modification du logiciel ? Imaginez qu'une nouvelle table utilise **Categorie** comme clé étrangère. La classe **CategorieDependance** va avoir une nouvelle propriété **NbNouvelleTables**. Il faudra penser de modifier le test pour en tenir compte et également le **ViewModel**.
 
@@ -1449,7 +1510,7 @@ Avez-vous une solution pour ceci ?
 
 Il faudrait modifier le concept des classes de type **Dépendance**. Est-ce nécessaire d'avoir le nombre d'éléments par dépendance ? Si ce n'est pas nécessaire, il suffirait de retourner un booléen pour indiquer s'il y a une dépendance ou non. Si le nombre de dépendances est nécessaire, il faudrait modifier la classe comme ci-dessous.
 
-```csharp showLineNumbers
+```csharp showLineNumbers title="NE PAS COPIER"
 public class CategorieDependance
 {
     public int CategorieId { get; init; }

@@ -1,6 +1,6 @@
 ---
 sidebar_position: 815
-draft: true
+draft: false
 ---
 
 # Structure d'un test

@@ -796,7 +796,7 @@ Si la propriété **UtilisateurId** est modifiée, il faut également indiquer q
 
 ### Enregistrement du ViewModel - SCViewModelExtensions
 
-Dans la classe **Supercarte.WPF/Extensions/ServiceCollections/SCServiceViewModelExtensions**, il faut enregistrer le nouveau **ViewModel**.
+Dans la classe **Supercarte.WPF/Extensions/ServiceCollections/SCViewModelExtensions**, il faut enregistrer le nouveau **ViewModel**.
 
 ```csharp showLineNumbers
 using Microsoft.Extensions.DependencyInjection;

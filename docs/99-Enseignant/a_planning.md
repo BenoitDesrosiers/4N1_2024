@@ -113,14 +113,14 @@ _________ MI-Session __________
   * suppression d'une carte d'un utilisateur
  
 * Semaine 12
-  * WPF partie 5
-  * 
+  * Tests unitaire
+  * Tests d'intégration
 
 * Semaine 13, 
-  * Tests
+  * temps pour tp3
 
 * Semaine 14
-  * tp3
+  * temps pour tp3
 
 * Semaine 15 
   * présentation du tp3

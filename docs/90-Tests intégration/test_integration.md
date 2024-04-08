@@ -1,6 +1,6 @@
 ---
 sidebar_position: 910
-draft: true
+draft: false
 ---
 
 # Liste de tests d'intégration

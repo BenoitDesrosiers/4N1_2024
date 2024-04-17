@@ -6,12 +6,11 @@ draft: false
 
 # Aide pour le TP3
 
-Pour le TP3, vous devez *faire l'affichage d'une afin de sélectionner une ligne, ce qui affichera les informations associées à cette ligne*.
-
+Pour le TP3, vous devez *faire l'affichage* d'une entité (genre, artiste maisonedition) afin de sélectionner une ligne, ce qui affichera les informations associées à cette ligne.
 
 La technique pour faire ca n'a pas été directement expliqué dans le cours, mais elle dérive de plusieurs techniques que nous avons vues. 
 
-Le diagramme ci-dessous vous donne, ne premier lieu, les étapes de programmation à suivre. Par la suite, vous y trouverez les étapes d'exécution de ce code. 
+Le diagramme ci-dessous vous donne, en premier lieu, les étapes de programmation à suivre. Par la suite, vous y trouverez les étapes d'exécution de ce code. 
 
 Bonne lecture!
 

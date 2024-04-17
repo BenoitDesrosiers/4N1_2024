@@ -16,7 +16,7 @@ erDiagram
     me ||--o{ mu : ""
 
     ro[Role] {
-        int RoleId PK
+        int RoleId PK "auto"
         nvarchar(25) Nom "contrainte unique, valeur: admin, usager"
     }
     ut[Utilisateur] {
@@ -71,7 +71,7 @@ erDiagram
     }
 ```
 
-Ce diagramme sur [mermaid.ink](https://mermaid.ink/img/pako:eNqtVdtu2kAQ_ZXRPhXJQTZgLlZTiYqkrVKiqOlFKvRhsTewkneXrnfTUMK_9DXfwY911sGJuZj2IebF3jMze-bMMLMksUoYiQjTA06nmoqxBHy0gvv7kxO1BGsggjHBXw7gZwGILUDYCmDKCgBNygDVFYA45FHwGn1SKfsBy8dv93BpwB1-SODq4vlY3lIdz6h-1QhrcKkExomVNJqiPQMr-U_LPLilKbM6ApoILj2wGZ0yXRBZFTmPvhie8owatN27u4TlFPAiao0qgmxxCf0aXGkmlagALw8iwSNSuqkiG8U1xEoIJg3lmpU55IHaGGiozBXNMvaeZjMMY_OgTMMcD38pnZSdStqeXzyJspFFlGUZ2sxx-Kc63vnFtsHGcR9MWMwFTQEF43dIdPP9qus1ah6Usn9zCn4dPjKYO8M5XawfIONA4xkz64fjqjgGZ0bxlG0pGkEA6z8Qlk0nSqXQd0G3bZHoDbWpieCGphmrw1c8LxHAupxTe-dOMi7mKXM8AIF0_eCKMkWT5w5fQfEm7KhK1LJmx9ot8LHen7nBnCvAfjqxpY5LsFBKpgsY4Mu10obv5IpaB72OD8zA61OgUiJ51NZqiuiusAOr2a4_-LtWfbwlM-UWK5B3TOpD50PKMyXPEm64kodac8pGue-ecEXE47K1_WJiHGud5wHjhBywLNZ87hihn7RpSidphX3YrsE1N-wbm5Rsqxv1KS-qRxu19jJ7VvG_cjs4fhB6yxVugfksr_vLZrHXX5dYxozK-FCL-UWLOY-9BnsSRLDRVjPs_1N2WuXlC99PNMNp-vJFJx4RTAvKE9zPeVpjYmY4PcYkysdhPnWcuTN1OV0vZEwio3EVEDt3ym2WOony0eQRhkIoPXzc-fnq98icShItyR2JgqBZb_lBs9totdqNbs9ve2RBoqbfqfuBH_Qa3U7g95qdcOWR30ph2KAe-j2_0wp7nUbYbHTzaN9zyNFY_QXReps7?type=png)
+Ce diagramme sur [mermaid.ink](https://kroki.io/mermaid/svg/eNqtVMtu2lAQ3ecrRl4FiUQmErRFTSUqkrZKg6KmjwXqYrAncKX7oPeRJkryL93mO_ixzgUTGzBkg1f2OXPnceb4ku0LHFtUB8CPNfD4eHRkHiB46EKSzFF-X6KqRFWoQ8e0RJl_QdHWoWojtmhi-M1I-g0P88_4CO0hYl9yuLqABIM3yQupb9FmE7SHJ-0GDIyCJDPaW-RDBEGLP4GacIuSgu0C5kroJgSHY7KLHE_FkMMfXkjh0HPgevEKtbuHdtqAK0vaqHpuUEe0FkSlSP0MRljIjFKkPQpLZfl5lg5nuTT-Cp2jz-gmkIR5QrIwZeyvsXlSp-j5RSHDQgdV1eEyuFj7NTmaRY4lXxzb4HLKhEIJLJG4g6T4PHzbPGk0oTLxh1NIj-ErwTTGTfF-9gxOAGYT8rPnXUrE6mfeCElVCbvQgtk_aJdxI2Mk9GK-lUDu8AaD9F24QenoGH4yXinNWzjHcBcRJ9RUUuwAmJCz57iEMYcUNn6Cg-I_GW5RsarSVkO1Ul7rd-EtbeF6chRKT-W8FKPlPfT55dpYL1bnY2Vb796kQB7enwJqzQ2zksEis6sy9oOltcOQrob0OL_zFRMtiU-kbQ18icIZfZYLL4zesN6YhvNz6zotk-1QqZMWv_52Z5TXRFStTy6zYhr7gEQHKXEka4PbnQZcC0-_aFQGbnNgMQjaYaHM-iilYK8PU3eBMPNRGL6vp5O42L01vmGdAW_Koc5q3JMu3RMPrHmnEEDRcGXVG85f88E-N9vLLfENuM-t_geDOR7N)
 
 :::warning Avertissement
 En cas de différence entre le diagramme sur cette page et celui sur mermaid.ink, c'est celui sur cette page qui est la bonne version

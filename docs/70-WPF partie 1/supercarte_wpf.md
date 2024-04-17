@@ -448,7 +448,12 @@ public partial class App : Application
 
 
 
-Démarrez l'application. Il y a 2 fenêtres.
+Démarrez l'application. 
+
+
+:::warning ATTENTION
+Vous obtiendrez 2 fenêtres. Il est important d'enlever le 2ième en suivant ces instructions
+:::
 
 Ouvrez le fichier **App.xaml**.
 

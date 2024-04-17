@@ -9,19 +9,19 @@ draft: false
 
 <!-- à revoir, pas très claire comme explication -->
 
-Le simulacre est une partie essentielle dans les tests. Il permet de créer un faux objet et d'indiquer ce que ses fonctionnalités retourneront comme valeur. Il existe les **Mock** et **Stub**.
+Le simulacre (fake en anglais) est une partie essentielle dans les tests. Il permet de créer un faux objet et d'indiquer ce que ses fonctionnalités retourneront comme valeur. Il existe les **Mock** et **Stub**.
 
 Les simulacres sont très pratiques pour les tests unitaires, car il faut prédire le résultat des dépendances de la fonctionnalité à tester.
 
-Voici la différence entre les 2 selon Microsoft.
+Voici la différence entre les 2:
 
-- **Mock** - Il s’agit d’un objet fictif du système qui détermine la réussite ou l’échec d’un test unitaire. Un simulacre commence comme un faux jusqu’à ce qu’il soit affirmé contre.
+- **Mock** - Il s’agit d’un objet fictif du système qui détermine la réussite ou l’échec d’un test unitaire. Un mock permet de valider qu'une fonction à bien été appelée. Il permet de vérifier le bon fonctionnement du code.
 
-- **Stub** - Un stub permet de remplacer de manière contrôlée une dépendance existante (ou collaborateur) dans le système. À l’aide d’un stub, vous pouvez tester votre code sans avoir à gérer directement la dépendance. Par défaut, un stub commence comme un faux.
+- **Stub** - Un stub permet de remplacer de manière contrôlée une dépendance existante (ou collaborateur) dans le système. À l’aide d’un stub, vous pouvez tester votre code sans avoir à gérer directement la dépendance. 
 
-> Source : https://learn.microsoft.com/fr-ca/dotnet/core/testing/unit-testing-best-practices#lets-speak-the-same-language
+[Pour en savoir plus](https://www.educative.io/answers/what-is-faking-vs-mocking-vs-stubbing)
 
-Dans la pratique, le simulacre peut faire les 2 rôles en même temps. Il est possible qu'un comportement soit programmé dans le simulacre (**stub**) et de devoir valider (**mock**) des appels de méthodes pour déterminer si le test est un succès ou non. Le terme **Fake** permet d'indiquer que c'est un simulacre, soit un **mock**, soit un **stub** ou les 2 en même temps.
+Dans la pratique, le simulacre peut faire les 2 rôles en même temps. Il est possible qu'un comportement soit programmé dans le simulacre (**stub**) et de devoir valider des appels de méthodes à l'aide d'un **mock** pour déterminer si le test est un succès ou non. Le terme **Fake** permet d'indiquer que c'est un simulacre, soit un **mock**, soit un **stub** ou les 2 en même temps.
 
 Pour faciliter la création d'un simulacre, il est conseillé d'utiliser des librairies. Sinon, il faudrait créer soi-même des classes simulacres.
 
@@ -29,7 +29,7 @@ Voici des librairies qui sont utiles pour créer des simulacres et vérifier.
 
 - **Moq** 
 
-  Cette librairie est l'une des plus populaires pour les projets **.NET**. Elle permet facilement de créer des simulacres. Elle permet de créer rapidement un objet à partir d'une interface. Dans le cas que l'objet soit créé à partir d'une classe, il faut que la classe soit conçue pour faciliter la réécriture des méthodes à simuler. C’est l'une des raisons que les injections des dépendances sont faites à partir d'une interface la majorité du temps. Même si la librairie s'appelle **Moq** et que l'objet est **Mock\<T\>**, elle permet de faire un **stub** et un **mock**.
+  Cette librairie est l'une des plus populaires pour les projets **.NET**. Elle permet de créer rapidement un objet simulacre à partir d'une interface. Lorsque l'objet estcréé à partir d'une classe, il faut que la classe soit conçue pour faciliter la réécriture des méthodes à simuler. C’est l'une des raisons pour laquelle les injections de dépendances sont faites à partir d'une interface la majorité du temps. Même si la librairie s'appelle **Moq** et que l'objet est **Mock\<T\>**, elle permet de faire un **stub** ou un **mock**.
 
   Pour plus d'information : https://github.com/moq/moq4
 
@@ -41,7 +41,11 @@ Voici des librairies qui sont utiles pour créer des simulacres et vérifier.
   
 - **~~MockQueryable~~**
 
-  Pour être en mesure de simuler le **contexte** de **Entity Framework**, il faut créer la mécanique de construction des requêtes pour que ce soit 		**queryable**. Dans le cas d'une requête asynchrone, il n'est pas possible de le faire directement avec **Moq**. Il faut utiliser une librairie additionnelle. 	Pour faciliter la création d'un objet **queryable**. La librairie **MockQueryable** est un complément à la librairie **Moq**. Cette librairie ne sera pas utilisée pour le **TP 3**, car il n'est plus nécessaire de faire le test unitaire du **repository**.
+  Pour être en mesure de simuler le **contexte** de **Entity Framework**, il faut créer la mécanique de construction des requêtes pour que ce soit 		**queryable**. Dans le cas d'une requête asynchrone, il n'est pas possible de le faire directement avec **Moq**. Il faut utiliser une librairie additionnelle. 	Pour faciliter la création d'un objet **queryable**. La librairie **MockQueryable** est un complément à la librairie **Moq**. 
+  
+:::info 
+Cette librairie ne sera pas utilisée pour le **TP 3**, car il n'est plus nécessaire de faire le test unitaire du **repository**.
+:::
 
   Pour plus d'information : https://github.com/romantitov/MockQueryable
 
@@ -51,11 +55,11 @@ La phase de préparation du test est souvent appelée **arrangement** ou **arran
 
 Cette phase permet de créer les données de test et les simulacres. 
 
-Les simulacres sont également configurés pour simuler le comportement des méthodes.
+Les simulacres sont configurés pour simuler le comportement des méthodes.
 
 Dans cette phase, il faut également créer les objets des résultats attendus si c'est nécessaire.
 
-Pour les éléments répétitifs, il peut être intéressant d'utiliser des méthodes configurées.
+Pour les éléments répétitifs, il existe des attribut de fonctions permettant de fournir une liste de valeurs à la fonction de tests (ex: /[InlineDate]).
 
 ## Exécution - action
 

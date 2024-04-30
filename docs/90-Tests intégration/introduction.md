@@ -20,7 +20,7 @@ Il faut modifier la cible du projet. Le projet **ITest** utilisera le projet **.
 
 Effectuez un double-clic sur l'entête du projet **SuperCarte.ITest** pour voir le **XML** de configuration.
 
-Vous devez modifiez la balise **` <TargetFramework>net7.0</TargetFramework>`** par **` <TargetFramework>net7.0-windows</TargetFramework>`**. Enregistrez le fichier.
+Vous devez modifiez la balise **\<TargetFramework>net7.0\</TargetFramework>** par **\<TargetFramework>net7.0-windows\</TargetFramework>**. Enregistrez le fichier.
 
 Dans l'exemple ci-dessous, la balise est à la ligne 4.
 
@@ -74,7 +74,7 @@ Cette classe est l'équivalent du **Program.cs** ou du **App.xaml.cs**.
 
 Le **navigateur** et la **notification** ne seront pas injectés. Il faudra utiliser un simulacre pour ces 2 dépendances.
 
-```c#
+```csharp showLineNumbers
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -121,7 +121,7 @@ Pour faire des tests d'intégration, il est recommandé d'utiliser une base de d
 :::
 
 
-```c#
+```csharp showLineNumbers
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost\\SQLExpress;Database=eDA_4N1_SuperCarte_Test;Trusted_Connection=True;Trust Server Certificate=true;"
@@ -161,7 +161,7 @@ Créez le dossier **Aides** à la racine du projet **SuperCarte.ITest**.
 
 Créez la classe **UtilitaireBD**.
 
-```c#
+```csharp showLineNumbers
 using Microsoft.EntityFrameworkCore;
 using SuperCarte.EF.Data.Context;
 
@@ -218,7 +218,7 @@ Il faut enregistrer cette classe dans les dépendances.
 
 Modifiez la méthode **ConfigureServices** de la classe **Startup.cs**.
 
-```c#
+```csharp showLineNumbers
  public void ConfigureServices(IServiceCollection services,
  HostBuilderContext context)
  {
@@ -244,7 +244,7 @@ Dans le fichier **GlobalUsings.cs**, il faut indiquer que l'exécution des tests
 
 Chaque test a créé une nouvelle base de données et doit avoir un jeu de données fixe. Pour permettre l'exécution en parallèle, chaque test devrait avoir sa propre base de données.
 
-```c#
+```csharp showLineNumbers
 global using Xunit;
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 ```

@@ -47,7 +47,7 @@ L'interface **ICategorieService** est le service réel.
 Cette classe va utiliser des dépendances pour faire fonctionner les tests. Il faut inclure toutes les dépendances réelles dont le **ViewModel** a besoin. 
 
 :::tip
-Pour le **TP 3** vous aurrez aussi besoin de **l'authenficitateur**.
+Pour le **TP 3** vous aurez aussi besoin de **l'authentificateur**.
 :::
 
 ```csharp showLineNumbers

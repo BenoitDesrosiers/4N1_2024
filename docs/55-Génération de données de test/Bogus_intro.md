@@ -18,6 +18,11 @@ La librairie contient une banque de données pour générer des noms de personne
 
 Il est toujours préférable d'utiliser une valeur proche de la réalité.
 
+
+## Code Source de l'exemple
+
+Le code source de cet exemple est dans ce fichier [code source](GenerateurBDGestionLivre.zip)
+
 ## Base de données exemple
 
 Pour ce document, une nouvelle base de données sera utilisée. La base de données est pour la gestion de livres dans des magasins. Elle contient tous les cas nécessaires pour le **TP 2**.
@@ -28,7 +33,7 @@ Pour cet exemple, nous allons utiliser la méthode **Database first** afin de g�
 
 Voici le DEA.
 
-<img src="/4N1_2024/img/11_dea_livre.jpg" />
+<img src="/4N1_2024/img/11_DEA_Livre.jpg" />
 
 Voici le script pour créer une base de données.
 
@@ -731,7 +736,7 @@ Créez la classe **AuteurGenerateur**.
 
 ```csharp
 using Bogus;
-using GenerateurDBGestionLivre.Data;
+using GenerateurBDGestionLivre.Data;
 
 namespace GenerateurBDGestionLivre;
 
@@ -873,7 +878,7 @@ Créez la classe **LivreGenerateur**.
 
 ```csharp
 using Bogus;
-using GenerateurDBGestionLivre.Data;
+using GenerateurBDGestionLivre.Data;
 
 namespace GenerateurBDGestionLivre;
 
@@ -1343,7 +1348,7 @@ Il y a maintenant un attribut **List\<Auteur> _lstAuteur** qui contient les aute
 
 Dans ce cas, il est important que ce soit l'objet **Auteur** et non seulement les **Id**, car **Entity Framework** ne peut pas ajouter directement des enregistrements à partir de la clé, mais à partir de l'objet.
 
-```csharp
+```csharp title="Ne pas copier, c'est déjà dans le code"
 private List<Auteur> _lstAuteur = new List<Auteur>();
 
 /***/
@@ -1363,7 +1368,7 @@ La méthode reçoit en paramètre l'objet **Livre** en cours de génération.
 
 Il y a une protection pour éviter de sélectionner 2 fois le même auteur. La méthode **PickRandom()** peut choisir le même élément plus d'une fois. Entre les lignes 14 et 25, c'est la boucle de sélection. La vérification se fait à la ligne 18.
 
-```csharp showLineNumbers
+```csharp showLineNumbers title="Ne pas copier, c'est déjà dans le code"
 private void GenAuteurs(Livre livre)
 {
     //Vérifie si la liste d'auteur n'est pas vide
@@ -1397,7 +1402,7 @@ La méthode **Generer()** est modifiée. Il n'est pas possible de mettre dans le
 
 Il faut donc générer un objet **Livre** et ensuite ajouter les auteurs avant de le retourner.
 
-```csharp
+```csharp title="Ne pas copier, c'est déjà dans le code"
 public Livre Generer()
 {
     //Génère un livre

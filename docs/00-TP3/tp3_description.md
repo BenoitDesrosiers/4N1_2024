@@ -65,7 +65,7 @@ Vous devez créer un fichier **Readme** contenant les commandes pour la migratio
 ## Insertion de données à l'aide de Bogus (en équipe)
 
 
-Vous devez insérer de l'information dans les tables Musique, Utilisateur et UtilisateurMusique (et Artiste pour les équipes de 2) à l'aide de Bogus.
+Vous devez insérer de l'information dans les tables Musique, Utilisateur et UtilisateurMusique ~~(et Artiste pour les équipes de 2)~~ à l'aide de Bogus.
 
 Les générateurs de Bogus doivent être dans le module WPF. Vous devez ajouter une option dans le menu de navigation permettant de générer de nouvelles entrées à la demande. Un appel au générateur ajoutera de 5 à 10 entrées par table. Aucun "feedback" est nécessaire. Pour vérifier si ca fonctionne, il faudra aller voir avec SSMS.  
 
@@ -93,6 +93,12 @@ L’application doit avoir une vue de connexion.
 L’algorithme de hachage doit être bcrypt.
 
 Chaque module doit autoriser ou non l’utilisateur en validant le rôle de l’utilisateur.
+
+:::warning Clarifications
+L'admin a accès à tout. 
+
+Les utilisateurs n'ont pas accès aux écrans de gestions (ils auraient uniquement accès à LEUR liste de lecture... mais vous n'avez pas à faire cet écran. En d'autres mots, un utilisateur non-admin, n'a accès à rien dans le système que je vous demande)
+:::
 
 ## Navigation (en équipe et seul)
 
